@@ -323,6 +323,77 @@ strong .wiki,strong.brick .wiki{color:inherit}
 .fact>span{font-family:var(--display);font-size:12.5px;color:var(--muted)}
 .lang-page .sec,#view-prog .sec{max-width:980px}
 
+
+/* ===== week plan ===== */
+.wk-disc{max-width:72ch;color:var(--muted);border-left:3px solid var(--warn);padding-left:12px}
+.wk-wrap{display:grid;gap:16px;padding:22px 0 30px;max-width:900px}
+.wk-top{display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:space-between;position:sticky;top:var(--hdr,104px);z-index:6;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(6px);padding:10px 0}
+.wk-prog{display:grid;gap:6px;flex:1 1 260px;max-width:460px}
+.wk-prog-bar{height:8px;border-radius:999px;background:var(--rule);overflow:hidden}
+.wk-prog-bar span{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .3s}
+.wk-list{list-style:none;margin:0;padding:0;display:grid}
+.wk{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;scroll-margin-top:calc(var(--hdr,104px) + 80px)}
+.wk-rail{position:relative;display:flex;justify-content:center}
+.wk-rail::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:var(--rule)}
+.wk:first-child .wk-rail::before{top:22px}.wk:last-child .wk-rail::before{bottom:calc(100% - 22px)}
+.wk-dot{position:relative;margin-top:8px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:600;background:var(--paper);border:2px solid var(--rule);color:var(--muted)}
+.wk.done .wk-dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.wk.now .wk-dot{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.wk.now.done .wk-dot{color:#fff}
+.wk-body{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:14px 18px 16px;margin-bottom:12px;display:grid;gap:6px}
+.wk.now .wk-body{border-color:var(--accent);box-shadow:0 10px 26px -20px var(--accent)}
+.wk.pause .wk-body{background:transparent;border-style:dashed}
+.wk.exam .wk-body{border-left:4px solid var(--brick)}
+.wk.done:not(.now) .wk-body{opacity:.72}
+.wk-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.wk-n{font-family:var(--display);font-weight:700;font-size:14px;color:var(--accent)}
+.wk.pause .wk-n{color:var(--muted)}.wk.exam .wk-n{color:var(--brick)}
+.wk-date,.wk-ch{font-size:12px;color:var(--muted)}
+.wk-ch{background:var(--code-bg);padding:1px 7px;border-radius:6px}
+.wk-now{font-family:var(--display);font-size:12px;font-weight:600;color:var(--accent-ink);background:var(--accent);padding:2px 9px;border-radius:999px}
+.wk-check{margin-left:auto;display:inline-flex;gap:6px;align-items:center;font-family:var(--display);font-size:13px;color:var(--muted);cursor:pointer}
+.wk-check input{width:16px;height:16px;accent-color:var(--ok)}
+.wk-body h3{font-family:var(--display);font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0}
+.wk-body p{margin:0;font-size:16px;color:var(--muted)}
+.wk-links{display:grid;gap:8px;margin-top:6px}
+.wk-row{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.wk-lbl{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);min-width:118px}
+.wk-lab,.wk-ext{font-family:var(--display);font-size:13.5px;font-weight:600;text-decoration:none;padding:4px 10px;border-radius:8px;max-width:100%;overflow-wrap:anywhere}
+.wk-lab{color:var(--accent);background:var(--accent-soft)}
+.wk-lab:hover{background:color-mix(in srgb,var(--accent) 18%,transparent)}
+.wk-ext{color:var(--ink);border:1px solid var(--rule);background:var(--paper)}
+.wk-ext:hover{border-color:var(--accent)}
+.wk-ext span{font-weight:500;color:var(--muted)}
+.thisweek{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;align-items:center;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:14px;padding:12px 18px;max-width:980px;margin-top:22px;transition:border-color .15s}
+.thisweek:hover{border-color:var(--accent)}
+.thisweek .tw-k{font-family:var(--mono);font-size:12px;color:var(--muted);grid-column:1}
+.thisweek b{font-family:var(--display);font-size:18px;grid-column:1}
+.thisweek .tw-go{grid-column:2;grid-row:1 / span 2;font-family:var(--display);font-weight:600;color:var(--accent);white-space:nowrap}
+.res-wrap{display:grid;gap:30px;padding:24px 0 30px}
+.res-g h2{font-family:var(--display);font-size:24px;font-weight:800;letter-spacing:-.02em;margin:0 0 12px}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px}
+.res{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px 18px 18px;display:grid;gap:8px;align-content:start}
+.res-h{display:grid;gap:1px}
+.res-h h3{font-family:var(--display);font-size:18px;font-weight:700;margin:0}
+.res-by{font-size:13px;color:var(--muted);font-family:var(--display)}
+.res p{margin:0;font-size:15.5px}
+.res-how{color:var(--muted)}
+.res-f{display:flex;flex-wrap:wrap;gap:6px}
+.res-tag{font-family:var(--mono);font-size:11.5px;padding:2px 8px;border-radius:6px;background:var(--code-bg);color:var(--muted)}
+.res-tag.wk-ref{background:var(--accent-soft);color:var(--accent)}
+.res-go{justify-self:start;text-decoration:none;margin-top:4px}
+.res-note{max-width:72ch}
+@media (max-width:720px){
+  .wk{grid-template-columns:30px minmax(0,1fr);gap:10px}
+  .wk-dot{width:26px;height:26px;font-size:11px}
+  .wk-body{padding:12px 14px 14px}
+  .wk-lbl{min-width:0;width:100%}
+  .wk-top{top:0;flex-wrap:nowrap;gap:10px;padding:8px 0}
+  .wk-top .btn{padding:6px 11px;font-size:13px;white-space:nowrap}
+  .wk-prog{flex:1 1 auto}
+  .thisweek{grid-template-columns:1fr}.thisweek .tw-go{grid-column:1;grid-row:auto;margin-top:4px}
+}
+
 /* ===== daily ===== */
 .mod-cards{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
 .mod-cards .person-card.sm{margin-top:0;flex:1 1 230px}
@@ -566,6 +637,8 @@ footer a{color:var(--muted)}
       <a href="#hoare" data-view="hoare"><span class="de">Hoare-Kalkül</span><span class="en">Hoare logic</span></a>
       <a href="#practice" data-view="practice"><span class="de">Übungen</span><span class="en">Exercises</span></a>
       <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
+      <a href="#weeks" data-view="weeks"><span class="de">Wochenplan</span><span class="en">Week by week</span></a>
+      <a href="#resources" data-view="resources"><span class="de">Weiterlernen</span><span class="en">Learn more</span></a>
     </nav>
   </div>
 </header>
@@ -714,6 +787,31 @@ footer a{color:var(--muted)}
   <div id="daily" class="dl"></div>
 </section>
 
+<!-- ================= WEEKS ================= -->
+<section class="view" id="view-weeks" aria-labelledby="weeks-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span><span class="de">Wochenplan</span><span class="en">Week by week</span></span></nav>
+  <div class="page-h">
+    <div class="kicker">Programmierung · WS 2026/27</div>
+    <h1 id="weeks-title"><span class="de">Semester-Wochenplan</span><span class="en">Semester week by week</span></h1>
+    <p class="lede"><span class="de">Woche für Woche: was gerade in der Vorlesung dran ist, was du hier im Hoare Lab dazu übst und welche Seite im Netz dich weiterbringt.</span><span class="en">Week by week: what the lecture is covering, what you can practise here in Hoare Lab, and which site on the web takes you further.</span></p>
+    <p class="wk-disc small"><span class="de">Orientierungsplan: Die Reihenfolge folgt den Kapiteln der Vorlesung, das genaue Tempo legt die Vorlesung fest. Verbindlich sind die Ankündigungen im Moodle-Kurs und die wöchentlichen Übungsblätter. Vorlesungszeit laut RWTH: 12. Oktober 2026 bis 5. Februar 2027, Weihnachtspause 23. Dezember bis 5. Januar.</span><span class="en">Orientation plan: the order follows the chapters of the lecture; the lecture sets the actual pace. The announcements in the Moodle course and the weekly exercise sheets are what counts. Lecture period according to RWTH: 12 October 2026 to 5 February 2027, Christmas break 23 December to 5 January.</span></p>
+  </div>
+  <div id="weeks" class="wk-wrap"></div>
+  <div class="pager"><a class="btn" href="#prog">← Programmierung</a><a class="btn primary" href="#resources"><span class="de">Weiterlernen →</span><span class="en">Learn more →</span></a></div>
+</section>
+
+<!-- ================= RESOURCES ================= -->
+<section class="view" id="view-resources" aria-labelledby="res-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span><span class="de">Weiterlernen</span><span class="en">Learn more</span></span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Programmierung · Ergänzungen</span><span class="en">Programmierung · extras</span></div>
+    <h1 id="res-title"><span class="de">Weiterlernen</span><span class="en">Learn more</span></h1>
+    <p class="lede"><span class="de">Kostenlose Seiten, mit denen du neben den Übungsblättern trainieren kannst. Zu jeder steht, wofür sie sich eignet und zu welchem Kapitel der Vorlesung sie passt.</span><span class="en">Free sites to train with alongside the exercise sheets. For each one you see what it is good for and which chapter of the lecture it fits.</span></p>
+  </div>
+  <div id="resources" class="res-wrap"></div>
+  <div class="pager"><a class="btn" href="#weeks"><span class="de">← Wochenplan</span><span class="en">← Week by week</span></a><a class="btn primary" href="#daily"><span class="de">Täglich üben →</span><span class="en">Practise daily →</span></a></div>
+</section>
+
 <!-- ================= PROGRAMMIERUNG HUB ================= -->
 <section class="view" id="view-prog" aria-labelledby="prog-title">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><span>Programmierung</span></nav>
@@ -734,6 +832,7 @@ footer a{color:var(--muted)}
     </div>
   </div>
 
+  <div id="prog-thisweek"></div>
   <section class="sec">
     <div class="sec-h"><span class="num">01</span><h2><span class="de">Aufbau der Vorlesung</span><span class="en">How the lecture is organised</span></h2></div>
     <div class="parts">

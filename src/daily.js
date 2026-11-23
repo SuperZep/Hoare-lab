@@ -379,6 +379,7 @@ function dPack() {
   const t = dNum(dToday()), gi = g => DTOPICS.indexOf(g);
   const o = { t, s: DS.streak, b: DS.best, l: DS.last ? dNum(DS.last) - t : null, d: DS.days.map(x => dNum(x) - t).filter(x => x > -60),
     n: DS.stats.n, k: DS.stats.ok, x: Object.entries(DS.box).map(([key, v]) => { const [g, sd] = key.split(':'); return [gi(g), (+sd).toString(36), v.b, v.d - t]; }) };
+  try { if (WDONE.size) o.w = [...WDONE]; } catch (e) {}
   const S = DS.sess;
   if (S && S.date === dToday()) o.q = [S.round, S.idx, S.done ? 1 : 0, S.items.map(i => [gi(i.g), i.s.toString(36), i.rev ? 1 : 0]), S.res.map(r => r ? (r.ok ? 1 : 0) : -1)];
   return o;
@@ -388,7 +389,7 @@ function dUnpack(o) {
   if (!ok) throw new Error('form');
   const g = i => { if (!DTOPICS[i]) throw new Error('topic'); return DTOPICS[i]; };
   const R = { streak: +o.s || 0, best: +o.b || 0, last: o.l === null || o.l === undefined ? null : dStr(o.t + o.l), days: o.d.map(x => dStr(o.t + x)),
-    stats: { n: +o.n || 0, ok: +o.k || 0 }, box: {}, sess: null };
+    stats: { n: +o.n || 0, ok: +o.k || 0 }, box: {}, sess: null, weeks: Array.isArray(o.w) ? o.w.filter(Number.isInteger) : [] };
   for (const [i, sd, b, d] of o.x) R.box[g(i) + ':' + parseInt(sd, 36)] = { b: Math.min(4, Math.max(1, +b)), d: o.t + d };
   if (o.q && dStr(o.t) === dToday()) {
     const [round, idx, done, items, res] = o.q;
@@ -412,6 +413,7 @@ function dMerge(R) {
   for (const [k, v] of Object.entries(R.box)) { const L = DS.box[k]; if (!L || v.d < L.d) DS.box[k] = v; }
   if (R.stats.n > DS.stats.n) DS.stats = R.stats;
   if (R.sess) { const L = DS.sess, cnt = S => S ? S.res.filter(Boolean).length + (S.done ? 99 : 0) + S.round * 100 : -1; if (!L || L.date !== R.sess.date || cnt(R.sess) > cnt(L)) DS.sess = R.sess; }
+  try { if (R.weeks.length) { R.weeks.forEach(n => WDONE.add(n)); wSave(); } } catch (e) {}
   dSave(); DC = { v: {}, fb: null, shown: false };
 }
 async function dApplyCode(txt, fromLink) {
