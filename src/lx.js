@@ -382,7 +382,7 @@ function taskHTML(l, t, idx) {
   const badge = r ? `<span class="lxbadge ${r.pts === max ? 'full' : r.pts ? 'part' : 'zero'}">${r.pts} / ${max} ${lt('pts')}${t.type === 'self' ? ' · ' + lt('self_pts') : ''}</span>` : `<span class="lxbadge">${max} ${lt('pts')}</span>`;
   const checkBtn = t.type === 'self' ? '' : `<button class="btn primary" type="button" data-lxact="check" data-lx="${l}" data-t="${t.id}">${t.type === 'pprog' ? lt('run_tests') : lt('check')}</button>`;
   return `<article class="xt" id="xt-${t.id}">
-    <header class="xt-h"><span class="xt-n">${lt('task')} ${idx + 1}</span><h3>${esc(L(t.title))}</h3>${badge}</header>
+    <header class="xt-h"><span class="xt-n">${lt('task')} ${idx + 1}</span><h3>${esc(L(t.title))}</h3>${badge}${reportLink({ area: 'Klausur ' + LX[l].title, id: t.id, name: L(t.title), answer: Object.entries(S.v).filter(([k]) => k.startsWith(t.id + ':')).map(([k, v]) => v).filter(Boolean).join(' | ') })}</header>
     <p>${esc(L(t.q))}</p>${body}
     <div class="row">${checkBtn}<button class="btn ${t.type === 'self' ? 'primary' : 'ghost'}" type="button" data-lxact="sol" data-lx="${l}" data-t="${t.id}">${showSol ? lt('hide') : lt('show')}</button></div>
     ${sol}</article>`;

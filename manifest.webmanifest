@@ -1,0 +1,21 @@
+{
+  "name": "Hoare Lab – Programmierung, erstes Jahr",
+  "short_name": "Hoare Lab",
+  "description": "Lernhilfe für Programmierung im ersten Jahr Informatik: Hoare-Kalkül, Java, Haskell, Prolog. DE/EN.",
+  "lang": "de",
+  "start_url": "./#plan",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F1F2EE",
+  "theme_color": "#2C40CF",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Täglich 5 Minuten", "url": "./#daily" },
+    { "name": "Klausur üben", "url": "./#exam" },
+    { "name": "Wochenplan", "url": "./#weeks" }
+  ]
+}

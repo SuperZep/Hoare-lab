@@ -537,7 +537,7 @@ function dCard(S) {
   else if (DC.fb && !DC.fb.err) btns = `<button type="button" class="btn" data-dact="reveal">${esc(dt('reveal'))}</button><button type="button" class="btn primary" data-dact="check">${esc(dt('check'))}</button>`;
   else if (G.kind !== 'mc') btns = `<button type="button" class="btn primary" data-dact="check">${esc(dt('check'))}</button>`;
   return `<article class="dl-card" aria-live="polite">
-    <div class="dl-card-h"><span class="dl-topic t-${G.topic}">${esc(dt('t_' + G.topic))}</span>${it.rev ? `<span class="dl-rev">↻ ${esc(dt('review'))}</span>` : ''}<span class="dl-count mono">${esc(dt('task_of', { i: S.idx + 1, n: S.items.length }))}</span></div>
+    <div class="dl-card-h"><span class="dl-topic t-${G.topic}">${esc(dt('t_' + G.topic))}</span>${it.rev ? `<span class="dl-rev">↻ ${esc(dt('review'))}</span>` : ''}<span class="dl-count mono">${esc(dt('task_of', { i: S.idx + 1, n: S.items.length }))}</span>${reportLink({ area: 'Täglich', id: it.g + ':' + it.s, name: dt('t_' + G.topic), answer: DC.v.a || (DC.v.n === '1' ? 'nicht unifizierbar' : '') })}</div>
     <div class="dl-q">${G.body()}</div>
     ${input}
     ${fbh}

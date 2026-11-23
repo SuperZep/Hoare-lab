@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hoare Lab</title>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFD0lEQVR4XsVXbWiVVRz//c/zPPc+W6696DY1nTqYFc4YzQ8JRfaC1ZcIoogIWVCQnwxZEmZLjaysBgWiIfRmQlZfqm9iUZQUmDLQICmyTU2dOqebbnf3ec4/fuf26N3dvW66QX84cDjn9/I/r89zBIxX1GCD2OZ7f66HVqwWyMOq2ZsBFdc/6RAVCQ4r9GvIQOeh75aeSjwlqSy669flxi/bbrxUg40zUM1O2jY/RAIYLw0bj/TYaOjZ335cspveboSLl+2/z/iVe2hsbSYWgQFkikafhKoqrDFpzyUSnb//4Pet30rLnQdqI990iQlm2ThjRcSb0qEXhKrGxksbtdkTfmRbTOSh3fOnzbbx8Chzjn8q5qBQhwOkFz3pbVTkMRsPq0huORgkWZsrk0milA696ElvI5AFqlmam8Q8k1F4nsD3BNmsXlcSNCeXGtSiZt5gDD3pbQDV/JFHkWJ6jY+dW5rw6ZYmlIUGcXxtSdCIHHKpQS1qUnv0jKpy1Jen3oggk7WYPzeN5lvKXVnZNhPnB2I3kokGseSQm+hQk9r0yAtx055EbBUV5T5+2T+Ajs09bhRPP1GHh+6pRl9/NKEkaE4sOeRSg1rUpDY98mNUAgwCbpzmY/vOU3h/xykn+ObL87CwMcTFoRjelb06JthHDLHkkEsNalGz0JwxJgGGtYr6GQHe2XYcu3/oR02Vj80d851BrMX3g1t3VYchlhxyqUEtahaLogkQyq2ZShmse70H3ccyaFl0A9aumoO+c5Hb1S57yRUG29hHDLHkkEsNahW3LzEDbhYUCFMGZ85l8eJr3W4HP/VoLdoer8OZvixSgWAoo66wzjb2EUMsOeRSo8TgSy9BElGsqKzwsXffBWx695ib5peen4Mlt03Did4sFjamXGGdbewjhlhyyKXG1aLoEuQHBWoqA3zwWS92fHka5WUG69sb0LKoDJ+8N8sV1tnGPmKIJWc885KbsDCMu64UR3qGXVfdjABhKG5q3VKF4toYxBBLzkRiXJjv58718rur0bF6rjN8a+tx7N13CW2rTrjCOtvYRwyx7t7wx7+8rpoAd/bgxRhNjSHeWDfPDWjbxyex66szuKk+wB9/jbjCOtvYxyCWHHKTE1MqSibA4zWStW5dO9cvwPTqK+d6Ro2PbKQI0+IK62xL7g1iySGXGle5u4onwIkTEQwPW2x4oQGLby3H4T+HsHZTtzvXyaFO9oCL/+4NYoglh1xqUKvUYhSdAWMEvWdH8NyKmXjkwRqc64+w5tVu9J2PSp7r5N4ghlhyyKUGtahZLMYkwKv0wmCEZ56sR/vK2e5S2dh5FAcODqJqnHPNY0cMseSQSw1qUbPYd2RUAgQMXIpwR2sFNq5pcFl/uKsXn39zFrXTA7fW4wUxxJJDLjWoRU1qFybh51Yvt0RWFenA4O+jGRz6/ZLz2vrRSVRVehO6VJJwM1HpOe7S1grXTE1q0yMvVJqXdY36VPAq5e9TGBqXVWbEIggk779pYpH8kqX5MQLcZkynC3UERqFHRAJirNvMCgfkjwRHcj3miQ651KBWgbmlJ72NqH5hvFBUr3yzmASv0twVPLERF4tSOvSip/P2Y7wdR4P/GC80fDQkQu4bPgnzUjq5h0lo6Elv0/XT7acF8Qpj0sJnUy6JqbAuDD7NNHZPM5MWetLb8IHIN1qU6X8AQI8fVHgiqfG/ItcY1KQ2PehFz8uP0//zef4vVmnXdZq+UIcAAAAASUVORK5CYII=">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -518,6 +519,96 @@ body.touring{overflow:hidden}
   .thisweek{grid-template-columns:1fr}.thisweek .tw-go{grid-column:1;grid-row:auto;margin-top:4px}
 }
 
+
+/* report link */
+.rep-link{font-family:var(--display);font-size:12.5px;font-weight:600;color:var(--muted);text-decoration:none;white-space:nowrap;margin-left:auto}
+.rep-link:hover{color:var(--brick);text-decoration:underline}
+.xt-h .rep-link,.ws-h .rep-link,.kbar .rep-link{margin-left:auto}
+.ws-h{position:relative}.ws-h .rep-link{position:absolute;top:0;right:0}
+.dl-card-h .rep-link{margin-left:8px}
+/* install */
+.install-box{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px;font-family:var(--display);font-size:13.5px}
+.install-box:empty{display:none}
+.inst-ok{color:var(--ok);font-weight:600}.inst-off{color:var(--warn);font-weight:600}
+/* glossary */
+.gl{display:grid;gap:14px;padding:22px 0 30px;max-width:980px}
+.gl-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;position:sticky;top:var(--hdr,104px);z-index:5;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(6px);padding:10px 0}
+.gl-search{flex:1 1 280px}
+.gl-search input{width:100%;font-size:16px;padding:10px 14px;border:1.5px solid var(--rule);border-radius:12px;background:var(--surface);color:var(--ink)}
+.gl-search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.gl-chips{display:flex;flex-wrap:wrap;gap:6px}
+.gl-chip{font-family:var(--display);font-size:13px;font-weight:600;border:1px solid var(--rule);background:var(--surface);color:var(--muted);padding:5px 12px;border-radius:999px;cursor:pointer}
+.gl-chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.gl-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:10px}
+.gl-row{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.gl-t{display:grid;gap:1px}.gl-t b{font-family:var(--display);font-size:17px}
+.gl-o{font-family:var(--display);font-size:14px;color:var(--accent)}
+.gl-row p{margin:0;font-size:15px;color:var(--muted)}
+.gl-m{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--display);font-size:13px}
+.gl-m a{color:var(--accent);text-decoration:none;font-weight:600}
+.gl-tag{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:6px;color:var(--tc,var(--muted));background:color-mix(in srgb,var(--tc,var(--muted)) 12%,transparent)}
+.gl-tag.k-gen{--tc:var(--muted)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* exam hub print card */
+.print-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;text-decoration:none;color:var(--ink);background:var(--surface);border:1px dashed var(--rule);border-radius:14px;padding:12px 16px;margin:14px 0 6px;max-width:980px}
+.print-card:hover{border-color:var(--accent)}
+.print-card .pc-i{font-size:22px;width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:var(--code-bg)}
+.print-card b{display:block;font-family:var(--display);font-size:16.5px}
+.print-card .pc-go{font-family:var(--display);font-weight:600;color:var(--accent);white-space:nowrap}
+/* printable exam */
+.pr{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;padding:20px 0 40px}
+.pr > *{min-width:0}
+.pr-ctrl{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:14px 18px;max-width:980px}
+.pr-ctrl fieldset{border:0;margin:0;padding:0;min-width:0;display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center}
+.pr-ctrl legend{font-family:var(--display);font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.pr-ctrl .f{display:grid;gap:4px;font-family:var(--display);font-size:13px}
+.pr-ctrl select{font:inherit;font-size:15px;padding:6px 10px;border-radius:9px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)}
+.pr-ctrl p{margin:0;flex-basis:100%}
+.pr-sheet{background:#fff;color:#111;border:1px solid var(--rule);border-radius:6px;padding:40px 48px;max-width:860px;box-shadow:0 18px 40px -30px rgba(0,0,0,.5);font-family:var(--serif, Georgia, serif);font-size:15px;line-height:1.5}
+.pr-sheet h2{font-family:var(--display);font-size:24px;margin:0}
+.pr-sheet h3{font-family:var(--display);font-size:16.5px;margin:0 0 6px;display:flex;gap:10px;align-items:baseline}
+.pr-sheet h3 span{color:#555;font-weight:600}
+.pr-sheet h3 em{margin-left:auto;font-style:normal;font-size:13px;color:#555;white-space:nowrap}
+.pr-sheet h4{font-family:var(--display);font-size:14px;margin:12px 0 4px}
+.pr-sheet p{margin:0 0 8px}
+.pr-cover{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 20px;align-items:flex-end;border-bottom:2px solid #111;padding-bottom:12px;margin-bottom:14px}
+.pr-cover p{color:#555;font-size:13px;margin:4px 0 0}
+.pr-name{font-family:var(--display);font-size:14px;display:flex;gap:8px;align-items:flex-end}
+.pr-name span{display:inline-block;width:220px;border-bottom:1px solid #111;height:18px}
+.pr-pts{border-collapse:collapse;width:100%;font-size:13px;margin-bottom:22px}
+.pr-pts th,.pr-pts td{border:1px solid #999;padding:3px 8px;text-align:left}
+.pr-pts td:nth-child(3),.pr-pts td:nth-child(4),.pr-pts th:nth-child(3),.pr-pts th:nth-child(4){width:64px;text-align:center}
+.pr-pts tr.sum td{font-weight:700}
+.pr-task{padding:14px 0 16px;border-top:1px solid #ccc}
+.pr-code{font-family:var(--mono);font-size:12.5px;line-height:1.5;background:#f3f3f3;border:1px solid #ddd;border-radius:4px;padding:8px 10px;margin:6px 0 10px;white-space:pre-wrap;color:#111}
+.pr-blank{display:grid;gap:0;margin:6px 0}
+.pr-blank i{display:block;height:28px;border-bottom:1px solid #999}
+.pr-blank.inline{flex:1;margin:0 0 0 10px}
+.pr-blank.inline i{height:22px}
+.pr-f{display:flex;align-items:flex-end;gap:6px;margin:6px 0;font-size:14px}
+.pr-f .mono,.pr-sheet .mono{font-family:var(--mono);font-size:12.5px}
+.pr-mc{list-style:none;padding:0;margin:6px 0;display:grid;gap:6px}
+.pr-mc li{display:flex;gap:10px;align-items:center}
+.pr-mc .box{width:13px;height:13px;border:1.5px solid #333;border-radius:2px;flex:none}
+.pr-prog{font-family:var(--mono);font-size:12.5px;line-height:2;margin:6px 0}
+.pr-ln{padding-left:calc(var(--ind) * 2.2ch)}
+.pr-ln.a{color:#1f2fa8}
+.pr-gap{display:inline-block;min-width:60%;border-bottom:1px solid #777;height:1em;vertical-align:-2px;margin:0 2px}
+.pr-solpart{margin-top:30px;border-top:3px double #111;padding-top:14px}
+.pr-task.sol .pr-expl{font-size:13.5px;color:#333}
+@media (max-width:720px){.pr-sheet{padding:22px 16px}.pr-name span{width:120px}.print-card{grid-template-columns:auto minmax(0,1fr)}.print-card .pc-go{grid-column:2}}
+@media print{
+  @page{margin:16mm 14mm}
+  body{background:#fff !important}
+  header.top,footer,.crumbs,.pr-ctrl,.pr-h,.tour,#cal-dlg,.view:not(#view-print){display:none !important}
+  #view-print{display:block !important;padding:0}
+  .pr{padding:0}
+  .pr-sheet{border:0;box-shadow:none;padding:0;max-width:none;font-size:11.5pt}
+  .pr-task{break-inside:avoid}
+  .pr-solpart{break-before:page;border-top:0;margin-top:0}
+  .pr-code{background:#f5f5f5}
+}
+
 /* typical-mistake hint */
 .dg{display:block;font-weight:400;margin-top:6px;padding:9px 12px;border-radius:9px;background:color-mix(in srgb,var(--warn) 11%,transparent);border-left:3px solid var(--warn);font-family:var(--serif, inherit);font-size:15.5px;line-height:1.5;color:var(--ink)}
 .dg b{font-family:var(--display);color:var(--warn);font-weight:700}
@@ -770,6 +861,7 @@ footer a{color:var(--muted)}
       <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
       <a href="#weeks" data-view="weeks"><span class="de">Wochenplan</span><span class="en">Week by week</span></a>
       <a href="#resources" data-view="resources"><span class="de">Weiterlernen</span><span class="en">Learn more</span></a>
+      <a href="#glossary" data-view="glossary"><span class="de">Glossar</span><span class="en">Glossary</span></a>
     </nav>
   </div>
 </header>
@@ -941,6 +1033,28 @@ footer a{color:var(--muted)}
   </div>
   <div id="resources" class="res-wrap"></div>
   <div class="pager"><a class="btn" href="#weeks"><span class="de">← Wochenplan</span><span class="en">← Week by week</span></a><a class="btn primary" href="#daily"><span class="de">Täglich üben →</span><span class="en">Practise daily →</span></a></div>
+</section>
+
+<!-- ================= GLOSSARY ================= -->
+<section class="view" id="view-glossary" aria-labelledby="gl-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span><span class="de">Glossar</span><span class="en">Glossary</span></span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Programmierung · Fachbegriffe</span><span class="en">Programmierung · terminology</span></div>
+    <h1 id="gl-title"><span class="de">Glossar Deutsch ↔ Englisch</span><span class="en">Glossary German ↔ English</span></h1>
+    <p class="lede"><span class="de">Die Fachbegriffe der Vorlesung mit ihrer englischen Entsprechung und einer kurzen Erklärung. Praktisch, wenn du englische Quellen liest oder auf Englisch denkst.</span><span class="en">The technical terms of the lecture with their German counterpart and a short explanation. Handy when the lecture is in German but you think or read in English.</span></p>
+  </div>
+  <div id="glossary" class="gl"></div>
+</section>
+
+<!-- ================= PRINTABLE EXAM ================= -->
+<section class="view" id="view-print" aria-labelledby="pr-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span><span class="de">Probeklausur drucken</span><span class="en">Print a practice exam</span></span></nav>
+  <div class="page-h pr-h">
+    <div class="kicker"><span class="de">Klausur · zum Ausdrucken</span><span class="en">Exam · printable</span></div>
+    <h1 id="pr-title"><span class="de">Probeklausur auf Papier</span><span class="en">Practice exam on paper</span></h1>
+    <p class="lede"><span class="de">Alle Klausur-Trainings als eine Probeklausur zum Ausdrucken oder als PDF. Die Lösungen kommen auf eigene Seiten am Ende.</span><span class="en">All exam trainings as one practice exam to print or save as PDF. The solutions come on separate pages at the end.</span></p>
+  </div>
+  <div id="printexam" class="pr"></div>
 </section>
 
 <!-- ================= PROGRAMMIERUNG HUB ================= -->
@@ -1508,6 +1622,7 @@ Oma = renate.</pre>
       <a class="part-card" href="#exam-haskell"><span class="pn">III · 18 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Haskell</span><span class="pd"><span class="de">6 Aufgaben: Typen bestimmen, Auswertung, Pattern Matching, Lazy Evaluation, Funktionen auf Bäumen.</span><span class="en">6 tasks: determining types, evaluation, pattern matching, lazy evaluation, functions on trees.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
       <a class="part-card" href="#exam-prolog"><span class="pn">IV · 23 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Prolog</span><span class="pd"><span class="de">6 Aufgaben: Unifikation, Anfragen mit Backtracking, drei Prädikate programmieren, dazu eine Prolog-Spielwiese.</span><span class="en">6 tasks: unification, queries with backtracking, programming three predicates, plus a Prolog playground.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
     </div>
+    <a class="print-card" href="#print"><span class="pc-i" aria-hidden="true">🖶</span><span><b><span class="de">Probeklausur auf Papier</span><span class="en">Practice exam on paper</span></b><span class="muted"><span class="de">Alle Teile als Druckversion oder PDF, Lösungen auf eigenen Seiten.</span><span class="en">All parts as a printable version or PDF, solutions on separate pages.</span></span></span><span class="pc-go"><span class="de">Zur Druckversion →</span><span class="en">To the print version →</span></span></a>
     <p class="small muted"><span class="de">Die Aufgaben sind eigene Übungsaufgaben im Stil der Klausur, keine Originalaufgaben der RWTH.</span><span class="en">The tasks are original practice tasks in exam style, not actual RWTH exam questions.</span></p>
   </section>
 </section>
@@ -1532,6 +1647,7 @@ Oma = renate.</pre>
 </main>
 
 <footer>
+  <div id="install-box" class="install-box"></div>
   <p><span class="de">Unabhängige Lernhilfe für Studierende im ersten Jahr. Kein offizielles Angebot der RWTH Aachen.</span><span class="en">Independent study aid for first-year students. Not an official RWTH Aachen offering.</span></p>
   <p><span class="de">Quellen:</span><span class="en">Sources:</span>
     <a href="https://sc.informatik.rwth-aachen.de/wp-content/uploads/2025/10/2025-WS-Erstsemestereinfuehrung-BSInf.pdf">Erstsemester-Facheinführung BSInf WS 2025/26</a> ·

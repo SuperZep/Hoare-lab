@@ -360,7 +360,7 @@ function renderWS() {
       ${open ? `<div class="step-b">${stepBody(ex, S, i, P)}</div>` : ''}</section>`;
   }).join('');
   document.getElementById('ws').innerHTML = `
-    <div class="ws-h"><span class="badge">${t(ex.group)}${ex.group === 'ifarr' ? ' · ' + t(ex.mode) : ''}</span><h2>${esc(L(ex.title))}</h2><p class="prose">${esc(L(ex.story))}</p></div>
+    <div class="ws-h">${reportLink({ area: 'Übungen', id: ex.id, name: L(ex.title) })}<span class="badge">${t(ex.group)}${ex.group === 'ifarr' ? ' · ' + t(ex.mode) : ''}</span><h2>${esc(L(ex.title))}</h2><p class="prose">${esc(L(ex.story))}</p></div>
     ${programHTML(ex, { showInv: ex.mode === 'given' })}
     ${ex.mode === 'given' && c.cond ? `<div class="invbox">${t('inv_label')} = ⟨${esc(pr(c.inv))}⟩</div>` : ''}
     <div class="steps">${steps}</div>`;
@@ -513,7 +513,7 @@ function renderExam() {
   const head = done
     ? `<div class="kscore"><div class="big">${t('k_score', { p: R.pts, t: R.total })}</div><div class="bar"><span style="width:${Math.round(pct * 100)}%"></span></div><p>${K.timeup ? t('k_timeup') + ' ' : ''}${pct >= 0.8 ? t('k_g1') : pct >= 0.5 ? t('k_g2') : t('k_g3')}</p>
        <div class="row"><button class="btn primary" type="button" data-k-act="new">${t('k_new')}</button><button class="btn" type="button" data-k-act="retry">${t('k_retry')}</button></div></div>`
-    : `<div class="kbar"><span class="badge">${kTotal(ex)} ${t('k_points')}</span>${K.ends ? `<span class="kclock"><span id="k-clock">20:00</span> ${t('k_left')}</span>` : ''}</div>`;
+    : `<div class="kbar"><span class="badge">${kTotal(ex)} ${t('k_points')}</span>${K.ends ? `<span class="kclock"><span id="k-clock">20:00</span> ${t('k_left')}</span>` : ''}${reportLink({ area: 'Klausur Hoare', id: ex.id, name: L(ex.title) })}</div>`;
   box.innerHTML = `
     <div class="plan-h"><div class="kicker">${t('k_kicker')}</div><h1 id="exam-title">${esc(L(ex.title))}</h1></div>
     <div class="kpaper">
@@ -570,11 +570,11 @@ function renderTracer() {
 }
 
 /* ---- view routing & language ---- */
-const VIEWS = ['plan', 'daily', 'prog', 'weeks', 'resources', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam', 'exam-java', 'exam-haskell', 'exam-prolog', 'exam-hoare'];
+const VIEWS = ['plan', 'daily', 'prog', 'weeks', 'resources', 'glossary', 'print', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam', 'exam-java', 'exam-haskell', 'exam-prolog', 'exam-hoare'];
 const PROG_VIEWS = VIEWS.filter(v => v !== 'plan' && v !== 'daily');
-const TOP_OF = { weeks: 'prog', resources: 'prog', java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
-const SUB_OF = { 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
-const TITLES = { plan: 'Hoare Lab', daily: 'Täglich · Hoare Lab', weeks: 'Wochenplan · Hoare Lab', resources: 'Weiterlernen · Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
+const TOP_OF = { weeks: 'prog', resources: 'prog', glossary: 'prog', print: 'exam', java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const SUB_OF = { print: 'exam', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const TITLES = { plan: 'Hoare Lab', daily: 'Täglich · Hoare Lab', weeks: 'Wochenplan · Hoare Lab', resources: 'Weiterlernen · Hoare Lab', glossary: 'Glossar · Hoare Lab', print: 'Probeklausur drucken · Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
 
 /* section bar (Java/Haskell/Prolog): jump, scrollspy, progress */
 function hdrH() { const h = document.querySelector('header.top'); return h && getComputedStyle(h).position === 'sticky' ? h.offsetHeight : 0; }
@@ -626,6 +626,8 @@ function showView(v, scroll) {
   try { document.title = TITLES[v] || 'Hoare Lab'; } catch (e) {}
   if (v === 'daily') renderDaily();
   if (v === 'weeks') renderWeeks();
+  if (v === 'glossary') renderGlossary();
+  if (v === 'print') renderPrint();
   if (v === 'resources') renderResources();
   if (v === 'prog') renderThisWeek();
   if (v === 'practice') renderPractice();
@@ -644,6 +646,9 @@ function setLang(l) {
   try { dNavBadge(); } catch (e) {}
   if (ST.view === 'daily') renderDaily();
   if (ST.view === 'weeks') renderWeeks();
+  if (ST.view === 'glossary') renderGlossary();
+  if (ST.view === 'print') renderPrint();
+  try { renderInstall(); } catch (e) {}
   try { calBtnLabel(); } catch (e) {}
   try { tourLang(); } catch (e) {}
   try { const dd = document.getElementById('cal-dlg'); if (dd && dd.open) renderCalDlg(); } catch (e) {}
@@ -663,6 +668,9 @@ function start(data) {
   initDaily();
   initWeeks();
   initCalDlg();
+  initGlossary();
+  initPrint();
+  initPWA();
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
   const ws = document.getElementById('ws');
   ws.addEventListener('click', handleWS);
