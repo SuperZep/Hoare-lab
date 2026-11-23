@@ -410,6 +410,25 @@ strong .wiki,strong.brick .wiki{color:inherit}
 .dl-score{font-family:var(--display);font-size:20px;font-weight:600}
 .dl-foot{max-width:760px}
 .linkbtn{border:0;background:none;padding:0;font:inherit;color:var(--accent);text-decoration:underline;cursor:pointer}
+.linkbtn.strong{font-weight:600}
+.dl-sync{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:20px 24px 24px;display:grid;gap:14px;max-width:860px}
+.dl-sync-h{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.dl-sync-h h2{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.dl-sync p{margin:0}
+.dl-sync-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px;align-items:start}
+.dl-sync-out{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start}
+.dl-qrbox{margin:0;display:grid;gap:6px;justify-items:center;font-family:var(--display);font-size:13px;color:var(--muted)}
+.dl-qr{width:184px;height:184px;border-radius:10px;border:1px solid var(--rule);display:block}
+.dl-sync-link,.dl-sync-in{display:grid;gap:10px;align-content:start}
+.dl-sync-in{border-left:1px solid var(--rule);padding-left:22px}
+.dl-sync-in h3{font-family:var(--display);font-size:16px}
+.dl-sync textarea{width:100%;font-size:12.5px;line-height:1.45;padding:9px 11px;border:1.5px solid var(--rule);border-radius:10px;background:var(--paper);color:var(--ink);resize:vertical;word-break:break-all}
+.dl-sync textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.dl-actions.start{justify-content:flex-start}
+.dl-sync-link .dl-actions .btn{flex:0 0 auto}
+.dl-banner{max-width:860px}
+@media (max-width:860px){.dl-sync-grid{grid-template-columns:1fr}.dl-sync-in{border-left:0;padding-left:0;border-top:1px solid var(--rule);padding-top:16px}}
+@media (max-width:520px){.dl-sync{padding:16px}.dl-sync-out{grid-template-columns:1fr;justify-items:center}.dl-qr{width:200px;height:200px}}
 @media (prefers-reduced-motion:no-preference){.dl-card{animation:dlIn .22s ease-out}@keyframes dlIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
 @media (max-width:720px){
   .dl-stats{grid-template-columns:1fr auto;padding:12px 14px;gap:12px}

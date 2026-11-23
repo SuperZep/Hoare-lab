@@ -31,6 +31,14 @@ const DT = {
     more: 'Bonusrunde starten', more_note: 'Bonusrunden zählen nicht für die Serie, ihre Fehler kommen aber ebenfalls wieder.',
     reset: 'Fortschritt zurücksetzen', reset_q: 'Serie, Wiederholungen und Statistik löschen?',
     stats: 'Insgesamt {k} von {n} Aufgaben richtig', local: 'Dein Fortschritt bleibt nur in diesem Browser gespeichert.',
+    sync_btn: 'Auf ein anderes Gerät übertragen', sync_close: 'Schließen', sync_h: 'Fortschritt übertragen',
+    sync_p: 'Es gibt keine Anmeldung: Dein Fortschritt liegt nur in diesem Browser. So nimmst du ihn auf ein anderes Gerät mit:',
+    sync_qr: 'Mit dem Handy scannen', sync_or: 'oder den Link auf dem anderen Gerät öffnen, zum Beispiel per Mail oder Messenger an dich selbst.',
+    copy_link: 'Link kopieren', copy_code: 'Nur den Code kopieren', copied: 'Kopiert ✓', copy_fail: 'Kopieren nicht möglich: Markiere den Text und kopiere ihn von Hand.',
+    sync_in_h: 'Code von einem anderen Gerät einfügen', sync_in_ph: 'Code oder Link einfügen', sync_apply: 'Übernehmen',
+    sync_merge: 'Beide Stände werden zusammengeführt: die längere Serie, alle Wiederholungen und alle geübten Tage. Nichts geht verloren.',
+    sync_ok: 'Fortschritt übernommen. {s}. {r}.', sync_bad: 'Dieser Code ist ungültig oder unvollständig.', sync_wait: 'Code wird erstellt …',
+    sync_note: 'Der Code enthält nur deinen Lernstand, keinen Namen und keine persönlichen Daten.',
     wd: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'], today: 'heute'
   },
   en: {
@@ -62,6 +70,14 @@ const DT = {
     more: 'Start a bonus round', more_note: 'Bonus rounds do not count towards the streak, but their mistakes come back as well.',
     reset: 'Reset progress', reset_q: 'Delete streak, reviews and statistics?',
     stats: '{k} of {n} tasks correct overall', local: 'Your progress is stored only in this browser.',
+    sync_btn: 'Transfer to another device', sync_close: 'Close', sync_h: 'Transfer your progress',
+    sync_p: 'There is no sign-in: your progress lives only in this browser. To take it to another device:',
+    sync_qr: 'Scan with your phone', sync_or: 'or open the link on the other device, for example by emailing or messaging it to yourself.',
+    copy_link: 'Copy link', copy_code: 'Copy the code only', copied: 'Copied ✓', copy_fail: 'Copying is not possible here: select the text and copy it by hand.',
+    sync_in_h: 'Paste a code from another device', sync_in_ph: 'Paste a code or link', sync_apply: 'Apply',
+    sync_merge: 'Both records are merged: the longer streak, all reviews and all practised days. Nothing is lost.',
+    sync_ok: 'Progress transferred. {s}. {r}.', sync_bad: 'This code is invalid or incomplete.', sync_wait: 'Creating the code …',
+    sync_note: 'The code contains only your learning progress, no name and no personal data.',
     wd: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'], today: 'today'
   }
 };
@@ -348,6 +364,123 @@ function dComplete(S) {
   dSave(); dNavBadge();
 }
 
+
+/* ---------- transfer between devices (no server) ---------- */
+const DSYNC_URL = 'https://superzep.github.io/Hoare-lab/';
+let DSY = { open: false, code: null, msg: null, copied: '', banner: null };
+const b64u = u8 => { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const unb64u = str => { const s = atob(str.replace(/-/g, '+').replace(/_/g, '/')); const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; };
+async function dZip(u8, how) {
+  const cs = how === 'z' ? new CompressionStream('deflate-raw') : new DecompressionStream('deflate-raw');
+  const out = new Blob([u8]).stream().pipeThrough(cs);
+  return new Uint8Array(await new Response(out).arrayBuffer());
+}
+function dPack() {
+  const t = dNum(dToday()), gi = g => DTOPICS.indexOf(g);
+  const o = { t, s: DS.streak, b: DS.best, l: DS.last ? dNum(DS.last) - t : null, d: DS.days.map(x => dNum(x) - t).filter(x => x > -60),
+    n: DS.stats.n, k: DS.stats.ok, x: Object.entries(DS.box).map(([key, v]) => { const [g, sd] = key.split(':'); return [gi(g), (+sd).toString(36), v.b, v.d - t]; }) };
+  const S = DS.sess;
+  if (S && S.date === dToday()) o.q = [S.round, S.idx, S.done ? 1 : 0, S.items.map(i => [gi(i.g), i.s.toString(36), i.rev ? 1 : 0]), S.res.map(r => r ? (r.ok ? 1 : 0) : -1)];
+  return o;
+}
+function dUnpack(o) {
+  const ok = o && Number.isInteger(o.t) && Array.isArray(o.x) && Array.isArray(o.d);
+  if (!ok) throw new Error('form');
+  const g = i => { if (!DTOPICS[i]) throw new Error('topic'); return DTOPICS[i]; };
+  const R = { streak: +o.s || 0, best: +o.b || 0, last: o.l === null || o.l === undefined ? null : dStr(o.t + o.l), days: o.d.map(x => dStr(o.t + x)),
+    stats: { n: +o.n || 0, ok: +o.k || 0 }, box: {}, sess: null };
+  for (const [i, sd, b, d] of o.x) R.box[g(i) + ':' + parseInt(sd, 36)] = { b: Math.min(4, Math.max(1, +b)), d: o.t + d };
+  if (o.q && dStr(o.t) === dToday()) {
+    const [round, idx, done, items, res] = o.q;
+    R.sess = { date: dToday(), round, idx, done: !!done, items: items.map(([i, sd, rv]) => ({ g: g(i), s: parseInt(sd, 36), ...(rv ? { rev: true } : {}) })), res: res.map(r => r < 0 ? null : { ok: r === 1 }) };
+  }
+  return R;
+}
+async function dExport() {
+  const json = new TextEncoder().encode(JSON.stringify(dPack()));
+  try { return 'HL1z' + b64u(await dZip(json, 'z')); } catch (e) { return 'HL1j' + b64u(json); }
+}
+async function dDecode(txt) {
+  txt = (txt || '').trim(); const m = txt.match(/HL1([zj])([A-Za-z0-9_-]+)/); if (!m) throw new Error('nocode');
+  let u8 = unb64u(m[2]); if (m[1] === 'z') u8 = await dZip(u8, 'u');
+  return dUnpack(JSON.parse(new TextDecoder().decode(u8)));
+}
+function dMerge(R) {
+  if (R.last && (!DS.last || dNum(R.last) > dNum(DS.last) || (R.last === DS.last && R.streak > DS.streak))) { DS.last = R.last; DS.streak = R.streak; }
+  DS.best = Math.max(DS.best, R.best, DS.streak);
+  DS.days = [...new Set([...DS.days, ...R.days])].sort().slice(-120);
+  for (const [k, v] of Object.entries(R.box)) { const L = DS.box[k]; if (!L || v.d < L.d) DS.box[k] = v; }
+  if (R.stats.n > DS.stats.n) DS.stats = R.stats;
+  if (R.sess) { const L = DS.sess, cnt = S => S ? S.res.filter(Boolean).length + (S.done ? 99 : 0) + S.round * 100 : -1; if (!L || L.date !== R.sess.date || cnt(R.sess) > cnt(L)) DS.sess = R.sess; }
+  dSave(); DC = { v: {}, fb: null, shown: false };
+}
+async function dApplyCode(txt, fromLink) {
+  try { dMerge(await dDecode(txt)); DSY.msg = { ok: true }; } catch (e) { DSY.msg = { ok: false }; }
+  if (fromLink) { DSY.banner = DSY.msg; DSY.msg = null; DSY.open = false; renderDaily(); window.scrollTo(0, 0); return; }
+  DSY.open = true; DSY.code = null; renderDaily(); dSyncRefresh();
+}
+function dQR(text) {
+  try { const q = qrcode(0, 'L'); q.addData(text, 'Byte'); q.make(); const n = q.getModuleCount(); let p = '';
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) p += `M${c + 4} ${r + 4}h1v1h-1z`;
+    return `<svg class="dl-qr" viewBox="0 0 ${n + 8} ${n + 8}" role="img" aria-label="QR"><rect width="${n + 8}" height="${n + 8}" fill="#fff"/><path d="${p}" fill="#000" shape-rendering="crispEdges"/></svg>`;
+  } catch (e) { return ''; }
+}
+function dSyncMsg(m) {
+  if (!m.ok) return dt('sync_bad');
+  const n = dStreak(), due = dDue(dNum(dToday())).length;
+  return dt('sync_ok', { s: n ? dt(n === 1 ? 'streak_n' : 'streak_ns', { n }) : dt('streak_0'), r: due ? dt(due === 1 ? 'due' : 'dues', { n: due }) : dt('due_0') });
+}
+function dSyncHTML() {
+  if (!DSY.open) return '';
+  const link = DSY.code ? DSYNC_URL + '#import=' + DSY.code : '';
+  const msg = DSY.msg ? `<div class="fb ${DSY.msg.ok ? 'ok' : 'bad'}" role="status">${esc(dSyncMsg(DSY.msg))}</div>` : '';
+  return `<section class="dl-sync" aria-labelledby="dl-sync-h">
+    <div class="dl-sync-h"><h2 id="dl-sync-h">${esc(dt('sync_h'))}</h2><button type="button" class="btn ghost" data-dact="sync">${esc(dt('sync_close'))}</button></div>
+    ${msg}
+    <p>${esc(dt('sync_p'))}</p>
+    <div class="dl-sync-grid">
+      <div class="dl-sync-out">
+        ${DSY.code ? `<figure class="dl-qrbox">${dQR(link)}<figcaption>${esc(dt('sync_qr'))}</figcaption></figure>` : `<p class="muted">${esc(dt('sync_wait'))}</p>`}
+        <div class="dl-sync-link">
+          <p class="small">${esc(dt('sync_or'))}</p>
+          <textarea class="mono" rows="3" readonly id="dl-sync-link" aria-label="Link">${esc(link)}</textarea>
+          <div class="dl-actions start"><button type="button" class="btn primary" data-dact="copylink" ${DSY.code ? '' : 'disabled'}>${esc(DSY.copied === 'link' ? dt('copied') : dt('copy_link'))}</button><button type="button" class="btn" data-dact="copycode" ${DSY.code ? '' : 'disabled'}>${esc(DSY.copied === 'code' ? dt('copied') : dt('copy_code'))}</button></div>
+          ${DSY.copied === 'fail' ? `<p class="err">${esc(dt('copy_fail'))}</p>` : ''}
+          <p class="small muted">${esc(dt('sync_note'))}</p>
+        </div>
+      </div>
+      <div class="dl-sync-in">
+        <h3>${esc(dt('sync_in_h'))}</h3>
+        <textarea class="mono" rows="3" id="dl-sync-in" placeholder="${esc(dt('sync_in_ph'))}" spellcheck="false" autocapitalize="off"></textarea>
+        <div class="dl-actions start"><button type="button" class="btn primary" data-dact="import">${esc(dt('sync_apply'))}</button></div>
+        <p class="small muted">${esc(dt('sync_merge'))}</p>
+      </div>
+    </div>
+  </section>`;
+}
+async function dSyncRefresh() {
+  const code = await dExport();
+  if (!DSY.open) return;
+  DSY.code = code; const el = document.querySelector('#daily .dl-sync');
+  if (el) el.outerHTML = dSyncHTML();
+}
+async function dCopy(what) {
+  const txt = what === 'link' ? DSYNC_URL + '#import=' + DSY.code : DSY.code;
+  let ok = false;
+  try { await navigator.clipboard.writeText(txt); ok = true; } catch (e) {
+    try { const ta = document.getElementById('dl-sync-link'); const old = ta.value; ta.value = txt; ta.select(); ok = document.execCommand('copy'); ta.value = old; } catch (e2) {}
+  }
+  DSY.copied = ok ? what : 'fail';
+  const el = document.querySelector('#daily .dl-sync'); if (el) el.outerHTML = dSyncHTML();
+  if (ok) setTimeout(() => { if (DSY.copied === what) { DSY.copied = ''; const e2 = document.querySelector('#daily .dl-sync'); if (e2) e2.outerHTML = dSyncHTML(); } }, 2500);
+}
+/* called by the router for #import=CODE */
+function dImportFromHash(h) {
+  const code = h.slice('import='.length);
+  try { history.replaceState(null, '', location.pathname + location.search + '#daily'); } catch (e) {}
+  dApplyCode(code, true);
+}
+
 /* ---------- UI ---------- */
 let DC = { v: {}, fb: null, shown: false };
 const FLAME = '<svg class="flame" viewBox="0 0 16 16" aria-hidden="true"><path d="M8.3.7c.5 2.5-.9 3.9-2.2 5.3C4.8 7.4 3.4 8.8 3.4 11c0 2.6 2 4.4 4.6 4.4s4.6-1.8 4.6-4.4c0-2.1-1-3.7-2.1-5-.1 1.2-.7 2.2-1.6 2.7.5-2.2-.1-5.6-.6-8z" fill="currentColor"/><path d="M8 15.4c-1.4 0-2.4-1-2.4-2.4 0-1.3.8-2.1 1.6-2.9.2.8.6 1.3 1.2 1.6-.1-1 .2-2 .8-2.8.7.9 1.3 1.9 1.3 3.5 0 1.8-1.1 3-2.5 3z" fill="#fff" opacity=".32"/></svg>';
@@ -414,18 +547,20 @@ function dDone(S) {
 function renderDaily() {
   const root = document.getElementById('daily'); if (!root) return;
   const S = dSession();
-  root.innerHTML = `${dHeader()}
+  root.innerHTML = `${DSY.banner ? `<div class="fb ${DSY.banner.ok ? 'ok' : 'bad'} dl-banner" role="status">${esc(dSyncMsg(DSY.banner))}</div>` : ''}${dHeader()}
     <div class="dl-main">
       <div class="dl-round"><span class="mono small muted">${S.round ? esc(dt('bonus', { n: S.round })) : esc(new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }))}</span>${dProgress(S)}</div>
       ${S.done ? dDone(S) : dCard(S)}
     </div>
-    <p class="dl-foot small muted">${esc(dt('stats', { k: DS.stats.ok, n: DS.stats.n }))} · ${esc(dt('local'))} · <button type="button" class="linkbtn" data-dact="reset">${esc(dt('reset'))}</button></p>`;
+    <p class="dl-foot small muted">${esc(dt('stats', { k: DS.stats.ok, n: DS.stats.n }))} · ${esc(dt('local'))} <button type="button" class="linkbtn strong" data-dact="sync" aria-expanded="${DSY.open}">${esc(dt('sync_btn'))}</button> · <button type="button" class="linkbtn" data-dact="reset">${esc(dt('reset'))}</button></p>
+    ${dSyncHTML()}`;
   dNavBadge();
   const inp = document.getElementById('dl-input');
-  if (inp && !inp.disabled && document.activeElement === document.body && innerWidth > 720) inp.focus({ preventScroll: true });
+  if (inp && !inp.disabled && !DSY.open && document.activeElement === document.body && innerWidth > 720) inp.focus({ preventScroll: true });
 }
 function dFocusAfter(sel) { const el = document.querySelector('#daily ' + sel); if (el) el.focus({ preventScroll: true }); }
 function dAct(a) {
+  DSY.banner = null;
   const S = dSession();
   if (a === 'check' && !S.done) {
     const it = S.items[S.idx], G = dItem(it), res = G.check(DC.v);
@@ -445,6 +580,12 @@ function dAct(a) {
   } else if (a === 'more') {
     DC = { v: {}, fb: null, shown: false };
     DS.sess = dBuild(dToday(), S.round + 1); dSave(); renderDaily(); dFocusAfter('#dl-input');
+  } else if (a === 'sync') {
+    DSY.open = !DSY.open; DSY.msg = null; DSY.code = null; DSY.copied = '';
+    renderDaily();
+    if (DSY.open) { dSyncRefresh(); const el = document.querySelector('#daily .dl-sync'); if (el) el.scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' }); }
+  } else if (a === 'copylink' || a === 'copycode') { dCopy(a === 'copylink' ? 'link' : 'code');
+  } else if (a === 'import') { const t = document.getElementById('dl-sync-in'); if (t && t.value.trim()) dApplyCode(t.value);
   } else if (a === 'reset') {
     if (!confirmReset()) return;
     DS = dFresh(); DC = { v: {}, fb: null, shown: false }; dSave(); renderDaily();

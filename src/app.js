@@ -613,6 +613,7 @@ function initSecbar() {
   addEventListener('scroll', () => { if (tick) return; tick = true; requestAnimationFrame(() => { tick = false; secbarSpy(); }); }, { passive: true });
 }
 function showView(v, scroll) {
+  if (v && v.startsWith('import=')) { v = 'daily'; try { dImportFromHash(location.hash.slice(1)); } catch (e) {} }
   if (!VIEWS.includes(v)) v = 'plan';
   ST.view = v;
   VIEWS.forEach(n => document.getElementById('view-' + n).classList.toggle('on', n === v));
