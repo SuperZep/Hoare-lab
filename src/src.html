@@ -318,6 +318,50 @@ pre.code{font-family:var(--mono);font-size:14.5px;line-height:1.6;background:var
 .pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:10px}
 .mod-link{color:var(--ink);text-decoration:none}
 .mod-link:hover{color:var(--accent)}
+/* language exam training */
+.lx{display:grid;gap:22px;padding-bottom:10px}
+.lx .page-h{border-bottom:0;padding-bottom:0}
+.lxsum{position:sticky;top:110px;z-index:4;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:14px;padding:12px 18px;max-width:980px}
+.lxsum .big{font-family:var(--display);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.lxsum .bar{height:8px;border-radius:999px;background:var(--code-bg);overflow:hidden}
+.lxsum .bar span{display:block;height:100%;background:var(--accent)}
+@media (max-width:700px){.lxsum{grid-template-columns:1fr;position:static}}
+.xts{display:grid;gap:16px;max-width:980px}
+.xt{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px 20px;display:grid;gap:12px;min-width:0}
+.xt>p{font-size:16.5px;max-width:72ch}
+.xt-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.xt-h .xt-n{font-family:var(--mono);font-size:13px;color:var(--accent)}
+.xt-h h3{font-size:19px}
+.lxbadge{margin-left:auto;font-family:var(--display);font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid var(--rule);color:var(--muted);white-space:nowrap}
+.lxbadge.full{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.lxbadge.part{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.lxbadge.zero{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.lxarea{width:100%;font-size:14.5px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical;line-height:1.55}
+.lxarea:focus,.lxf input:focus{border-color:var(--accent);outline:none}
+.lxfields{display:grid;gap:12px}
+.lxf{display:grid;gap:6px;font-size:15px;min-width:0}
+.lxf>.mono{font-size:14px}
+.lxf .row{flex-wrap:wrap}
+.lxf .row input:not([type]){flex:1 1 240px}
+.lxf input:not([type]){font-size:15px;padding:7px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink);flex:1;min-width:0;max-width:520px}
+.lxf input:disabled{opacity:.5}
+.lxm{font-family:var(--mono);font-weight:700}
+.lxm.yes,.lx-lines .yes,.lxtest.yes .small:last-child{color:var(--ok)}
+.lxm.no,.lx-lines .no{color:var(--bad)}
+.lxexp{font-family:var(--display);font-size:13.5px;color:var(--muted)}
+.lx-lines{display:grid;gap:2px;font-size:15px}
+.lxmc{display:grid;gap:8px}
+.lxopt{display:flex;gap:10px;align-items:center;padding:8px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);cursor:pointer}
+.lxopt.right{border-color:var(--ok);background:var(--ok-soft)}
+.lxopt input{accent-color:var(--accent)}
+.lxtests{display:grid;gap:6px}
+.lxtest{display:grid;gap:2px;padding:8px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);font-size:15px;min-width:0;overflow-wrap:anywhere}
+.lxtest.yes{border-color:color-mix(in srgb,var(--ok) 50%,var(--rule))}
+.lxtest.no{border-color:color-mix(in srgb,var(--bad) 50%,var(--rule));background:var(--bad-soft)}
+.lxsol{display:grid;gap:8px}
+.lxsol .lab{font-family:var(--display);font-weight:600}
+.lxchecks{display:grid;gap:6px}
+.lx .tool{max-width:980px}
 footer{border-top:1px solid var(--rule);padding:26px 20px 40px;max-width:1180px;margin:0 auto;display:grid;gap:8px;font-size:15px;color:var(--muted)}
 footer a{color:var(--muted)}
 </style>
@@ -452,7 +496,7 @@ N = 3.</pre>
     <div class="sec-h"><span class="num">03</span><h2><span class="de">Üben und prüfen</span><span class="en">Practise and test yourself</span></h2></div>
     <div class="cards">
       <a class="card link-card" href="#practice"><span class="tag"><span class="de">11 Aufgaben</span><span class="en">11 exercises</span></span><h3><span class="de">Geführte Übungen zum Hoare-Kalkül</span><span class="en">Guided Hoare logic exercises</span></h3><p><span class="de">Invariante gegeben oder selbst finden, if/else und Arrays, mit automatischem Prüfer.</span><span class="en">Invariant given or found yourself, if/else and arrays, with an automatic checker.</span></p></a>
-      <a class="card link-card" href="#exam"><span class="tag"><span class="de">mit Punkten</span><span class="en">with points</span></span><h3><span class="de">Klausur-Simulation</span><span class="en">Exam simulation</span></h3><p><span class="de">Eine Aufgabe wie in der Prüfung, optional mit 20 Minuten Zeitlimit.</span><span class="en">A task like in the exam, optionally with a 20-minute time limit.</span></p></a>
+      <a class="card link-card" href="#exam"><span class="tag"><span class="de">4 Trainings · mit Punkten</span><span class="en">4 trainings · with points</span></span><h3><span class="de">Klausur üben</span><span class="en">Practise for the exam</span></h3><p><span class="de">Klausur-Training für Java, Haskell und Prolog sowie die Hoare-Simulation mit Zeitlimit.</span><span class="en">Exam training for Java, Haskell and Prolog plus the timed Hoare simulation.</span></p></a>
     </div>
   </section>
 </section>
@@ -521,6 +565,7 @@ N = 3.</pre>
         <ol><li>Unterklassen und Vererbung</li><li>Abstrakte Klassen und Interfaces</li><li>Modularität und Pakete</li></ol></div>
     </div>
     <p class="small muted"><span class="de">Kapitelnamen wie in den Vorlesungsfolien (auf Deutsch).</span><span class="en">Chapter names as in the lecture slides (in German).</span></p>
+    <div class="row"><a class="btn primary" href="#exam-java"><span class="de">Prüfungsaufgaben zu Java üben →</span><span class="en">Practise Java exam tasks →</span></a></div>
   </section>
 
   <section class="sec">
@@ -534,7 +579,7 @@ N = 3.</pre>
     }
     return res;
 }</pre>
-    <div class="pager"><a class="btn" href="#prog">← Programmierung</a><a class="btn primary" href="#haskell"><span class="de">Weiter: Haskell →</span><span class="en">Next: Haskell →</span></a></div>
+    <div class="pager"><a class="btn" href="#prog">← Programmierung</a><a class="btn" href="#exam-java"><span class="de">Klausur-Training Java</span><span class="en">Java exam training</span></a><a class="btn primary" href="#haskell"><span class="de">Weiter: Haskell →</span><span class="en">Next: Haskell →</span></a></div>
   </section>
 </section>
 
@@ -594,6 +639,7 @@ N = 3.</pre>
         <ol><li>Prinzipien der funktionalen Programmierung</li><li>Deklarationen</li><li>Ausdrücke</li><li>Muster (Patterns)</li><li>Typen und Datenstrukturen</li><li>Funktionale Programmiertechniken</li></ol></div>
     </div>
     <p class="small muted"><span class="de">Gearbeitet wird mit dem interaktiven Modus des Glasgow Haskell Compilers (GHCi).</span><span class="en">You work with the interactive mode of the Glasgow Haskell Compiler (GHCi).</span></p>
+    <div class="row"><a class="btn primary" href="#exam-haskell"><span class="de">Prüfungsaufgaben zu Haskell üben →</span><span class="en">Practise Haskell exam tasks →</span></a></div>
   </section>
 
   <section class="sec">
@@ -608,7 +654,7 @@ quadrate xs = map (\x -> x * x) xs
 
 -- GHCi&gt; quadrate [1, 2, 3]
 -- [1,4,9]</pre>
-    <div class="pager"><a class="btn" href="#java">← Java</a><a class="btn primary" href="#prolog"><span class="de">Weiter: Prolog →</span><span class="en">Next: Prolog →</span></a></div>
+    <div class="pager"><a class="btn" href="#java">← Java</a><a class="btn" href="#exam-haskell"><span class="de">Klausur-Training Haskell</span><span class="en">Haskell exam training</span></a><a class="btn primary" href="#prolog"><span class="de">Weiter: Prolog →</span><span class="en">Next: Prolog →</span></a></div>
   </section>
 </section>
 
@@ -667,6 +713,7 @@ quadrate xs = map (\x -> x * x) xs
       <div class="ch"><div class="ch-h"><span class="cn">IV</span><h3><span class="de">Logische Programmierung</span><span class="en">Logic programming</span></h3></div>
         <ol><li>Grundkonzepte der logischen Programmierung</li><li>Syntax von Prolog</li><li>Rechnen in Prolog <span class="muted small">(Unifikation, allgemeinster Unifikator, Resolution)</span></li></ol></div>
     </div>
+    <div class="row"><a class="btn primary" href="#exam-prolog"><span class="de">Prüfungsaufgaben zu Prolog üben →</span><span class="en">Practise Prolog exam tasks →</span></a></div>
   </section>
 
   <section class="sec">
@@ -679,7 +726,7 @@ grossmutterVon(G, K) :- mutterVon(G, M), mutterVon(M, K).
 
 ?- grossmutterVon(Oma, aline).
 Oma = renate.</pre>
-    <div class="pager"><a class="btn" href="#haskell">← Haskell</a><a class="btn primary" href="#hoare"><span class="de">Weiter: Hoare-Kalkül →</span><span class="en">Next: Hoare logic →</span></a></div>
+    <div class="pager"><a class="btn" href="#haskell">← Haskell</a><a class="btn" href="#exam-prolog"><span class="de">Klausur-Training Prolog</span><span class="en">Prolog exam training</span></a><a class="btn primary" href="#hoare"><span class="de">Weiter: Hoare-Kalkül →</span><span class="en">Next: Hoare logic →</span></a></div>
   </section>
 </section>
 
@@ -900,7 +947,7 @@ Oma = renate.</pre>
         </div>
         <div class="cta">
           <a class="btn primary" href="#practice"><span class="de">Jetzt üben: 11 geführte Aufgaben</span><span class="en">Practise now: 11 guided exercises</span></a>
-          <a class="btn" href="#exam"><span class="de">Klausur-Simulation</span><span class="en">Exam simulation</span></a>
+          <a class="btn" href="#exam-hoare"><span class="de">Klausur-Simulation</span><span class="en">Exam simulation</span></a>
         </div>
       </section>
     </div>
@@ -917,8 +964,39 @@ Oma = renate.</pre>
 </section>
 
 <!-- ================= EXAM ================= -->
-<section class="view" id="view-exam" aria-labelledby="exam-title">
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#hoare">Hoare-Kalkül</a><span>›</span><span><span class="de">Klausur</span><span class="en">Exam</span></span></nav>
+<section class="view" id="view-exam" aria-labelledby="examhub-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span><span class="de">Klausur</span><span class="en">Exam</span></span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Prüfungsvorbereitung · Programmierung</span><span class="en">Exam preparation · Programmierung</span></div>
+    <h1 id="examhub-title"><span class="de">Klausur üben</span><span class="en">Practise for the exam</span></h1>
+    <p class="lede"><span class="de">Für jeden Teil der Vorlesung gibt es ein eigenes Klausur-Training mit Punkten. Die Aufgaben werden sofort ausgewertet; Programmieraufgaben in Prolog testet ein eingebautes Mini-Prolog.</span><span class="en">Each part of the lecture has its own exam training with points. Tasks are graded immediately; Prolog programming tasks are tested by a built-in mini Prolog.</span></p>
+  </div>
+  <section class="sec">
+    <div class="parts">
+      <a class="part-card" href="#exam-java"><span class="pn">II · 24 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Java</span><span class="pd"><span class="de">8 Aufgaben: Ausgaben, Parameterübergabe, dynamisches Binden, Überladen, Rekursion, abstrakte Klassen, eine Methode schreiben.</span><span class="en">8 tasks: outputs, parameter passing, dynamic binding, overloading, recursion, abstract classes, writing a method.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
+      <a class="part-card accent" href="#exam-hoare"><span class="pn">II.1.4 · <span class="de">mit Zeitlimit</span><span class="en">timed</span></span><span class="pt">Hoare-Kalkül</span><span class="pd"><span class="de">Klausur-Simulation: alle Zusicherungen, Invariante und Variante selbst eintragen, 13 Programme.</span><span class="en">Exam simulation: fill in every assertion, the invariant and the variant yourself, 13 programs.</span></span><span class="go"><span class="de">Simulation starten →</span><span class="en">Start simulation →</span></span></a>
+      <a class="part-card" href="#exam-haskell"><span class="pn">III · 18 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Haskell</span><span class="pd"><span class="de">6 Aufgaben: Typen bestimmen, Auswertung, Pattern Matching, Lazy Evaluation, Funktionen auf Bäumen.</span><span class="en">6 tasks: determining types, evaluation, pattern matching, lazy evaluation, functions on trees.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
+      <a class="part-card" href="#exam-prolog"><span class="pn">IV · 23 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Prolog</span><span class="pd"><span class="de">6 Aufgaben: Unifikation, Anfragen mit Backtracking, drei Prädikate programmieren, dazu eine Prolog-Spielwiese.</span><span class="en">6 tasks: unification, queries with backtracking, programming three predicates, plus a Prolog playground.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
+    </div>
+    <p class="small muted"><span class="de">Die Aufgaben sind eigene Übungsaufgaben im Stil der Klausur, keine Originalaufgaben der RWTH.</span><span class="en">The tasks are original practice tasks in exam style, not actual RWTH exam questions.</span></p>
+  </section>
+</section>
+
+<section class="view" id="view-exam-java" aria-labelledby="lx-java-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span>Java</span></nav>
+  <div id="lx-java" class="lx"></div>
+</section>
+<section class="view" id="view-exam-haskell" aria-labelledby="lx-haskell-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span>Haskell</span></nav>
+  <div id="lx-haskell" class="lx"></div>
+</section>
+<section class="view" id="view-exam-prolog" aria-labelledby="lx-prolog-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span>Prolog</span></nav>
+  <div id="lx-prolog" class="lx"></div>
+</section>
+
+<section class="view" id="view-exam-hoare" aria-labelledby="exam-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span>Hoare-Kalkül</span></nav>
   <div id="exam"></div>
 </section>
 </main>
@@ -938,7 +1016,11 @@ Oma = renate.</pre>
 /*ENGINE*/
 </script>
 <script>
+/*LANGENG*/
+</script>
+<script>
 /*APP*/
+/*LX*/
 </script>
 </body>
 </html>

@@ -318,6 +318,50 @@ pre.code{font-family:var(--mono);font-size:14.5px;line-height:1.6;background:var
 .pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:10px}
 .mod-link{color:var(--ink);text-decoration:none}
 .mod-link:hover{color:var(--accent)}
+/* language exam training */
+.lx{display:grid;gap:22px;padding-bottom:10px}
+.lx .page-h{border-bottom:0;padding-bottom:0}
+.lxsum{position:sticky;top:110px;z-index:4;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:14px;padding:12px 18px;max-width:980px}
+.lxsum .big{font-family:var(--display);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.lxsum .bar{height:8px;border-radius:999px;background:var(--code-bg);overflow:hidden}
+.lxsum .bar span{display:block;height:100%;background:var(--accent)}
+@media (max-width:700px){.lxsum{grid-template-columns:1fr;position:static}}
+.xts{display:grid;gap:16px;max-width:980px}
+.xt{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px 20px;display:grid;gap:12px;min-width:0}
+.xt>p{font-size:16.5px;max-width:72ch}
+.xt-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.xt-h .xt-n{font-family:var(--mono);font-size:13px;color:var(--accent)}
+.xt-h h3{font-size:19px}
+.lxbadge{margin-left:auto;font-family:var(--display);font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid var(--rule);color:var(--muted);white-space:nowrap}
+.lxbadge.full{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.lxbadge.part{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.lxbadge.zero{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.lxarea{width:100%;font-size:14.5px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical;line-height:1.55}
+.lxarea:focus,.lxf input:focus{border-color:var(--accent);outline:none}
+.lxfields{display:grid;gap:12px}
+.lxf{display:grid;gap:6px;font-size:15px;min-width:0}
+.lxf>.mono{font-size:14px}
+.lxf .row{flex-wrap:wrap}
+.lxf .row input:not([type]){flex:1 1 240px}
+.lxf input:not([type]){font-size:15px;padding:7px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink);flex:1;min-width:0;max-width:520px}
+.lxf input:disabled{opacity:.5}
+.lxm{font-family:var(--mono);font-weight:700}
+.lxm.yes,.lx-lines .yes,.lxtest.yes .small:last-child{color:var(--ok)}
+.lxm.no,.lx-lines .no{color:var(--bad)}
+.lxexp{font-family:var(--display);font-size:13.5px;color:var(--muted)}
+.lx-lines{display:grid;gap:2px;font-size:15px}
+.lxmc{display:grid;gap:8px}
+.lxopt{display:flex;gap:10px;align-items:center;padding:8px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);cursor:pointer}
+.lxopt.right{border-color:var(--ok);background:var(--ok-soft)}
+.lxopt input{accent-color:var(--accent)}
+.lxtests{display:grid;gap:6px}
+.lxtest{display:grid;gap:2px;padding:8px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);font-size:15px;min-width:0;overflow-wrap:anywhere}
+.lxtest.yes{border-color:color-mix(in srgb,var(--ok) 50%,var(--rule))}
+.lxtest.no{border-color:color-mix(in srgb,var(--bad) 50%,var(--rule));background:var(--bad-soft)}
+.lxsol{display:grid;gap:8px}
+.lxsol .lab{font-family:var(--display);font-weight:600}
+.lxchecks{display:grid;gap:6px}
+.lx .tool{max-width:980px}
 footer{border-top:1px solid var(--rule);padding:26px 20px 40px;max-width:1180px;margin:0 auto;display:grid;gap:8px;font-size:15px;color:var(--muted)}
 footer a{color:var(--muted)}
 </style>
@@ -452,7 +496,7 @@ N = 3.</pre>
     <div class="sec-h"><span class="num">03</span><h2><span class="de">Üben und prüfen</span><span class="en">Practise and test yourself</span></h2></div>
     <div class="cards">
       <a class="card link-card" href="#practice"><span class="tag"><span class="de">11 Aufgaben</span><span class="en">11 exercises</span></span><h3><span class="de">Geführte Übungen zum Hoare-Kalkül</span><span class="en">Guided Hoare logic exercises</span></h3><p><span class="de">Invariante gegeben oder selbst finden, if/else und Arrays, mit automatischem Prüfer.</span><span class="en">Invariant given or found yourself, if/else and arrays, with an automatic checker.</span></p></a>
-      <a class="card link-card" href="#exam"><span class="tag"><span class="de">mit Punkten</span><span class="en">with points</span></span><h3><span class="de">Klausur-Simulation</span><span class="en">Exam simulation</span></h3><p><span class="de">Eine Aufgabe wie in der Prüfung, optional mit 20 Minuten Zeitlimit.</span><span class="en">A task like in the exam, optionally with a 20-minute time limit.</span></p></a>
+      <a class="card link-card" href="#exam"><span class="tag"><span class="de">4 Trainings · mit Punkten</span><span class="en">4 trainings · with points</span></span><h3><span class="de">Klausur üben</span><span class="en">Practise for the exam</span></h3><p><span class="de">Klausur-Training für Java, Haskell und Prolog sowie die Hoare-Simulation mit Zeitlimit.</span><span class="en">Exam training for Java, Haskell and Prolog plus the timed Hoare simulation.</span></p></a>
     </div>
   </section>
 </section>
@@ -521,6 +565,7 @@ N = 3.</pre>
         <ol><li>Unterklassen und Vererbung</li><li>Abstrakte Klassen und Interfaces</li><li>Modularität und Pakete</li></ol></div>
     </div>
     <p class="small muted"><span class="de">Kapitelnamen wie in den Vorlesungsfolien (auf Deutsch).</span><span class="en">Chapter names as in the lecture slides (in German).</span></p>
+    <div class="row"><a class="btn primary" href="#exam-java"><span class="de">Prüfungsaufgaben zu Java üben →</span><span class="en">Practise Java exam tasks →</span></a></div>
   </section>
 
   <section class="sec">
@@ -534,7 +579,7 @@ N = 3.</pre>
     }
     return res;
 }</pre>
-    <div class="pager"><a class="btn" href="#prog">← Programmierung</a><a class="btn primary" href="#haskell"><span class="de">Weiter: Haskell →</span><span class="en">Next: Haskell →</span></a></div>
+    <div class="pager"><a class="btn" href="#prog">← Programmierung</a><a class="btn" href="#exam-java"><span class="de">Klausur-Training Java</span><span class="en">Java exam training</span></a><a class="btn primary" href="#haskell"><span class="de">Weiter: Haskell →</span><span class="en">Next: Haskell →</span></a></div>
   </section>
 </section>
 
@@ -594,6 +639,7 @@ N = 3.</pre>
         <ol><li>Prinzipien der funktionalen Programmierung</li><li>Deklarationen</li><li>Ausdrücke</li><li>Muster (Patterns)</li><li>Typen und Datenstrukturen</li><li>Funktionale Programmiertechniken</li></ol></div>
     </div>
     <p class="small muted"><span class="de">Gearbeitet wird mit dem interaktiven Modus des Glasgow Haskell Compilers (GHCi).</span><span class="en">You work with the interactive mode of the Glasgow Haskell Compiler (GHCi).</span></p>
+    <div class="row"><a class="btn primary" href="#exam-haskell"><span class="de">Prüfungsaufgaben zu Haskell üben →</span><span class="en">Practise Haskell exam tasks →</span></a></div>
   </section>
 
   <section class="sec">
@@ -608,7 +654,7 @@ quadrate xs = map (\x -> x * x) xs
 
 -- GHCi&gt; quadrate [1, 2, 3]
 -- [1,4,9]</pre>
-    <div class="pager"><a class="btn" href="#java">← Java</a><a class="btn primary" href="#prolog"><span class="de">Weiter: Prolog →</span><span class="en">Next: Prolog →</span></a></div>
+    <div class="pager"><a class="btn" href="#java">← Java</a><a class="btn" href="#exam-haskell"><span class="de">Klausur-Training Haskell</span><span class="en">Haskell exam training</span></a><a class="btn primary" href="#prolog"><span class="de">Weiter: Prolog →</span><span class="en">Next: Prolog →</span></a></div>
   </section>
 </section>
 
@@ -667,6 +713,7 @@ quadrate xs = map (\x -> x * x) xs
       <div class="ch"><div class="ch-h"><span class="cn">IV</span><h3><span class="de">Logische Programmierung</span><span class="en">Logic programming</span></h3></div>
         <ol><li>Grundkonzepte der logischen Programmierung</li><li>Syntax von Prolog</li><li>Rechnen in Prolog <span class="muted small">(Unifikation, allgemeinster Unifikator, Resolution)</span></li></ol></div>
     </div>
+    <div class="row"><a class="btn primary" href="#exam-prolog"><span class="de">Prüfungsaufgaben zu Prolog üben →</span><span class="en">Practise Prolog exam tasks →</span></a></div>
   </section>
 
   <section class="sec">
@@ -679,7 +726,7 @@ grossmutterVon(G, K) :- mutterVon(G, M), mutterVon(M, K).
 
 ?- grossmutterVon(Oma, aline).
 Oma = renate.</pre>
-    <div class="pager"><a class="btn" href="#haskell">← Haskell</a><a class="btn primary" href="#hoare"><span class="de">Weiter: Hoare-Kalkül →</span><span class="en">Next: Hoare logic →</span></a></div>
+    <div class="pager"><a class="btn" href="#haskell">← Haskell</a><a class="btn" href="#exam-prolog"><span class="de">Klausur-Training Prolog</span><span class="en">Prolog exam training</span></a><a class="btn primary" href="#hoare"><span class="de">Weiter: Hoare-Kalkül →</span><span class="en">Next: Hoare logic →</span></a></div>
   </section>
 </section>
 
@@ -900,7 +947,7 @@ Oma = renate.</pre>
         </div>
         <div class="cta">
           <a class="btn primary" href="#practice"><span class="de">Jetzt üben: 11 geführte Aufgaben</span><span class="en">Practise now: 11 guided exercises</span></a>
-          <a class="btn" href="#exam"><span class="de">Klausur-Simulation</span><span class="en">Exam simulation</span></a>
+          <a class="btn" href="#exam-hoare"><span class="de">Klausur-Simulation</span><span class="en">Exam simulation</span></a>
         </div>
       </section>
     </div>
@@ -917,8 +964,39 @@ Oma = renate.</pre>
 </section>
 
 <!-- ================= EXAM ================= -->
-<section class="view" id="view-exam" aria-labelledby="exam-title">
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#hoare">Hoare-Kalkül</a><span>›</span><span><span class="de">Klausur</span><span class="en">Exam</span></span></nav>
+<section class="view" id="view-exam" aria-labelledby="examhub-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span><span class="de">Klausur</span><span class="en">Exam</span></span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Prüfungsvorbereitung · Programmierung</span><span class="en">Exam preparation · Programmierung</span></div>
+    <h1 id="examhub-title"><span class="de">Klausur üben</span><span class="en">Practise for the exam</span></h1>
+    <p class="lede"><span class="de">Für jeden Teil der Vorlesung gibt es ein eigenes Klausur-Training mit Punkten. Die Aufgaben werden sofort ausgewertet; Programmieraufgaben in Prolog testet ein eingebautes Mini-Prolog.</span><span class="en">Each part of the lecture has its own exam training with points. Tasks are graded immediately; Prolog programming tasks are tested by a built-in mini Prolog.</span></p>
+  </div>
+  <section class="sec">
+    <div class="parts">
+      <a class="part-card" href="#exam-java"><span class="pn">II · 24 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Java</span><span class="pd"><span class="de">8 Aufgaben: Ausgaben, Parameterübergabe, dynamisches Binden, Überladen, Rekursion, abstrakte Klassen, eine Methode schreiben.</span><span class="en">8 tasks: outputs, parameter passing, dynamic binding, overloading, recursion, abstract classes, writing a method.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
+      <a class="part-card accent" href="#exam-hoare"><span class="pn">II.1.4 · <span class="de">mit Zeitlimit</span><span class="en">timed</span></span><span class="pt">Hoare-Kalkül</span><span class="pd"><span class="de">Klausur-Simulation: alle Zusicherungen, Invariante und Variante selbst eintragen, 13 Programme.</span><span class="en">Exam simulation: fill in every assertion, the invariant and the variant yourself, 13 programs.</span></span><span class="go"><span class="de">Simulation starten →</span><span class="en">Start simulation →</span></span></a>
+      <a class="part-card" href="#exam-haskell"><span class="pn">III · 18 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Haskell</span><span class="pd"><span class="de">6 Aufgaben: Typen bestimmen, Auswertung, Pattern Matching, Lazy Evaluation, Funktionen auf Bäumen.</span><span class="en">6 tasks: determining types, evaluation, pattern matching, lazy evaluation, functions on trees.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
+      <a class="part-card" href="#exam-prolog"><span class="pn">IV · 23 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Prolog</span><span class="pd"><span class="de">6 Aufgaben: Unifikation, Anfragen mit Backtracking, drei Prädikate programmieren, dazu eine Prolog-Spielwiese.</span><span class="en">6 tasks: unification, queries with backtracking, programming three predicates, plus a Prolog playground.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
+    </div>
+    <p class="small muted"><span class="de">Die Aufgaben sind eigene Übungsaufgaben im Stil der Klausur, keine Originalaufgaben der RWTH.</span><span class="en">The tasks are original practice tasks in exam style, not actual RWTH exam questions.</span></p>
+  </section>
+</section>
+
+<section class="view" id="view-exam-java" aria-labelledby="lx-java-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span>Java</span></nav>
+  <div id="lx-java" class="lx"></div>
+</section>
+<section class="view" id="view-exam-haskell" aria-labelledby="lx-haskell-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span>Haskell</span></nav>
+  <div id="lx-haskell" class="lx"></div>
+</section>
+<section class="view" id="view-exam-prolog" aria-labelledby="lx-prolog-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span>Prolog</span></nav>
+  <div id="lx-prolog" class="lx"></div>
+</section>
+
+<section class="view" id="view-exam-hoare" aria-labelledby="exam-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span>Hoare-Kalkül</span></nav>
   <div id="exam"></div>
 </section>
 </main>
@@ -1552,6 +1630,350 @@ const EXAM = [
 
 </script>
 <script>
+/* ===== Mini-Prolog (pure Prolog: unification, SLD resolution, is/2, lists) ===== */
+const PL = (() => {
+  const LIMIT = { limit: true };
+  let vid = 0;
+  const mkVar = n => ({ t: 'v', n, id: ++vid });
+  const atom = n => ({ t: 'a', n });
+  const num = v => ({ t: 'n', v });
+  const cmp = (f, a) => ({ t: 'c', f, a });
+  const NIL = atom('[]');
+  const cons = (h, tl) => cmp('.', [h, tl]);
+  function perr(code, d) { const e = new Error(code); e.code = code; e.detail = d || ''; return e; }
+
+  const SYM = '+-*/\\^<>=~:.?@#&$';
+  function tokenize(src) {
+    const toks = []; let i = 0, ws = true;
+    while (i < src.length) {
+      const c = src[i];
+      if (/\s/.test(c)) { i++; ws = true; continue; }
+      if (c === '%') { while (i < src.length && src[i] !== '\n') i++; ws = true; continue; }
+      const push = tk => { tk.ws = ws; toks.push(tk); ws = false; };
+      if (/[0-9]/.test(c)) { let j = i; while (j < src.length && /[0-9]/.test(src[j])) j++; push({ k: 'num', v: +src.slice(i, j) }); i = j; continue; }
+      if (/[a-z]/.test(c)) { let j = i; while (j < src.length && /[A-Za-z0-9_]/.test(src[j])) j++; push({ k: 'atom', v: src.slice(i, j) }); i = j; continue; }
+      if (/[A-Z_]/.test(c)) { let j = i; while (j < src.length && /[A-Za-z0-9_]/.test(src[j])) j++; push({ k: 'var', v: src.slice(i, j) }); i = j; continue; }
+      if (c === "'") { let j = i + 1; while (j < src.length && src[j] !== "'") j++; if (j >= src.length) throw perr('quote'); push({ k: 'atom', v: src.slice(i + 1, j), q: true }); i = j + 1; continue; }
+      if ('()[]|,'.includes(c)) { push({ k: c }); i++; continue; }
+      if (c === '!') { push({ k: 'atom', v: '!' }); i++; continue; }
+      if (c === '.' && (i + 1 >= src.length || /[\s%]/.test(src[i + 1]))) { push({ k: 'end' }); i++; continue; }
+      if (SYM.includes(c)) { let j = i; while (j < src.length && SYM.includes(src[j])) j++; push({ k: 'atom', v: src.slice(i, j), sym: true }); i = j; continue; }
+      throw perr('char', c);
+    }
+    return toks;
+  }
+  const INFIX = { ':-': [1200, 'xfx'], ',': [1000, 'xfy'], ';': [1100, 'xfy'], '=': [700, 'xfx'], '\\=': [700, 'xfx'], 'is': [700, 'xfx'],
+    '<': [700, 'xfx'], '>': [700, 'xfx'], '=<': [700, 'xfx'], '>=': [700, 'xfx'], '=:=': [700, 'xfx'], '=\\=': [700, 'xfx'], '==': [700, 'xfx'], '\\==': [700, 'xfx'],
+    '+': [500, 'yfx'], '-': [500, 'yfx'], '*': [400, 'yfx'], '/': [400, 'yfx'], '//': [400, 'yfx'], 'mod': [400, 'yfx'] };
+  const PREFIX = { '\\+': [900, 'fy'], '-': [200, 'fy'] };
+
+  function parseTerms(src, kind) {
+    const toks = tokenize(src); let pos = 0; let names = {};
+    const peek = () => toks[pos], next = () => toks[pos++];
+    const expect = k => { const t = next(); if (!t || t.k !== k) throw perr('expect', k); return t; };
+    const infixOf = t => { if (!t) return null; if (t.k === ',') return ','; if (t.k === 'atom' && INFIX[t.v] && t.v !== ',') return t.v; if (t.k === 'atom' && t.v === ';') return ';'; return null; };
+    function startsTerm(t) { return t && (t.k === 'num' || t.k === 'var' || t.k === '(' || t.k === '[' || (t.k === 'atom' && !infixOf(t))); }
+    function parse(max) {
+      let [left, lp] = primary(max);
+      for (;;) {
+        const op = infixOf(peek()); if (!op) break;
+        const [p, type] = INFIX[op];
+        if (p > max) break;
+        const lmax = type[0] === 'y' ? p : p - 1; if (lp > lmax) break;
+        next();
+        const right = parse(type[2] === 'y' ? p : p - 1);
+        left = cmp(op, [left, right]); lp = p;
+      }
+      return left;
+    }
+    function primary(max) {
+      const t = next(); if (!t) throw perr('end');
+      if (t.k === 'num') return [num(t.v), 0];
+      if (t.k === 'var') { if (t.v === '_') return [mkVar('_'), 0]; return [names[t.v] ||= mkVar(t.v), 0]; }
+      if (t.k === '(') { const e = parse(1200); expect(')'); return [e, 0]; }
+      if (t.k === '[') {
+        if (peek() && peek().k === ']') { next(); return [NIL, 0]; }
+        const items = [parse(999)];
+        while (peek() && peek().k === ',') { next(); items.push(parse(999)); }
+        let tail = NIL;
+        if (peek() && peek().k === '|') { next(); tail = parse(999); }
+        expect(']');
+        return [items.reduceRight((acc, h) => cons(h, acc), tail), 0];
+      }
+      if (t.k === 'atom') {
+        if (peek() && peek().k === '(' && !peek().ws) {
+          next(); const args = [parse(999)];
+          while (peek() && peek().k === ',') { next(); args.push(parse(999)); }
+          expect(')'); return [cmp(t.v, args), 0];
+        }
+        if (PREFIX[t.v] && startsTerm(peek())) {
+          if (t.v === '-' && peek().k === 'num' && !peek().ws) { const n = next(); return [num(-n.v), 0]; }
+          const [p, type] = PREFIX[t.v]; if (p > max) return [atom(t.v), 0];
+          const arg = parse(type[1] === 'y' ? p : p - 1); return [cmp(t.v, [arg]), p];
+        }
+        return [atom(t.v), INFIX[t.v] ? 1201 : 0];
+      }
+      throw perr('tok', t.k);
+    }
+    const out = [];
+    while (pos < toks.length) { names = {}; const term = parse(1200); expect('end'); out.push({ term, names }); }
+    return out;
+  }
+  function parseProgram(src) {
+    const db = {};
+    for (const { term } of parseTerms(src)) {
+      let head = term, body = atom('true');
+      if (term.t === 'c' && term.f === ':-' && term.a.length === 2) { head = term.a[0]; body = term.a[1]; }
+      if (head.t === 'v' || head.t === 'n') throw perr('head');
+      const key = keyOf(head); (db[key] ||= []).push({ head, body });
+    }
+    return db;
+  }
+  function parseQuery(src) {
+    let s = src.trim().replace(/^\?-\s*/, ''); if (!/\.\s*$/.test(s)) s += '.';
+    const r = parseTerms(s); if (r.length !== 1) throw perr('query');
+    return r[0];
+  }
+  function parseTerm(src) { return parseQuery(src); }
+  const keyOf = t => t.t === 'a' ? t.n + '/0' : t.f + '/' + t.a.length;
+
+  function walk(t, s) { while (t.t === 'v' && s[t.id] !== undefined) t = s[t.id]; return t; }
+  function occurs(v, t, s) { t = walk(t, s); if (t.t === 'v') return t.id === v.id; if (t.t === 'c') return t.a.some(x => occurs(v, x, s)); return false; }
+  function bind(v, t, s, oc) { if (oc && occurs(v, t, s)) return null; const s2 = Object.create(s); s2[v.id] = t; return s2; }
+  function unify(a, b, s, oc = false) {
+    a = walk(a, s); b = walk(b, s);
+    if (a.t === 'v' && b.t === 'v' && a.id === b.id) return s;
+    if (a.t === 'v') return bind(a, b, s, oc);
+    if (b.t === 'v') return bind(b, a, s, oc);
+    if (a.t === 'a') return b.t === 'a' && a.n === b.n ? s : null;
+    if (a.t === 'n') return b.t === 'n' && a.v === b.v ? s : null;
+    if (b.t !== 'c' || a.f !== b.f || a.a.length !== b.a.length) return null;
+    for (let i = 0; i < a.a.length; i++) { s = unify(a.a[i], b.a[i], s, oc); if (!s) return null; }
+    return s;
+  }
+  function resolve(t, s) { t = walk(t, s); return t.t === 'c' ? cmp(t.f, t.a.map(x => resolve(x, s))) : t; }
+  function rename(t, map) {
+    if (t.t === 'v') return map[t.id] ||= mkVar(t.n);
+    if (t.t === 'c') return cmp(t.f, t.a.map(x => rename(x, map)));
+    return t;
+  }
+  function evalA(t, s) {
+    t = walk(t, s);
+    if (t.t === 'n') return t.v;
+    if (t.t === 'v') throw perr('inst');
+    if (t.t === 'c' && t.a.length === 2) {
+      const x = evalA(t.a[0], s), y = evalA(t.a[1], s);
+      switch (t.f) { case '+': return x + y; case '-': return x - y; case '*': return x * y;
+        case '//': if (y === 0) throw perr('zero'); return Math.trunc(x / y);
+        case '/': if (y === 0) throw perr('zero'); return x / y;
+        case 'mod': if (y === 0) throw perr('zero'); return ((x % y) + y) % y; }
+    }
+    if (t.t === 'c' && t.f === '-' && t.a.length === 1) return -evalA(t.a[0], s);
+    throw perr('type', fmt(t, s));
+  }
+  function same(a, b, s) { a = walk(a, s); b = walk(b, s); if (a.t !== b.t) return false; if (a.t === 'v') return a.id === b.id; if (a.t === 'a') return a.n === b.n; if (a.t === 'n') return a.v === b.v; return a.f === b.f && a.a.length === b.a.length && a.a.every((x, i) => same(x, b.a[i], s)); }
+
+  function* solve(goals, s, db, ctx, depth) {
+    if (!goals) { yield s; return; }
+    if (++ctx.steps > ctx.max || depth > 1500) throw LIMIT;
+    const g = walk(goals.g, s), rest = goals.next;
+    if (g.t === 'v') throw perr('inst');
+    if (g.t === 'n') throw perr('callable');
+    const key = keyOf(g), a = g.a || [];
+    switch (key) {
+      case 'true/0': yield* solve(rest, s, db, ctx, depth); return;
+      case 'fail/0': case 'false/0': return;
+      case ',/2': yield* solve({ g: a[0], next: { g: a[1], next: rest } }, s, db, ctx, depth); return;
+      case ';/2': yield* solve({ g: a[0], next: rest }, s, db, ctx, depth); yield* solve({ g: a[1], next: rest }, s, db, ctx, depth); return;
+      case '=/2': { const s2 = unify(a[0], a[1], s); if (s2) yield* solve(rest, s2, db, ctx, depth); return; }
+      case '\\=/2': if (!unify(a[0], a[1], s)) yield* solve(rest, s, db, ctx, depth); return;
+      case '==/2': if (same(a[0], a[1], s)) yield* solve(rest, s, db, ctx, depth); return;
+      case '\\==/2': if (!same(a[0], a[1], s)) yield* solve(rest, s, db, ctx, depth); return;
+      case 'is/2': { const s2 = unify(a[0], num(evalA(a[1], s)), s); if (s2) yield* solve(rest, s2, db, ctx, depth); return; }
+      case '</2': case '>/2': case '=</2': case '>=/2': case '=:=/2': case '=\\=/2': {
+        const x = evalA(a[0], s), y = evalA(a[1], s);
+        const ok = { '<': x < y, '>': x > y, '=<': x <= y, '>=': x >= y, '=:=': x === y, '=\\=': x !== y }[g.f];
+        if (ok) yield* solve(rest, s, db, ctx, depth); return; }
+      case '\\+/1': { let found = false; for (const _ of solve({ g: a[0], next: null }, s, db, ctx, depth + 1)) { found = true; break; } if (!found) yield* solve(rest, s, db, ctx, depth); return; }
+      case '!/0': throw perr('cut');
+    }
+    const cls = db[key]; if (!cls) throw perr('unknown', key);
+    for (const cl of cls) {
+      const map = {}; const h = rename(cl.head, map), b = rename(cl.body, map);
+      const s2 = unify(g, h, s);
+      if (s2) yield* solve(b.t === 'a' && b.n === 'true' ? rest : { g: b, next: rest }, s2, db, ctx, depth + 1);
+    }
+  }
+
+  const QUOTE_RE = /^[a-z][A-Za-z0-9_]*$/;
+  function fmt(t, s, top = true) {
+    t = walk(t, s || {});
+    if (t.t === 'v') return '_' + (t.n && t.n !== '_' ? t.n : 'G') + t.id;
+    if (t.t === 'n') return String(t.v);
+    if (t.t === 'a') return t.n === '[]' || QUOTE_RE.test(t.n) || /^[+\-*/\\^<>=~:.?@#&$]+$/.test(t.n) ? t.n : "'" + t.n + "'";
+    if (t.f === '.' && t.a.length === 2) {
+      const items = []; let cur = t;
+      while (cur.t === 'c' && cur.f === '.' && cur.a.length === 2) { items.push(fmt(cur.a[0], s, false)); cur = walk(cur.a[1], s || {}); }
+      return '[' + items.join(',') + (cur.t === 'a' && cur.n === '[]' ? '' : '|' + fmt(cur, s, false)) + ']';
+    }
+    if (INFIX[t.f] && t.a.length === 2) return fmt(t.a[0], s, false) + (/^[a-z]/.test(t.f) ? ' ' + t.f + ' ' : t.f) + fmt(t.a[1], s, false);
+    return t.f + '(' + t.a.map(x => fmt(x, s, false)).join(',') + ')';
+  }
+
+  /* run a query: returns {answers:[{Var: 'val'}], more:boolean} or {error} */
+  function run(program, query, maxAnswers = 8, maxSteps = 60000) {
+    try {
+      const db = typeof program === 'string' ? parseProgram(program) : program;
+      const q = parseQuery(query);
+      const ctx = { steps: 0, max: maxSteps }, answers = [];
+      const qvars = Object.entries(q.names).filter(([n]) => !n.startsWith('_'));
+      let more = false;
+      try {
+        for (const s of solve({ g: q.term, next: null }, {}, db, ctx, 0)) {
+          if (answers.length >= maxAnswers) { more = true; break; }
+          const ans = {}; qvars.forEach(([n, v]) => ans[n] = fmt(resolve(v, s), {}));
+          answers.push(ans);
+        }
+      } catch (e) { if (e === LIMIT && answers.length) return { answers, limit: true }; throw e; }
+      return { answers, more };
+    } catch (e) {
+      if (e === LIMIT) return { error: 'limit' };
+      return { error: e.code || 'syntax', detail: e.detail };
+    }
+  }
+  /* most general unifier check */
+  function mgu(t1src, t2src) {
+    const { term } = parseTerm(`p(${t1src}, ${t2src})`);
+    const s = unify(term.a[0], term.a[1], {}, true);
+    return { term, s };
+  }
+  function variant(a, b) {
+    const m1 = new Map(), m2 = new Map();
+    function go(x, y) {
+      if (x.t === 'v' || y.t === 'v') {
+        if (x.t !== 'v' || y.t !== 'v') return false;
+        if (m1.has(x.id) || m2.has(y.id)) return m1.get(x.id) === y.id && m2.get(y.id) === x.id;
+        m1.set(x.id, y.id); m2.set(y.id, x.id); return true;
+      }
+      if (x.t !== y.t) return false;
+      if (x.t === 'a') return x.n === y.n;
+      if (x.t === 'n') return x.v === y.v;
+      return x.f === y.f && x.a.length === y.a.length && x.a.every((z, i) => go(z, y.a[i]));
+    }
+    return go(a, b);
+  }
+  /* user answer like "X = f(a), Y = b" for terms t1, t2 sharing variable names */
+  function checkUnifier(t1src, t2src, userSrc) {
+    const { term, names } = parseTerms(`p(${t1src}, ${t2src}).`)[0];
+    const ref = unify(term.a[0], term.a[1], {}, true);
+    const u = (userSrc || '').trim().replace(/^\{|\}$/g, '').trim();
+    if (!u) return { error: 'empty' };
+    let s = {};
+    try {
+      const q = parseTerms(`q(${u}).`)[0];
+      const remap = t => {
+        if (t.t === 'v') { if (t.n === '_') return mkVar('_'); return names[t.n] || (names[t.n] = mkVar(t.n)); }
+        if (t.t === 'c') return cmp(t.f, t.a.map(remap));
+        return t;
+      };
+      for (const p of q.term.a) {
+        if (!(p.t === 'c' && p.f === '=' && p.a.length === 2)) return { error: 'form' };
+        const Lv = remap(p.a[0]), R = remap(p.a[1]);
+        if (Lv.t !== 'v') return { error: 'form' };
+        if (Object.prototype.hasOwnProperty.call(s, Lv.id) || s[Lv.id] !== undefined) return { error: 'twice', detail: Lv.n };
+        s = Object.create(s); s[Lv.id] = R;
+      }
+    } catch (e) { return { error: 'syntax' }; }
+    let depth = 0;
+    const res = t => { if (++depth > 5000) throw LIMIT; t = walk(t, s); return t.t === 'c' ? cmp(t.f, t.a.map(res)) : t; };
+    let ua, ub;
+    try { ua = res(term.a[0]); depth = 0; ub = res(term.a[1]); } catch (e) { return { ok: false, unifies: false }; }
+    if (fmt(ua) !== fmt(ub)) return { ok: false, unifies: false };
+    if (!ref) return { ok: false, unifies: true, ref: false };
+    const ga = resolve(term.a[0], ref);
+    if (!variant(ua, ga)) return { ok: false, unifies: true, general: false };
+    return { ok: true };
+  }
+  function refUnifier(t1src, t2src) {
+    const { term, names } = parseTerms(`p(${t1src}, ${t2src}).`)[0];
+    const s = unify(term.a[0], term.a[1], {}, true);
+    if (!s) return null;
+    return Object.entries(names).filter(([n, v]) => walk(v, s) !== v).map(([n, v]) => `${n} = ${fmt(resolve(v, s))}`).join(', ');
+  }
+  return { run, parseProgram, checkUnifier, refUnifier, fmt };
+})();
+
+/* ===== Haskell type comparison ===== */
+const HT = (() => {
+  function tokenize(s) {
+    const t = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (s.startsWith('->', i)) { t.push('->'); i += 2; continue; }
+      if (s.startsWith('=>', i)) { t.push('=>'); i += 2; continue; }
+      if (s.startsWith('::', i)) { t.push('::'); i += 2; continue; }
+      if ('()[],'.includes(c)) { t.push(c); i++; continue; }
+      if (/[A-Za-z_]/.test(c)) { let j = i; while (j < s.length && /[A-Za-z0-9_']/.test(s[j])) j++; t.push(s.slice(i, j)); i = j; continue; }
+      throw new Error('char');
+    }
+    return t;
+  }
+  function parse(src) {
+    let toks = tokenize(src); let pos = 0;
+    const ci = toks.indexOf('::'); if (ci >= 0) toks = toks.slice(ci + 1);
+    const peek = () => toks[pos], next = () => toks[pos++];
+    const expect = x => { if (next() !== x) throw new Error('expect ' + x); };
+    let ctx = [];
+    const di = toks.indexOf('=>');
+    if (di >= 0) {
+      const ctoks = toks.slice(0, di); toks = toks.slice(di + 1);
+      const flat = ctoks.filter(x => x !== '(' && x !== ')');
+      const groups = []; let cur = [];
+      for (const x of flat) { if (x === ',') { groups.push(cur); cur = []; } else cur.push(x); }
+      groups.push(cur);
+      for (const g of groups) { if (g.length !== 2 || !/^[A-Z]/.test(g[0]) || !/^[a-z]/.test(g[1])) throw new Error('ctx'); ctx.push(g); }
+    }
+    function type() { const a = btype(); if (peek() === '->') { next(); return { k: 'fn', a, b: type() }; } return a; }
+    function btype() { const f = atype(); const args = []; while (peek() && peek() !== '->' && peek() !== ')' && peek() !== ']' && peek() !== ',') args.push(atype()); return args.length ? { k: 'app', f, args } : f; }
+    function atype() {
+      const x = next(); if (x === undefined) throw new Error('end');
+      if (x === '(') {
+        if (peek() === ')') { next(); return { k: 'con', n: '()' }; }
+        const items = [type()]; while (peek() === ',') { next(); items.push(type()); }
+        expect(')'); return items.length === 1 ? items[0] : { k: 'tup', items };
+      }
+      if (x === '[') { const e = type(); expect(']'); return { k: 'list', e }; }
+      if (/^[a-z_]/.test(x)) return { k: 'var', n: x };
+      if (/^[A-Z]/.test(x)) return x === 'String' ? { k: 'list', e: { k: 'con', n: 'Char' } } : { k: 'con', n: x };
+      throw new Error('tok');
+    }
+    const ty = type(); if (pos !== toks.length) throw new Error('rest');
+    return { ctx, ty };
+  }
+  function canon(src) {
+    const { ctx, ty } = parse(src); const m = new Map();
+    const v = n => { if (!m.has(n)) m.set(n, 't' + m.size); return m.get(n); };
+    const go = t => {
+      switch (t.k) {
+        case 'var': return v(t.n);
+        case 'con': return t.n;
+        case 'list': return '[' + go(t.e) + ']';
+        case 'tup': return '(' + t.items.map(go).join(',') + ')';
+        case 'fn': return '(' + go(t.a) + '->' + go(t.b) + ')';
+        case 'app': return '(' + go(t.f) + ' ' + t.args.map(go).join(' ') + ')';
+      }
+    };
+    const body = go(ty);
+    const cs = ctx.filter(([, x]) => m.has(x)).map(([c, x]) => c + ' ' + m.get(x)).sort();
+    return [...new Set(cs)].join(',') + '|' + body;
+  }
+  function eq(a, b) { try { return canon(a) === canon(b); } catch (e) { return null; } }
+  return { eq, canon };
+})();
+
+</script>
+<script>
 /* ===== App ===== */
 const T = {
   de: {
@@ -1902,7 +2324,7 @@ function renderList() {
     return `<button type="button" class="exbtn" data-ex="${e.id}" aria-current="${ST.ex === e.id}"><span class="t">${esc(L(e.title))}</span><span class="lv" aria-label="level ${e.level}">${'●'.repeat(e.level)}${'○'.repeat(3 - e.level)}</span><span class="pr">${t('progress', { d: Math.min(d, n), n })}</span></button>`;
   }).join('');
   document.getElementById('exlist').innerHTML = ['given', 'find', 'ifarr'].map(g => `<div class="exgroup"><h3>${t(g)}</h3>${grp(g)}</div>`).join('')
-    + `<a class="btn" href="#exam" style="justify-self:start">${t('k_title')} →</a>`;
+    + `<a class="btn" href="#exam-hoare" style="justify-self:start">${t('k_title')} →</a>`;
 }
 function renderWS() {
   const ex = exById(ST.ex), P = prog(ex.id), S = stepsFor(ex), c = compile(ex);
@@ -2123,10 +2545,11 @@ function renderTracer() {
 }
 
 /* ---- view routing & language ---- */
-const VIEWS = ['plan', 'prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam'];
-const PROG_VIEWS = ['prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam'];
-const TOP_OF = { java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog' };
-const TITLES = { plan: 'Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab' };
+const VIEWS = ['plan', 'prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam', 'exam-java', 'exam-haskell', 'exam-prolog', 'exam-hoare'];
+const PROG_VIEWS = VIEWS.filter(v => v !== 'plan');
+const TOP_OF = { java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const SUB_OF = { 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const TITLES = { plan: 'Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
 function showView(v, scroll) {
   if (!VIEWS.includes(v)) v = 'plan';
   ST.view = v;
@@ -2134,10 +2557,12 @@ function showView(v, scroll) {
   document.body.dataset.group = PROG_VIEWS.includes(v) ? 'prog' : 'none';
   const top = TOP_OF[v] || v;
   document.querySelectorAll('nav.views a').forEach(a => { if (a.dataset.view === top) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-  document.querySelectorAll('nav.subnav a').forEach(a => { if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  const sub = SUB_OF[v] || v;
+  document.querySelectorAll('nav.subnav a').forEach(a => { if (a.dataset.view === sub) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   try { document.title = TITLES[v] || 'Hoare Lab'; } catch (e) {}
   if (v === 'practice') renderPractice();
-  if (v === 'exam') { renderExam(); kArmTimer(); }
+  if (v === 'exam-hoare') { renderExam(); kArmTimer(); }
+  if (v.startsWith('exam-') && LX[v.slice(5)]) renderLX(v.slice(5));
   if (scroll) window.scrollTo(0, 0);
 }
 function setLang(l) {
@@ -2147,13 +2572,14 @@ function setLang(l) {
   try { localStorage.setItem('hoarelab-lang', l); } catch (e) {}
   renderBW(); renderTracer();
   if (ST.view === 'practice') renderPractice();
-  if (ST.view === 'exam') renderExam();
+  if (ST.view === 'exam-hoare') renderExam();
+  if (ST.view.startsWith('exam-') && LX[ST.view.slice(5)]) renderLX(ST.view.slice(5));
   snapshot();
 }
-function snapshot() { try { window.claude?.hot?.snapshot?.(() => ({ view: ST.view, ex: ST.ex, P: ST.P, tr: ST.tr, K: ST.K })); } catch (e) {} }
+function snapshot() { try { window.claude?.hot?.snapshot?.(() => ({ view: ST.view, ex: ST.ex, P: ST.P, tr: ST.tr, K: ST.K, LX: ST.LX })); } catch (e) {} }
 
 function start(data) {
-  if (data && data.P) { ST.P = data.P; ST.ex = data.ex || ST.ex; if (data.tr) ST.tr = data.tr; if (data.K) ST.K = { ...ST.K, ...data.K }; }
+  if (data && data.P) { ST.P = data.P; ST.ex = data.ex || ST.ex; if (data.tr) ST.tr = data.tr; if (data.K) ST.K = { ...ST.K, ...data.K }; if (data.LX) ST.LX = data.LX; }
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
   const ws = document.getElementById('ws');
@@ -2171,6 +2597,7 @@ function start(data) {
     if (e.key !== 'Enter') return; const i = e.target.closest('input[data-k]'); if (!i) return;
     e.preventDefault(); const all = [...ek.querySelectorAll('input[data-k]:not([disabled])')]; const n = all[all.indexOf(i) + 1]; if (n) n.focus();
   });
+  ['lx-java', 'lx-haskell', 'lx-prolog'].forEach(id => { const el = document.getElementById(id); el.addEventListener('click', handleLX); el.addEventListener('input', handleLXInput); el.addEventListener('change', handleLXInput); });
   document.querySelectorAll('[data-scroll]').forEach(b => b.addEventListener('click', () => { const el = document.getElementById(b.dataset.scroll); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' }); }));
   ['bw-var', 'bw-expr', 'bw-post'].forEach(id => document.getElementById(id).addEventListener('input', renderBW));
   document.getElementById('tr-n').value = ST.tr.n;
@@ -2181,6 +2608,460 @@ function start(data) {
   setLang(lang);
   showView(location.hash.slice(1) || (data && data.view) || 'plan', false);
 }
+
+/* ===== Klausur-Training per language ===== */
+const LXT = {
+  de: {
+    task: 'Aufgabe', pts: 'P.', check: 'Prüfen', show: 'Lösung zeigen', hide: 'Lösung ausblenden', reset: 'Alle Antworten löschen', checkall: 'Alle Aufgaben prüfen',
+    total: '{p} von {t} Punkten', checked: '{n} von {m} Aufgaben geprüft', expected: 'Richtig wäre:', yours: 'Deine Antwort:', solution: 'Lösung',
+    lines_hint: 'Eine Ausgabezeile pro Zeile.', not_unif: 'nicht unifizierbar', unif_ph: 'z. B. X = a, Y = f(b)',
+    u_ok: 'Richtig, ein allgemeinster Unifikator.', u_notgen: 'Das ist ein Unifikator, aber nicht der allgemeinste.', u_wrong: 'Diese Substitution macht die Terme nicht gleich.',
+    u_isnot: 'Die Terme sind nicht unifizierbar.', u_is: 'Die Terme sind unifizierbar.', u_err: 'Bitte in der Form X = Term, Y = Term eingeben.',
+    q_hint: 'Antworten in der Reihenfolge, in der Prolog sie findet, durch Komma oder ; getrennt. Keine Antwort: false. Erfolg ohne Bindung: true.',
+    run_tests: 'Tests ausführen', test: 'Test', t_ok: 'bestanden', t_fail: 'nicht bestanden', t_got: 'Prolog liefert:', t_want: 'Erwartet:', t_none: 'keine Antwort (false)', t_yes: 'true',
+    t_extra: 'mehr oder andere Antworten als erwartet', perr_limit: 'Abbruch nach zu vielen Schritten (Endlosschleife?).', perr_unknown: 'Unbekanntes Prädikat {d}.', perr_syntax: 'Syntaxfehler im Programm oder in der Anfrage.', perr_inst: 'Arithmetik mit ungebundener Variable.', perr_cut: 'Der Cut ! wird hier nicht unterstützt.',
+    self_txt: 'Schreibe deine Lösung zuerst selbst (auf Papier oder hier). Öffne dann die Musterlösung und hake ab, was deine Lösung erfüllt.', self_area: 'Deine Lösung (wird nicht automatisch geprüft)', self_pts: 'selbst bewertet',
+    mc_pick: 'Wähle eine Antwort.', type_ph: 'z. B. Num a => a -> a', val_ph: 'Wert', num_ph: 'Zahl', err_type: 'Der Typ ist nicht lesbar. Beispiel: (a -> b) -> [a] -> [b]',
+    pg_title: 'Prolog-Spielwiese', pg_txt: 'Probiere eigene Programme und Anfragen aus. Unterstützt werden reines Prolog, Listen, is/2, Vergleiche, = , \\= und \\+.', pg_prog: 'Programm', pg_query: 'Anfrage', pg_run: 'Ausführen', pg_noans: 'false.', pg_more: 'weitere Antworten vorhanden …',
+    hub_hint: 'Aufgabentypen, wie sie in Klausuren zur Programmierung üblich sind. Jede Aufgabe wird sofort ausgewertet.', h1: 'Klausur-Training {l}', overview: 'Alle Klausuren'
+  },
+  en: {
+    task: 'Task', pts: 'pts', check: 'Check', show: 'Show solution', hide: 'Hide solution', reset: 'Clear all answers', checkall: 'Check all tasks',
+    total: '{p} of {t} points', checked: '{n} of {m} tasks checked', expected: 'Correct would be:', yours: 'Your answer:', solution: 'Solution',
+    lines_hint: 'One output line per line.', not_unif: 'not unifiable', unif_ph: 'e.g. X = a, Y = f(b)',
+    u_ok: 'Correct, a most general unifier.', u_notgen: 'That is a unifier, but not the most general one.', u_wrong: 'This substitution does not make the terms equal.',
+    u_isnot: 'The terms are not unifiable.', u_is: 'The terms are unifiable.', u_err: 'Please enter it as X = term, Y = term.',
+    q_hint: 'Answers in the order Prolog finds them, separated by commas or ;. No answer: false. Success without bindings: true.',
+    run_tests: 'Run tests', test: 'Test', t_ok: 'passed', t_fail: 'failed', t_got: 'Prolog returns:', t_want: 'Expected:', t_none: 'no answer (false)', t_yes: 'true',
+    t_extra: 'more or different answers than expected', perr_limit: 'Stopped after too many steps (infinite loop?).', perr_unknown: 'Unknown predicate {d}.', perr_syntax: 'Syntax error in the program or the query.', perr_inst: 'Arithmetic with an unbound variable.', perr_cut: 'The cut ! is not supported here.',
+    self_txt: 'Write your own solution first (on paper or here). Then open the model solution and tick what your solution achieves.', self_area: 'Your solution (not checked automatically)', self_pts: 'self-assessed',
+    mc_pick: 'Pick an answer.', type_ph: 'e.g. Num a => a -> a', val_ph: 'value', num_ph: 'number', err_type: 'The type cannot be read. Example: (a -> b) -> [a] -> [b]',
+    pg_title: 'Prolog playground', pg_txt: 'Try your own programs and queries. Supported: pure Prolog, lists, is/2, comparisons, =, \\= and \\+.', pg_prog: 'Program', pg_query: 'Query', pg_run: 'Run', pg_noans: 'false.', pg_more: 'more answers available …',
+    hub_hint: 'Task types that are common in Programmierung exams. Every task is graded immediately.', h1: 'Exam training: {l}', overview: 'All exams'
+  }
+};
+const lt = (k, rep) => { let s = LXT[lang][k] ?? LXT.de[k] ?? k; if (rep) for (const r in rep) s = s.split('{' + r + '}').join(rep[r]); return s; };
+
+const FAM = `vater(hans, peter).
+vater(hans, anna).
+vater(peter, lisa).
+mutter(anna, tom).
+
+elternteil(X, Y) :- vater(X, Y).
+elternteil(X, Y) :- mutter(X, Y).
+
+grossvater(X, Z) :- vater(X, Y), elternteil(Y, Z).`;
+const ARI = `laenge([], 0).
+laenge([_|T], N) :- laenge(T, M), N is M + 1.
+
+summe([], 0).
+summe([H|T], S) :- summe(T, R), S is R + H.`;
+
+const LX = {
+  java: {
+    title: 'Java', kicker: { de: 'Klausur-Training · Teil II', en: 'Exam training · part II' },
+    intro: { de: 'Ausgaben vorhersagen, Rekursion nachrechnen, Objektorientierung durchschauen und eine Methode schreiben.', en: 'Predict outputs, trace recursion, see through object orientation and write a method.' },
+    tasks: [
+      { id: 'j1', type: 'lines', title: { de: 'Ausgabe: Ganzzahlen und Strings', en: 'Output: integers and strings' },
+        q: { de: 'Was gibt das Programmstück aus?', en: 'What does this code print?' },
+        code: `int a = 7, b = 2;
+System.out.println(a / b);
+System.out.println(a % b);
+System.out.println((double) a / b);
+System.out.println("" + a + b);
+System.out.println(a + b + "");`, answer: ['3', '1', '3.5', '72', '9'],
+        expl: { de: '7 / 2 ist Ganzzahldivision: 3. 7 % 2 ist der Rest: 1. Der Cast wirkt vor der Division, also 7.0 / 2 = 3.5. Bei "" + a + b wird von links ausgewertet: Zuerst entsteht ein String, an den 7 und 2 angehängt werden: 72. Bei a + b + "" wird zuerst 7 + 2 = 9 gerechnet und dann in einen String umgewandelt.',
+                en: '7 / 2 is integer division: 3. 7 % 2 is the remainder: 1. The cast applies before the division, so 7.0 / 2 = 3.5. In "" + a + b evaluation goes left to right: first a string, then 7 and 2 are appended: 72. In a + b + "" first 7 + 2 = 9 is computed, then converted to a string.' } },
+      { id: 'j2', type: 'lines', title: { de: 'Parameterübergabe und Referenzen', en: 'Parameter passing and references' },
+        q: { de: 'Was gibt main aus?', en: 'What does main print?' },
+        code: `static void f(int x, int[] a) {
+    x = x + 1;
+    a[0] = a[0] + 1;
+    a = new int[] {100};
+    a[0] = a[0] + 1;
+}
+
+public static void main(String[] args) {
+    int x = 1;
+    int[] a = {10};
+    f(x, a);
+    System.out.println(x);
+    System.out.println(a[0]);
+}`, answer: ['1', '11'],
+        expl: { de: 'Java übergibt immer Werte (call by value). x ist eine Kopie, die Änderung bleibt in f. Bei einem Array wird die Referenz kopiert: a[0] = a[0] + 1 ändert das Array von main auf 11. Danach zeigt das lokale a auf ein neues Array. Diese Änderung sieht main nicht.',
+                en: 'Java always passes values (call by value). x is a copy, so the change stays inside f. For an array the reference is copied: a[0] = a[0] + 1 changes main’s array to 11. Afterwards the local a points to a new array, and main does not see that change.' } },
+      { id: 'j3', type: 'lines', title: { de: 'Dynamisches Binden', en: 'Dynamic binding' },
+        q: { de: 'Was wird ausgegeben?', en: 'What is printed?' },
+        code: `class A {
+    int wert()    { return 1; }
+    int doppelt() { return 2 * wert(); }
+}
+class B extends A {
+    int wert()    { return 5; }
+}
+
+// in main:
+A x = new B();
+System.out.println(x.wert());
+System.out.println(x.doppelt());
+A y = new A();
+System.out.println(y.doppelt());`, answer: ['5', '10', '2'],
+        expl: { de: 'x hat den statischen Typ A, zeigt aber auf ein B-Objekt. Zur Laufzeit wird die Methode des tatsächlichen Objekts ausgeführt: wert() liefert 5. Auch innerhalb von doppelt() ruft wert() die überschriebene Methode auf: 2 · 5 = 10. Für ein echtes A-Objekt ergibt doppelt() 2 · 1 = 2.',
+                en: 'x has the static type A but points to a B object. At run time the method of the actual object is executed: wert() returns 5. Inside doppelt(), wert() also calls the overriding method: 2 · 5 = 10. For a real A object doppelt() gives 2 · 1 = 2.' } },
+      { id: 'j4', type: 'lines', title: { de: 'Überladen und Überschreiben', en: 'Overloading and overriding' },
+        q: { de: 'Was wird ausgegeben? Achtung, das ist eine klassische Falle.', en: 'What is printed? Careful, this is a classic trap.' },
+        code: `class A {
+    String f(A o) { return "A/A"; }
+}
+class B extends A {
+    String f(A o) { return "B/A"; }
+    String f(B o) { return "B/B"; }
+}
+
+// in main:
+A x = new B();
+B y = new B();
+System.out.println(x.f(y));
+System.out.println(y.f(y));
+System.out.println(y.f(x));`, answer: ['B/A', 'B/B', 'B/A'],
+        expl: { de: 'Welche Signatur aufgerufen wird, entscheidet der Compiler anhand der statischen Typen. x hat den Typ A, und A kennt nur f(A): Gewählt wird f(A), zur Laufzeit läuft die überschreibende Version in B: B/A. y hat den Typ B, das Argument y ebenfalls: f(B) passt am genauesten: B/B. Im dritten Aufruf hat das Argument x den statischen Typ A: f(A), ausgeführt in B: B/A.',
+                en: 'Which signature is called is decided by the compiler from the static types. x has type A, and A only knows f(A): f(A) is chosen, and at run time the overriding version in B runs: B/A. y has type B and so does the argument y: f(B) is the most specific match: B/B. In the third call the argument x has static type A: f(A), executed in B: B/A.' } },
+      { id: 'j5', type: 'nums', title: { de: 'Rekursion nachrechnen', en: 'Tracing recursion' },
+        q: { de: 'Gegeben ist die folgende Methode.', en: 'Consider the following method.' },
+        code: `static int f(int n) {
+    if (n <= 1) return n;
+    return f(n - 1) + f(n - 2);
+}`, fields: [{ label: { de: 'Wert von f(7)', en: 'value of f(7)' }, a: 13 }, { label: { de: 'Anzahl aller Aufrufe von f bei der Auswertung von f(5), einschließlich des ersten', en: 'number of calls of f when evaluating f(5), including the first' }, a: 15 }],
+        expl: { de: 'f ist die Fibonacci-Folge: 0, 1, 1, 2, 3, 5, 8, 13. Für die Anzahl der Aufrufe A(n) gilt A(0) = A(1) = 1 und A(n) = 1 + A(n − 1) + A(n − 2). Also A(2) = 3, A(3) = 5, A(4) = 9, A(5) = 15.',
+                en: 'f is the Fibonacci sequence: 0, 1, 1, 2, 3, 5, 8, 13. For the number of calls A(n): A(0) = A(1) = 1 and A(n) = 1 + A(n − 1) + A(n − 2). So A(2) = 3, A(3) = 5, A(4) = 9, A(5) = 15.' } },
+      { id: 'j6', type: 'nums', title: { de: 'Rekursive Datenstruktur', en: 'Recursive data structure' },
+        q: { de: 'Was gibt das Programm aus?', en: 'What does the program print?' },
+        code: `class Element {
+    int wert; Element next;
+    Element(int wert, Element next) { this.wert = wert; this.next = next; }
+}
+
+static int g(Element e) {
+    if (e == null) return 0;
+    if (e.wert % 2 == 0) return e.wert + g(e.next);
+    return g(e.next);
+}
+
+// in main:
+Element kopf = new Element(3, new Element(4, new Element(7, new Element(10, null))));
+System.out.println(g(kopf));`, fields: [{ label: { de: 'Ausgabe', en: 'output' }, a: 14 }],
+        expl: { de: 'g läuft rekursiv durch die Liste und addiert nur die geraden Werte: 4 + 10 = 14. Die Rekursion endet bei null.', en: 'g walks recursively through the list and adds only the even values: 4 + 10 = 14. The recursion ends at null.' } },
+      { id: 'j7', type: 'mc', pts: 2, title: { de: 'Abstrakte Klassen und Interfaces', en: 'Abstract classes and interfaces' },
+        q: { de: 'Welche der Anweisungen wird vom Compiler abgelehnt? Dabei sei f bereits als Form f = new Kreis(); deklariert.', en: 'Which statement does the compiler reject? Assume f has been declared as Form f = new Kreis();.' },
+        code: `abstract class Form {
+    abstract double flaeche();
+}
+interface Zeichenbar {
+    void zeichne();
+}
+class Kreis extends Form implements Zeichenbar {
+    double r;
+    double flaeche() { return 3.14 * r * r; }
+    public void zeichne() { }
+}`,
+        options: ['Zeichenbar z = new Kreis();', 'Form g = new Form();', 'Kreis k = (Kreis) f;', 'double d = f.flaeche();'], ok: 1,
+        expl: { de: 'Von einer abstrakten Klasse kann man keine Objekte erzeugen. Variablen vom Typ Form oder Zeichenbar dürfen auf ein Kreis-Objekt zeigen, der Cast ist erlaubt, weil Kreis eine Unterklasse von Form ist, und flaeche() ist in Form deklariert.',
+                en: 'You cannot create objects of an abstract class. Variables of type Form or Zeichenbar may point to a Kreis object, the cast is allowed because Kreis is a subclass of Form, and flaeche() is declared in Form.' } },
+      { id: 'j8', type: 'self', title: { de: 'Programmieren: Palindrom', en: 'Programming: palindrome' },
+        q: { de: 'Schreiben Sie eine Methode static boolean istPalindrom(int[] a), die genau dann true liefert, wenn a von vorne und von hinten gelesen gleich ist. Verwenden Sie kein Hilfsarray.', en: 'Write a method static boolean istPalindrom(int[] a) that returns true exactly when a reads the same forwards and backwards. Do not use a helper array.' },
+        model: `static boolean istPalindrom(int[] a) {
+    for (int i = 0; i < a.length / 2; i++) {
+        if (a[i] != a[a.length - 1 - i]) {
+            return false;
+        }
+    }
+    return true;
+}`,
+        checks: [{ t: { de: 'Signatur und Rückgabetyp boolean stimmen', en: 'Signature and return type boolean are right' }, p: 1 },
+                 { t: { de: 'Die Schleife läuft nur bis zur Mitte (a.length / 2)', en: 'The loop only runs to the middle (a.length / 2)' }, p: 1 },
+                 { t: { de: 'Verglichen wird a[i] mit a[a.length - 1 - i]', en: 'It compares a[i] with a[a.length - 1 - i]' }, p: 2 },
+                 { t: { de: 'Beim ersten Unterschied false, sonst am Ende true', en: 'false at the first difference, otherwise true at the end' }, p: 1 },
+                 { t: { de: 'Leeres Array und Länge 1 liefern true', en: 'Empty array and length 1 return true' }, p: 1 }] }
+    ]
+  },
+  haskell: {
+    title: 'Haskell', kicker: { de: 'Klausur-Training · Teil III', en: 'Exam training · part III' },
+    intro: { de: 'Typen bestimmen, Ausdrücke auswerten, Muster und Lazy Evaluation verstehen und eine Funktion auf Bäumen schreiben.', en: 'Determine types, evaluate expressions, understand patterns and lazy evaluation, and write a function on trees.' },
+    tasks: [
+      { id: 'h1', type: 'htype', title: { de: 'Typen bestimmen', en: 'Determining types' },
+        q: { de: 'Geben Sie für jede Funktion den allgemeinsten Typ an, einschließlich Typklassen-Einschränkungen.', en: 'Give the most general type of each function, including type class constraints.' },
+        code: `f x y     = x : y
+twice g x = g (g x)
+h (x, y)  = if x then y else y + 1`,
+        fields: [{ label: 'f ::', a: 'a -> [a] -> [a]' }, { label: 'twice ::', a: '(a -> a) -> a -> a' }, { label: 'h ::', a: 'Num a => (Bool, a) -> a' }],
+        expl: { de: 'f: (:) hängt ein Element vorne an eine Liste desselben Typs. twice: g wird auf sein eigenes Ergebnis angewendet, also müssen Argument- und Ergebnistyp gleich sein. h: x steht in der Bedingung und muss Bool sein; y + 1 verlangt Num, und beide Zweige haben den Typ von y.',
+                en: 'f: (:) puts an element in front of a list of the same type. twice: g is applied to its own result, so argument and result type must be equal. h: x is the condition and must be Bool; y + 1 requires Num, and both branches have the type of y.' } },
+      { id: 'h2', type: 'htype', title: { de: 'Typ mit Typklasse', en: 'Type with a type class' },
+        q: { de: 'Welchen allgemeinsten Typ hat g?', en: 'What is the most general type of g?' },
+        code: `g f xs = map f (filter even xs)`, fields: [{ label: 'g ::', a: 'Integral a => (a -> b) -> [a] -> [b]' }],
+        expl: { de: 'even :: Integral a => a -> Bool erzwingt Integral für die Elemente von xs. map f wendet f auf diese Elemente an; das Ergebnis hat einen beliebigen Typ b.', en: 'even :: Integral a => a -> Bool forces Integral for the elements of xs. map f applies f to those elements; the result has an arbitrary type b.' } },
+      { id: 'h3', type: 'hval', title: { de: 'Ausdrücke auswerten', en: 'Evaluating expressions' },
+        q: { de: 'Zu welchem Wert werten die Ausdrücke aus? Schreiben Sie das Ergebnis so, wie GHCi es ausgibt.', en: 'What do the expressions evaluate to? Write the result the way GHCi prints it.' },
+        fields: [{ label: 'take 3 (map (*2) [1..])', a: ['[2,4,6]'] }, { label: 'foldr (-) 0 [1,2,3]', a: ['2'] }, { label: 'foldl (-) 0 [1,2,3]', a: ['-6', '(-6)'] },
+                 { label: `[ (x, y) | x <- [1..3], y <- "ab", odd x ]`, a: [`[(1,'a'),(1,'b'),(3,'a'),(3,'b')]`] }],
+        expl: { de: 'Wegen Lazy Evaluation werden aus der unendlichen Liste nur drei Elemente berechnet. foldr klammert von rechts: 1 − (2 − (3 − 0)) = 2. foldl klammert von links: ((0 − 1) − 2) − 3 = −6. In der Listenkomprehension ist x die äußere Schleife, y die innere, und odd x filtert x = 2 heraus.',
+                en: 'Thanks to lazy evaluation only three elements of the infinite list are computed. foldr brackets from the right: 1 − (2 − (3 − 0)) = 2. foldl brackets from the left: ((0 − 1) − 2) − 3 = −6. In the list comprehension x is the outer loop, y the inner one, and odd x filters out x = 2.' } },
+      { id: 'h4', type: 'nums', title: { de: 'Pattern Matching', en: 'Pattern matching' },
+        q: { de: 'Werten Sie die Aufrufe aus.', en: 'Evaluate the calls.' },
+        code: `f :: [Int] -> Int
+f []       = 0
+f [x]      = x
+f (x:y:ys) = x - f ys`, fields: [{ label: 'f [10, 3, 4]', a: 6 }, { label: 'f [1, 2, 3, 4, 5]', a: 3 }],
+        expl: { de: 'Die dritte Gleichung nimmt zwei Elemente weg und rechnet x − f ys. f [10, 3, 4] = 10 − f [4] = 10 − 4 = 6. f [1, 2, 3, 4, 5] = 1 − f [3, 4, 5] = 1 − (3 − f [5]) = 1 − (3 − 5) = 3.', en: 'The third equation removes two elements and computes x − f ys. f [10, 3, 4] = 10 − f [4] = 10 − 4 = 6. f [1, 2, 3, 4, 5] = 1 − f [3, 4, 5] = 1 − (3 − f [5]) = 1 − (3 − 5) = 3.' } },
+      { id: 'h5', type: 'mc', pts: 2, title: { de: 'Lazy Evaluation', en: 'Lazy evaluation' },
+        q: { de: 'Welcher Ausdruck terminiert?', en: 'Which expression terminates?' },
+        options: ['length [1..]', 'head (filter (> 100) [1..])', 'sum (takeWhile (> 0) [1..])', 'last [1..]'], ok: 1,
+        expl: { de: 'Lazy Evaluation berechnet nur, was gebraucht wird. head braucht nur das erste Element der gefilterten Liste: 101. Die anderen Ausdrücke müssen die ganze unendliche Liste durchlaufen; takeWhile (> 0) hört nie auf, weil alle Zahlen positiv sind.', en: 'Lazy evaluation only computes what is needed. head needs only the first element of the filtered list: 101. The other expressions must traverse the whole infinite list; takeWhile (> 0) never stops because all numbers are positive.' } },
+      { id: 'h6', type: 'self', title: { de: 'Programmieren: Binärbäume', en: 'Programming: binary trees' },
+        q: { de: 'Gegeben ist data Baum = Blatt | Knoten Baum Int Baum. Schreiben Sie summe :: Baum -> Int (Summe aller Zahlen) und tiefe :: Baum -> Int (ein Blatt hat die Tiefe 0).', en: 'Given data Baum = Blatt | Knoten Baum Int Baum. Write summe :: Baum -> Int (sum of all numbers) and tiefe :: Baum -> Int (a leaf has depth 0).' },
+        model: `data Baum = Blatt | Knoten Baum Int Baum
+
+summe :: Baum -> Int
+summe Blatt          = 0
+summe (Knoten l x r) = summe l + x + summe r
+
+tiefe :: Baum -> Int
+tiefe Blatt          = 0
+tiefe (Knoten l _ r) = 1 + max (tiefe l) (tiefe r)
+
+-- b = Knoten (Knoten Blatt 1 Blatt) 2 (Knoten Blatt 3 (Knoten Blatt 4 Blatt))
+-- summe b == 10,  tiefe b == 3`,
+        checks: [{ t: { de: 'Je eine Gleichung für Blatt und für Knoten (Pattern Matching)', en: 'One equation for Blatt and one for Knoten (pattern matching)' }, p: 2 },
+                 { t: { de: 'summe ruft sich auf beiden Teilbäumen auf', en: 'summe recurses on both subtrees' }, p: 1 },
+                 { t: { de: 'tiefe rechnet 1 + max der beiden Teilbäume', en: 'tiefe computes 1 + max of the two subtrees' }, p: 2 },
+                 { t: { de: 'Typsignaturen angegeben', en: 'Type signatures given' }, p: 1 }] }
+    ]
+  },
+  prolog: {
+    title: 'Prolog', kicker: { de: 'Klausur-Training · Teil IV', en: 'Exam training · part IV' },
+    intro: { de: 'Unifikation, Anfragen mit Backtracking und kleine Prädikate, die ein eingebautes Mini-Prolog direkt testet.', en: 'Unification, queries with backtracking and small predicates that a built-in mini Prolog tests directly.' },
+    tasks: [
+      { id: 'p1', type: 'unify', title: { de: 'Unifikation', en: 'Unification' },
+        q: { de: 'Sind die Terme unifizierbar? Geben Sie gegebenenfalls einen allgemeinsten Unifikator an, zum Beispiel X = a, Y = f(b). Verwenden Sie den Occurs-Check.', en: 'Are the terms unifiable? If so, give a most general unifier, for example X = a, Y = f(b). Use the occurs check.' },
+        pairs: [['f(X, g(Y))', 'f(a, g(b))'], ['p(X, f(X))', 'p(g(Y), f(g(a)))'], ['h(X, X)', 'h(a, b)'], ['k(X, f(X))', 'k(Y, Y)'], ['[X, Y | Z]', '[1, 2, 3, 4]']],
+        why: [null, null, { de: 'X müsste gleichzeitig a und b sein.', en: 'X would have to be a and b at the same time.' }, { de: 'Aus X = Y folgt f(X) = X. Der Occurs-Check schlägt fehl.', en: 'From X = Y we get f(X) = X. The occurs check fails.' }, null] },
+      { id: 'p2', type: 'pquery', title: { de: 'Anfragen und Backtracking', en: 'Queries and backtracking' },
+        q: { de: 'Welche Antworten liefert Prolog auf die Anfragen, und in welcher Reihenfolge?', en: 'Which answers does Prolog give to the queries, and in which order?' },
+        program: FAM, queries: ['grossvater(hans, E)', 'elternteil(X, tom)', 'vater(peter, anna)'],
+        expl: { de: 'Prolog probiert die Klauseln von oben nach unten und die Teilziele von links nach rechts. Für grossvater(hans, E) wird zuerst Y = peter gefunden (E = lisa), dann Y = anna, deren Kind tom über mutter gefunden wird.', en: 'Prolog tries clauses top to bottom and subgoals left to right. For grossvater(hans, E) it first finds Y = peter (E = lisa), then Y = anna, whose child tom is found via mutter.' } },
+      { id: 'p3', type: 'pquery', title: { de: 'Rekursion und Arithmetik', en: 'Recursion and arithmetic' },
+        q: { de: 'Welche Antworten liefert Prolog?', en: 'Which answers does Prolog give?' },
+        program: ARI, queries: ['laenge([a, b, c], N)', 'summe([4, 5, 6], S)', 'laenge([[1, 2], []], N)'],
+        expl: { de: 'is/2 rechnet erst, wenn die rechte Seite vollständig gebunden ist, deshalb steht der rekursive Aufruf vor der Rechnung. Die Liste [[1, 2], []] hat zwei Elemente, egal was in ihnen steht.', en: 'is/2 only computes once the right-hand side is fully bound, so the recursive call comes before the calculation. The list [[1, 2], []] has two elements, whatever they contain.' } },
+      { id: 'p4', type: 'pprog', pts: 4, title: { de: 'Programmieren: letztes Element', en: 'Programming: last element' },
+        q: { de: 'Schreiben Sie ein Prädikat letztes(L, X), das gilt, wenn X das letzte Element der Liste L ist.', en: 'Write a predicate letztes(L, X) that holds if X is the last element of the list L.' },
+        starter: '% letztes(L, X)\n', model: `letztes([X], X).
+letztes([_|T], X) :- letztes(T, X).`,
+        tests: [{ q: 'letztes([1, 2, 3], X)', exp: ['X = 3'] }, { q: 'letztes([a], X)', exp: ['X = a'] }, { q: 'letztes([], X)', exp: false }, { q: 'letztes([1, 2, 3], 2)', exp: false }] },
+      { id: 'p5', type: 'pprog', pts: 4, title: { de: 'Programmieren: verdoppeln', en: 'Programming: doubling' },
+        q: { de: 'Schreiben Sie verdoppeln(L, D): D enthält jedes Element von L zweimal hintereinander, zum Beispiel verdoppeln([1, 2], [1, 1, 2, 2]).', en: 'Write verdoppeln(L, D): D contains each element of L twice in a row, for example verdoppeln([1, 2], [1, 1, 2, 2]).' },
+        starter: '% verdoppeln(L, D)\n', model: `verdoppeln([], []).
+verdoppeln([H|T], [H, H|R]) :- verdoppeln(T, R).`,
+        tests: [{ q: 'verdoppeln([1, 2], D)', exp: ['D = [1,1,2,2]'] }, { q: 'verdoppeln([], D)', exp: ['D = []'] }, { q: 'verdoppeln([a], [a, a])', exp: true }, { q: 'verdoppeln([a], [a])', exp: false }] },
+      { id: 'p6', type: 'pprog', pts: 4, title: { de: 'Programmieren: zählen', en: 'Programming: counting' },
+        q: { de: 'Schreiben Sie zaehle(X, L, N): N ist die Anzahl der Vorkommen von X in der Liste L. Jede Anfrage soll genau eine Antwort liefern.', en: 'Write zaehle(X, L, N): N is the number of occurrences of X in the list L. Every query should give exactly one answer.' },
+        starter: '% zaehle(X, L, N)\n', model: `zaehle(_, [], 0).
+zaehle(X, [X|T], N) :- zaehle(X, T, M), N is M + 1.
+zaehle(X, [Y|T], N) :- X \\= Y, zaehle(X, T, N).`,
+        tests: [{ q: 'zaehle(a, [a, b, a], N)', exp: ['N = 2'] }, { q: 'zaehle(c, [a, b], N)', exp: ['N = 0'] }, { q: 'zaehle(1, [], N)', exp: ['N = 0'] }, { q: 'zaehle(b, [b, b, b, a], 3)', exp: true }] }
+    ]
+  }
+};
+
+/* ---- state, scoring ---- */
+ST.LX = ST.LX || {};
+const lxS = l => (ST.LX[l] ||= { v: {}, r: {}, sol: {} });
+function taskMax(t) {
+  switch (t.type) {
+    case 'lines': return t.answer.length;
+    case 'nums': case 'htype': case 'hval': return t.fields.length;
+    case 'unify': return t.pairs.length;
+    case 'pquery': return t.queries.length;
+    case 'mc': case 'pprog': return t.pts;
+    case 'self': return t.checks.reduce((s, c) => s + c.p, 0);
+  }
+}
+const normV = s => String(s ?? '').replace(/\s+/g, '').replace(/−/g, '-');
+function splitTop(s) { const out = []; let d = 0, cur = ''; for (const c of s) { if ('[('.includes(c)) d++; if ('])'.includes(c)) d--; if ((c === ',' || c === ';' || c === '\n') && d === 0) { out.push(cur); cur = ''; } else cur += c; } out.push(cur); return out.map(x => x.trim()).filter(Boolean); }
+function normAnswers(s) {
+  return splitTop(s || '').map(x => x.replace(/^[A-Z_][A-Za-z0-9_]*\s*=\s*/, '')).map(normV).map(x => ({ nein: 'false', no: 'false', falsch: 'false', ja: 'true', yes: 'true', wahr: 'true' }[x.toLowerCase()] || x));
+}
+function expectedAnswers(program, q) {
+  const r = PL.run(program, q);
+  if (r.error) return null;
+  if (!r.answers.length) return ['false'];
+  return r.answers.map(a => { const vals = Object.values(a); return vals.length ? vals.map(normV).join(',') : 'true'; });
+}
+function plErr(r) { return lt('perr_' + (r.error === 'limit' ? 'limit' : r.error === 'unknown' ? 'unknown' : r.error === 'inst' ? 'inst' : r.error === 'cut' ? 'cut' : 'syntax'), { d: r.detail || '' }); }
+function infoText(i) { if (!i) return ''; if (i.err) return plErr(i.err); return (i.got.length ? i.got.join(' ; ') : lt('t_none')) + (i.extra ? ' · ' + lt('t_extra') : ''); }
+function fmtAns(a) { const e = Object.entries(a); return e.length ? e.map(([k, v]) => `${k} = ${v}`).join(', ') : 'true'; }
+
+function gradeTask(l, t) {
+  const S = lxS(l), V = k => S.v[t.id + ':' + k] ?? '';
+  const res = { items: [], pts: 0 };
+  switch (t.type) {
+    case 'lines': {
+      const got = String(V('0')).split('\n').map(x => x.trim()).filter(x => x !== '');
+      t.answer.forEach((a, i) => { const ok = normV(got[i]) === normV(a); res.items.push({ ok, got: got[i] ?? '', exp: a }); if (ok) res.pts++; });
+      break; }
+    case 'nums': t.fields.forEach((f, i) => { const g = V(i).trim().replace('−', '-'); const ok = g !== '' && Number(g) === f.a; res.items.push({ ok, exp: String(f.a) }); if (ok) res.pts++; }); break;
+    case 'hval': t.fields.forEach((f, i) => { const g = normV(V(i)); const ok = f.a.some(a => normV(a) === g); res.items.push({ ok, exp: f.a[0] }); if (ok) res.pts++; }); break;
+    case 'htype': t.fields.forEach((f, i) => { const g = V(i); const e = g.trim() ? HT.eq(g, f.a) : false; res.items.push({ ok: e === true, err: e === null, exp: f.a }); if (e === true) res.pts++; }); break;
+    case 'mc': { const g = V('0'); res.items.push({ ok: g !== '' && +g === t.ok }); if (g !== '' && +g === t.ok) res.pts = t.pts; break; }
+    case 'unify': t.pairs.forEach(([a, b], i) => {
+      const ref = PL.refUnifier(a, b), notU = V('n' + i) === '1', txt = V(i);
+      let ok = false, msg;
+      if (ref === null) { ok = notU; msg = ok ? '' : 'u_isnot'; }
+      else if (notU) { msg = 'u_is'; }
+      else { const c = PL.checkUnifier(a, b, txt); if (c.error) msg = 'u_err'; else if (c.ok) ok = true; else msg = c.unifies ? 'u_notgen' : 'u_wrong'; }
+      res.items.push({ ok, msg, exp: ref }); if (ok) res.pts++; }); break;
+    case 'pquery': t.queries.forEach((q, i) => { const exp = expectedAnswers(t.program, q) || []; const got = normAnswers(V(i)); const ok = got.length === exp.length && got.every((g, j) => g === exp[j]); res.items.push({ ok, exp: exp.join(' ; ') }); if (ok) res.pts++; }); break;
+    case 'pprog': {
+      const prog = V('0');
+      let passed = 0;
+      t.tests.forEach(ts => {
+        const r = PL.run(prog, ts.q);
+        let ok = false, info;
+        if (r.error) info = { err: r };
+        else {
+          const got = [...new Set(r.answers.map(fmtAns))];
+          if (ts.exp === false) ok = r.answers.length === 0;
+          else if (ts.exp === true) ok = r.answers.length > 0;
+          else ok = got.length === ts.exp.length && ts.exp.every(e => got.map(normV).includes(normV(e)));
+          info = { got, extra: !ok && r.answers.length > 0 && ts.exp !== false };
+        }
+        res.items.push({ ok, info });
+        if (ok) passed++;
+      });
+      res.pts = Math.round(t.pts * passed / t.tests.length); break; }
+    case 'self': t.checks.forEach((c, i) => { const ok = V('c' + i) === '1'; res.items.push({ ok }); if (ok) res.pts += c.p; }); break;
+  }
+  res.max = taskMax(t);
+  return res;
+}
+
+/* ---- rendering ---- */
+function codeHTML(src) { return `<pre class="code">${esc(src)}</pre>`; }
+function fb(ok, inner) { return `<div class="fb ${ok ? 'ok' : 'bad'}">${inner}</div>`; }
+function taskHTML(l, t, idx) {
+  const S = lxS(l), r = S.r[t.id], showSol = !!S.sol[t.id], V = k => S.v[t.id + ':' + k] ?? '';
+  const key = k => `data-lx="${l}" data-t="${t.id}" data-k="${k}"`;
+  const mark = (i) => r && r.items[i] ? `<span class="lxm ${r.items[i].ok ? 'yes' : 'no'}">${r.items[i].ok ? '✓' : '✗'}</span>` : '';
+  let body = '';
+  switch (t.type) {
+    case 'lines': {
+      body = codeHTML(t.code) + `<label class="f" for="lx-${t.id}"><span>${lt('lines_hint')}</span><textarea id="lx-${t.id}" class="lxarea mono" rows="${t.answer.length + 1}" ${key('0')} spellcheck="false">${esc(V('0'))}</textarea></label>`;
+      if (r) body += `<div class="lx-lines">${r.items.map((it, i) => `<div class="${it.ok ? 'yes' : 'no'}">${it.ok ? '✓' : '✗'} <span class="mono">${esc(it.got || '—')}</span>${!it.ok && showSol ? ` <span class="muted">→ ${esc(it.exp)}</span>` : ''}</div>`).join('')}</div>`;
+      break; }
+    case 'nums': case 'hval': case 'htype':
+      body = (t.code ? codeHTML(t.code) : '') + `<div class="lxfields">${t.fields.map((f, i) => `<label class="lxf" for="lx-${t.id}-${i}"><span class="mono">${esc(L(f.label))}</span><span class="row"><input id="lx-${t.id}-${i}" class="mono" ${key(i)} value="${esc(V(i))}" placeholder="${esc(t.type === 'htype' ? lt('type_ph') : t.type === 'nums' ? lt('num_ph') : lt('val_ph'))}" autocomplete="off" spellcheck="false" ${t.type === 'nums' ? 'inputmode="numeric"' : ''}>${mark(i)}</span>${r && r.items[i] && r.items[i].err ? `<span class="err">${lt('err_type')}</span>` : ''}${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(t.type === 'nums' ? r.items[i].exp : Array.isArray(f.a) ? f.a[0] : f.a)}</b></span>` : ''}</label>`).join('')}</div>`;
+      break;
+    case 'mc':
+      body = (t.code ? codeHTML(t.code) : '') + `<div class="lxmc" role="radiogroup">${t.options.map((o, i) => `<label class="lxopt ${r && showSol && i === t.ok ? 'right' : ''}"><input type="radio" name="lx-${t.id}" value="${i}" ${key('0')} ${V('0') === String(i) ? 'checked' : ''}> <span class="mono">${esc(o)}</span></label>`).join('')}</div>`;
+      if (r && !r.items[0].ok && V('0') === '') body += `<p class="small muted">${lt('mc_pick')}</p>`;
+      break;
+    case 'unify':
+      body = `<div class="lxfields">${t.pairs.map(([a, b], i) => `<div class="lxf"><span class="mono">${esc(a)} &nbsp;≟&nbsp; ${esc(b)}</span>
+        <span class="row"><input class="mono" ${key(i)} value="${esc(V(i))}" placeholder="${esc(lt('unif_ph'))}" autocomplete="off" spellcheck="false" aria-label="${esc(a + ' = ' + b)}" ${V('n' + i) === '1' ? 'disabled' : ''}>
+        <label class="kcheck small"><input type="checkbox" ${key('n' + i)} ${V('n' + i) === '1' ? 'checked' : ''}> ${lt('not_unif')}</label>${mark(i)}</span>
+        ${r && !r.items[i].ok && r.items[i].msg ? `<span class="err">${esc(lt(r.items[i].msg))}</span>` : ''}
+        ${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(r.items[i].exp === null ? lt('not_unif') : r.items[i].exp)}</b>${t.why[i] ? ' · ' + esc(L(t.why[i])) : ''}</span>` : ''}</div>`).join('')}</div>`;
+      break;
+    case 'pquery':
+      body = codeHTML(t.program) + `<p class="syntax">${lt('q_hint')}</p><div class="lxfields">${t.queries.map((q, i) => `<label class="lxf" for="lx-${t.id}-${i}"><span class="mono">?- ${esc(q)}.</span><span class="row"><input id="lx-${t.id}-${i}" class="mono" ${key(i)} value="${esc(V(i))}" autocomplete="off" spellcheck="false">${mark(i)}</span>${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(r.items[i].exp)}</b></span>` : ''}</label>`).join('')}</div>`;
+      break;
+    case 'pprog':
+      body = `<label class="f" for="lx-${t.id}"><span>${lt('pg_prog')}</span><textarea id="lx-${t.id}" class="lxarea mono" rows="6" ${key('0')} spellcheck="false">${esc(V('0') || t.starter)}</textarea></label>
+        <div class="lxtests">${t.tests.map((ts, i) => { const it = r && r.items[i]; return `<div class="lxtest ${it ? (it.ok ? 'yes' : 'no') : ''}"><span class="mono">?- ${esc(ts.q)}.</span><span class="small">${lt('t_want')} <span class="mono">${esc(ts.exp === false ? lt('t_none') : ts.exp === true ? lt('t_yes') : ts.exp.join(' ; '))}</span></span>${it ? `<span class="small">${it.ok ? '✓ ' + lt('t_ok') : '✗ ' + lt('t_got') + ' <span class="mono">' + esc(infoText(it.info)) + '</span>'}</span>` : ''}</div>`; }).join('')}</div>`;
+      break;
+    case 'self':
+      body = `<p class="small muted">${lt('self_txt')}</p><label class="f" for="lx-${t.id}"><span>${lt('self_area')}</span><textarea id="lx-${t.id}" class="lxarea mono" rows="8" ${key('0')} spellcheck="false">${esc(V('0'))}</textarea></label>`;
+      if (showSol) body += `<div class="lxsol"><span class="lab">${lt('solution')}</span>${codeHTML(t.model)}<div class="lxchecks">${t.checks.map((c, i) => `<label class="kcheck"><input type="checkbox" ${key('c' + i)} ${V('c' + i) === '1' ? 'checked' : ''}> <span>${esc(L(c.t))} <span class="muted">(${c.p} ${lt('pts')})</span></span></label>`).join('')}</div></div>`;
+      break;
+  }
+  let sol = '';
+  if (showSol && t.expl) sol = `<div class="fb info"><span class="lab">${lt('solution')}</span><span>${esc(L(t.expl))}</span></div>`;
+  if (showSol && t.type === 'pprog') sol = `<div class="lxsol"><span class="lab">${lt('solution')}</span>${codeHTML(t.model)}</div>`;
+  if (showSol && t.type === 'lines') sol = `<div class="fb info"><span class="lab">${lt('solution')}</span><pre class="code">${esc(t.answer.join('\n'))}</pre><span>${esc(L(t.expl))}</span></div>`;
+  const max = taskMax(t);
+  const badge = r ? `<span class="lxbadge ${r.pts === max ? 'full' : r.pts ? 'part' : 'zero'}">${r.pts} / ${max} ${lt('pts')}${t.type === 'self' ? ' · ' + lt('self_pts') : ''}</span>` : `<span class="lxbadge">${max} ${lt('pts')}</span>`;
+  const checkBtn = t.type === 'self' ? '' : `<button class="btn primary" type="button" data-lxact="check" data-lx="${l}" data-t="${t.id}">${t.type === 'pprog' ? lt('run_tests') : lt('check')}</button>`;
+  return `<article class="xt" id="xt-${t.id}">
+    <header class="xt-h"><span class="xt-n">${lt('task')} ${idx + 1}</span><h3>${esc(L(t.title))}</h3>${badge}</header>
+    <p>${esc(L(t.q))}</p>${body}
+    <div class="row">${checkBtn}<button class="btn ${t.type === 'self' ? 'primary' : 'ghost'}" type="button" data-lxact="sol" data-lx="${l}" data-t="${t.id}">${showSol ? lt('hide') : lt('show')}</button></div>
+    ${sol}</article>`;
+}
+function lxTotals(l) {
+  const D = LX[l], S = lxS(l);
+  const total = D.tasks.reduce((s, t) => s + taskMax(t), 0);
+  const got = D.tasks.reduce((s, t) => s + (S.r[t.id] ? S.r[t.id].pts : 0), 0);
+  const n = D.tasks.filter(t => S.r[t.id]).length;
+  return { total, got, n, m: D.tasks.length };
+}
+function lxSummaryHTML(l) {
+  const T = lxTotals(l), pct = T.total ? T.got / T.total : 0;
+  return `<div class="lxsum"><div><div class="big">${lt('total', { p: T.got, t: T.total })}</div><div class="small muted">${lt('checked', { n: T.n, m: T.m })}</div></div>
+    <div class="bar"><span style="width:${Math.round(pct * 100)}%"></span></div>
+    <div class="row"><button class="btn" type="button" data-lxact="checkall" data-lx="${l}">${lt('checkall')}</button><button class="btn ghost" type="button" data-lxact="reset" data-lx="${l}">${lt('reset')}</button></div></div>`;
+}
+function playgroundHTML() {
+  const S = lxS('prolog');
+  const prog = S.v['pg:prog'] ?? FAM, q = S.v['pg:q'] ?? 'grossvater(hans, E)';
+  const out = S.pg;
+  let res = '';
+  if (out) {
+    if (out.error) res = `<div class="fb bad">${esc(plErr(out))}</div>`;
+    else if (!out.answers.length) res = `<pre class="code">${lt('pg_noans')}</pre>`;
+    else res = `<pre class="code">${esc(out.answers.map(fmtAns).join(' ;\n') + '.')}${out.more || out.limit ? '\n' + esc(lt('pg_more')) : ''}</pre>`;
+  }
+  return `<section class="tool" id="pg"><h3><span class="as">?-</span><span>${lt('pg_title')}</span></h3><p class="small muted">${lt('pg_txt')}</p>
+    <label class="f" for="pg-prog"><span>${lt('pg_prog')}</span><textarea id="pg-prog" class="lxarea mono" rows="9" data-lx="prolog" data-t="pg" data-k="prog" spellcheck="false">${esc(prog)}</textarea></label>
+    <div class="inline-in"><span class="mono">?-</span><input id="pg-q" class="mono" data-lx="prolog" data-t="pg" data-k="q" value="${esc(q)}" aria-label="${esc(lt('pg_query'))}" autocomplete="off" spellcheck="false"><button class="btn primary" type="button" data-lxact="pgrun" data-lx="prolog">${lt('pg_run')}</button></div>
+    ${res}</section>`;
+}
+function renderLX(l) {
+  const D = LX[l], box = document.getElementById('lx-' + l);
+  if (!box) return;
+  box.innerHTML = `<div class="page-h"><div class="kicker">${esc(L(D.kicker))}</div><h1 id="lx-${l}-title">${lt('h1', { l: D.title })}</h1><p class="lede">${esc(L(D.intro))}</p><p class="small muted">${lt('hub_hint')}</p></div>
+    ${lxSummaryHTML(l)}
+    <div class="xts">${D.tasks.map((tk, i) => taskHTML(l, tk, i)).join('')}</div>
+    ${l === 'prolog' ? playgroundHTML() : ''}
+    <div class="pager"><a class="btn" href="#${l}">← ${D.title}</a><a class="btn" href="#exam">${lt('overview')} →</a></div>`;
+}
+function rerenderTask(l, id) {
+  const D = LX[l], i = D.tasks.findIndex(x => x.id === id), el = document.getElementById('xt-' + id);
+  if (el && i >= 0) el.outerHTML = taskHTML(l, D.tasks[i], i);
+  const sum = document.querySelector(`#lx-${l} .lxsum`); if (sum) sum.outerHTML = lxSummaryHTML(l);
+}
+function handleLX(e) {
+  const b = e.target.closest('[data-lxact]'); if (!b) return;
+  const l = b.dataset.lx, act = b.dataset.lxact, S = lxS(l), id = b.dataset.t;
+  if (act === 'check') { S.r[id] = gradeTask(l, LX[l].tasks.find(x => x.id === id)); rerenderTask(l, id); }
+  else if (act === 'sol') { S.sol[id] = !S.sol[id]; const tk = LX[l].tasks.find(x => x.id === id); if (tk.type === 'self') S.r[id] = gradeTask(l, tk); rerenderTask(l, id); }
+  else if (act === 'checkall') { LX[l].tasks.forEach(tk => { if (tk.type !== 'self' || S.sol[tk.id]) S.r[tk.id] = gradeTask(l, tk); }); renderLX(l); }
+  else if (act === 'reset') { ST.LX[l] = { v: {}, r: {}, sol: {} }; renderLX(l); }
+  else if (act === 'pgrun') { S.pg = PL.run(S.v['pg:prog'] ?? FAM, S.v['pg:q'] ?? 'grossvater(hans, E)'); const pg = document.getElementById('pg'); if (pg) pg.outerHTML = playgroundHTML(); }
+  snapshot();
+}
+function handleLXInput(e) {
+  const i = e.target.closest('[data-lx][data-k]'); if (!i) return;
+  const l = i.dataset.lx, S = lxS(l), k = i.dataset.t + ':' + i.dataset.k;
+  if (i.type === 'checkbox') {
+    S.v[k] = i.checked ? '1' : '';
+    const tk = LX[l].tasks.find(x => x.id === i.dataset.t);
+    if (tk && tk.type === 'self') { S.r[tk.id] = gradeTask(l, tk); const badge = document.querySelector(`#xt-${tk.id} .lxbadge`); const r = S.r[tk.id]; if (badge) { badge.className = 'lxbadge ' + (r.pts === r.max ? 'full' : r.pts ? 'part' : 'zero'); badge.textContent = `${r.pts} / ${r.max} ${lt('pts')} · ${lt('self_pts')}`; } const sum = document.querySelector(`#lx-${l} .lxsum`); if (sum) sum.outerHTML = lxSummaryHTML(l); }
+    if (tk && tk.type === 'unify') { const inp = document.querySelector(`[data-lx="${l}"][data-t="${tk.id}"][data-k="${i.dataset.k.slice(1)}"]`); if (inp) inp.disabled = i.checked; }
+  } else if (i.type === 'radio') S.v[k] = i.value;
+  else S.v[k] = i.value;
+}
+
+/* boot */
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 
 </script>

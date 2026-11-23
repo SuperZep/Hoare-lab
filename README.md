@@ -11,12 +11,12 @@ Aufbau: **Erstes Jahr** (Startseite) → **Programmierung** (Modulübersicht) �
 - **Java, Haskell, Prolog:** Entstehung und Problem, Entwicklung, Einsatz heute, Kapitel der Vorlesung, erstes Beispiel.
 - **Hoare-Kalkül:** Motivation, Geschichte, die sieben Regeln, Rückwärts-Rechner für die Zuweisungsregel, Invarianten-Tracer, Terminierung, Spickzettel.
 - **Übungen (11):** geführte Aufgaben mit gegebener oder selbst zu findender Schleifeninvariante, dazu if/else und Arrays. Ein Prüfer testet Invarianten automatisch und zeigt Gegenbeispiele.
-- **Klausur-Simulation:** Aufgabe im Stil der schriftlichen Prüfung, mit optionalem Zeitlimit und Punktebewertung.
+- **Klausur:** Übersicht mit vier Trainings: Hoare-Simulation (Zeitlimit, Punkte) sowie Klausur-Training für Java, Haskell und Prolog. Prolog-Programmieraufgaben testet ein eingebautes Mini-Prolog, Haskell-Typen werden bis auf Umbenennung der Typvariablen verglichen.
 
 ## Aufbau / Structure
 
 - `index.html` – die fertige Seite (eine Datei, ohne Abhängigkeiten außer Google Fonts).
-- `src/` – Quelltexte: `src.html` (Markup, CSS und alle Seiteninhalte), `core.js` (Parser, Auswertung, Prüfer), `exercises.js` und `exercises2.js` (Aufgaben), `app.js` (Oberfläche).
+- `src/` – Quelltexte: `src.html` (Markup, CSS und alle Seiteninhalte), `core.js` (Parser, Auswertung, Prüfer), `langengines.js` (Mini-Prolog, Haskell-Typvergleich), `lx.js` (Klausur-Training der Sprachen), `exercises.js` und `exercises2.js` (Aufgaben), `app.js` (Oberfläche).
 - Neu bauen / rebuild: `cd src && python3 build.py`
 
 Unabhängige Lernhilfe, kein offizielles Angebot der RWTH Aachen.

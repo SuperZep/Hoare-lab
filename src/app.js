@@ -348,7 +348,7 @@ function renderList() {
     return `<button type="button" class="exbtn" data-ex="${e.id}" aria-current="${ST.ex === e.id}"><span class="t">${esc(L(e.title))}</span><span class="lv" aria-label="level ${e.level}">${'●'.repeat(e.level)}${'○'.repeat(3 - e.level)}</span><span class="pr">${t('progress', { d: Math.min(d, n), n })}</span></button>`;
   }).join('');
   document.getElementById('exlist').innerHTML = ['given', 'find', 'ifarr'].map(g => `<div class="exgroup"><h3>${t(g)}</h3>${grp(g)}</div>`).join('')
-    + `<a class="btn" href="#exam" style="justify-self:start">${t('k_title')} →</a>`;
+    + `<a class="btn" href="#exam-hoare" style="justify-self:start">${t('k_title')} →</a>`;
 }
 function renderWS() {
   const ex = exById(ST.ex), P = prog(ex.id), S = stepsFor(ex), c = compile(ex);
@@ -569,10 +569,11 @@ function renderTracer() {
 }
 
 /* ---- view routing & language ---- */
-const VIEWS = ['plan', 'prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam'];
-const PROG_VIEWS = ['prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam'];
-const TOP_OF = { java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog' };
-const TITLES = { plan: 'Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab' };
+const VIEWS = ['plan', 'prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam', 'exam-java', 'exam-haskell', 'exam-prolog', 'exam-hoare'];
+const PROG_VIEWS = VIEWS.filter(v => v !== 'plan');
+const TOP_OF = { java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const SUB_OF = { 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const TITLES = { plan: 'Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
 function showView(v, scroll) {
   if (!VIEWS.includes(v)) v = 'plan';
   ST.view = v;
@@ -580,10 +581,12 @@ function showView(v, scroll) {
   document.body.dataset.group = PROG_VIEWS.includes(v) ? 'prog' : 'none';
   const top = TOP_OF[v] || v;
   document.querySelectorAll('nav.views a').forEach(a => { if (a.dataset.view === top) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-  document.querySelectorAll('nav.subnav a').forEach(a => { if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  const sub = SUB_OF[v] || v;
+  document.querySelectorAll('nav.subnav a').forEach(a => { if (a.dataset.view === sub) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   try { document.title = TITLES[v] || 'Hoare Lab'; } catch (e) {}
   if (v === 'practice') renderPractice();
-  if (v === 'exam') { renderExam(); kArmTimer(); }
+  if (v === 'exam-hoare') { renderExam(); kArmTimer(); }
+  if (v.startsWith('exam-') && LX[v.slice(5)]) renderLX(v.slice(5));
   if (scroll) window.scrollTo(0, 0);
 }
 function setLang(l) {
@@ -593,13 +596,14 @@ function setLang(l) {
   try { localStorage.setItem('hoarelab-lang', l); } catch (e) {}
   renderBW(); renderTracer();
   if (ST.view === 'practice') renderPractice();
-  if (ST.view === 'exam') renderExam();
+  if (ST.view === 'exam-hoare') renderExam();
+  if (ST.view.startsWith('exam-') && LX[ST.view.slice(5)]) renderLX(ST.view.slice(5));
   snapshot();
 }
-function snapshot() { try { window.claude?.hot?.snapshot?.(() => ({ view: ST.view, ex: ST.ex, P: ST.P, tr: ST.tr, K: ST.K })); } catch (e) {} }
+function snapshot() { try { window.claude?.hot?.snapshot?.(() => ({ view: ST.view, ex: ST.ex, P: ST.P, tr: ST.tr, K: ST.K, LX: ST.LX })); } catch (e) {} }
 
 function start(data) {
-  if (data && data.P) { ST.P = data.P; ST.ex = data.ex || ST.ex; if (data.tr) ST.tr = data.tr; if (data.K) ST.K = { ...ST.K, ...data.K }; }
+  if (data && data.P) { ST.P = data.P; ST.ex = data.ex || ST.ex; if (data.tr) ST.tr = data.tr; if (data.K) ST.K = { ...ST.K, ...data.K }; if (data.LX) ST.LX = data.LX; }
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
   const ws = document.getElementById('ws');
@@ -617,6 +621,7 @@ function start(data) {
     if (e.key !== 'Enter') return; const i = e.target.closest('input[data-k]'); if (!i) return;
     e.preventDefault(); const all = [...ek.querySelectorAll('input[data-k]:not([disabled])')]; const n = all[all.indexOf(i) + 1]; if (n) n.focus();
   });
+  ['lx-java', 'lx-haskell', 'lx-prolog'].forEach(id => { const el = document.getElementById(id); el.addEventListener('click', handleLX); el.addEventListener('input', handleLXInput); el.addEventListener('change', handleLXInput); });
   document.querySelectorAll('[data-scroll]').forEach(b => b.addEventListener('click', () => { const el = document.getElementById(b.dataset.scroll); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' }); }));
   ['bw-var', 'bw-expr', 'bw-post'].forEach(id => document.getElementById(id).addEventListener('input', renderBW));
   document.getElementById('tr-n').value = ST.tr.n;
@@ -627,4 +632,3 @@ function start(data) {
   setLang(lang);
   showView(location.hash.slice(1) || (data && data.view) || 'plan', false);
 }
-window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
