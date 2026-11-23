@@ -100,7 +100,7 @@ const DGT = {
   }
 };
 const dgt = (k, rep) => { let s = DGT[lang][k] ?? DGT.de[k] ?? k; if (rep) for (const r in rep) s = s.split('{' + r + '}').join(rep[r]); return s; };
-function dgBox(tip) { return tip ? `<span class="dg" role="note"><b>${esc(dgt('lab'))}:</b> ${esc(dgt(tip.k, tip.rep))}</span>` : ''; }
+function dgBox(tip) { if (!tip) return ''; const txt = tip.m ? (tip.m[lang] ?? tip.m.de) : dgt(tip.k, tip.rep); return `<span class="dg" role="note"><b>${esc(dgt('lab'))}:</b> ${esc(txt)}</span>`; }
 const dgState = s => Object.entries(s || {}).map(([k, v]) => `${k} = ${Array.isArray(v) ? '[' + v.join(', ') + ']' : v}`).join(', ');
 
 /* ---------- Hoare: assignment / weakest precondition ---------- */

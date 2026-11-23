@@ -296,12 +296,12 @@ function gradeTask(l, t) {
   switch (t.type) {
     case 'lines': {
       const got = String(V('0')).split('\n').map(x => x.trim()).filter(x => x !== '');
-      t.answer.forEach((a, i) => { const ok = normV(got[i]) === normV(a); res.items.push({ ok, got: got[i] ?? '', exp: a }); if (ok) res.pts++; });
+      t.answer.forEach((a, i) => { const ok = normV(got[i]) === normV(a); res.items.push({ ok, got: got[i] ?? '', exp: a, tip: ok ? null : dgTrap(t, i, got[i] ?? '') }); if (ok) res.pts++; });
       break; }
-    case 'nums': t.fields.forEach((f, i) => { const g = V(i).trim().replace('−', '-'); const ok = g !== '' && Number(g) === f.a; res.items.push({ ok, exp: String(f.a) }); if (ok) res.pts++; }); break;
-    case 'hval': t.fields.forEach((f, i) => { const g = normV(V(i)); const ok = f.a.some(a => normV(a) === g); res.items.push({ ok, exp: f.a[0] }); if (ok) res.pts++; }); break;
+    case 'nums': t.fields.forEach((f, i) => { const g = V(i).trim().replace('−', '-'); const ok = g !== '' && Number(g) === f.a; res.items.push({ ok, exp: String(f.a), tip: ok ? null : dgTrap(t, i, g) }); if (ok) res.pts++; }); break;
+    case 'hval': t.fields.forEach((f, i) => { const g = normV(V(i)); const ok = f.a.some(a => normV(a) === g); res.items.push({ ok, exp: f.a[0], tip: ok ? null : dgTrap(t, i, V(i)) }); if (ok) res.pts++; }); break;
     case 'htype': t.fields.forEach((f, i) => { const g = V(i); const e = g.trim() ? HT.eq(g, f.a) : false; res.items.push({ ok: e === true, err: e === null, exp: f.a, tip: e === false && g.trim() ? diagHtype(g.replace(/^.*::/, ''), f.a) : null }); if (e === true) res.pts++; }); break;
-    case 'mc': { const g = V('0'); res.items.push({ ok: g !== '' && +g === t.ok }); if (g !== '' && +g === t.ok) res.pts = t.pts; break; }
+    case 'mc': { const g = V('0'); res.items.push({ ok: g !== '' && +g === t.ok, tip: g !== '' && +g !== t.ok ? dgTrap(t, 'mc', +g) : null }); if (g !== '' && +g === t.ok) res.pts = t.pts; break; }
     case 'unify': t.pairs.forEach(([a, b], i) => {
       const ref = PL.refUnifier(a, b), notU = V('n' + i) === '1', txt = V(i);
       let ok = false, msg;
@@ -309,7 +309,7 @@ function gradeTask(l, t) {
       else if (notU) { msg = 'u_is'; }
       else { const c = PL.checkUnifier(a, b, txt); if (c.error) msg = 'u_err'; else if (c.ok) ok = true; else msg = c.unifies ? 'u_notgen' : 'u_wrong'; }
       res.items.push({ ok, msg, exp: ref, tip: ok ? null : diagUnify(a, b, txt, notU) }); if (ok) res.pts++; }); break;
-    case 'pquery': t.queries.forEach((q, i) => { const exp = expectedAnswers(t.program, q) || []; const got = normAnswers(V(i)); const ok = got.length === exp.length && got.every((g, j) => g === exp[j]); res.items.push({ ok, exp: exp.join(' ; ') }); if (ok) res.pts++; }); break;
+    case 'pquery': t.queries.forEach((q, i) => { const exp = expectedAnswers(t.program, q) || []; const got = normAnswers(V(i)); const ok = got.length === exp.length && got.every((g, j) => g === exp[j]); res.items.push({ ok, exp: exp.join(' ; '), tip: ok || !got.length ? null : dgTrap(t, i, V(i)) }); if (ok) res.pts++; }); break;
     case 'pprog': {
       const prog = V('0');
       let passed = 0;
@@ -327,7 +327,7 @@ function gradeTask(l, t) {
         res.items.push({ ok, info });
         if (ok) passed++;
       });
-      res.pts = Math.round(t.pts * passed / t.tests.length); break; }
+      res.pts = Math.round(t.pts * passed / t.tests.length); if (passed < t.tests.length && prog.trim()) res.tip = diagProg(t, res.items); break; }
     case 'self': t.checks.forEach((c, i) => { const ok = V('c' + i) === '1'; res.items.push({ ok }); if (ok) res.pts += c.p; }); break;
   }
   res.max = taskMax(t);
@@ -345,7 +345,7 @@ function taskHTML(l, t, idx) {
   switch (t.type) {
     case 'lines': {
       body = codeHTML(t.code) + `<label class="f" for="lx-${t.id}"><span>${lt('lines_hint')}</span><textarea id="lx-${t.id}" class="lxarea mono" rows="${t.answer.length + 1}" ${key('0')} spellcheck="false">${esc(V('0'))}</textarea></label>`;
-      if (r) body += `<div class="lx-lines">${r.items.map((it, i) => `<div class="${it.ok ? 'yes' : 'no'}">${it.ok ? '✓' : '✗'} <span class="mono">${esc(it.got || '—')}</span>${!it.ok && showSol ? ` <span class="muted">→ ${esc(it.exp)}</span>` : ''}</div>`).join('')}</div>`;
+      if (r) body += `<div class="lx-lines">${r.items.map((it, i) => `<div class="${it.ok ? 'yes' : 'no'}">${it.ok ? '✓' : '✗'} <span class="mono">${esc(it.got || '—')}</span>${!it.ok && showSol ? ` <span class="muted">→ ${esc(it.exp)}</span>` : ''}${!it.ok ? dgBox(it.tip) : ''}</div>`).join('')}</div>`;
       break; }
     case 'nums': case 'hval': case 'htype':
       body = (t.code ? codeHTML(t.code) : '') + `<div class="lxfields">${t.fields.map((f, i) => `<label class="lxf" for="lx-${t.id}-${i}"><span class="mono">${esc(L(f.label))}</span><span class="row"><input id="lx-${t.id}-${i}" class="mono" ${key(i)} value="${esc(V(i))}" placeholder="${esc(t.type === 'htype' ? lt('type_ph') : t.type === 'nums' ? lt('num_ph') : lt('val_ph'))}" autocomplete="off" spellcheck="false" ${t.type === 'nums' ? 'inputmode="numeric"' : ''}>${mark(i)}</span>${r && r.items[i] && r.items[i].err ? `<span class="err">${lt('err_type')}</span>` : ''}${r && r.items[i] && !r.items[i].ok && r.items[i].tip ? dgBox(r.items[i].tip) : ''}${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(t.type === 'nums' ? r.items[i].exp : Array.isArray(f.a) ? f.a[0] : f.a)}</b></span>` : ''}</label>`).join('')}</div>`;
@@ -353,6 +353,7 @@ function taskHTML(l, t, idx) {
     case 'mc':
       body = (t.code ? codeHTML(t.code) : '') + `<div class="lxmc" role="radiogroup">${t.options.map((o, i) => `<label class="lxopt ${r && showSol && i === t.ok ? 'right' : ''}"><input type="radio" name="lx-${t.id}" value="${i}" ${key('0')} ${V('0') === String(i) ? 'checked' : ''}> <span class="mono">${esc(o)}</span></label>`).join('')}</div>`;
       if (r && !r.items[0].ok && V('0') === '') body += `<p class="small muted">${lt('mc_pick')}</p>`;
+      if (r && !r.items[0].ok && r.items[0].tip) body += dgBox(r.items[0].tip);
       break;
     case 'unify':
       body = `<div class="lxfields">${t.pairs.map(([a, b], i) => `<div class="lxf"><span class="mono">${esc(a)} &nbsp;≟&nbsp; ${esc(b)}</span>
@@ -362,11 +363,11 @@ function taskHTML(l, t, idx) {
         ${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(r.items[i].exp === null ? lt('not_unif') : r.items[i].exp)}</b>${t.why[i] ? ' · ' + esc(L(t.why[i])) : ''}</span>` : ''}</div>`).join('')}</div>`;
       break;
     case 'pquery':
-      body = codeHTML(t.program) + `<p class="syntax">${lt('q_hint')}</p><div class="lxfields">${t.queries.map((q, i) => `<label class="lxf" for="lx-${t.id}-${i}"><span class="mono">?- ${esc(q)}.</span><span class="row"><input id="lx-${t.id}-${i}" class="mono" ${key(i)} value="${esc(V(i))}" autocomplete="off" spellcheck="false">${mark(i)}</span>${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(r.items[i].exp)}</b></span>` : ''}</label>`).join('')}</div>`;
+      body = codeHTML(t.program) + `<p class="syntax">${lt('q_hint')}</p><div class="lxfields">${t.queries.map((q, i) => `<label class="lxf" for="lx-${t.id}-${i}"><span class="mono">?- ${esc(q)}.</span><span class="row"><input id="lx-${t.id}-${i}" class="mono" ${key(i)} value="${esc(V(i))}" autocomplete="off" spellcheck="false">${mark(i)}</span>${r && !r.items[i].ok ? dgBox(r.items[i].tip) : ''}${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(r.items[i].exp)}</b></span>` : ''}</label>`).join('')}</div>`;
       break;
     case 'pprog':
       body = `<label class="f" for="lx-${t.id}"><span>${lt('pg_prog')}</span><textarea id="lx-${t.id}" class="lxarea mono" rows="6" ${key('0')} spellcheck="false">${esc(V('0') || t.starter)}</textarea></label>
-        <div class="lxtests">${t.tests.map((ts, i) => { const it = r && r.items[i]; return `<div class="lxtest ${it ? (it.ok ? 'yes' : 'no') : ''}"><span class="mono">?- ${esc(ts.q)}.</span><span class="small">${lt('t_want')} <span class="mono">${esc(ts.exp === false ? lt('t_none') : ts.exp === true ? lt('t_yes') : ts.exp.join(' ; '))}</span></span>${it ? `<span class="small">${it.ok ? '✓ ' + lt('t_ok') : '✗ ' + lt('t_got') + ' <span class="mono">' + esc(infoText(it.info)) + '</span>'}</span>` : ''}</div>`; }).join('')}</div>`;
+        <div class="lxtests">${t.tests.map((ts, i) => { const it = r && r.items[i]; return `<div class="lxtest ${it ? (it.ok ? 'yes' : 'no') : ''}"><span class="mono">?- ${esc(ts.q)}.</span><span class="small">${lt('t_want')} <span class="mono">${esc(ts.exp === false ? lt('t_none') : ts.exp === true ? lt('t_yes') : ts.exp.join(' ; '))}</span></span>${it ? `<span class="small">${it.ok ? '✓ ' + lt('t_ok') : '✗ ' + lt('t_got') + ' <span class="mono">' + esc(infoText(it.info)) + '</span>'}</span>` : ''}</div>`; }).join('')}</div>` + (r && r.tip ? dgBox(r.tip) : '');
       break;
     case 'self':
       body = `<p class="small muted">${lt('self_txt')}</p><label class="f" for="lx-${t.id}"><span>${lt('self_area')}</span><textarea id="lx-${t.id}" class="lxarea mono" rows="8" ${key('0')} spellcheck="false">${esc(V('0'))}</textarea></label>`;
