@@ -286,6 +286,9 @@ body[data-group="prog"] .subnav-row{display:block}
 .page-h h1{font-size:clamp(40px,6vw,72px);font-weight:800;letter-spacing:-.035em}
 .page-h .lede{font-size:20px;max-width:60ch}
 .page-h .lede.why-langs{font-size:18px;border-left:3px solid var(--accent);padding-left:16px}
+.intro-2col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 48px;align-items:start}
+.intro-2col .lede{max-width:none;font-size:18px}
+@media (max-width:860px){.intro-2col{grid-template-columns:minmax(0,1fr)}}
 .page-h .lede strong{color:var(--accent)}
 .facts{display:flex;flex-wrap:wrap;gap:10px}
 .fact{display:grid;gap:0;padding:8px 14px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);min-width:120px}
@@ -445,6 +448,7 @@ footer a{color:var(--muted)}
   <div class="page-h">
     <div class="kicker"><span class="de">1. Semester · Pflichtmodul · Lehr- und Forschungsgebiet Informatik 2</span><span class="en">Semester 1 · compulsory module · Research Group Computer Science 2</span></div>
     <h1 id="prog-title">Programmierung</h1>
+    <div class="intro-2col">
     <p class="lede">
       <span class="de">Die Vorlesung zeigt drei Arten zu programmieren: imperativ und objektorientiert mit Java, funktional mit Haskell und logisch mit Prolog. Dazu kommt die Programmverifikation mit dem Hoare-Kalkül. Wer mehrere Paradigmen kennt, drückt eigene Ideen besser aus, wählt für ein Problem die passende Sprache und lernt neue Sprachen schneller.</span>
       <span class="en">The lecture shows three ways of programming: imperative and object-oriented with Java, functional with Haskell and logic-based with Prolog. On top comes program verification with Hoare logic. Knowing several paradigms helps you express your ideas, pick the right language for a problem and learn new languages faster.</span>
@@ -453,6 +457,7 @@ footer a{color:var(--muted)}
       <span class="de">Die Auswahl der drei Sprachen ist didaktisch gut begründet: Zusammen decken sie alle grundlegenden Programmierparadigmen ab, die man klassisch unterscheidet. Java steht für die <strong>imperative</strong> und die <strong>objektorientierte</strong> Programmierung, bei der Anweisungen Schritt für Schritt Zustände verändern. Haskell steht für die <strong>funktionale</strong> und Prolog für die <strong>logische</strong> Programmierung, die beiden deklarativen Paradigmen, bei denen man beschreibt, was berechnet werden soll, und nicht, wie. Wer diese vier Denkweisen einmal geübt hat, findet sich in fast jeder neuen Sprache schnell zurecht, denn moderne Sprachen wie Python, Kotlin oder Rust kombinieren genau diese Ideen.</span>
       <span class="en">The choice of these three languages is didactically sound: together they cover all the fundamental programming paradigms that are classically distinguished. Java stands for <strong>imperative</strong> and <strong>object-oriented</strong> programming, where statements change state step by step. Haskell stands for <strong>functional</strong> and Prolog for <strong>logic</strong> programming, the two declarative paradigms in which you describe what to compute rather than how. Anyone who has practised these four ways of thinking quickly finds their way in almost any new language, because modern languages such as Python, Kotlin or Rust combine exactly these ideas.</span>
     </p>
+    </div>
   </div>
 
   <section class="sec">
