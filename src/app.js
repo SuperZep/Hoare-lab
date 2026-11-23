@@ -568,25 +568,6 @@ function renderTracer() {
   document.getElementById('tr-table').innerHTML = `<table class="vt">${th}${tb}</table>`;
 }
 
-/* ---- clamp the right intro column to the left one ---- */
-let whyOpen = false;
-function clampWhy() {
-  const grid = document.querySelector('#view-prog .intro-2col'), right = document.getElementById('why-text'), btn = document.getElementById('why-more');
-  if (!grid || !right || !btn || ST.view !== 'prog') return;
-  const left = grid.querySelector(':scope > p.lede');
-  const twoCols = getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length > 1;
-  right.style.maxHeight = ''; right.classList.remove('clamped');
-  if (!twoCols) { btn.hidden = true; return; }
-  const lh = parseFloat(getComputedStyle(right).lineHeight) || 28.8;
-  const maxH = Math.max(1, Math.floor((left.getBoundingClientRect().height + 2) / lh)) * lh;
-  if (right.scrollHeight <= maxH + 2) { btn.hidden = true; return; }
-  btn.hidden = false;
-  btn.setAttribute('aria-expanded', String(whyOpen));
-  btn.querySelector('.de').textContent = whyOpen ? 'weniger' : '… mehr';
-  btn.querySelector('.en').textContent = whyOpen ? 'less' : '… more';
-  if (!whyOpen) { right.style.maxHeight = maxH + 'px'; right.classList.add('clamped'); }
-}
-
 /* ---- view routing & language ---- */
 const VIEWS = ['plan', 'prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam', 'exam-java', 'exam-haskell', 'exam-prolog', 'exam-hoare'];
 const PROG_VIEWS = VIEWS.filter(v => v !== 'plan');
@@ -603,7 +584,6 @@ function showView(v, scroll) {
   const sub = SUB_OF[v] || v;
   document.querySelectorAll('nav.subnav a').forEach(a => { if (a.dataset.view === sub) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   try { document.title = TITLES[v] || 'Hoare Lab'; } catch (e) {}
-  if (v === 'prog') requestAnimationFrame(clampWhy);
   if (v === 'practice') renderPractice();
   if (v === 'exam-hoare') { renderExam(); kArmTimer(); }
   if (v.startsWith('exam-') && LX[v.slice(5)]) renderLX(v.slice(5));
@@ -614,7 +594,7 @@ function setLang(l) {
   document.body.dataset.lang = l; document.documentElement.lang = l;
   document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === l)));
   try { localStorage.setItem('hoarelab-lang', l); } catch (e) {}
-  renderBW(); renderTracer(); requestAnimationFrame(clampWhy);
+  renderBW(); renderTracer();
   if (ST.view === 'practice') renderPractice();
   if (ST.view === 'exam-hoare') renderExam();
   if (ST.view.startsWith('exam-') && LX[ST.view.slice(5)]) renderLX(ST.view.slice(5));
@@ -649,9 +629,14 @@ function start(data) {
   document.getElementById('tr-step').addEventListener('click', () => { const n = trace(exById('g2'), { n: ST.tr.n }).length; ST.tr.hl = (ST.tr.hl + 1) % n; renderTracer(); });
   document.getElementById('tr-reset').addEventListener('click', () => { ST.tr.hl = 0; renderTracer(); });
   window.addEventListener('hashchange', () => showView(location.hash.slice(1), true));
-  document.getElementById('why-more').addEventListener('click', () => { whyOpen = !whyOpen; clampWhy(); if (!whyOpen) document.getElementById('why-text').scrollIntoView({ block: 'nearest' }); });
-  let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(clampWhy, 120); });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(clampWhy);
+  document.getElementById('why-text').addEventListener('click', e => {
+    const b = e.target.closest('[data-why]'); if (!b) return;
+    const p = document.getElementById('why-text'), open = b.dataset.why === 'open';
+    p.classList.toggle('open', open);
+    p.querySelectorAll('[data-why="open"]').forEach(x => x.setAttribute('aria-expanded', String(open)));
+    const target = p.querySelector(`body[data-lang] .${lang} [data-why="${open ? 'close' : 'open'}"]`) || p.querySelector(`.${lang} [data-why="${open ? 'close' : 'open'}"]`);
+    if (target) target.focus({ preventScroll: true });
+  });
   setLang(lang);
   showView(location.hash.slice(1) || (data && data.view) || 'plan', false);
 }
