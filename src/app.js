@@ -574,6 +574,44 @@ const PROG_VIEWS = VIEWS.filter(v => v !== 'plan');
 const TOP_OF = { java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
 const SUB_OF = { 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
 const TITLES = { plan: 'Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
+
+/* section bar (Java/Haskell/Prolog): jump, scrollspy, progress */
+function hdrH() { const h = document.querySelector('header.top'); return h && getComputedStyle(h).position === 'sticky' ? h.offsetHeight : 0; }
+function setHdrVar() { document.documentElement.style.setProperty('--hdr', hdrH() + 'px'); }
+function secbarSpy() {
+  const view = document.querySelector('.view.on.lang-page'); if (!view) return;
+  const bar = view.querySelector('.secbar'); if (!bar) return;
+  const secs = [...view.querySelectorAll('.sec[id]')];
+  const line = hdrH() + bar.offsetHeight + 40;
+  let cur = secs[0];
+  for (const s of secs) if (s.getBoundingClientRect().top <= line) cur = s;
+  const atEnd = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
+  if (atEnd) cur = secs[secs.length - 1];
+  const chips = bar.querySelector('.secbar-chips');
+  bar.querySelectorAll('[data-jump]').forEach(b => {
+    const on = b.dataset.jump === cur.id;
+    if (on && b.getAttribute('aria-current') !== 'true') {
+      b.setAttribute('aria-current', 'true');
+      const l = b.offsetLeft - chips.offsetLeft, r = l + b.offsetWidth;
+      if (l < chips.scrollLeft || r > chips.scrollLeft + chips.clientWidth) chips.scrollTo({ left: Math.max(0, l - 24) });
+    } else if (!on) b.removeAttribute('aria-current');
+  });
+  const first = secs[0].getBoundingClientRect().top + scrollY - line;
+  const last = secs[secs.length - 1].getBoundingClientRect().bottom + scrollY - innerHeight;
+  const p = Math.min(1, Math.max(0, (scrollY - first) / Math.max(1, last - first)));
+  bar.querySelector('.secbar-prog span').style.width = (p * 100).toFixed(1) + '%';
+}
+function initSecbar() {
+  setHdrVar();
+  try { new ResizeObserver(() => { setHdrVar(); secbarSpy(); }).observe(document.querySelector('header.top')); } catch (e) { addEventListener('resize', setHdrVar); }
+  document.querySelectorAll('.secbar [data-jump]').forEach(b => b.addEventListener('click', () => {
+    const el = document.getElementById(b.dataset.jump); if (!el) return;
+    el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
+    const h = el.querySelector('h2'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+  }));
+  let tick = false;
+  addEventListener('scroll', () => { if (tick) return; tick = true; requestAnimationFrame(() => { tick = false; secbarSpy(); }); }, { passive: true });
+}
 function showView(v, scroll) {
   if (!VIEWS.includes(v)) v = 'plan';
   ST.view = v;
@@ -588,6 +626,7 @@ function showView(v, scroll) {
   if (v === 'exam-hoare') { renderExam(); kArmTimer(); }
   if (v.startsWith('exam-') && LX[v.slice(5)]) renderLX(v.slice(5));
   if (scroll) window.scrollTo(0, 0);
+  try { secbarSpy(); } catch (e) {}
 }
 function setLang(l) {
   lang = l;
@@ -606,6 +645,7 @@ function snapshot() { try { window.claude?.hot?.snapshot?.(() => ({ view: ST.vie
 function start(data) {
   if (data && data.P) { ST.P = data.P; ST.ex = data.ex || ST.ex; if (data.tr) ST.tr = data.tr; if (data.K) ST.K = { ...ST.K, ...data.K }; if (data.LX) ST.LX = data.LX; }
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  initSecbar();
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
   const ws = document.getElementById('ws');
   ws.addEventListener('click', handleWS);

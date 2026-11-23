@@ -322,6 +322,33 @@ strong .wiki,strong.brick .wiki{color:inherit}
 .fact b{font-family:var(--display);font-size:19px;font-weight:800;letter-spacing:-.01em}
 .fact>span{font-family:var(--display);font-size:12.5px;color:var(--muted)}
 .lang-page .sec,#view-prog .sec{max-width:980px}
+/* section bar on language pages */
+.secbar{position:sticky;top:var(--hdr,104px);z-index:8;max-width:980px;margin:22px 0 4px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(8px);border:1px solid var(--rule);border-radius:14px;box-shadow:0 6px 18px -14px rgba(20,23,31,.35);overflow:hidden}
+.secbar-in{display:flex;align-items:center;gap:6px;padding:6px 8px 6px 14px}
+.secbar-l{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;padding-right:8px;border-right:1px solid var(--rule);margin-right:2px}
+.secbar-chips{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;scroll-behavior:smooth}
+.secbar-chips::-webkit-scrollbar{display:none}
+.secbar button{border:0;background:transparent;font-family:var(--display);font-size:14px;font-weight:600;color:var(--muted);padding:7px 11px;border-radius:9px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:baseline;gap:7px;transition:background .15s,color .15s}
+.secbar button .n{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--accent);opacity:.75}
+.secbar button:hover{color:var(--ink);background:var(--accent-soft)}
+.secbar button[aria-current="true"]{color:var(--accent);background:var(--accent-soft)}
+.secbar button[aria-current="true"] .n{opacity:1}
+.secbar button:focus-visible,.secbar-exam:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.secbar-exam{font-family:var(--display);font-size:14px;font-weight:600;text-decoration:none;color:var(--accent-ink);background:var(--accent);padding:7px 13px;border-radius:9px;white-space:nowrap;margin-left:4px}
+.secbar-exam:hover{filter:brightness(1.08)}
+.secbar-prog{height:2px;background:transparent}
+.secbar-prog span{display:block;height:100%;width:0;background:var(--accent);transition:width .1s linear}
+.lang-page .sec h2:focus{outline:none}
+.lang-page .sec{scroll-margin-top:calc(var(--hdr,104px) + 70px)}
+@media (max-width:720px){
+  .secbar{top:6px;margin:16px -4px 2px;border-radius:12px}
+  .secbar-in{padding:5px 6px}
+  .secbar-l{display:none}
+  .secbar button{padding:7px 9px;font-size:13.5px}
+  .secbar-exam{display:none}
+}
+@media (prefers-reduced-motion:reduce){.secbar-chips{scroll-behavior:auto}.secbar-prog span{transition:none}}
+
 .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:12px}
 .part-card{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;transition:border-color .15s,transform .15s}
 .part-card:hover{border-color:var(--accent);transform:translateY(-2px)}
@@ -636,7 +663,12 @@ N = 3.</pre>
     </div>
   </div>
 
-  <section class="sec">
+  <nav class="secbar" aria-label="Abschnitte · Sections">
+    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="java-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="java-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="java-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="java-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="java-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button></div><a class="secbar-exam" href="#exam-java"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
+    <div class="secbar-prog" aria-hidden="true"><span></span></div>
+  </nav>
+
+  <section class="sec" id="java-why">
     <div class="sec-h"><span class="num">01</span><h2><span class="de">Warum Java entstand</span><span class="en">Why Java was created</span></h2></div>
     <div class="prose">
       <p class="de">1991 startete bei Sun Microsystems das <strong>Green Project</strong> um James Gosling, Mike Sheridan und Patrick Naughton. Ziel war Software für Unterhaltungselektronik wie Set-Top-Boxen und interaktives Fernsehen. Das Problem: Jedes Gerät hatte einen anderen Prozessor und wenig Speicher. Ein Programm hätte für jedes Gerät neu geschrieben oder übersetzt werden müssen.</p>
@@ -646,7 +678,7 @@ N = 3.</pre>
     </div>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="java-evo">
     <div class="sec-h"><span class="num">02</span><h2><span class="de">Entwicklung in Kürze</span><span class="en">Evolution in brief</span></h2></div>
     <div class="timeline">
       <div class="tl"><div class="yr">1991</div><div><h4>Oak</h4><p><span class="de">Erste Programme laufen im Green Project.</span><span class="en">First programs run in the Green Project.</span></p></div></div>
@@ -661,7 +693,7 @@ N = 3.</pre>
     </div>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="java-today">
     <div class="sec-h"><span class="num">03</span><h2><span class="de">Wo Java heute gefragt ist</span><span class="en">Where Java is in demand today</span></h2></div>
     <div class="cards">
       <div class="card"><span class="tag"><span class="de">Finanzen</span><span class="en">finance</span></span><h3><span class="de">Banken und Versicherungen</span><span class="en">Banks and insurers</span></h3><p><span class="de">Kernsysteme, Zahlungsverkehr und Handelsplattformen laufen oft seit Jahrzehnten auf der JVM.</span><span class="en">Core systems, payments and trading platforms have often run on the JVM for decades.</span></p></div>
@@ -672,7 +704,7 @@ N = 3.</pre>
     <p class="small muted"><span class="de">Im TIOBE-Index vom November 2026 steht Java auf Platz 3 (8,89 %), knapp vor C++. Der Index misst Suchanfragen, nicht direkt Stellenangebote.</span><span class="en">In the November 2026 TIOBE index Java ranks third (8.89 %), just ahead of C++. The index measures search activity, not job offers directly.</span></p>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="java-lecture">
     <div class="sec-h"><span class="num">04</span><h2><span class="de">Java in der Vorlesung Programmierung</span><span class="en">Java in the Programmierung lecture</span></h2></div>
     <div class="chapters">
       <div class="ch"><div class="ch-h"><span class="cn">II.1</span><h3><span class="de">Grundelemente der Programmierung</span><span class="en">Basic elements of programming</span></h3></div>
@@ -688,7 +720,7 @@ N = 3.</pre>
     <div class="row"><a class="btn primary" href="#exam-java"><span class="de">Prüfungsaufgaben zu Java üben →</span><span class="en">Practise Java exam tasks →</span></a></div>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="java-look">
     <div class="sec-h"><span class="num">05</span><h2><span class="de">Ein erster Blick</span><span class="en">A first look</span></h2></div>
     <p class="prose"><span class="de">Die Fakultät, das Standardbeispiel der Vorlesung. Genau dieses Programm wird im Kapitel Verifikation mit dem Hoare-Kalkül bewiesen.</span><span class="en">The factorial, the lecture’s standard example. Exactly this program is proved correct with Hoare logic in the verification chapter.</span></p>
 <pre class="code">public static int fak(int n) {
@@ -718,7 +750,12 @@ N = 3.</pre>
     </div>
   </div>
 
-  <section class="sec">
+  <nav class="secbar" aria-label="Abschnitte · Sections">
+    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="haskell-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="haskell-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="haskell-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="haskell-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="haskell-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button></div><a class="secbar-exam" href="#exam-haskell"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
+    <div class="secbar-prog" aria-hidden="true"><span></span></div>
+  </nav>
+
+  <section class="sec" id="haskell-why">
     <div class="sec-h"><span class="num">01</span><h2><span class="de">Warum Haskell entstand</span><span class="en">Why Haskell was created</span></h2></div>
     <div class="prose">
       <p class="de">Nach der Sprache Miranda (1985) wuchs das Interesse an <strong>lazy</strong> ausgewerteten, rein funktionalen Sprachen. 1987 gab es mehr als ein Dutzend davon, alle ähnlich, aber nicht kompatibel. Miranda war die verbreitetste, gehörte aber einer Firma. Das bremste Forschung und Anwendungen.</p>
@@ -728,7 +765,7 @@ N = 3.</pre>
     </div>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="haskell-evo">
     <div class="sec-h"><span class="num">02</span><h2><span class="de">Entwicklung in Kürze</span><span class="en">Evolution in brief</span></h2></div>
     <div class="timeline">
       <div class="tl"><div class="yr">1985</div><div><h4>Miranda</h4><p><span class="de">Lazy und rein funktional, aber proprietär.</span><span class="en">Lazy and purely functional, but proprietary.</span></p></div></div>
@@ -741,7 +778,7 @@ N = 3.</pre>
     </div>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="haskell-today">
     <div class="sec-h"><span class="num">03</span><h2><span class="de">Wo Haskell heute gefragt ist</span><span class="en">Where Haskell is in demand today</span></h2></div>
     <div class="cards">
       <div class="card"><span class="tag"><span class="de">Finanzen</span><span class="en">finance</span></span><h3><span class="de">Banken und Zahlungsverkehr</span><span class="en">Banks and payments</span></h3><p><span class="de">Standard Chartered nutzt seit 2009 einen eigenen Haskell-Dialekt, ABN AMRO berechnet damit Kontrahentenrisiken, Juspay baut Zahlungssysteme.</span><span class="en">Standard Chartered has used its own Haskell dialect since 2009, ABN AMRO computes counterparty risk with it, Juspay builds payment systems.</span></p></div>
@@ -752,7 +789,7 @@ N = 3.</pre>
     <p class="small muted"><span class="de">Haskell ist eine Nische: Oft arbeiten nur einzelne Teams einer Firma damit. Viel größer ist sein Einfluss auf andere Sprachen, etwa Lambdas und Streams in Java.</span><span class="en">Haskell is a niche: often only individual teams within a company use it. Its influence on other languages, such as lambdas and streams in Java, is much larger.</span></p>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="haskell-lecture">
     <div class="sec-h"><span class="num">04</span><h2><span class="de">Haskell in der Vorlesung Programmierung</span><span class="en">Haskell in the Programmierung lecture</span></h2></div>
     <div class="chapters one">
       <div class="ch"><div class="ch-h"><span class="cn">III</span><h3><span class="de">Funktionale Programmierung</span><span class="en">Functional programming</span></h3></div>
@@ -762,7 +799,7 @@ N = 3.</pre>
     <div class="row"><a class="btn primary" href="#exam-haskell"><span class="de">Prüfungsaufgaben zu Haskell üben →</span><span class="en">Practise Haskell exam tasks →</span></a></div>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="haskell-look">
     <div class="sec-h"><span class="num">05</span><h2><span class="de">Ein erster Blick</span><span class="en">A first look</span></h2></div>
     <p class="prose"><span class="de">Dieselbe Fakultät wie bei Java, diesmal als Gleichungen mit Mustern. Dazu eine Funktion höherer Ordnung: Sie bekommt eine andere Funktion als Argument.</span><span class="en">The same factorial as in Java, this time as equations with patterns. Plus a higher-order function: it takes another function as an argument.</span></p>
 <pre class="code">fak :: Integer -> Integer
@@ -793,7 +830,12 @@ quadrate xs = map (\x -> x * x) xs
     </div>
   </div>
 
-  <section class="sec">
+  <nav class="secbar" aria-label="Abschnitte · Sections">
+    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="prolog-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="prolog-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="prolog-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="prolog-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="prolog-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button></div><a class="secbar-exam" href="#exam-prolog"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
+    <div class="secbar-prog" aria-hidden="true"><span></span></div>
+  </nav>
+
+  <section class="sec" id="prolog-why">
     <div class="sec-h"><span class="num">01</span><h2><span class="de">Warum Prolog entstand</span><span class="en">Why Prolog was created</span></h2></div>
     <div class="prose">
       <p class="de">Im Sommer 1972 entwickelten <strong>Alain Colmerauer</strong> und <strong>Philippe Roussel</strong> an der Universität Marseille ein Frage-Antwort-System für natürliche Sprache. Sie brauchten eine Möglichkeit, Grammatik und Wissen in Logik aufzuschreiben und Sätze durch logisches Schließen zu analysieren. Grundlage war <strong>Robert Kowalskis</strong> Idee aus Edinburgh, logische Formeln (Horn-Klauseln) selbst als Programm zu lesen.</p>
@@ -803,7 +845,7 @@ quadrate xs = map (\x -> x * x) xs
     </div>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="prolog-evo">
     <div class="sec-h"><span class="num">02</span><h2><span class="de">Entwicklung in Kürze</span><span class="en">Evolution in brief</span></h2></div>
     <div class="timeline">
       <div class="tl key"><div class="yr">1972</div><div><h4>Prolog</h4><p><span class="de">Erste Version in Marseille.</span><span class="en">First version in Marseille.</span></p></div></div>
@@ -816,7 +858,7 @@ quadrate xs = map (\x -> x * x) xs
     </div>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="prolog-today">
     <div class="sec-h"><span class="num">03</span><h2><span class="de">Wo Prolog heute gefragt ist</span><span class="en">Where Prolog is in demand today</span></h2></div>
     <div class="cards">
       <div class="card"><span class="tag"><span class="de">KI</span><span class="en">AI</span></span><h3><span class="de">Sprachverarbeitung</span><span class="en">Language processing</span></h3><p><span class="de">IBM Watson, das 2011 bei Jeopardy! gewann, zerlegte die Fragen mit Prolog-Regeln.</span><span class="en">IBM Watson, which won Jeopardy! in 2011, parsed the questions with Prolog rules.</span></p></div>
@@ -827,7 +869,7 @@ quadrate xs = map (\x -> x * x) xs
     <p class="small muted"><span class="de">Prolog ist in der Industrie eine kleine Nische. SWI-Prolog wird laut Projekt rund 250.000 Mal im Jahr heruntergeladen.</span><span class="en">Prolog is a small niche in industry. According to the project, SWI-Prolog is downloaded about 250,000 times a year.</span></p>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="prolog-lecture">
     <div class="sec-h"><span class="num">04</span><h2><span class="de">Prolog in der Vorlesung Programmierung</span><span class="en">Prolog in the Programmierung lecture</span></h2></div>
     <div class="chapters one">
       <div class="ch"><div class="ch-h"><span class="cn">IV</span><h3><span class="de">Logische Programmierung</span><span class="en">Logic programming</span></h3></div>
@@ -836,7 +878,7 @@ quadrate xs = map (\x -> x * x) xs
     <div class="row"><a class="btn primary" href="#exam-prolog"><span class="de">Prüfungsaufgaben zu Prolog üben →</span><span class="en">Practise Prolog exam tasks →</span></a></div>
   </section>
 
-  <section class="sec">
+  <section class="sec" id="prolog-look">
     <div class="sec-h"><span class="num">05</span><h2><span class="de">Ein erster Blick</span><span class="en">A first look</span></h2></div>
     <p class="prose"><span class="de">Fakten über eine Familie und eine Regel, wie in den Vorlesungsfolien. Die Anfrage fragt nach der Großmutter; Prolog findet die Antwort durch Unifikation.</span><span class="en">Facts about a family and a rule, as in the lecture slides. The query asks for the grandmother; Prolog finds the answer by unification.</span></p>
 <pre class="code">mutterVon(renate, susanne).
@@ -2670,6 +2712,44 @@ const PROG_VIEWS = VIEWS.filter(v => v !== 'plan');
 const TOP_OF = { java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
 const SUB_OF = { 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
 const TITLES = { plan: 'Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
+
+/* section bar (Java/Haskell/Prolog): jump, scrollspy, progress */
+function hdrH() { const h = document.querySelector('header.top'); return h && getComputedStyle(h).position === 'sticky' ? h.offsetHeight : 0; }
+function setHdrVar() { document.documentElement.style.setProperty('--hdr', hdrH() + 'px'); }
+function secbarSpy() {
+  const view = document.querySelector('.view.on.lang-page'); if (!view) return;
+  const bar = view.querySelector('.secbar'); if (!bar) return;
+  const secs = [...view.querySelectorAll('.sec[id]')];
+  const line = hdrH() + bar.offsetHeight + 40;
+  let cur = secs[0];
+  for (const s of secs) if (s.getBoundingClientRect().top <= line) cur = s;
+  const atEnd = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
+  if (atEnd) cur = secs[secs.length - 1];
+  const chips = bar.querySelector('.secbar-chips');
+  bar.querySelectorAll('[data-jump]').forEach(b => {
+    const on = b.dataset.jump === cur.id;
+    if (on && b.getAttribute('aria-current') !== 'true') {
+      b.setAttribute('aria-current', 'true');
+      const l = b.offsetLeft - chips.offsetLeft, r = l + b.offsetWidth;
+      if (l < chips.scrollLeft || r > chips.scrollLeft + chips.clientWidth) chips.scrollTo({ left: Math.max(0, l - 24) });
+    } else if (!on) b.removeAttribute('aria-current');
+  });
+  const first = secs[0].getBoundingClientRect().top + scrollY - line;
+  const last = secs[secs.length - 1].getBoundingClientRect().bottom + scrollY - innerHeight;
+  const p = Math.min(1, Math.max(0, (scrollY - first) / Math.max(1, last - first)));
+  bar.querySelector('.secbar-prog span').style.width = (p * 100).toFixed(1) + '%';
+}
+function initSecbar() {
+  setHdrVar();
+  try { new ResizeObserver(() => { setHdrVar(); secbarSpy(); }).observe(document.querySelector('header.top')); } catch (e) { addEventListener('resize', setHdrVar); }
+  document.querySelectorAll('.secbar [data-jump]').forEach(b => b.addEventListener('click', () => {
+    const el = document.getElementById(b.dataset.jump); if (!el) return;
+    el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
+    const h = el.querySelector('h2'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+  }));
+  let tick = false;
+  addEventListener('scroll', () => { if (tick) return; tick = true; requestAnimationFrame(() => { tick = false; secbarSpy(); }); }, { passive: true });
+}
 function showView(v, scroll) {
   if (!VIEWS.includes(v)) v = 'plan';
   ST.view = v;
@@ -2684,6 +2764,7 @@ function showView(v, scroll) {
   if (v === 'exam-hoare') { renderExam(); kArmTimer(); }
   if (v.startsWith('exam-') && LX[v.slice(5)]) renderLX(v.slice(5));
   if (scroll) window.scrollTo(0, 0);
+  try { secbarSpy(); } catch (e) {}
 }
 function setLang(l) {
   lang = l;
@@ -2702,6 +2783,7 @@ function snapshot() { try { window.claude?.hot?.snapshot?.(() => ({ view: ST.vie
 function start(data) {
   if (data && data.P) { ST.P = data.P; ST.ex = data.ex || ST.ex; if (data.tr) ST.tr = data.tr; if (data.K) ST.K = { ...ST.K, ...data.K }; if (data.LX) ST.LX = data.LX; }
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  initSecbar();
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
   const ws = document.getElementById('ws');
   ws.addEventListener('click', handleWS);
