@@ -477,7 +477,9 @@ async function dCopy(what) {
   if (ok) setTimeout(() => { if (DSY.copied === what) { DSY.copied = ''; const e2 = document.querySelector('#daily .dl-sync'); if (e2) e2.outerHTML = dSyncHTML(); } }, 2500);
 }
 /* called by the router for #import=CODE */
+let DIMPORTED = false;
 function dImportFromHash(h) {
+  DIMPORTED = true;
   const code = h.slice('import='.length);
   try { history.replaceState(null, '', location.pathname + location.search + '#daily'); } catch (e) {}
   dApplyCode(code, true);

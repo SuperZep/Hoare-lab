@@ -644,6 +644,7 @@ function setLang(l) {
   if (ST.view === 'daily') renderDaily();
   if (ST.view === 'weeks') renderWeeks();
   try { calBtnLabel(); } catch (e) {}
+  try { tourLang(); } catch (e) {}
   try { const dd = document.getElementById('cal-dlg'); if (dd && dd.open) renderCalDlg(); } catch (e) {}
   if (ST.view === 'resources') renderResources();
   if (ST.view === 'prog') renderThisWeek();
@@ -696,4 +697,5 @@ function start(data) {
   try { autoWiki(); } catch (e) { console.error(e); }
   setLang(lang);
   showView(location.hash.slice(1) || (data && data.view) || 'plan', false);
+  try { initTour(); } catch (e) { console.error(e); }
 }

@@ -336,6 +336,40 @@ strong .wiki,strong.brick .wiki{color:inherit}
 .wk-prog-bar span{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .3s}
 
 
+
+/* first-visit tour */
+#tour-btn{margin-left:-10px}
+.cal-btn + .cal-btn{margin-left:-10px}
+body.touring{overflow:hidden}
+.tour{position:fixed;inset:0;z-index:1000;display:none}
+.tour.on{display:block}
+.tour-hole{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(10,12,20,.58);outline:2px solid var(--accent);outline-offset:0;transition:left .28s ease,top .28s ease,width .28s ease,height .28s ease;pointer-events:none}
+.tour.center .tour-hole{left:50%;top:50%;width:0;height:0;outline:0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tour-hole{box-shadow:0 0 0 9999px rgba(0,0,0,.72)}}
+:root[data-theme="dark"] .tour-hole{box-shadow:0 0 0 9999px rgba(0,0,0,.72)}
+.tour-card{position:fixed;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:16px;padding:18px 20px 16px;box-shadow:0 24px 60px -18px rgba(10,12,20,.6);display:grid;gap:10px;transition:left .28s ease,top .28s ease}
+.tour-card::before{content:"";position:absolute;top:-7px;left:var(--arrow,50%);width:14px;height:14px;margin-left:-7px;background:var(--surface);border-left:1px solid var(--rule);border-top:1px solid var(--rule);transform:rotate(45deg)}
+.tour-card.above::before{top:auto;bottom:-7px;transform:rotate(225deg)}
+.tour.center .tour-card{left:50%;top:50%;transform:translate(-50%,-50%);width:min(460px,calc(100vw - 24px));padding:26px 26px 20px;text-align:left}
+.tour.center .tour-card::before{display:none}
+.tour-card h2{font-family:var(--display);font-size:19px;font-weight:800;letter-spacing:-.01em;margin:0;padding-right:26px}
+.tour.center .tour-card h2{font-size:24px}
+.tour-card p{margin:0;font-size:16px;line-height:1.5;color:var(--muted)}
+.tour-logo{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--accent)}
+.tour-x{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:999px;border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:14px}
+.tour-x:hover{background:var(--code-bg);color:var(--ink)}
+.tour-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px}
+.tour-dots{display:flex;gap:5px;align-items:center}
+.tour-dots i{width:7px;height:7px;border-radius:999px;background:var(--rule);transition:width .2s,background .2s}
+.tour-dots i.past{background:color-mix(in srgb,var(--accent) 45%,var(--rule))}
+.tour-dots i.on{width:20px;background:var(--accent)}
+.tour-btns{display:flex;gap:8px;margin-left:auto}
+.tour-lang{display:inline-flex;justify-self:start;border:1px solid var(--rule);border-radius:999px;overflow:hidden}
+.tour-lang button{border:0;background:transparent;padding:5px 12px;font-family:var(--display);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.tour-lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+@media (prefers-reduced-motion:reduce){.tour-hole,.tour-card{transition:none}}
+@media (max-width:520px){.tour-card{padding:16px 16px 14px}.tour-btns{width:100%}.tour-btns .btn{flex:1}}
+
 /* header calendar button + popup */
 .cal-btn{margin-left:auto;position:relative;width:38px;height:38px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .15s,border-color .15s,background .15s}
 .cal-btn:hover,.cal-btn:focus-visible{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
@@ -714,6 +748,7 @@ footer a{color:var(--muted)}
       <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
     </nav>
 <button type="button" class="cal-btn" id="cal-btn" aria-haspopup="dialog" aria-controls="cal-dlg"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M7.5 13.5h3M13.5 13.5h3M7.5 17h3" stroke-width="2.2"/></svg><span class="tip" role="tooltip"><span class="de">Semester auf einen Blick</span><span class="en">The semester at a glance</span></span></button>
+    <button type="button" class="cal-btn" id="tour-btn"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.7"/><path d="M12 17.2v.1" stroke-width="2.6"/></svg><span class="tip" role="tooltip"><span class="de">Tour starten</span><span class="en">Take the tour</span></span></button>
     <div class="lang" role="group" aria-label="Sprache / Language">
       <button type="button" id="lang-de" data-lang="de" aria-pressed="true">DE</button>
       <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
