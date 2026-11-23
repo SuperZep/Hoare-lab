@@ -324,21 +324,20 @@ strong .wiki,strong.brick .wiki{color:inherit}
 .lang-page .sec,#view-prog .sec{max-width:980px}
 
 /* ===== daily ===== */
+.mod-cards{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.mod-cards .person-card.sm{margin-top:0;flex:1 1 230px}
+.daily-card{border-left:3px solid var(--brick)}
+.daily-card:hover{border-color:var(--brick)}
+.daily-card .dc-ic{background:var(--bad-soft);color:var(--brick);border-radius:12px}
+.daily-card .dc-ic .flame{width:22px;height:22px}
+.dc-streak{display:inline-flex;align-items:center;gap:4px;color:var(--brick) !important;font-family:var(--display);font-weight:600}
+.dc-streak:empty{display:none}
+.dc-streak .flame{width:12px;height:12px}
 .nav-daily{display:inline-flex;align-items:center;gap:6px}
 .nav-daily .flame{width:14px;height:14px;color:var(--brick)}
 .nav-streak{font-family:var(--mono);font-size:11.5px;font-weight:600;min-width:20px;height:20px;padding:0 6px;border-radius:999px;display:inline-grid;place-items:center;background:var(--bad-soft);color:var(--brick)}
 .nav-streak.today{background:var(--brick);color:#fff}
 .nav-streak[hidden]{display:none}
-.daily-teaser{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:14px;align-items:center;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--brick);border-radius:14px;padding:12px 16px;max-width:860px;margin-top:6px;transition:border-color .15s,transform .15s}
-.daily-teaser:hover{border-color:var(--brick)}
-.daily-teaser .dt-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--bad-soft);color:var(--brick)}
-.daily-teaser .dt-ic .flame{width:20px;height:20px}
-.daily-teaser .dt-b{display:grid;gap:2px;font-size:15.5px}
-.daily-teaser .dt-b b{font-family:var(--display);font-size:16.5px}
-.daily-teaser .dt-b > span{color:var(--muted)}
-.daily-teaser .dt-s{font-family:var(--display);font-weight:600;font-size:14px;color:var(--brick);display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
-.daily-teaser .dt-s .flame{width:14px;height:14px}
-.daily-teaser .dt-go{font-family:var(--display);font-weight:600;font-size:15px;color:var(--accent);white-space:nowrap}
 .dl-h{border-bottom:0;padding-bottom:10px}
 .dl{display:grid;gap:22px;padding-bottom:40px}
 .dl-stats{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:14px 18px;max-width:860px}
@@ -417,10 +416,7 @@ strong .wiki,strong.brick .wiki{color:inherit}
   .dl-week{grid-column:1 / -1;grid-row:2;justify-content:space-between}
   .dl-card{padding:18px 16px 18px;border-radius:16px}
   .dl-q{font-size:16px}
-  .daily-teaser{grid-template-columns:auto minmax(0,1fr);row-gap:8px}
-  .daily-teaser .dt-s{grid-column:2}
-  .daily-teaser .dt-go{grid-column:2}
-  .dl-actions .btn{flex:1 1 auto}
+        .dl-actions .btn{flex:1 1 auto}
 }
 
 /* section bar on language pages */
@@ -565,12 +561,6 @@ footer a{color:var(--muted)}
       <span class="de">Für jedes Modul des ersten Jahres entsteht hier eine Lernseite. Begonnen haben wir mit Programmierung: je eine Seite zu Java, Haskell und Prolog und ein ausführlicher Teil zum Hoare-Kalkül, an dem viele im ersten Semester hängen bleiben.</span>
       <span class="en">Every first-year module will get a study page here. We started with Programmierung: one page each for Java, Haskell and Prolog, plus an in-depth section on Hoare logic, where many first-semester students get stuck.</span>
     </p>
-    <a class="daily-teaser" href="#daily">
-      <span class="dt-ic"><svg class="flame" viewBox="0 0 16 16" aria-hidden="true"><path d="M8.3.7c.5 2.5-.9 3.9-2.2 5.3C4.8 7.4 3.4 8.8 3.4 11c0 2.6 2 4.4 4.6 4.4s4.6-1.8 4.6-4.4c0-2.1-1-3.7-2.1-5-.1 1.2-.7 2.2-1.6 2.7.5-2.2-.1-5.6-.6-8z" fill="currentColor"/><path d="M8 15.4c-1.4 0-2.4-1-2.4-2.4 0-1.3.8-2.1 1.6-2.9.2.8.6 1.3 1.2 1.6-.1-1 .2-2 .8-2.8.7.9 1.3 1.9 1.3 3.5 0 1.8-1.1 3-2.5 3z" fill="#fff" opacity=".32"/></svg></span>
-      <span class="dt-b"><b><span class="de">Täglich 5 Minuten</span><span class="en">5 minutes a day</span></b><span><span class="de">Fünf kurze Aufgaben aus Hoare-Kalkül, Java, Haskell und Prolog. Jeden Tag neu, Fehler kommen wieder.</span><span class="en">Five short tasks on Hoare logic, Java, Haskell and Prolog. New every day; mistakes come back.</span></span></span>
-      <span class="dt-s" id="plan-daily-streak"></span>
-      <span class="dt-go"><span class="de">Heute üben →</span><span class="en">Practise today →</span></span>
-    </a>
   </div>
   <div class="sem">
     <div class="sem-col">
@@ -579,14 +569,25 @@ footer a{color:var(--muted)}
         <div class="mod-t"><h3><a href="#prog" class="mod-link">Programmierung</a></h3><a class="pill live" href="#prog"><span class="de">Zum Modul →</span><span class="en">Open module →</span></a></div>
         <p><span class="de">Drei Paradigmen und die Einführung in die Programmverifikation. Für jede Sprache gibt es eine eigene Seite, für den Hoare-Kalkül Lektion, Übungen und Klausur-Simulation.</span><span class="en">Three paradigms plus an introduction to program verification. Each language has its own page; Hoare logic has a lesson, exercises and an exam simulation.</span></p>
         <div class="chips"><a class="chip" href="#java">Java</a><a class="chip" href="#haskell">Haskell</a><a class="chip" href="#prolog">Prolog</a><a class="chip" href="#hoare">Hoare-Kalkül</a><a class="chip" href="#practice"><span class="de">Übungen</span><span class="en">Exercises</span></a><a class="chip" href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a></div>
-        <a class="person-card sm" href="https://rwthcontacts.rwth-aachen.de/person/PER-XXZ5FLM" target="_blank" rel="noopener">
-          <span class="mono-avatar" aria-hidden="true">JG</span>
-          <span class="pc-body">
-            <span class="pc-name">Prof. Dr. Jürgen Giesl</span>
-            <span class="pc-org"><span class="de">Programmiersprachen und Verifikation</span><span class="en">Programming Languages and Verification</span></span>
-            <span class="pc-go"><span class="de">Kontakt auf RWTHcontacts →</span><span class="en">Contact on RWTHcontacts →</span></span>
-          </span>
-        </a>
+        <div class="mod-cards">
+          <a class="person-card sm" href="https://rwthcontacts.rwth-aachen.de/person/PER-XXZ5FLM" target="_blank" rel="noopener">
+            <span class="mono-avatar" aria-hidden="true">JG</span>
+            <span class="pc-body">
+              <span class="pc-name">Prof. Dr. Jürgen Giesl</span>
+              <span class="pc-org"><span class="de">Programmiersprachen und Verifikation</span><span class="en">Programming Languages and Verification</span></span>
+              <span class="pc-go"><span class="de">Kontakt auf RWTHcontacts →</span><span class="en">Contact on RWTHcontacts →</span></span>
+            </span>
+          </a>
+          <a class="person-card sm daily-card" href="#daily">
+            <span class="mono-avatar dc-ic" aria-hidden="true"><svg class="flame" viewBox="0 0 16 16" aria-hidden="true"><path d="M8.3.7c.5 2.5-.9 3.9-2.2 5.3C4.8 7.4 3.4 8.8 3.4 11c0 2.6 2 4.4 4.6 4.4s4.6-1.8 4.6-4.4c0-2.1-1-3.7-2.1-5-.1 1.2-.7 2.2-1.6 2.7.5-2.2-.1-5.6-.6-8z" fill="currentColor"/><path d="M8 15.4c-1.4 0-2.4-1-2.4-2.4 0-1.3.8-2.1 1.6-2.9.2.8.6 1.3 1.2 1.6-.1-1 .2-2 .8-2.8.7.9 1.3 1.9 1.3 3.5 0 1.8-1.1 3-2.5 3z" fill="#fff" opacity=".32"/></svg></span>
+            <span class="pc-body">
+              <span class="pc-name"><span class="de">Täglich 5 Minuten</span><span class="en">5 minutes a day</span></span>
+              <span class="pc-org">Hoare · Java · Haskell · Prolog</span>
+              <span class="pc-extra dc-streak" id="plan-daily-streak"></span>
+              <span class="pc-go"><span class="de">Heute üben →</span><span class="en">Practise today →</span></span>
+            </span>
+          </a>
+        </div>
       </div>
       <div class="mod"><div class="mod-t"><h3>Einführung in die Technische Informatik</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
         <p><span class="de">Vom Bit zum Rechner: Zahlendarstellung, Schaltnetze, Schaltwerke.</span><span class="en">From bits to computers: number representation, combinational and sequential circuits.</span></p>
