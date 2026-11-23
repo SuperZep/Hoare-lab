@@ -125,7 +125,7 @@ function genHwp(seed) {
       if (u.err) return { err: u.err === 'var' ? dt('unknown', { v: u.detail }) : dt('syntax') };
       const e = equiv(ex, u.ast, chain[0]);
       if (e.ok) return { ok: true };
-      return { ok: false, why: dt('hwp_cex', { s: dState(e.state), a: dt(e.va ? 'true_' : 'false_'), b: dt(e.vb ? 'true_' : 'false_') }) };
+      return { ok: false, why: dt('hwp_cex', { s: dState(e.state), a: dt(e.va ? 'true_' : 'false_'), b: dt(e.vb ? 'true_' : 'false_') }), tip: diagWp(ex, u.ast, comp, parse(post)) };
     },
     solution() {
       let h = `<div class="dl-prog mono sol">`;
@@ -161,7 +161,7 @@ function genHinv(seed) {
       const q = dt('hinv_q', { i: '\u0001' }).split('\u0001');
       return `<p>${esc(q[0])}<code class="dl-inv">${esc(pr(parse(inv)))}</code>${esc(q[1] || '')}</p><div class="dl-prog mono"><div class="dl-asr">⟨ ${esc(pr(c.pre))} ⟩</div>${code.map(l => `<div class="dl-ln" style="padding-left:${l.ind * 2}ch">${esc(l.s)}</div>`).join('')}<div class="dl-asr">⟨ ${esc(pr(c.post))} ⟩</div></div>`;
     },
-    check(v) { return v.a === undefined || v.a === '' ? { err: '' } : { ok: +v.a === res.ans }; },
+    check(v) { return v.a === undefined || v.a === '' ? { err: '' } : { ok: +v.a === res.ans, tip: diagInvMC(+v.a, res.ans) }; },
     answer: res.ans,
     solution() {
       const R = res.R; let t;
@@ -179,40 +179,47 @@ const pickNames = (s, ns) => { const o = {}; ns.forEach(n => { if (s && n in s) 
 const jdiv = (a, b) => Math.trunc(a / b), jmod = (a, b) => a - b * Math.trunc(a / b);
 function genJava(seed) {
   const r = dRng(seed), kind = dInt(r, 0, 6);
-  let code, v, ans, ex;
+  let code, v, ans, ex, alts = [];
   if (kind === 0) {
     const a = dInt(r, 0, 2), b = dInt(r, 4, 7), k = dInt(r, 2, 3); let s = 0; const ts = []; for (let i = a; i < b; i++) { s += k * i; ts.push(s); }
     code = `int s = 0;\nfor (int i = ${a}; i < ${b}; i++) {\n    s = s + ${k} * i;\n}`; v = 's'; ans = s;
+    alts = [[s + k * b, 'j_incl', { b, b1: b - 1 }], [s - k * a, 'j_from', { a }]];
     ex = { de: `i läuft von ${a} bis ${b - 1} (nicht bis ${b}). Zwischenwerte von s: ${ts.join(', ')}.`, en: `i runs from ${a} to ${b - 1} (not to ${b}). Intermediate values of s: ${ts.join(', ')}.` };
   } else if (kind === 1) {
     const X = dInt(r, 7, 16), c = dInt(r, 2, 4); let x = X, y = 0; const xs = [x]; while (x > 0) { x -= c; y++; xs.push(x); }
     code = `int x = ${X};\nint y = 0;\nwhile (x > 0) {\n    x = x - ${c};\n    y = y + 1;\n}`; v = 'y'; ans = y;
+    alts = [[Math.floor(X / c), 'j_floor'], [y - 1, 'j_off'], [y + 1, 'j_off']];
     ex = { de: `x nimmt die Werte ${xs.join(', ')} an. Die Schleife läuft ${y}-mal; danach ist x ≤ 0.`, en: `x takes the values ${xs.join(', ')}. The loop runs ${y} times; afterwards x ≤ 0.` };
   } else if (kind === 2) {
     const p = (r() < 0.6 ? -1 : 1) * dInt(r, 7, 19), q = dInt(r, 2, 5), d = jdiv(p, q), m = jmod(p, q);
     code = `int p = ${p};\nint q = ${q};\nint z = p / q + p % q;`; v = 'z'; ans = d + m;
+    alts = [[Math.floor(p / q) + (((p % q) + q) % q), 'j_python', { p, q, d, m }], [Math.floor(p / q), 'j_python', { p, q, d, m }], [d, 'j_part'], [m, 'j_part']];
     ex = { de: `Ganzzahlige Division rundet in Java in Richtung 0: ${p} / ${q} = ${d}. Der Rest hat das Vorzeichen von p: ${p} % ${q} = ${m}. Also z = ${d} + ${m < 0 ? '(' + m + ')' : m} = ${d + m}.`, en: `Integer division in Java rounds towards 0: ${p} / ${q} = ${d}. The remainder takes the sign of p: ${p} % ${q} = ${m}. So z = ${d} + ${m < 0 ? '(' + m + ')' : m} = ${d + m}.` };
   } else if (kind === 3) {
     const a = dInt(r, 1, 7);
     code = `int i = ${a};\nint j = i++ + ++i;`; v = 'j'; ans = a + (a + 2);
+    alts = [[2 * a + 1, 'j_post'], [2 * a + 3, 'j_post'], [2 * a + 2 === ans ? -1e9 : 2 * a + 2, 'j_post'], [2 * a, 'j_post'], [2 * a + 4, 'j_post']];
     ex = { de: `i++ liefert den alten Wert ${a} und erhöht i auf ${a + 1}. ++i erhöht zuerst auf ${a + 2} und liefert ${a + 2}. Also j = ${a} + ${a + 2} = ${ans}.`, en: `i++ yields the old value ${a} and increments i to ${a + 1}. ++i increments first to ${a + 2} and yields ${a + 2}. So j = ${a} + ${a + 2} = ${ans}.` };
   } else if (kind === 4) {
     const arr = [...Array(dInt(r, 5, 6))].map(() => dInt(r, -3, 9)); let s = 0; const used = []; for (let i = 0; i < arr.length; i += 2) { s += arr[i]; used.push(arr[i]); }
     code = `int[] a = {${arr.join(', ')}};\nint s = 0;\nfor (int i = 0; i < a.length; i += 2) {\n    s += a[i];\n}`; v = 's'; ans = s;
+    alts = [[arr.filter(x => x % 2 === 0).reduce((p, x) => p + x, 0), 'j_values'], [arr.reduce((p, x) => p + x, 0), 'j_all'], [arr.filter((_, i) => i % 2 === 1).reduce((p, x) => p + x, 0), 'j_odd']];
     ex = { de: `Summiert werden die Elemente an den Indizes 0, 2, 4, …, nicht die geraden Werte: ${used.join(' + ')} = ${s}.`, en: `The loop adds the elements at indices 0, 2, 4, …, not the even values: ${used.join(' + ')} = ${s}.` };
   } else if (kind === 5) {
     const n = dInt(r, 4, 8); let f = 1; const fs = []; for (let k = n; k > 1; k -= 2) { f *= k; fs.push(k); }
     code = `static int f(int n) {\n    if (n <= 1) return 1;\n    return n * f(n - 2);\n}\n\nint v = f(${n});`; v = 'v'; ans = f;
+    { let fa = 1; for (let k = 2; k <= n; k++) fa *= k; alts = [[fa, 'j_fact'], [0, 'j_base']]; }
     ex = { de: `f(${n}) = ${fs.join(' · ')} · f(${n % 2 ? 1 : 0}) = ${fs.join(' · ')} · 1 = ${f}.`, en: `f(${n}) = ${fs.join(' · ')} · f(${n % 2 ? 1 : 0}) = ${fs.join(' · ')} · 1 = ${f}.` };
   } else {
     const n = dInt(r, 3, 6); let c = 0; for (let i = 0; i < n; i++) for (let j = i; j < n; j++) c++;
     code = `int c = 0;\nfor (int i = 0; i < ${n}; i++) {\n    for (int j = i; j < ${n}; j++) {\n        c++;\n    }\n}`; v = 'c'; ans = c;
+    alts = [[n * n, 'j_square'], [n * (n - 1) / 2, 'j_strict']];
     ex = { de: `Für i = 0 läuft die innere Schleife ${n}-mal, für i = 1 ${n - 1}-mal, … für i = ${n - 1} einmal: ${[...Array(n)].map((_, k) => n - k).join(' + ')} = ${c}.`, en: `For i = 0 the inner loop runs ${n} times, for i = 1 ${n - 1} times, … for i = ${n - 1} once: ${[...Array(n)].map((_, k) => n - k).join(' + ')} = ${c}.` };
   }
   return {
-    topic: 'java', link: '#java', kind: 'num', answer: ans,
+    topic: 'java', link: '#java', kind: 'num', answer: ans, alts,
     body() { return `<p>${esc(dt('java_q', { v }))}</p><pre class="code">${esc(code)}</pre>`; },
-    check(vv) { const g = (vv.a || '').trim().replace(/[−–]/g, '-'); if (!/^-?\d+$/.test(g)) return { err: '' }; return { ok: +g === ans }; },
+    check(vv) { const g = (vv.a || '').trim().replace(/[−–]/g, '-'); if (!/^-?\d+$/.test(g)) return { err: '' }; if (+g === ans) return { ok: true }; const al = alts.find(x => x[0] === +g && x[0] !== ans); return { ok: false, tip: al ? { k: al[1], rep: al[2] } : null }; },
     solution() { return `<p><b class="mono">${esc(v)} = ${ans}</b>. ${esc(dL(ex))}</p>`; }
   };
 }
@@ -245,7 +252,7 @@ function genHtype(seed) {
   return {
     topic: 'htype', link: '#haskell', kind: 'text', ph: 'htype_ph',
     body() { return `<p>${esc(dt('htype_q'))}</p><pre class="code">${esc(e)} :: ?</pre>`; },
-    check(v) { const g = (v.a || '').trim(); if (!g) return { err: '' }; const q = HT.eq(g.replace(/^.*::/, ''), t); if (q === null) return { err: dt('htype_err') }; return { ok: q === true }; },
+    check(v) { const g = (v.a || '').trim(); if (!g) return { err: '' }; const q = HT.eq(g.replace(/^.*::/, ''), t); if (q === null) return { err: dt('htype_err') }; return q === true ? { ok: true } : { ok: false, tip: diagHtype(g.replace(/^.*::/, ''), t) }; },
     solution() { return `<p><b class="mono">${esc(e)} :: ${esc(t)}</b></p><p>${esc(dL(ex))}</p>`; }
   };
 }
@@ -301,12 +308,12 @@ function genUnify(seed) {
     body() { return `<p>${esc(dt('unify_q'))}</p><div class="dl-terms mono"><span>${esc(a)}</span><span class="dl-eq">≟</span><span>${esc(b)}</span></div>`; },
     check(v) {
       const no = v.n === '1', txt = (v.a || '').trim();
-      if (!u.ok) return no ? { ok: true } : (txt ? { ok: false, why: dt('u_isnot') } : { err: '' });
-      if (no) return { ok: false, why: dt('u_is') };
+      if (!u.ok) return no ? { ok: true } : (txt ? { ok: false, why: dt('u_isnot'), tip: diagUnify(a, b, txt, false) } : { err: '' });
+      if (no) return { ok: false, why: dt('u_is'), tip: diagUnify(a, b, txt, true) };
       if (!txt) return { err: '' };
       const c = PL.checkUnifier(a, b, txt);
       if (c.error) return { err: dt('u_err') };
-      return c.ok ? { ok: true } : { ok: false, why: dt(c.unifies ? 'u_notgen' : 'u_wrong') };
+      return c.ok ? { ok: true } : { ok: false, why: dt(c.unifies ? 'u_notgen' : 'u_wrong'), tip: diagUnify(a, b, txt, false) };
     },
     expect: u,
     solution() {
@@ -523,8 +530,8 @@ function dCard(S) {
   let fbh = '', btns = '';
   if (DC.fb && DC.fb.err) fbh = `<div class="fb info" role="status">${esc(DC.fb.err)}</div>`;
   else if (DC.fb && DC.fb.ok) fbh = `<div class="fb ok" role="status"><span class="lab">${esc(dt('right'))}</span>${G.solution()}</div>`;
-  else if (DC.shown) fbh = `<div class="fb ${DC.fb ? 'bad' : 'info'}" role="status"><span class="lab">${esc(dt(DC.fb ? 'wrong' : 'revealed'))}</span>${DC.fb && DC.fb.why ? `<span>${esc(DC.fb.why)}</span>` : ''}${G.solution()}</div>`;
-  else if (DC.fb) fbh = `<div class="fb bad" role="status"><span class="lab">${esc(dt('wrong'))}</span>${DC.fb.why ? `<span>${esc(DC.fb.why)}</span>` : ''}</div>`;
+  else if (DC.shown) fbh = `<div class="fb ${DC.fb ? 'bad' : 'info'}" role="status"><span class="lab">${esc(dt(DC.fb ? 'wrong' : 'revealed'))}</span>${DC.fb && DC.fb.why ? `<span>${esc(DC.fb.why)}</span>` : ''}${DC.fb ? dgBox(DC.fb.tip) : ''}${G.solution()}</div>`;
+  else if (DC.fb) fbh = `<div class="fb bad" role="status"><span class="lab">${esc(dt('wrong'))}</span>${DC.fb.why ? `<span>${esc(DC.fb.why)}</span>` : ''}${dgBox(DC.fb.tip)}</div>`;
   const last = S.idx === S.items.length - 1;
   if ((DC.fb && DC.fb.ok) || DC.shown) btns = `<a class="btn ghost" href="${G.link}">${esc(dt('to_topic'))}</a><button type="button" class="btn primary" data-dact="next">${esc(dt(last ? 'finish' : 'next'))}</button>`;
   else if (DC.fb && !DC.fb.err) btns = `<button type="button" class="btn" data-dact="reveal">${esc(dt('reveal'))}</button><button type="button" class="btn primary" data-dact="check">${esc(dt('check'))}</button>`;

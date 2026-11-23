@@ -518,6 +518,10 @@ body.touring{overflow:hidden}
   .thisweek{grid-template-columns:1fr}.thisweek .tw-go{grid-column:1;grid-row:auto;margin-top:4px}
 }
 
+/* typical-mistake hint */
+.dg{display:block;margin-top:6px;padding:9px 12px;border-radius:9px;background:color-mix(in srgb,var(--warn) 11%,transparent);border-left:3px solid var(--warn);font-family:var(--serif, inherit);font-size:15.5px;line-height:1.5;color:var(--ink)}
+.dg b{font-family:var(--display);color:var(--warn);font-weight:700}
+.chk + .dg,.chk ~ .dg{margin-top:10px}
 /* ===== daily ===== */
 .mod-cards{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
 .mod-cards .person-card.sm{margin-top:0;flex:1 1 230px}
@@ -2426,7 +2430,9 @@ const PL = (() => {
     if (!s) return null;
     return Object.entries(names).filter(([n, v]) => walk(v, s) !== v).map(([n, v]) => `${n} = ${fmt(resolve(v, s))}`).join(', ');
   }
-  return { run, parseProgram, checkUnifier, refUnifier, fmt };
+  /* true if the terms unify when the occurs check is switched off (used to name the typical mistake) */
+  function unifiesWithoutOC(t1src, t2src) { try { const { term } = parseTerms(`p(${t1src}, ${t2src}).`)[0]; return !!unify(term.a[0], term.a[1], {}, false); } catch (e) { return false; } }
+  return { run, parseProgram, checkUnifier, refUnifier, unifiesWithoutOC, fmt };
 })();
 
 /* ===== Haskell type comparison ===== */
@@ -2495,7 +2501,24 @@ const HT = (() => {
     return [...new Set(cs)].join(',') + '|' + body;
   }
   function eq(a, b) { try { return canon(a) === canon(b); } catch (e) { return null; } }
-  return { eq, canon };
+  /* one-way matching: is `spec` an instance of `gen` (type variables of gen replaced consistently)? */
+  function same(x, y) { return JSON.stringify(x) === JSON.stringify(y); }
+  function match(g, s, m) {
+    if (g.k === 'var') { if (m.has(g.n)) return same(m.get(g.n), s); m.set(g.n, s); return true; }
+    if (g.k !== s.k) return false;
+    switch (g.k) {
+      case 'con': return g.n === s.n;
+      case 'list': return match(g.e, s.e, m);
+      case 'tup': return g.items.length === s.items.length && g.items.every((x, i) => match(x, s.items[i], m));
+      case 'fn': return match(g.a, s.a, m) && match(g.b, s.b, m);
+      case 'app': return g.args.length === s.args.length && match(g.f, s.f, m) && g.args.every((x, i) => match(x, s.args[i], m));
+    }
+    return false;
+  }
+  function instanceOf(spec, gen) { try { return match(parse(gen).ty, parse(spec).ty, new Map()); } catch (e) { return null; } }
+  function ctxOf(src) { try { return parse(src).ctx; } catch (e) { return null; } }
+  function body(src) { const i = src.indexOf('=>'); return i >= 0 ? src.slice(i + 2) : src.replace(/^.*::/, ''); }
+  return { eq, canon, instanceOf, ctxOf, body };
 })();
 
 </script>
@@ -2734,21 +2757,22 @@ function stepsFor(ex) {
 
 /* ---- feedback blocks ---- */
 const chkRow = (ok, lab, d) => `<div class="chk-r"><span class="m ${ok ? 'y' : 'n'}">${ok ? '✓' : '✗'}</span><div><div class="lab">${lab}</div><div class="d">${d}</div></div></div>`;
-function checkHTML(R, ex, withHint = true) {
+function checkHTML(R, ex, withHint = true, tip = null) {
   const c = compile(ex), parts = [];
   parts.push(chkRow(R.start.ok, t('c_start'), R.start.ok ? '' : t('c_start_bad', { i: esc(fmtS(R.start.input)), s: esc(fmtS(R.start.state, c.names)) })));
   parts.push(chkRow(R.keep.ok, t('c_keep'), R.keep.ok ? t('c_n', { n: R.keep.n }) : R.keep.undef ? t('c_keep_undef', { b: esc(fmtS(R.keep.before, c.names)) }) : t('c_keep_bad', { b: esc(fmtS(R.keep.before, c.names)), a: esc(fmtS(R.keep.after, c.names)) })));
   parts.push(chkRow(R.end.ok, t('c_end'), R.end.ok ? t('c_n', { n: R.end.n }) : t('c_end_bad', { s: esc(fmtS(R.end.state, c.names)) })));
   let hint = '';
   if (R.ok) hint = `<div class="fb ok"><span class="lab">${t('c_all')}</span></div>`;
+  else if (tip) hint = dgBox(tip);
   else if (withHint) hint = `<p class="small muted">${!R.start.ok ? t('c_hint_start') : !R.end.ok ? t('c_hint_end') : t('c_hint_keep')}</p>`;
   return `<div class="chk">${parts.join('')}</div>${hint}`;
 }
-function variantHTML(R, ex) {
+function variantHTML(R, ex, tip = null) {
   const c = compile(ex);
   return `<div class="chk">${chkRow(R.nonneg.ok, t('v_nonneg'), R.nonneg.ok ? t('c_n', { n: R.n }) : t('v_nonneg_bad', { s: esc(fmtS(R.nonneg.state, c.names)), v: fmtN(R.nonneg.v) }))}
     ${chkRow(R.dec.ok, t('v_dec'), R.dec.ok ? t('c_n', { n: R.n }) : t('v_dec_bad', { b: esc(fmtS(R.dec.before, c.names)), a: esc(fmtS(R.dec.after, c.names)), v0: fmtN(R.dec.v0), v1: fmtN(R.dec.v1) }))}</div>
-    ${R.ok ? `<div class="fb ok"><span class="lab">${t('v_ok')}</span></div>` : ''}`;
+    ${R.ok ? `<div class="fb ok"><span class="lab">${t('v_ok')}</span></div>` : dgBox(tip)}`;
 }
 const errHTML = r => `<div class="fb bad"><span>${errMsg(r)}</span></div>`;
 
@@ -2766,7 +2790,7 @@ function stepBody(ex, S, i, P) {
         if (res.err) fb = errHTML(res);
         else if (res.ok) fb = `<div class="fb ok"><span class="lab">${t('ok_eq')}</span><span class="as">⟨${esc(pr(s.expect))}⟩</span></div>`;
         else if (res.shown) fb = `<div class="fb info"><span class="lab">${t('expected')}</span><span class="as">⟨${esc(pr(s.expect))}⟩</span></div>`;
-        else fb = `<div class="fb bad"><span class="lab">${t('neq')}</span><span class="mono small">${esc(fmtS(res.state, c.names.filter(n => !res.vars || res.vars.includes(n))))}</span><span>${t('neq_d', { u: fmtN(res.va), e: fmtN(res.vb) })}</span></div>`;
+        else fb = `<div class="fb bad"><span class="lab">${t('neq')}</span><span class="mono small">${esc(fmtS(res.state, c.names.filter(n => !res.vars || res.vars.includes(n))))}</span><span>${t('neq_d', { u: fmtN(res.va), e: fmtN(res.vb) })}</span>${dgBox(res.tip)}</div>`;
       }
       const hint = P.res[s.id + '_h'] ? (s.k === 'input'
         ? `<div class="fb info">${t('before_hint', { x: `<b class="mono">${esc(s.x)}</b>`, t: `<b class="mono">${esc(s.tsrc)}</b>` })}</div>`
@@ -2805,7 +2829,7 @@ function stepBody(ex, S, i, P) {
     }
     case 'own': {
       let fb = '';
-      if (res) fb = res.err ? errHTML(res) : checkHTML(res.R, ex);
+      if (res) fb = res.err ? errHTML(res) : checkHTML(res.R, ex, true, res.tip);
       const hints = ex.hints[lang].slice(0, P.hints).map(h => `<li>${esc(h)}</li>`).join('');
       return `<p>${t('own_txt')}</p>
         <div class="prog">${lnHTML({ k: 'a', s: pr(c.pre), ind: 0, note: 'pre' })}${codeLines(c.init, 0).map(l => lnHTML(l)).join('')}${inputLine(t('ph'), 0)}${lnHTML({ k: 'c', s: `while (${ex.cond}) { … }` })}${lnHTML({ k: 'a', s: pr(c.post), ind: 0 })}</div>
@@ -2815,7 +2839,7 @@ function stepBody(ex, S, i, P) {
     }
     case 'variant': {
       let fb = '';
-      if (res) fb = res.err ? errHTML(res) : variantHTML(res.R, ex);
+      if (res) fb = res.err ? errHTML(res) : variantHTML(res.R, ex, res.tip);
       return `<p>${t('v_prompt')}</p>
         <div class="inline-in"><span class="mono">V =</span><input id="in-${ex.id}-var" data-in="var" value="${esc(val)}" placeholder="${esc(t('phv'))}" autocomplete="off" spellcheck="false" aria-label="V"></div>
         <div class="row"><button class="btn primary" type="button" data-act="checkvar">${t('check')}</button><button class="btn" type="button" data-act="vhint">${t('hint')}</button>${nextBtn}</div>
@@ -2883,7 +2907,7 @@ function handleWS(e) {
     case 'check': {
       const r = userFormula(ex, readVal(), 'B');
       if (r.err) P.res[s.id] = r;
-      else { const q = equiv(ex, r.ast, s.expect); if (!q.ok) q.vars = [...new Set([...varsOf(r.ast), ...varsOf(s.expect)])]; P.res[s.id] = q.ok ? { ok: true } : q; if (q.ok) P.done[s.id] = true; }
+      else { const q = equiv(ex, r.ast, s.expect); if (!q.ok) { q.vars = [...new Set([...varsOf(r.ast), ...varsOf(s.expect)])]; q.tip = diagWp(ex, r.ast, s.k === 'input' ? [{ k: 'asg', x: s.x, e: parse(s.tsrc), src: s.tsrc }] : compile(ex).init, s.after); } P.res[s.id] = q.ok ? { ok: true } : q; if (q.ok) P.done[s.id] = true; }
       break; }
     case 'hint': P.res[s.id + '_h'] = true; break;
     case 'show': P.res[s.id] = { shown: true }; break;
@@ -2895,12 +2919,12 @@ function handleWS(e) {
     case 'cand': { const k = +b.dataset.k; P.res[s.id] = { picked: k }; if (ex.cands[k].ok) P.done[s.id] = true; break; }
     case 'checkinv': {
       const r = userFormula(ex, readVal(), 'B');
-      if (r.err) P.res[s.id] = r; else { const R = checkInv(ex, r.ast); P.res[s.id] = { R }; if (R.ok) P.done[s.id] = true; }
+      if (r.err) P.res[s.id] = r; else { const R = checkInv(ex, r.ast); P.res[s.id] = { R, tip: diagInv(ex, r.ast, R) }; if (R.ok) P.done[s.id] = true; }
       break; }
     case 'morehint': P.hints++; break;
     case 'checkvar': {
       const r = userFormula(ex, readVal(), 'N');
-      if (r.err) P.res[s.id] = r; else { const R = checkVariant(ex, r.ast); P.res[s.id] = { R }; if (R.ok) P.done[s.id] = true; }
+      if (r.err) P.res[s.id] = r; else { const R = checkVariant(ex, r.ast); P.res[s.id] = { R, tip: diagVar(R) }; if (R.ok) P.done[s.id] = true; }
       break; }
     case 'vhint': P.vhint = true; break;
     case 'reset': delete ST.P[ex.id]; break;
@@ -2947,7 +2971,7 @@ function kGrade() {
   const ex = exById(ST.K.id), c = compile(ex), V = ST.K.vals, res = { lines: {}, vlines: {}, pts: 0 };
   const iu = userFormula(ex, V.inv || '', 'B');
   let Igrade = c.inv;
-  if (iu.ast) { res.invR = checkInv(ex, iu.ast); if (res.invR.ok) { Igrade = iu.ast; res.invOK = true; res.pts += 2; } }
+  if (iu.ast) { res.invR = checkInv(ex, iu.ast); if (res.invR.ok) { Igrade = iu.ast; res.invOK = true; res.pts += 2; } else res.invTip = diagInv(ex, iu.ast, res.invR); }
   else res.invErr = iu;
   const A = annotate(ex, Igrade), b = kBlankLines(ex);
   b.aIdx.forEach(i => {
@@ -2958,7 +2982,7 @@ function kGrade() {
   });
   const vu = userFormula(ex, V.var || '', 'N');
   let Vgrade = c.variant;
-  if (vu.ast) { res.varR = checkVariant(ex, vu.ast, Igrade); if (res.varR.ok) { Vgrade = vu.ast; res.varOK = true; res.pts++; } }
+  if (vu.ast) { res.varR = checkVariant(ex, vu.ast, Igrade); if (res.varR.ok) { Vgrade = vu.ast; res.varOK = true; res.pts++; } else res.varTip = diagVar(res.varR); }
   else res.varErr = vu;
   const VL = annotateVariant(ex, Vgrade, Igrade), ax = auxEx(ex);
   b.vIdx.forEach(i => {
@@ -3007,8 +3031,8 @@ function renderExam() {
   let invFb = '', varFb = '';
   if (done) {
     if (R.invOK) invFb = `<div class="fb ok">${t('k_inv_used')}</div>`;
-    else invFb = `<div class="fb bad"><span>${R.invErr && (K.vals.inv || '').trim() ? errMsg(R.invErr) + ' ' : ''}${t('k_inv_bad')}</span><span class="as">⟨${esc(pr(c.inv))}⟩</span></div>${R.invR ? checkHTML(R.invR, ex, false) : ''}`;
-    if (!R.varOK) varFb = `<div class="fb bad"><span>${R.varErr && (K.vals.var || '').trim() ? errMsg(R.varErr) + ' ' : ''}${t('k_var_bad')}</span><span class="as">V = ${esc(pr(c.variant))}</span></div>${R.varR ? variantHTML(R.varR, ex) : ''}`;
+    else invFb = `<div class="fb bad"><span>${R.invErr && (K.vals.inv || '').trim() ? errMsg(R.invErr) + ' ' : ''}${t('k_inv_bad')}</span><span class="as">⟨${esc(pr(c.inv))}⟩</span></div>${R.invR ? checkHTML(R.invR, ex, false, R.invTip) : ''}`;
+    if (!R.varOK) varFb = `<div class="fb bad"><span>${R.varErr && (K.vals.var || '').trim() ? errMsg(R.varErr) + ' ' : ''}${t('k_var_bad')}</span><span class="as">V = ${esc(pr(c.variant))}</span></div>${R.varR ? variantHTML(R.varR, ex, R.varTip) : ''}`;
   }
   const pct = done ? R.pts / R.total : 0;
   const head = done
@@ -5687,6 +5711,256 @@ var qrcode = function() {
 }(function () {
     return qrcode;
 }));
+/* ================= typical-mistake diagnosis =================
+   Given a wrong answer, try to name the misconception behind it.
+   Every function returns { k, rep } (message key + values) or null; the text is built at render time. */
+const DGT = {
+  de: {
+    lab: 'Typischer Fehler',
+    wp_unchanged: 'Zusicherung nur abgeschrieben: Vor einer Zuweisung gilt nicht dieselbe Formel wie danach. Ersetze die zugewiesene Variable durch die rechte Seite.',
+    wp_forward: 'Vorwärts statt rückwärts gerechnet: Du hast die Zuweisung „rückgängig gemacht“ (etwa x − 2 statt x + 2). Die Zuweisungsregel setzt die rechte Seite ein: Aus ⟨φ⟩ nach x = t wird ⟨φ[x := t]⟩ davor.',
+    wp_paren: 'Klammern vergessen: Die rechte Seite wird als Ganzes eingesetzt, also 2 · (x + y) und nicht 2 · x + y.',
+    wp_lastonly: 'Nur die letzte Zuweisung berücksichtigt: Das ist die Zusicherung in der Mitte. Rechne noch über die erste Zuweisung zurück.',
+    wp_firstonly: 'Die untere Zuweisung übersprungen: Von unten nach oben heißt, zuerst über die letzte Zuweisung zurückrechnen.',
+    wp_order: 'Reihenfolge vertauscht: Zuerst wird die untere Zuweisung eingesetzt, danach die obere.',
+    inv_post: 'Nachbedingung als Invariante: Sie gilt erst nach der Schleife. Die Invariante beschreibt den Zwischenstand nach jeder Runde.',
+    inv_start: 'Randfall übersehen: Die Vorbedingung erlaubt {in}. Für diese Eingabe gilt deine Formel schon vor der Schleife nicht.',
+    inv_bound: 'Schranke vergessen: Ohne {b} folgt aus I ∧ ¬B nicht die Nachbedingung. Ergänze die Invariante um {b}.',
+    inv_weak: 'Zu schwach: Am Ende folgt aus I ∧ ¬B nicht die Nachbedingung. Die Invariante muss festhalten, was bisher berechnet wurde, also wie das Zwischenergebnis mit dem Zähler zusammenhängt.',
+    inv_reach: 'Schon in einem echten Lauf falsch: Bei der Eingabe {in} gilt deine Formel nach {k} Schleifendurchläufen nicht mehr. Spiel die Schleife mit dieser Eingabe auf dem Papier durch.',
+    inv_notind: 'Wahr, aber nicht induktiv: Deine Formel stimmt in jedem echten Lauf, aber aus I ∧ B allein folgt sie nach dem Rumpf nicht. Meist fehlt der Zusammenhang zwischen den Variablen, etwa res = 3 · i.',
+    var_grows: 'Die Variante wächst ({v0} → {v1}): Sie muss in jeder Runde kleiner werden. Nimm den Abstand zur Schranke, zum Beispiel n − i statt i.',
+    var_const: 'Die Variante ändert sich im Rumpf nicht ({v0} → {v1}). Sie muss von einer Variable abhängen, die der Rumpf verändert.',
+    var_neg: 'Kann negativ werden: In der Schleife muss V ≥ 0 sein. Nutze die Schleifenbedingung; aus i < n folgt zum Beispiel n − i > 0.',
+    mc_end: 'Die dritte Bedingung vergessen: Neben Start und Erhalt muss I ∧ ¬B die Nachbedingung liefern. Dafür fehlt hier eine Schranke oder ein Zusammenhang.',
+    mc_keep: 'Erhalt zu schnell bejaht: Er muss für jeden Zustand mit I ∧ B gelten, nicht nur für die Werte, die das Programm wirklich durchläuft.',
+    mc_start: 'Vorbedingung nicht ausgereizt: Die Invariante muss nach der Initialisierung für jede erlaubte Eingabe gelten, auch für Randfälle wie n = 0 oder y = 0.',
+    mc_strict: 'Zu streng geprüft: Eine Invariante muss nicht wie die Musterlösung aussehen. Äquivalente Umformungen oder zusätzliche wahre Bedingungen sind erlaubt, solange Start, Erhalt und Ende gelten.',
+    mc_other: 'Prüfe die drei Bedingungen der Reihe nach: Start, Erhalt, Ende. Die erste, die scheitert, ist die Antwort.',
+    j_incl: 'Grenze mitgezählt: i < {b} läuft nur bis {b1}, nicht bis {b}.',
+    j_from: 'Startwert übersehen: Die Schleife beginnt bei i = {a}.',
+    j_floor: 'Abgerundet statt gezählt: Die Schleife läuft, solange x > 0 ist. Auch der letzte Durchlauf, nach dem x ≤ 0 wird, zählt mit.',
+    j_off: 'Um eins verzählt: Zähle die Durchläufe einzeln, am besten in einer kleinen Tabelle mit x und y.',
+    j_python: 'Gerechnet wie in Python oder in der Mathematik: In Java rundet / in Richtung 0, und % hat das Vorzeichen von p. Also {p} / {q} = {d} und {p} % {q} = {m}.',
+    j_part: 'Nur einen Teil berechnet: z ist Quotient plus Rest, also p / q + p % q.',
+    j_post: 'i++ und ++i verwechselt: i++ liefert den alten Wert und erhöht danach, ++i erhöht zuerst und liefert den neuen Wert. Beide Erhöhungen zählen.',
+    j_values: 'Werte statt Indizes: Die Schleife nimmt die Elemente an den Positionen 0, 2, 4, …, egal ob die Werte gerade sind.',
+    j_all: 'Alle Elemente summiert: i += 2 überspringt jedes zweite Element.',
+    j_odd: 'Indizes ab 1 gezählt: Java-Arrays beginnen bei Index 0.',
+    j_fact: 'Schrittweite übersehen: f ruft sich mit n − 2 auf, nicht mit n − 1.',
+    j_base: 'Basisfall falsch: Für n ≤ 1 liefert f den Wert 1, nicht 0.',
+    j_square: 'Die innere Schleife beginnt bei j = i, nicht bei 0: Sie wird mit jedem i kürzer.',
+    j_strict: 'j = i zählt mit: Die innere Schleife läuft für jedes i auch einmal mit j = i.',
+    h_noctx: 'Typklasse vergessen: Der Ausdruck benutzt eine Funktion mit Einschränkung, deshalb gehört {c} vor den Typ.',
+    h_extractx: 'Unnötige Einschränkung: Für diesen Ausdruck wird keine Typklasse gebraucht.',
+    h_ctx: 'Falsche Typklasse: Der Typ stimmt, aber die Einschränkung muss {c} lauten.',
+    h_special: 'Zu speziell: Gefragt ist der allgemeinste Typ. Wo nichts einen bestimmten Typ erzwingt, steht eine Typvariable wie a.',
+    h_paren: 'Klammern vergessen: Ein Argument mit Funktionstyp muss geklammert werden, etwa (a -> b) -> [a] -> [b]. Ohne Klammern bedeutet a -> b -> [a] etwas anderes.',
+    h_curry: 'Tupel statt Currying: Haskell-Funktionen nehmen ihre Argumente nacheinander, also a -> b -> c statt (a, b) -> c.',
+    u_occurs: 'Occurs-Check vergessen: Eine Variable kann nicht an einen Term gebunden werden, der sie selbst enthält, etwa X = f(X). Mit Occurs-Check sind die Terme nicht unifizierbar.',
+    u_clash: 'Konflikt übersehen: Vergleiche Funktor und Stelligkeit Stelle für Stelle. Zwei verschiedene Konstanten oder Funktoren passen nie zusammen.',
+    u_bind: 'Zu viel festgelegt: Du hast {v} an einen konkreten Term gebunden. Im allgemeinsten Unifikator bleibt {v} eine Variable.',
+    u_check: 'Mach die Probe: Setze deine Substitution in beide Terme ein. Danach müssen sie Zeichen für Zeichen gleich sein.',
+    u_missed: 'Zu früh aufgegeben: Variablen dürfen an beliebige Terme gebunden werden. Nur verschiedene Funktoren oder Konstanten und der Occurs-Check verhindern eine Unifikation.'
+  },
+  en: {
+    lab: 'Typical mistake',
+    wp_unchanged: 'Assertion just copied: before an assignment the formula is not the same as after it. Replace the assigned variable with the right-hand side.',
+    wp_forward: 'Worked forwards instead of backwards: you “undid” the assignment (e.g. x − 2 instead of x + 2). The assignment rule plugs in the right-hand side: ⟨φ⟩ after x = t becomes ⟨φ[x := t]⟩ before it.',
+    wp_paren: 'Missing parentheses: the right-hand side is substituted as a whole, so 2 · (x + y), not 2 · x + y.',
+    wp_lastonly: 'Only the last assignment taken into account: that is the assertion in the middle. Work back over the first assignment as well.',
+    wp_firstonly: 'Skipped the lower assignment: bottom-up means you first work back over the last assignment.',
+    wp_order: 'Order swapped: the lower assignment is substituted first, then the upper one.',
+    inv_post: 'Postcondition used as invariant: it only holds after the loop. The invariant describes the intermediate state after each round.',
+    inv_start: 'Edge case missed: the precondition allows {in}. For this input your formula already fails before the loop.',
+    inv_bound: 'Missing bound: without {b}, I ∧ ¬B does not imply the postcondition. Add {b} to the invariant.',
+    inv_weak: 'Too weak: at the end, I ∧ ¬B does not imply the postcondition. The invariant must record what has been computed so far, i.e. how the intermediate result relates to the counter.',
+    inv_reach: 'False even in a real run: for the input {in} your formula no longer holds after {k} iterations. Trace the loop with this input on paper.',
+    inv_notind: 'True but not inductive: your formula holds in every real run, but I ∧ B alone does not imply it after the body. Usually the relation between the variables is missing, e.g. res = 3 · i.',
+    var_grows: 'The variant grows ({v0} → {v1}): it must decrease in every round. Use the distance to the bound, e.g. n − i instead of i.',
+    var_const: 'The variant does not change in the body ({v0} → {v1}). It must depend on a variable the body changes.',
+    var_neg: 'Can become negative: inside the loop V ≥ 0 must hold. Use the loop condition; for example i < n gives n − i > 0.',
+    mc_end: 'Forgot the third condition: besides start and preservation, I ∧ ¬B must give the postcondition. A bound or a relation is missing for that here.',
+    mc_keep: 'Preservation accepted too quickly: it must hold for every state with I ∧ B, not only for the values the program actually reaches.',
+    mc_start: 'Precondition not fully used: the invariant must hold after initialisation for every allowed input, including edge cases like n = 0 or y = 0.',
+    mc_strict: 'Checked too strictly: an invariant need not look like the model solution. Equivalent rewritings or additional true conditions are fine as long as start, preservation and end hold.',
+    mc_other: 'Check the three conditions in order: start, preservation, end. The first one that fails is the answer.',
+    j_incl: 'Counted the bound: i < {b} only runs up to {b1}, not to {b}.',
+    j_from: 'Missed the start value: the loop starts at i = {a}.',
+    j_floor: 'Rounded down instead of counting: the loop runs while x > 0. The last iteration, after which x ≤ 0, counts too.',
+    j_off: 'Off by one: count the iterations one by one, ideally in a small table with x and y.',
+    j_python: 'Computed as in Python or in maths: in Java / rounds towards 0, and % takes the sign of p. So {p} / {q} = {d} and {p} % {q} = {m}.',
+    j_part: 'Only computed part of it: z is quotient plus remainder, p / q + p % q.',
+    j_post: 'Mixed up i++ and ++i: i++ yields the old value and increments afterwards, ++i increments first and yields the new value. Both increments count.',
+    j_values: 'Values instead of indices: the loop takes the elements at positions 0, 2, 4, …, whether or not the values are even.',
+    j_all: 'Summed all elements: i += 2 skips every second element.',
+    j_odd: 'Counted indices from 1: Java arrays start at index 0.',
+    j_fact: 'Missed the step size: f calls itself with n − 2, not n − 1.',
+    j_base: 'Wrong base case: for n ≤ 1, f returns 1, not 0.',
+    j_square: 'The inner loop starts at j = i, not at 0: it gets shorter with every i.',
+    j_strict: 'j = i counts too: the inner loop also runs once with j = i for every i.',
+    h_noctx: 'Forgot the type class: the expression uses a function with a constraint, so {c} belongs in front of the type.',
+    h_extractx: 'Unnecessary constraint: this expression needs no type class.',
+    h_ctx: 'Wrong type class: the type is right, but the constraint must be {c}.',
+    h_special: 'Too specific: the most general type is asked for. Where nothing forces a particular type, a type variable like a appears.',
+    h_paren: 'Missing parentheses: an argument with a function type must be parenthesised, e.g. (a -> b) -> [a] -> [b]. Without them, a -> b -> [a] means something else.',
+    h_curry: 'Tuple instead of currying: Haskell functions take their arguments one after another, so a -> b -> c instead of (a, b) -> c.',
+    u_occurs: 'Forgot the occurs check: a variable cannot be bound to a term that contains it, e.g. X = f(X). With the occurs check the terms are not unifiable.',
+    u_clash: 'Missed a clash: compare functor and arity position by position. Two different constants or functors never match.',
+    u_bind: 'Fixed too much: you bound {v} to a concrete term. In the most general unifier {v} stays a variable.',
+    u_check: 'Check your answer: apply your substitution to both terms. Afterwards they must be identical, symbol by symbol.',
+    u_missed: 'Gave up too early: variables may be bound to any term. Only different functors or constants and the occurs check prevent unification.'
+  }
+};
+const dgt = (k, rep) => { let s = DGT[lang][k] ?? DGT.de[k] ?? k; if (rep) for (const r in rep) s = s.split('{' + r + '}').join(rep[r]); return s; };
+function dgBox(tip) { return tip ? `<span class="dg" role="note"><b>${esc(dgt('lab'))}:</b> ${esc(dgt(tip.k, tip.rep))}</span>` : ''; }
+const dgState = s => Object.entries(s || {}).map(([k, v]) => `${k} = ${Array.isArray(v) ? '[' + v.join(', ') + ']' : v}`).join(', ');
+
+/* ---------- Hoare: assignment / weakest precondition ---------- */
+function dgInverse(x, e) {
+  if (e.t !== 'bin' || (e.op !== '+' && e.op !== '-')) return null;
+  const isX = n => n.t === 'var' && n.v === x;
+  if (isX(e.a) && !varsOf(e.b).has(x)) return { t: 'bin', op: e.op === '+' ? '-' : '+', a: e.a, b: e.b };
+  if (e.op === '+' && isX(e.b) && !varsOf(e.a).has(x)) return { t: 'bin', op: '-', a: e.b, b: e.a };
+  return null;
+}
+function diagWp(ex, user, stmts, post) {
+  try {
+    if (!stmts.length || stmts.some(s => s.k !== 'asg')) return null;
+    const right = wpList(stmts, post)[0], cands = [['wp_unchanged', post]];
+    let f = post, okF = true;
+    for (let j = stmts.length - 1; j >= 0; j--) { const inv = dgInverse(stmts[j].x, stmts[j].e); if (!inv) { okF = false; break; } f = sub(f, stmts[j].x, inv); }
+    if (okF) cands.push(['wp_forward', f]);
+    let txt = pr(post);
+    for (let j = stmts.length - 1; j >= 0; j--) txt = txt.replace(new RegExp(`(?<![A-Za-z0-9_])${stmts[j].x}(?![A-Za-z0-9_\\[])`, 'g'), stmts[j].src);
+    try { cands.push(['wp_paren', parse(txt)]); } catch (e) {}
+    if (stmts.length === 2) {
+      cands.push(['wp_lastonly', wpList([stmts[1]], post)[0]], ['wp_firstonly', wpList([stmts[0]], post)[0]], ['wp_order', wpList([stmts[1], stmts[0]], post)[0]]);
+    }
+    for (const [k, cand] of cands) {
+      if (equiv(ex, cand, right).ok) continue;
+      if (equiv(ex, user, cand).ok) return { k };
+    }
+  } catch (e) {}
+  return null;
+}
+
+/* ---------- Hoare: invariant and variant ---------- */
+function dgBound(cond) {
+  if (!cond || cond.t !== 'cmp') return null;
+  if (cond.op === 'lt') return { t: 'cmp', op: 'le', a: cond.a, b: cond.b };
+  if (cond.op === 'gt') return { t: 'cmp', op: 'ge', a: cond.a, b: cond.b };
+  return null;
+}
+function dgHeads(ex, inv) { // first reachable loop head where inv is false: { input, k } or null
+  const c = compile(ex);
+  for (const g of grid(ex, ex.inputs)) {
+    const s0 = Object.assign(baseState(ex), g);
+    if (tryEv(c.pre, s0) !== true) continue;
+    let s = tryRun(c.init, s0); if (!s) continue;
+    for (let k = 0; k <= 60; k++) {
+      if (tryEv(inv, s) !== true) return { input: pick(s0, ex.inputs), k };
+      if (tryEv(c.cond, s) !== true) break;
+      s = tryRun(c.body, s); if (!s) break;
+    }
+  }
+  return null;
+}
+function diagInv(ex, user, R) {
+  try {
+    if (!R || R.ok) return null;
+    const c = compile(ex);
+    if (equiv(ex, user, c.post).ok) return { k: 'inv_post' };
+    if (!R.start.ok) return { k: 'inv_start', rep: { in: dgState(R.start.input) } };
+    if (!R.end.ok) {
+      const b = dgBound(c.cond);
+      if (b) { const R2 = checkInv(ex, { t: 'and', a: user, b }); if (R2.end.ok) return { k: 'inv_bound', rep: { b: pr(b) } }; }
+      return { k: 'inv_weak' };
+    }
+    if (!R.keep.ok && !R.keep.undef) {
+      const h = dgHeads(ex, user);
+      return h ? { k: 'inv_reach', rep: { in: dgState(h.input), k: h.k } } : { k: 'inv_notind' };
+    }
+  } catch (e) {}
+  return null;
+}
+function diagVar(R) {
+  if (!R || R.ok) return null;
+  if (!R.dec.ok) return R.dec.v1 > R.dec.v0 ? { k: 'var_grows', rep: { v0: R.dec.v0, v1: R.dec.v1 } } : R.dec.v1 === R.dec.v0 ? { k: 'var_const', rep: { v0: R.dec.v0, v1: R.dec.v1 } } : null;
+  if (!R.nonneg.ok) return { k: 'var_neg' };
+  return null;
+}
+function diagInvMC(picked, ans) {
+  if (picked === ans) return null;
+  if (picked === 3) return { k: ['mc_start', 'mc_keep', 'mc_end'][ans] };
+  if (ans === 3) return { k: 'mc_strict' };
+  return { k: 'mc_other' };
+}
+
+/* ---------- Haskell types ---------- */
+function dgSplitTop(s, sep) { // split at top-level separator (outside () and [])
+  const out = []; let d = 0, cur = '';
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (ch === '(' || ch === '[') d++; else if (ch === ')' || ch === ']') d--;
+    if (d === 0 && s.startsWith(sep, i)) { out.push(cur); cur = ''; i += sep.length - 1; continue; }
+    cur += ch;
+  }
+  out.push(cur); return out.map(x => x.trim());
+}
+function dgParenVariants(body) { // drop the parentheses of one function-typed group
+  const out = [];
+  for (let i = 0; i < body.length; i++) {
+    if (body[i] !== '(') continue;
+    let d = 0, j = i;
+    for (; j < body.length; j++) { if (body[j] === '(') d++; else if (body[j] === ')') { d--; if (!d) break; } }
+    const inner = body.slice(i + 1, j);
+    if (dgSplitTop(inner, '->').length > 1 && dgSplitTop(inner, ',').length === 1) out.push(body.slice(0, i) + inner + body.slice(j + 1));
+  }
+  return out;
+}
+function diagHtype(user, correct) {
+  try {
+    const uc = HT.ctxOf(user), cc = HT.ctxOf(correct); if (uc === null || cc === null) return null;
+    const ub = HT.body(user), cb = HT.body(correct);
+    if (HT.eq(ub, cb)) {
+      const ctxTxt = correct.includes('=>') ? correct.split('=>')[0].trim() + ' =>' : '';
+      if (cc.length && !uc.length) return { k: 'h_noctx', rep: { c: ctxTxt } };
+      if (!cc.length && uc.length) return { k: 'h_extractx' };
+      return { k: 'h_ctx', rep: { c: ctxTxt } };
+    }
+    if (HT.instanceOf(ub, cb)) return { k: 'h_special' };
+    let all = cb, vs = dgParenVariants(cb);
+    for (let n = 0; n < 6; n++) { const nx = dgParenVariants(all); if (!nx.length) break; all = nx[0]; vs.push(all); }
+    if (vs.some(v => HT.eq(ub, v))) return { k: 'h_paren' };
+    const parts = dgSplitTop(cb, '->');
+    if (parts.length >= 3 && HT.eq(ub, `(${parts[0]}, ${parts[1]}) -> ${parts.slice(2).join(' -> ')}`)) return { k: 'h_curry' };
+  } catch (e) {}
+  return null;
+}
+
+/* ---------- Prolog unification ---------- */
+function dgPairs(txt) {
+  const m = {}, re = /([A-Z_][A-Za-z0-9_]*)\s*=\s*(.+?)(?=,\s*[A-Z_][A-Za-z0-9_]*\s*=|$)/g;
+  let x; const s = (txt || '').trim().replace(/^\{|\}$/g, '');
+  while ((x = re.exec(s))) m[x[1]] = x[2].trim();
+  return m;
+}
+function diagUnify(a, b, txt, notU) {
+  try {
+    const ref = PL.refUnifier(a, b);
+    if (ref === null) { if (notU || !(txt || '').trim()) return null; return { k: PL.unifiesWithoutOC(a, b) ? 'u_occurs' : 'u_clash' }; }
+    if (notU) return { k: 'u_missed' };
+    if (!(txt || '').trim()) return null;
+    const c = PL.checkUnifier(a, b, txt); if (c.error || c.ok) return null;
+    if (c.unifies) {
+      const U = dgPairs(txt), Rf = dgPairs(ref), isVar = t => /^[A-Z_][A-Za-z0-9_]*$/.test(t);
+      for (const v of Object.keys(U)) if (!isVar(U[v]) && (Rf[v] === undefined || isVar(Rf[v]))) return { k: 'u_bind', rep: { v } };
+      return null;
+    }
+    return { k: 'u_check' };
+  } catch (e) { return null; }
+}
 /* ================= Täglich · 5 Minuten =================
    Five short tasks a day, generated from the date. Mistakes return
    (Leitner boxes: 1, 3, 7, 14 days). A streak counts consecutive days. */
@@ -5814,7 +6088,7 @@ function genHwp(seed) {
       if (u.err) return { err: u.err === 'var' ? dt('unknown', { v: u.detail }) : dt('syntax') };
       const e = equiv(ex, u.ast, chain[0]);
       if (e.ok) return { ok: true };
-      return { ok: false, why: dt('hwp_cex', { s: dState(e.state), a: dt(e.va ? 'true_' : 'false_'), b: dt(e.vb ? 'true_' : 'false_') }) };
+      return { ok: false, why: dt('hwp_cex', { s: dState(e.state), a: dt(e.va ? 'true_' : 'false_'), b: dt(e.vb ? 'true_' : 'false_') }), tip: diagWp(ex, u.ast, comp, parse(post)) };
     },
     solution() {
       let h = `<div class="dl-prog mono sol">`;
@@ -5850,7 +6124,7 @@ function genHinv(seed) {
       const q = dt('hinv_q', { i: '\u0001' }).split('\u0001');
       return `<p>${esc(q[0])}<code class="dl-inv">${esc(pr(parse(inv)))}</code>${esc(q[1] || '')}</p><div class="dl-prog mono"><div class="dl-asr">⟨ ${esc(pr(c.pre))} ⟩</div>${code.map(l => `<div class="dl-ln" style="padding-left:${l.ind * 2}ch">${esc(l.s)}</div>`).join('')}<div class="dl-asr">⟨ ${esc(pr(c.post))} ⟩</div></div>`;
     },
-    check(v) { return v.a === undefined || v.a === '' ? { err: '' } : { ok: +v.a === res.ans }; },
+    check(v) { return v.a === undefined || v.a === '' ? { err: '' } : { ok: +v.a === res.ans, tip: diagInvMC(+v.a, res.ans) }; },
     answer: res.ans,
     solution() {
       const R = res.R; let t;
@@ -5868,40 +6142,47 @@ const pickNames = (s, ns) => { const o = {}; ns.forEach(n => { if (s && n in s) 
 const jdiv = (a, b) => Math.trunc(a / b), jmod = (a, b) => a - b * Math.trunc(a / b);
 function genJava(seed) {
   const r = dRng(seed), kind = dInt(r, 0, 6);
-  let code, v, ans, ex;
+  let code, v, ans, ex, alts = [];
   if (kind === 0) {
     const a = dInt(r, 0, 2), b = dInt(r, 4, 7), k = dInt(r, 2, 3); let s = 0; const ts = []; for (let i = a; i < b; i++) { s += k * i; ts.push(s); }
     code = `int s = 0;\nfor (int i = ${a}; i < ${b}; i++) {\n    s = s + ${k} * i;\n}`; v = 's'; ans = s;
+    alts = [[s + k * b, 'j_incl', { b, b1: b - 1 }], [s - k * a, 'j_from', { a }]];
     ex = { de: `i läuft von ${a} bis ${b - 1} (nicht bis ${b}). Zwischenwerte von s: ${ts.join(', ')}.`, en: `i runs from ${a} to ${b - 1} (not to ${b}). Intermediate values of s: ${ts.join(', ')}.` };
   } else if (kind === 1) {
     const X = dInt(r, 7, 16), c = dInt(r, 2, 4); let x = X, y = 0; const xs = [x]; while (x > 0) { x -= c; y++; xs.push(x); }
     code = `int x = ${X};\nint y = 0;\nwhile (x > 0) {\n    x = x - ${c};\n    y = y + 1;\n}`; v = 'y'; ans = y;
+    alts = [[Math.floor(X / c), 'j_floor'], [y - 1, 'j_off'], [y + 1, 'j_off']];
     ex = { de: `x nimmt die Werte ${xs.join(', ')} an. Die Schleife läuft ${y}-mal; danach ist x ≤ 0.`, en: `x takes the values ${xs.join(', ')}. The loop runs ${y} times; afterwards x ≤ 0.` };
   } else if (kind === 2) {
     const p = (r() < 0.6 ? -1 : 1) * dInt(r, 7, 19), q = dInt(r, 2, 5), d = jdiv(p, q), m = jmod(p, q);
     code = `int p = ${p};\nint q = ${q};\nint z = p / q + p % q;`; v = 'z'; ans = d + m;
+    alts = [[Math.floor(p / q) + (((p % q) + q) % q), 'j_python', { p, q, d, m }], [Math.floor(p / q), 'j_python', { p, q, d, m }], [d, 'j_part'], [m, 'j_part']];
     ex = { de: `Ganzzahlige Division rundet in Java in Richtung 0: ${p} / ${q} = ${d}. Der Rest hat das Vorzeichen von p: ${p} % ${q} = ${m}. Also z = ${d} + ${m < 0 ? '(' + m + ')' : m} = ${d + m}.`, en: `Integer division in Java rounds towards 0: ${p} / ${q} = ${d}. The remainder takes the sign of p: ${p} % ${q} = ${m}. So z = ${d} + ${m < 0 ? '(' + m + ')' : m} = ${d + m}.` };
   } else if (kind === 3) {
     const a = dInt(r, 1, 7);
     code = `int i = ${a};\nint j = i++ + ++i;`; v = 'j'; ans = a + (a + 2);
+    alts = [[2 * a + 1, 'j_post'], [2 * a + 3, 'j_post'], [2 * a + 2 === ans ? -1e9 : 2 * a + 2, 'j_post'], [2 * a, 'j_post'], [2 * a + 4, 'j_post']];
     ex = { de: `i++ liefert den alten Wert ${a} und erhöht i auf ${a + 1}. ++i erhöht zuerst auf ${a + 2} und liefert ${a + 2}. Also j = ${a} + ${a + 2} = ${ans}.`, en: `i++ yields the old value ${a} and increments i to ${a + 1}. ++i increments first to ${a + 2} and yields ${a + 2}. So j = ${a} + ${a + 2} = ${ans}.` };
   } else if (kind === 4) {
     const arr = [...Array(dInt(r, 5, 6))].map(() => dInt(r, -3, 9)); let s = 0; const used = []; for (let i = 0; i < arr.length; i += 2) { s += arr[i]; used.push(arr[i]); }
     code = `int[] a = {${arr.join(', ')}};\nint s = 0;\nfor (int i = 0; i < a.length; i += 2) {\n    s += a[i];\n}`; v = 's'; ans = s;
+    alts = [[arr.filter(x => x % 2 === 0).reduce((p, x) => p + x, 0), 'j_values'], [arr.reduce((p, x) => p + x, 0), 'j_all'], [arr.filter((_, i) => i % 2 === 1).reduce((p, x) => p + x, 0), 'j_odd']];
     ex = { de: `Summiert werden die Elemente an den Indizes 0, 2, 4, …, nicht die geraden Werte: ${used.join(' + ')} = ${s}.`, en: `The loop adds the elements at indices 0, 2, 4, …, not the even values: ${used.join(' + ')} = ${s}.` };
   } else if (kind === 5) {
     const n = dInt(r, 4, 8); let f = 1; const fs = []; for (let k = n; k > 1; k -= 2) { f *= k; fs.push(k); }
     code = `static int f(int n) {\n    if (n <= 1) return 1;\n    return n * f(n - 2);\n}\n\nint v = f(${n});`; v = 'v'; ans = f;
+    { let fa = 1; for (let k = 2; k <= n; k++) fa *= k; alts = [[fa, 'j_fact'], [0, 'j_base']]; }
     ex = { de: `f(${n}) = ${fs.join(' · ')} · f(${n % 2 ? 1 : 0}) = ${fs.join(' · ')} · 1 = ${f}.`, en: `f(${n}) = ${fs.join(' · ')} · f(${n % 2 ? 1 : 0}) = ${fs.join(' · ')} · 1 = ${f}.` };
   } else {
     const n = dInt(r, 3, 6); let c = 0; for (let i = 0; i < n; i++) for (let j = i; j < n; j++) c++;
     code = `int c = 0;\nfor (int i = 0; i < ${n}; i++) {\n    for (int j = i; j < ${n}; j++) {\n        c++;\n    }\n}`; v = 'c'; ans = c;
+    alts = [[n * n, 'j_square'], [n * (n - 1) / 2, 'j_strict']];
     ex = { de: `Für i = 0 läuft die innere Schleife ${n}-mal, für i = 1 ${n - 1}-mal, … für i = ${n - 1} einmal: ${[...Array(n)].map((_, k) => n - k).join(' + ')} = ${c}.`, en: `For i = 0 the inner loop runs ${n} times, for i = 1 ${n - 1} times, … for i = ${n - 1} once: ${[...Array(n)].map((_, k) => n - k).join(' + ')} = ${c}.` };
   }
   return {
-    topic: 'java', link: '#java', kind: 'num', answer: ans,
+    topic: 'java', link: '#java', kind: 'num', answer: ans, alts,
     body() { return `<p>${esc(dt('java_q', { v }))}</p><pre class="code">${esc(code)}</pre>`; },
-    check(vv) { const g = (vv.a || '').trim().replace(/[−–]/g, '-'); if (!/^-?\d+$/.test(g)) return { err: '' }; return { ok: +g === ans }; },
+    check(vv) { const g = (vv.a || '').trim().replace(/[−–]/g, '-'); if (!/^-?\d+$/.test(g)) return { err: '' }; if (+g === ans) return { ok: true }; const al = alts.find(x => x[0] === +g && x[0] !== ans); return { ok: false, tip: al ? { k: al[1], rep: al[2] } : null }; },
     solution() { return `<p><b class="mono">${esc(v)} = ${ans}</b>. ${esc(dL(ex))}</p>`; }
   };
 }
@@ -5934,7 +6215,7 @@ function genHtype(seed) {
   return {
     topic: 'htype', link: '#haskell', kind: 'text', ph: 'htype_ph',
     body() { return `<p>${esc(dt('htype_q'))}</p><pre class="code">${esc(e)} :: ?</pre>`; },
-    check(v) { const g = (v.a || '').trim(); if (!g) return { err: '' }; const q = HT.eq(g.replace(/^.*::/, ''), t); if (q === null) return { err: dt('htype_err') }; return { ok: q === true }; },
+    check(v) { const g = (v.a || '').trim(); if (!g) return { err: '' }; const q = HT.eq(g.replace(/^.*::/, ''), t); if (q === null) return { err: dt('htype_err') }; return q === true ? { ok: true } : { ok: false, tip: diagHtype(g.replace(/^.*::/, ''), t) }; },
     solution() { return `<p><b class="mono">${esc(e)} :: ${esc(t)}</b></p><p>${esc(dL(ex))}</p>`; }
   };
 }
@@ -5990,12 +6271,12 @@ function genUnify(seed) {
     body() { return `<p>${esc(dt('unify_q'))}</p><div class="dl-terms mono"><span>${esc(a)}</span><span class="dl-eq">≟</span><span>${esc(b)}</span></div>`; },
     check(v) {
       const no = v.n === '1', txt = (v.a || '').trim();
-      if (!u.ok) return no ? { ok: true } : (txt ? { ok: false, why: dt('u_isnot') } : { err: '' });
-      if (no) return { ok: false, why: dt('u_is') };
+      if (!u.ok) return no ? { ok: true } : (txt ? { ok: false, why: dt('u_isnot'), tip: diagUnify(a, b, txt, false) } : { err: '' });
+      if (no) return { ok: false, why: dt('u_is'), tip: diagUnify(a, b, txt, true) };
       if (!txt) return { err: '' };
       const c = PL.checkUnifier(a, b, txt);
       if (c.error) return { err: dt('u_err') };
-      return c.ok ? { ok: true } : { ok: false, why: dt(c.unifies ? 'u_notgen' : 'u_wrong') };
+      return c.ok ? { ok: true } : { ok: false, why: dt(c.unifies ? 'u_notgen' : 'u_wrong'), tip: diagUnify(a, b, txt, false) };
     },
     expect: u,
     solution() {
@@ -6212,8 +6493,8 @@ function dCard(S) {
   let fbh = '', btns = '';
   if (DC.fb && DC.fb.err) fbh = `<div class="fb info" role="status">${esc(DC.fb.err)}</div>`;
   else if (DC.fb && DC.fb.ok) fbh = `<div class="fb ok" role="status"><span class="lab">${esc(dt('right'))}</span>${G.solution()}</div>`;
-  else if (DC.shown) fbh = `<div class="fb ${DC.fb ? 'bad' : 'info'}" role="status"><span class="lab">${esc(dt(DC.fb ? 'wrong' : 'revealed'))}</span>${DC.fb && DC.fb.why ? `<span>${esc(DC.fb.why)}</span>` : ''}${G.solution()}</div>`;
-  else if (DC.fb) fbh = `<div class="fb bad" role="status"><span class="lab">${esc(dt('wrong'))}</span>${DC.fb.why ? `<span>${esc(DC.fb.why)}</span>` : ''}</div>`;
+  else if (DC.shown) fbh = `<div class="fb ${DC.fb ? 'bad' : 'info'}" role="status"><span class="lab">${esc(dt(DC.fb ? 'wrong' : 'revealed'))}</span>${DC.fb && DC.fb.why ? `<span>${esc(DC.fb.why)}</span>` : ''}${DC.fb ? dgBox(DC.fb.tip) : ''}${G.solution()}</div>`;
+  else if (DC.fb) fbh = `<div class="fb bad" role="status"><span class="lab">${esc(dt('wrong'))}</span>${DC.fb.why ? `<span>${esc(DC.fb.why)}</span>` : ''}${dgBox(DC.fb.tip)}</div>`;
   const last = S.idx === S.items.length - 1;
   if ((DC.fb && DC.fb.ok) || DC.shown) btns = `<a class="btn ghost" href="${G.link}">${esc(dt('to_topic'))}</a><button type="button" class="btn primary" data-dact="next">${esc(dt(last ? 'finish' : 'next'))}</button>`;
   else if (DC.fb && !DC.fb.err) btns = `<button type="button" class="btn" data-dact="reveal">${esc(dt('reveal'))}</button><button type="button" class="btn primary" data-dact="check">${esc(dt('check'))}</button>`;
@@ -7093,7 +7374,7 @@ function gradeTask(l, t) {
       break; }
     case 'nums': t.fields.forEach((f, i) => { const g = V(i).trim().replace('−', '-'); const ok = g !== '' && Number(g) === f.a; res.items.push({ ok, exp: String(f.a) }); if (ok) res.pts++; }); break;
     case 'hval': t.fields.forEach((f, i) => { const g = normV(V(i)); const ok = f.a.some(a => normV(a) === g); res.items.push({ ok, exp: f.a[0] }); if (ok) res.pts++; }); break;
-    case 'htype': t.fields.forEach((f, i) => { const g = V(i); const e = g.trim() ? HT.eq(g, f.a) : false; res.items.push({ ok: e === true, err: e === null, exp: f.a }); if (e === true) res.pts++; }); break;
+    case 'htype': t.fields.forEach((f, i) => { const g = V(i); const e = g.trim() ? HT.eq(g, f.a) : false; res.items.push({ ok: e === true, err: e === null, exp: f.a, tip: e === false && g.trim() ? diagHtype(g.replace(/^.*::/, ''), f.a) : null }); if (e === true) res.pts++; }); break;
     case 'mc': { const g = V('0'); res.items.push({ ok: g !== '' && +g === t.ok }); if (g !== '' && +g === t.ok) res.pts = t.pts; break; }
     case 'unify': t.pairs.forEach(([a, b], i) => {
       const ref = PL.refUnifier(a, b), notU = V('n' + i) === '1', txt = V(i);
@@ -7101,7 +7382,7 @@ function gradeTask(l, t) {
       if (ref === null) { ok = notU; msg = ok ? '' : 'u_isnot'; }
       else if (notU) { msg = 'u_is'; }
       else { const c = PL.checkUnifier(a, b, txt); if (c.error) msg = 'u_err'; else if (c.ok) ok = true; else msg = c.unifies ? 'u_notgen' : 'u_wrong'; }
-      res.items.push({ ok, msg, exp: ref }); if (ok) res.pts++; }); break;
+      res.items.push({ ok, msg, exp: ref, tip: ok ? null : diagUnify(a, b, txt, notU) }); if (ok) res.pts++; }); break;
     case 'pquery': t.queries.forEach((q, i) => { const exp = expectedAnswers(t.program, q) || []; const got = normAnswers(V(i)); const ok = got.length === exp.length && got.every((g, j) => g === exp[j]); res.items.push({ ok, exp: exp.join(' ; ') }); if (ok) res.pts++; }); break;
     case 'pprog': {
       const prog = V('0');
@@ -7141,7 +7422,7 @@ function taskHTML(l, t, idx) {
       if (r) body += `<div class="lx-lines">${r.items.map((it, i) => `<div class="${it.ok ? 'yes' : 'no'}">${it.ok ? '✓' : '✗'} <span class="mono">${esc(it.got || '—')}</span>${!it.ok && showSol ? ` <span class="muted">→ ${esc(it.exp)}</span>` : ''}</div>`).join('')}</div>`;
       break; }
     case 'nums': case 'hval': case 'htype':
-      body = (t.code ? codeHTML(t.code) : '') + `<div class="lxfields">${t.fields.map((f, i) => `<label class="lxf" for="lx-${t.id}-${i}"><span class="mono">${esc(L(f.label))}</span><span class="row"><input id="lx-${t.id}-${i}" class="mono" ${key(i)} value="${esc(V(i))}" placeholder="${esc(t.type === 'htype' ? lt('type_ph') : t.type === 'nums' ? lt('num_ph') : lt('val_ph'))}" autocomplete="off" spellcheck="false" ${t.type === 'nums' ? 'inputmode="numeric"' : ''}>${mark(i)}</span>${r && r.items[i] && r.items[i].err ? `<span class="err">${lt('err_type')}</span>` : ''}${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(t.type === 'nums' ? r.items[i].exp : Array.isArray(f.a) ? f.a[0] : f.a)}</b></span>` : ''}</label>`).join('')}</div>`;
+      body = (t.code ? codeHTML(t.code) : '') + `<div class="lxfields">${t.fields.map((f, i) => `<label class="lxf" for="lx-${t.id}-${i}"><span class="mono">${esc(L(f.label))}</span><span class="row"><input id="lx-${t.id}-${i}" class="mono" ${key(i)} value="${esc(V(i))}" placeholder="${esc(t.type === 'htype' ? lt('type_ph') : t.type === 'nums' ? lt('num_ph') : lt('val_ph'))}" autocomplete="off" spellcheck="false" ${t.type === 'nums' ? 'inputmode="numeric"' : ''}>${mark(i)}</span>${r && r.items[i] && r.items[i].err ? `<span class="err">${lt('err_type')}</span>` : ''}${r && r.items[i] && !r.items[i].ok && r.items[i].tip ? dgBox(r.items[i].tip) : ''}${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(t.type === 'nums' ? r.items[i].exp : Array.isArray(f.a) ? f.a[0] : f.a)}</b></span>` : ''}</label>`).join('')}</div>`;
       break;
     case 'mc':
       body = (t.code ? codeHTML(t.code) : '') + `<div class="lxmc" role="radiogroup">${t.options.map((o, i) => `<label class="lxopt ${r && showSol && i === t.ok ? 'right' : ''}"><input type="radio" name="lx-${t.id}" value="${i}" ${key('0')} ${V('0') === String(i) ? 'checked' : ''}> <span class="mono">${esc(o)}</span></label>`).join('')}</div>`;
@@ -7151,7 +7432,7 @@ function taskHTML(l, t, idx) {
       body = `<div class="lxfields">${t.pairs.map(([a, b], i) => `<div class="lxf"><span class="mono">${esc(a)} &nbsp;≟&nbsp; ${esc(b)}</span>
         <span class="row"><input class="mono" ${key(i)} value="${esc(V(i))}" placeholder="${esc(lt('unif_ph'))}" autocomplete="off" spellcheck="false" aria-label="${esc(a + ' = ' + b)}" ${V('n' + i) === '1' ? 'disabled' : ''}>
         <label class="kcheck small"><input type="checkbox" ${key('n' + i)} ${V('n' + i) === '1' ? 'checked' : ''}> ${lt('not_unif')}</label>${mark(i)}</span>
-        ${r && !r.items[i].ok && r.items[i].msg ? `<span class="err">${esc(lt(r.items[i].msg))}</span>` : ''}
+        ${r && !r.items[i].ok && r.items[i].msg ? `<span class="err">${esc(lt(r.items[i].msg))}</span>` : ''}${r && !r.items[i].ok ? dgBox(r.items[i].tip) : ''}
         ${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(r.items[i].exp === null ? lt('not_unif') : r.items[i].exp)}</b>${t.why[i] ? ' · ' + esc(L(t.why[i])) : ''}</span>` : ''}</div>`).join('')}</div>`;
       break;
     case 'pquery':

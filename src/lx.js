@@ -300,7 +300,7 @@ function gradeTask(l, t) {
       break; }
     case 'nums': t.fields.forEach((f, i) => { const g = V(i).trim().replace('−', '-'); const ok = g !== '' && Number(g) === f.a; res.items.push({ ok, exp: String(f.a) }); if (ok) res.pts++; }); break;
     case 'hval': t.fields.forEach((f, i) => { const g = normV(V(i)); const ok = f.a.some(a => normV(a) === g); res.items.push({ ok, exp: f.a[0] }); if (ok) res.pts++; }); break;
-    case 'htype': t.fields.forEach((f, i) => { const g = V(i); const e = g.trim() ? HT.eq(g, f.a) : false; res.items.push({ ok: e === true, err: e === null, exp: f.a }); if (e === true) res.pts++; }); break;
+    case 'htype': t.fields.forEach((f, i) => { const g = V(i); const e = g.trim() ? HT.eq(g, f.a) : false; res.items.push({ ok: e === true, err: e === null, exp: f.a, tip: e === false && g.trim() ? diagHtype(g.replace(/^.*::/, ''), f.a) : null }); if (e === true) res.pts++; }); break;
     case 'mc': { const g = V('0'); res.items.push({ ok: g !== '' && +g === t.ok }); if (g !== '' && +g === t.ok) res.pts = t.pts; break; }
     case 'unify': t.pairs.forEach(([a, b], i) => {
       const ref = PL.refUnifier(a, b), notU = V('n' + i) === '1', txt = V(i);
@@ -308,7 +308,7 @@ function gradeTask(l, t) {
       if (ref === null) { ok = notU; msg = ok ? '' : 'u_isnot'; }
       else if (notU) { msg = 'u_is'; }
       else { const c = PL.checkUnifier(a, b, txt); if (c.error) msg = 'u_err'; else if (c.ok) ok = true; else msg = c.unifies ? 'u_notgen' : 'u_wrong'; }
-      res.items.push({ ok, msg, exp: ref }); if (ok) res.pts++; }); break;
+      res.items.push({ ok, msg, exp: ref, tip: ok ? null : diagUnify(a, b, txt, notU) }); if (ok) res.pts++; }); break;
     case 'pquery': t.queries.forEach((q, i) => { const exp = expectedAnswers(t.program, q) || []; const got = normAnswers(V(i)); const ok = got.length === exp.length && got.every((g, j) => g === exp[j]); res.items.push({ ok, exp: exp.join(' ; ') }); if (ok) res.pts++; }); break;
     case 'pprog': {
       const prog = V('0');
@@ -348,7 +348,7 @@ function taskHTML(l, t, idx) {
       if (r) body += `<div class="lx-lines">${r.items.map((it, i) => `<div class="${it.ok ? 'yes' : 'no'}">${it.ok ? '✓' : '✗'} <span class="mono">${esc(it.got || '—')}</span>${!it.ok && showSol ? ` <span class="muted">→ ${esc(it.exp)}</span>` : ''}</div>`).join('')}</div>`;
       break; }
     case 'nums': case 'hval': case 'htype':
-      body = (t.code ? codeHTML(t.code) : '') + `<div class="lxfields">${t.fields.map((f, i) => `<label class="lxf" for="lx-${t.id}-${i}"><span class="mono">${esc(L(f.label))}</span><span class="row"><input id="lx-${t.id}-${i}" class="mono" ${key(i)} value="${esc(V(i))}" placeholder="${esc(t.type === 'htype' ? lt('type_ph') : t.type === 'nums' ? lt('num_ph') : lt('val_ph'))}" autocomplete="off" spellcheck="false" ${t.type === 'nums' ? 'inputmode="numeric"' : ''}>${mark(i)}</span>${r && r.items[i] && r.items[i].err ? `<span class="err">${lt('err_type')}</span>` : ''}${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(t.type === 'nums' ? r.items[i].exp : Array.isArray(f.a) ? f.a[0] : f.a)}</b></span>` : ''}</label>`).join('')}</div>`;
+      body = (t.code ? codeHTML(t.code) : '') + `<div class="lxfields">${t.fields.map((f, i) => `<label class="lxf" for="lx-${t.id}-${i}"><span class="mono">${esc(L(f.label))}</span><span class="row"><input id="lx-${t.id}-${i}" class="mono" ${key(i)} value="${esc(V(i))}" placeholder="${esc(t.type === 'htype' ? lt('type_ph') : t.type === 'nums' ? lt('num_ph') : lt('val_ph'))}" autocomplete="off" spellcheck="false" ${t.type === 'nums' ? 'inputmode="numeric"' : ''}>${mark(i)}</span>${r && r.items[i] && r.items[i].err ? `<span class="err">${lt('err_type')}</span>` : ''}${r && r.items[i] && !r.items[i].ok && r.items[i].tip ? dgBox(r.items[i].tip) : ''}${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(t.type === 'nums' ? r.items[i].exp : Array.isArray(f.a) ? f.a[0] : f.a)}</b></span>` : ''}</label>`).join('')}</div>`;
       break;
     case 'mc':
       body = (t.code ? codeHTML(t.code) : '') + `<div class="lxmc" role="radiogroup">${t.options.map((o, i) => `<label class="lxopt ${r && showSol && i === t.ok ? 'right' : ''}"><input type="radio" name="lx-${t.id}" value="${i}" ${key('0')} ${V('0') === String(i) ? 'checked' : ''}> <span class="mono">${esc(o)}</span></label>`).join('')}</div>`;
@@ -358,7 +358,7 @@ function taskHTML(l, t, idx) {
       body = `<div class="lxfields">${t.pairs.map(([a, b], i) => `<div class="lxf"><span class="mono">${esc(a)} &nbsp;≟&nbsp; ${esc(b)}</span>
         <span class="row"><input class="mono" ${key(i)} value="${esc(V(i))}" placeholder="${esc(lt('unif_ph'))}" autocomplete="off" spellcheck="false" aria-label="${esc(a + ' = ' + b)}" ${V('n' + i) === '1' ? 'disabled' : ''}>
         <label class="kcheck small"><input type="checkbox" ${key('n' + i)} ${V('n' + i) === '1' ? 'checked' : ''}> ${lt('not_unif')}</label>${mark(i)}</span>
-        ${r && !r.items[i].ok && r.items[i].msg ? `<span class="err">${esc(lt(r.items[i].msg))}</span>` : ''}
+        ${r && !r.items[i].ok && r.items[i].msg ? `<span class="err">${esc(lt(r.items[i].msg))}</span>` : ''}${r && !r.items[i].ok ? dgBox(r.items[i].tip) : ''}
         ${r && !r.items[i].ok && showSol ? `<span class="lxexp">${lt('expected')} <b class="mono">${esc(r.items[i].exp === null ? lt('not_unif') : r.items[i].exp)}</b>${t.why[i] ? ' · ' + esc(L(t.why[i])) : ''}</span>` : ''}</div>`).join('')}</div>`;
       break;
     case 'pquery':

@@ -232,21 +232,22 @@ function stepsFor(ex) {
 
 /* ---- feedback blocks ---- */
 const chkRow = (ok, lab, d) => `<div class="chk-r"><span class="m ${ok ? 'y' : 'n'}">${ok ? '✓' : '✗'}</span><div><div class="lab">${lab}</div><div class="d">${d}</div></div></div>`;
-function checkHTML(R, ex, withHint = true) {
+function checkHTML(R, ex, withHint = true, tip = null) {
   const c = compile(ex), parts = [];
   parts.push(chkRow(R.start.ok, t('c_start'), R.start.ok ? '' : t('c_start_bad', { i: esc(fmtS(R.start.input)), s: esc(fmtS(R.start.state, c.names)) })));
   parts.push(chkRow(R.keep.ok, t('c_keep'), R.keep.ok ? t('c_n', { n: R.keep.n }) : R.keep.undef ? t('c_keep_undef', { b: esc(fmtS(R.keep.before, c.names)) }) : t('c_keep_bad', { b: esc(fmtS(R.keep.before, c.names)), a: esc(fmtS(R.keep.after, c.names)) })));
   parts.push(chkRow(R.end.ok, t('c_end'), R.end.ok ? t('c_n', { n: R.end.n }) : t('c_end_bad', { s: esc(fmtS(R.end.state, c.names)) })));
   let hint = '';
   if (R.ok) hint = `<div class="fb ok"><span class="lab">${t('c_all')}</span></div>`;
+  else if (tip) hint = dgBox(tip);
   else if (withHint) hint = `<p class="small muted">${!R.start.ok ? t('c_hint_start') : !R.end.ok ? t('c_hint_end') : t('c_hint_keep')}</p>`;
   return `<div class="chk">${parts.join('')}</div>${hint}`;
 }
-function variantHTML(R, ex) {
+function variantHTML(R, ex, tip = null) {
   const c = compile(ex);
   return `<div class="chk">${chkRow(R.nonneg.ok, t('v_nonneg'), R.nonneg.ok ? t('c_n', { n: R.n }) : t('v_nonneg_bad', { s: esc(fmtS(R.nonneg.state, c.names)), v: fmtN(R.nonneg.v) }))}
     ${chkRow(R.dec.ok, t('v_dec'), R.dec.ok ? t('c_n', { n: R.n }) : t('v_dec_bad', { b: esc(fmtS(R.dec.before, c.names)), a: esc(fmtS(R.dec.after, c.names)), v0: fmtN(R.dec.v0), v1: fmtN(R.dec.v1) }))}</div>
-    ${R.ok ? `<div class="fb ok"><span class="lab">${t('v_ok')}</span></div>` : ''}`;
+    ${R.ok ? `<div class="fb ok"><span class="lab">${t('v_ok')}</span></div>` : dgBox(tip)}`;
 }
 const errHTML = r => `<div class="fb bad"><span>${errMsg(r)}</span></div>`;
 
@@ -264,7 +265,7 @@ function stepBody(ex, S, i, P) {
         if (res.err) fb = errHTML(res);
         else if (res.ok) fb = `<div class="fb ok"><span class="lab">${t('ok_eq')}</span><span class="as">⟨${esc(pr(s.expect))}⟩</span></div>`;
         else if (res.shown) fb = `<div class="fb info"><span class="lab">${t('expected')}</span><span class="as">⟨${esc(pr(s.expect))}⟩</span></div>`;
-        else fb = `<div class="fb bad"><span class="lab">${t('neq')}</span><span class="mono small">${esc(fmtS(res.state, c.names.filter(n => !res.vars || res.vars.includes(n))))}</span><span>${t('neq_d', { u: fmtN(res.va), e: fmtN(res.vb) })}</span></div>`;
+        else fb = `<div class="fb bad"><span class="lab">${t('neq')}</span><span class="mono small">${esc(fmtS(res.state, c.names.filter(n => !res.vars || res.vars.includes(n))))}</span><span>${t('neq_d', { u: fmtN(res.va), e: fmtN(res.vb) })}</span>${dgBox(res.tip)}</div>`;
       }
       const hint = P.res[s.id + '_h'] ? (s.k === 'input'
         ? `<div class="fb info">${t('before_hint', { x: `<b class="mono">${esc(s.x)}</b>`, t: `<b class="mono">${esc(s.tsrc)}</b>` })}</div>`
@@ -303,7 +304,7 @@ function stepBody(ex, S, i, P) {
     }
     case 'own': {
       let fb = '';
-      if (res) fb = res.err ? errHTML(res) : checkHTML(res.R, ex);
+      if (res) fb = res.err ? errHTML(res) : checkHTML(res.R, ex, true, res.tip);
       const hints = ex.hints[lang].slice(0, P.hints).map(h => `<li>${esc(h)}</li>`).join('');
       return `<p>${t('own_txt')}</p>
         <div class="prog">${lnHTML({ k: 'a', s: pr(c.pre), ind: 0, note: 'pre' })}${codeLines(c.init, 0).map(l => lnHTML(l)).join('')}${inputLine(t('ph'), 0)}${lnHTML({ k: 'c', s: `while (${ex.cond}) { … }` })}${lnHTML({ k: 'a', s: pr(c.post), ind: 0 })}</div>
@@ -313,7 +314,7 @@ function stepBody(ex, S, i, P) {
     }
     case 'variant': {
       let fb = '';
-      if (res) fb = res.err ? errHTML(res) : variantHTML(res.R, ex);
+      if (res) fb = res.err ? errHTML(res) : variantHTML(res.R, ex, res.tip);
       return `<p>${t('v_prompt')}</p>
         <div class="inline-in"><span class="mono">V =</span><input id="in-${ex.id}-var" data-in="var" value="${esc(val)}" placeholder="${esc(t('phv'))}" autocomplete="off" spellcheck="false" aria-label="V"></div>
         <div class="row"><button class="btn primary" type="button" data-act="checkvar">${t('check')}</button><button class="btn" type="button" data-act="vhint">${t('hint')}</button>${nextBtn}</div>
@@ -381,7 +382,7 @@ function handleWS(e) {
     case 'check': {
       const r = userFormula(ex, readVal(), 'B');
       if (r.err) P.res[s.id] = r;
-      else { const q = equiv(ex, r.ast, s.expect); if (!q.ok) q.vars = [...new Set([...varsOf(r.ast), ...varsOf(s.expect)])]; P.res[s.id] = q.ok ? { ok: true } : q; if (q.ok) P.done[s.id] = true; }
+      else { const q = equiv(ex, r.ast, s.expect); if (!q.ok) { q.vars = [...new Set([...varsOf(r.ast), ...varsOf(s.expect)])]; q.tip = diagWp(ex, r.ast, s.k === 'input' ? [{ k: 'asg', x: s.x, e: parse(s.tsrc), src: s.tsrc }] : compile(ex).init, s.after); } P.res[s.id] = q.ok ? { ok: true } : q; if (q.ok) P.done[s.id] = true; }
       break; }
     case 'hint': P.res[s.id + '_h'] = true; break;
     case 'show': P.res[s.id] = { shown: true }; break;
@@ -393,12 +394,12 @@ function handleWS(e) {
     case 'cand': { const k = +b.dataset.k; P.res[s.id] = { picked: k }; if (ex.cands[k].ok) P.done[s.id] = true; break; }
     case 'checkinv': {
       const r = userFormula(ex, readVal(), 'B');
-      if (r.err) P.res[s.id] = r; else { const R = checkInv(ex, r.ast); P.res[s.id] = { R }; if (R.ok) P.done[s.id] = true; }
+      if (r.err) P.res[s.id] = r; else { const R = checkInv(ex, r.ast); P.res[s.id] = { R, tip: diagInv(ex, r.ast, R) }; if (R.ok) P.done[s.id] = true; }
       break; }
     case 'morehint': P.hints++; break;
     case 'checkvar': {
       const r = userFormula(ex, readVal(), 'N');
-      if (r.err) P.res[s.id] = r; else { const R = checkVariant(ex, r.ast); P.res[s.id] = { R }; if (R.ok) P.done[s.id] = true; }
+      if (r.err) P.res[s.id] = r; else { const R = checkVariant(ex, r.ast); P.res[s.id] = { R, tip: diagVar(R) }; if (R.ok) P.done[s.id] = true; }
       break; }
     case 'vhint': P.vhint = true; break;
     case 'reset': delete ST.P[ex.id]; break;
@@ -445,7 +446,7 @@ function kGrade() {
   const ex = exById(ST.K.id), c = compile(ex), V = ST.K.vals, res = { lines: {}, vlines: {}, pts: 0 };
   const iu = userFormula(ex, V.inv || '', 'B');
   let Igrade = c.inv;
-  if (iu.ast) { res.invR = checkInv(ex, iu.ast); if (res.invR.ok) { Igrade = iu.ast; res.invOK = true; res.pts += 2; } }
+  if (iu.ast) { res.invR = checkInv(ex, iu.ast); if (res.invR.ok) { Igrade = iu.ast; res.invOK = true; res.pts += 2; } else res.invTip = diagInv(ex, iu.ast, res.invR); }
   else res.invErr = iu;
   const A = annotate(ex, Igrade), b = kBlankLines(ex);
   b.aIdx.forEach(i => {
@@ -456,7 +457,7 @@ function kGrade() {
   });
   const vu = userFormula(ex, V.var || '', 'N');
   let Vgrade = c.variant;
-  if (vu.ast) { res.varR = checkVariant(ex, vu.ast, Igrade); if (res.varR.ok) { Vgrade = vu.ast; res.varOK = true; res.pts++; } }
+  if (vu.ast) { res.varR = checkVariant(ex, vu.ast, Igrade); if (res.varR.ok) { Vgrade = vu.ast; res.varOK = true; res.pts++; } else res.varTip = diagVar(res.varR); }
   else res.varErr = vu;
   const VL = annotateVariant(ex, Vgrade, Igrade), ax = auxEx(ex);
   b.vIdx.forEach(i => {
@@ -505,8 +506,8 @@ function renderExam() {
   let invFb = '', varFb = '';
   if (done) {
     if (R.invOK) invFb = `<div class="fb ok">${t('k_inv_used')}</div>`;
-    else invFb = `<div class="fb bad"><span>${R.invErr && (K.vals.inv || '').trim() ? errMsg(R.invErr) + ' ' : ''}${t('k_inv_bad')}</span><span class="as">⟨${esc(pr(c.inv))}⟩</span></div>${R.invR ? checkHTML(R.invR, ex, false) : ''}`;
-    if (!R.varOK) varFb = `<div class="fb bad"><span>${R.varErr && (K.vals.var || '').trim() ? errMsg(R.varErr) + ' ' : ''}${t('k_var_bad')}</span><span class="as">V = ${esc(pr(c.variant))}</span></div>${R.varR ? variantHTML(R.varR, ex) : ''}`;
+    else invFb = `<div class="fb bad"><span>${R.invErr && (K.vals.inv || '').trim() ? errMsg(R.invErr) + ' ' : ''}${t('k_inv_bad')}</span><span class="as">⟨${esc(pr(c.inv))}⟩</span></div>${R.invR ? checkHTML(R.invR, ex, false, R.invTip) : ''}`;
+    if (!R.varOK) varFb = `<div class="fb bad"><span>${R.varErr && (K.vals.var || '').trim() ? errMsg(R.varErr) + ' ' : ''}${t('k_var_bad')}</span><span class="as">V = ${esc(pr(c.variant))}</span></div>${R.varR ? variantHTML(R.varR, ex, R.varTip) : ''}`;
   }
   const pct = done ? R.pts / R.total : 0;
   const head = done

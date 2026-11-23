@@ -268,7 +268,9 @@ const PL = (() => {
     if (!s) return null;
     return Object.entries(names).filter(([n, v]) => walk(v, s) !== v).map(([n, v]) => `${n} = ${fmt(resolve(v, s))}`).join(', ');
   }
-  return { run, parseProgram, checkUnifier, refUnifier, fmt };
+  /* true if the terms unify when the occurs check is switched off (used to name the typical mistake) */
+  function unifiesWithoutOC(t1src, t2src) { try { const { term } = parseTerms(`p(${t1src}, ${t2src}).`)[0]; return !!unify(term.a[0], term.a[1], {}, false); } catch (e) { return false; } }
+  return { run, parseProgram, checkUnifier, refUnifier, unifiesWithoutOC, fmt };
 })();
 
 /* ===== Haskell type comparison ===== */
@@ -337,5 +339,22 @@ const HT = (() => {
     return [...new Set(cs)].join(',') + '|' + body;
   }
   function eq(a, b) { try { return canon(a) === canon(b); } catch (e) { return null; } }
-  return { eq, canon };
+  /* one-way matching: is `spec` an instance of `gen` (type variables of gen replaced consistently)? */
+  function same(x, y) { return JSON.stringify(x) === JSON.stringify(y); }
+  function match(g, s, m) {
+    if (g.k === 'var') { if (m.has(g.n)) return same(m.get(g.n), s); m.set(g.n, s); return true; }
+    if (g.k !== s.k) return false;
+    switch (g.k) {
+      case 'con': return g.n === s.n;
+      case 'list': return match(g.e, s.e, m);
+      case 'tup': return g.items.length === s.items.length && g.items.every((x, i) => match(x, s.items[i], m));
+      case 'fn': return match(g.a, s.a, m) && match(g.b, s.b, m);
+      case 'app': return g.args.length === s.args.length && match(g.f, s.f, m) && g.args.every((x, i) => match(x, s.args[i], m));
+    }
+    return false;
+  }
+  function instanceOf(spec, gen) { try { return match(parse(gen).ty, parse(spec).ty, new Map()); } catch (e) { return null; } }
+  function ctxOf(src) { try { return parse(src).ctx; } catch (e) { return null; } }
+  function body(src) { const i = src.indexOf('=>'); return i >= 0 ? src.slice(i + 2) : src.replace(/^.*::/, ''); }
+  return { eq, canon, instanceOf, ctxOf, body };
 })();
