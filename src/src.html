@@ -322,6 +322,107 @@ strong .wiki,strong.brick .wiki{color:inherit}
 .fact b{font-family:var(--display);font-size:19px;font-weight:800;letter-spacing:-.01em}
 .fact>span{font-family:var(--display);font-size:12.5px;color:var(--muted)}
 .lang-page .sec,#view-prog .sec{max-width:980px}
+
+/* ===== daily ===== */
+.nav-daily{display:inline-flex;align-items:center;gap:6px}
+.nav-daily .flame{width:14px;height:14px;color:var(--brick)}
+.nav-streak{font-family:var(--mono);font-size:11.5px;font-weight:600;min-width:20px;height:20px;padding:0 6px;border-radius:999px;display:inline-grid;place-items:center;background:var(--bad-soft);color:var(--brick)}
+.nav-streak.today{background:var(--brick);color:#fff}
+.nav-streak[hidden]{display:none}
+.daily-teaser{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:14px;align-items:center;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--brick);border-radius:14px;padding:12px 16px;max-width:860px;margin-top:6px;transition:border-color .15s,transform .15s}
+.daily-teaser:hover{border-color:var(--brick)}
+.daily-teaser .dt-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--bad-soft);color:var(--brick)}
+.daily-teaser .dt-ic .flame{width:20px;height:20px}
+.daily-teaser .dt-b{display:grid;gap:2px;font-size:15.5px}
+.daily-teaser .dt-b b{font-family:var(--display);font-size:16.5px}
+.daily-teaser .dt-b > span{color:var(--muted)}
+.daily-teaser .dt-s{font-family:var(--display);font-weight:600;font-size:14px;color:var(--brick);display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.daily-teaser .dt-s .flame{width:14px;height:14px}
+.daily-teaser .dt-go{font-family:var(--display);font-weight:600;font-size:15px;color:var(--accent);white-space:nowrap}
+.dl-h{border-bottom:0;padding-bottom:10px}
+.dl{display:grid;gap:22px;padding-bottom:40px}
+.dl-stats{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:14px 18px;max-width:860px}
+.dl-streak{display:flex;gap:12px;align-items:center}
+.dl-streak .flame{width:34px;height:34px;color:var(--rule)}
+.dl-streak.on .flame{color:var(--brick)}
+.dl-streak div{display:grid;gap:1px}
+.dl-streak b{font-family:var(--display);font-size:18px}
+.dl-streak span{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.dl-week{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.dl-day{display:grid;justify-items:center;gap:4px;font-family:var(--mono);font-size:11px;color:var(--muted);min-width:30px}
+.dl-day i{width:22px;height:22px;border-radius:50%;border:2px solid var(--rule);display:block}
+.dl-day.on i{background:var(--brick);border-color:var(--brick);box-shadow:inset 0 0 0 3px var(--surface)}
+.dl-day.now span{color:var(--ink);font-weight:600}
+.dl-day.now i{border-color:var(--brick)}
+.dl-due{display:grid;justify-items:end;text-align:right;gap:1px}
+.dl-due b{font-family:var(--display);font-size:22px;line-height:1;color:var(--accent)}
+.dl-due span{font-size:13px;color:var(--muted);max-width:16ch;font-family:var(--display)}
+.dl-main{display:grid;gap:12px;max-width:760px}
+.dl-round{display:grid;gap:8px}
+.dl-bar{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+.dl-bar span{height:8px;border-radius:999px;background:var(--rule);transition:background .2s}
+.dl-bar span.cur{background:color-mix(in srgb,var(--accent) 45%,var(--rule))}
+.dl-bar span.ok{background:var(--ok)}
+.dl-bar span.bad{background:var(--bad)}
+.dl-card{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 24px 24px;display:grid;gap:16px;box-shadow:0 14px 30px -24px rgba(20,23,31,.45)}
+.dl-card-h{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.dl-topic{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.02em;padding:4px 10px;border-radius:999px;--tc:var(--accent);color:var(--tc);background:color-mix(in srgb,var(--tc) 11%,transparent)}
+.dl-topic.t-java{--tc:var(--brick)}
+.dl-topic.t-htype{--tc:#7A4BC2}
+.dl-topic.t-unify{--tc:var(--ok)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .dl-topic.t-htype{--tc:#B99BF0}}
+:root[data-theme="dark"] .dl-topic.t-htype{--tc:#B99BF0}
+.dl-rev{font-family:var(--display);font-size:13px;font-weight:600;color:var(--warn)}
+.dl-count{margin-left:auto;font-size:12px;color:var(--muted)}
+.dl-q{display:grid;gap:12px;font-size:17px}
+.dl-q p{margin:0}
+.dl-prog{background:var(--code-bg);border-radius:12px;padding:12px 16px;font-size:15px;line-height:1.8;overflow-x:auto}
+.dl-prog .dl-ln{white-space:pre}
+.dl-asr{color:var(--accent);white-space:pre}
+.dl-inv{font-size:.92em;color:var(--accent);white-space:nowrap}
+.dl-asr.ask{color:var(--warn);font-weight:600}
+.dl-asr.dim{opacity:.5}
+.dl-prog.sol{background:transparent;padding:4px 0 0}
+.dl-terms{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:flex-start;font-size:18px;background:var(--code-bg);border-radius:12px;padding:14px 18px}
+.dl-eq{color:var(--accent);font-weight:600}
+.dl-in{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.dl-in input:not([type]),.dl-in input.mono{flex:1 1 260px;min-width:0;font-size:17px;padding:11px 14px;border:1.5px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink)}
+.dl-in input.mono:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.dl-in input:disabled{opacity:.55}
+.dl-opts{display:grid;gap:8px}
+.dl-opt{display:flex;gap:12px;align-items:center;text-align:left;font-family:var(--display);font-size:16px;color:var(--ink);background:var(--paper);border:1.5px solid var(--rule);border-radius:12px;padding:11px 14px;cursor:pointer;transition:border-color .15s,background .15s}
+.dl-opt:hover:not(:disabled){border-color:var(--accent)}
+.dl-opt .k{font-family:var(--mono);font-size:12px;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--code-bg);color:var(--muted);flex:none}
+.dl-opt:disabled{cursor:default}
+.dl-opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.dl-opt.right .k{background:var(--ok);color:#fff}
+.dl-opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.dl-opt.wrong .k{background:var(--bad);color:#fff}
+.dl-card .fb p{margin:0}
+.dl-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.dl-actions.center{justify-content:center}
+.dl-done{text-align:center;justify-items:center;padding:32px 24px}
+.dl-done h2{font-size:28px;font-weight:800;letter-spacing:-.02em}
+.dl-done p{margin:0;max-width:50ch}
+.dl-done-flame{position:relative;width:84px;height:84px;color:var(--rule)}
+.dl-done-flame.on{color:var(--brick)}
+.dl-done-flame .flame{width:84px;height:84px}
+.dl-done-flame b{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-family:var(--display);font-size:22px;color:#fff}
+.dl-score{font-family:var(--display);font-size:20px;font-weight:600}
+.dl-foot{max-width:760px}
+.linkbtn{border:0;background:none;padding:0;font:inherit;color:var(--accent);text-decoration:underline;cursor:pointer}
+@media (prefers-reduced-motion:no-preference){.dl-card{animation:dlIn .22s ease-out}@keyframes dlIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
+@media (max-width:720px){
+  .dl-stats{grid-template-columns:1fr auto;padding:12px 14px;gap:12px}
+  .dl-week{grid-column:1 / -1;grid-row:2;justify-content:space-between}
+  .dl-card{padding:18px 16px 18px;border-radius:16px}
+  .dl-q{font-size:16px}
+  .daily-teaser{grid-template-columns:auto minmax(0,1fr);row-gap:8px}
+  .daily-teaser .dt-s{grid-column:2}
+  .daily-teaser .dt-go{grid-column:2}
+  .dl-actions .btn{flex:1 1 auto}
+}
+
 /* section bar on language pages */
 .secbar{position:sticky;top:var(--hdr,104px);z-index:8;max-width:980px;margin:22px 0 4px;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(8px);border:1px solid var(--rule);border-radius:14px;box-shadow:0 6px 18px -14px rgba(20,23,31,.35);overflow:hidden}
 .secbar-in{display:flex;align-items:center;gap:6px;padding:6px 8px 6px 14px}
@@ -432,6 +533,7 @@ footer a{color:var(--muted)}
     <nav class="views" aria-label="Views">
       <a href="#plan" data-view="plan"><img class="flag" src="data:image/png;base64,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" width="24" height="16" alt="Flagge der Stadt Aachen / Flag of the city of Aachen"><span class="de">Erstes Jahr</span><span class="en">First year</span></a>
       <a href="#prog" data-view="prog">Programmierung</a>
+      <a href="#daily" data-view="daily" class="nav-daily"><svg class="flame" viewBox="0 0 16 16" aria-hidden="true"><path d="M8.3.7c.5 2.5-.9 3.9-2.2 5.3C4.8 7.4 3.4 8.8 3.4 11c0 2.6 2 4.4 4.6 4.4s4.6-1.8 4.6-4.4c0-2.1-1-3.7-2.1-5-.1 1.2-.7 2.2-1.6 2.7.5-2.2-.1-5.6-.6-8z" fill="currentColor"/><path d="M8 15.4c-1.4 0-2.4-1-2.4-2.4 0-1.3.8-2.1 1.6-2.9.2.8.6 1.3 1.2 1.6-.1-1 .2-2 .8-2.8.7.9 1.3 1.9 1.3 3.5 0 1.8-1.1 3-2.5 3z" fill="#fff" opacity=".32"/></svg><span class="de">Täglich</span><span class="en">Daily</span><span class="nav-streak" id="nav-streak" hidden>0</span></a>
       <a href="#practice" data-view="practice"><span class="de">Übungen</span><span class="en">Exercises</span></a>
       <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
     </nav>
@@ -463,6 +565,12 @@ footer a{color:var(--muted)}
       <span class="de">Für jedes Modul des ersten Jahres entsteht hier eine Lernseite. Begonnen haben wir mit Programmierung: je eine Seite zu Java, Haskell und Prolog und ein ausführlicher Teil zum Hoare-Kalkül, an dem viele im ersten Semester hängen bleiben.</span>
       <span class="en">Every first-year module will get a study page here. We started with Programmierung: one page each for Java, Haskell and Prolog, plus an in-depth section on Hoare logic, where many first-semester students get stuck.</span>
     </p>
+    <a class="daily-teaser" href="#daily">
+      <span class="dt-ic"><svg class="flame" viewBox="0 0 16 16" aria-hidden="true"><path d="M8.3.7c.5 2.5-.9 3.9-2.2 5.3C4.8 7.4 3.4 8.8 3.4 11c0 2.6 2 4.4 4.6 4.4s4.6-1.8 4.6-4.4c0-2.1-1-3.7-2.1-5-.1 1.2-.7 2.2-1.6 2.7.5-2.2-.1-5.6-.6-8z" fill="currentColor"/><path d="M8 15.4c-1.4 0-2.4-1-2.4-2.4 0-1.3.8-2.1 1.6-2.9.2.8.6 1.3 1.2 1.6-.1-1 .2-2 .8-2.8.7.9 1.3 1.9 1.3 3.5 0 1.8-1.1 3-2.5 3z" fill="#fff" opacity=".32"/></svg></span>
+      <span class="dt-b"><b><span class="de">Täglich 5 Minuten</span><span class="en">5 minutes a day</span></b><span><span class="de">Fünf kurze Aufgaben aus Hoare-Kalkül, Java, Haskell und Prolog. Jeden Tag neu, Fehler kommen wieder.</span><span class="en">Five short tasks on Hoare logic, Java, Haskell and Prolog. New every day; mistakes come back.</span></span></span>
+      <span class="dt-s" id="plan-daily-streak"></span>
+      <span class="dt-go"><span class="de">Heute üben →</span><span class="en">Practise today →</span></span>
+    </a>
   </div>
   <div class="sem">
     <div class="sem-col">
@@ -574,6 +682,16 @@ footer a{color:var(--muted)}
       <p class="small muted"><span class="de">Stand: Erstsemester-Einführung WS 2025/26, auch für die Dozierenden des 1. Semesters. Die Zuordnung der Module zum 2. Semester und die Dozierenden bitte im Studienplan in RWTHonline prüfen.</span><span class="en">Source: first-semester introduction WS 2025/26, including the semester-1 lecturers. Please check the semester-2 modules and lecturers in the RWTHonline study plan.</span></p>
     </div>
   </div>
+</section>
+
+<!-- ================= DAILY ================= -->
+<section class="view" id="view-daily" aria-labelledby="daily-title">
+  <div class="page-h dl-h">
+    <div class="kicker"><span class="de">Täglich · etwa 5 Minuten</span><span class="en">Daily · about 5 minutes</span></div>
+    <h1 id="daily-title"><span class="de">Fünf Aufgaben am Tag</span><span class="en">Five tasks a day</span></h1>
+    <p class="lede"><span class="de">Jeden Tag ein kurzer Mix aus Hoare-Kalkül, Java, Haskell und Prolog. Was du falsch machst, kommt nach einem, drei, sieben und vierzehn Tagen wieder, bis es sitzt.</span><span class="en">Every day a short mix of Hoare logic, Java, Haskell and Prolog. Whatever you get wrong comes back after one, three, seven and fourteen days, until it sticks.</span></p>
+  </div>
+  <div id="daily" class="dl"></div>
 </section>
 
 <!-- ================= PROGRAMMIERUNG HUB ================= -->
