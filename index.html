@@ -189,6 +189,8 @@ table.vt tr.ghost td{color:transparent}
 .mod-t h3{font-size:17px}
 .pill{font-family:var(--display);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid var(--rule);color:var(--muted);white-space:nowrap}
 .pill.live{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+a.pill{text-decoration:none;cursor:pointer;transition:filter .15s}
+a.pill:hover{filter:brightness(1.12)}
 .mod p{font-size:15.5px;color:var(--muted)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{font-family:var(--mono);font-size:12.5px;padding:2px 8px;border-radius:6px;background:var(--code-bg)}
@@ -304,7 +306,7 @@ footer a{color:var(--muted)}
     <div class="sem-col">
       <h2><span><span class="de">1. Semester</span><span class="en">Semester 1</span></span><span>WS</span></h2>
       <div class="mod live">
-        <div class="mod-t"><h3>Programmierung</h3><span class="pill live"><span class="de">Lernseite verfügbar</span><span class="en">Study page live</span></span></div>
+        <div class="mod-t"><h3>Programmierung</h3><a class="pill live" href="#hoare"><span class="de">Zur Lernseite →</span><span class="en">Open study page →</span></a></div>
         <p><span class="de">Programmierkonzepte in drei Paradigmen, dazu die Einführung in die Programmverifikation.</span><span class="en">Programming concepts across three paradigms, plus an introduction to program verification.</span></p>
         <div class="chips"><span class="chip">Java</span><span class="chip">Haskell</span><span class="chip">Prolog</span><a class="chip" href="#hoare">Hoare-Kalkül →</a></div>
       </div>
