@@ -68,6 +68,8 @@ header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--p
 .brand .as{font-weight:600}
 nav.views{display:flex;gap:4px;flex-wrap:wrap}
 nav.views a{font-family:var(--display);font-size:15px;font-weight:600;text-decoration:none;color:var(--muted);padding:7px 12px;border-radius:999px}
+nav.views a{display:inline-flex;align-items:center;gap:7px}
+nav.views .flag{flex:none;border-radius:2px;display:block}
 nav.views a[aria-current="page"]{color:var(--ink);background:var(--accent-soft)}
 nav.views a:hover{color:var(--ink)}
 .lang{margin-left:auto;display:flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden}
@@ -275,7 +277,7 @@ footer a{color:var(--muted)}
   <div class="top-in">
     <a class="brand" href="#hoare"><span class="as">⟨⟩</span> Hoare Lab</a>
     <nav class="views" aria-label="Views">
-      <a href="#plan" data-view="plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a>
+      <a href="#plan" data-view="plan"><svg class="flag" viewBox="0 0 5 3" width="20" height="12" role="img" aria-label="Flagge der Stadt Aachen / Flag of the city of Aachen"><rect width="5" height="1.5" fill="#000"/><rect y="1.5" width="5" height="1.5" fill="#FFD100"/><rect x=".1" y=".1" width="4.8" height="2.8" fill="none" stroke="var(--rule)" stroke-width=".2"/></svg><span class="de">Erstes Jahr</span><span class="en">First year</span></a>
       <a href="#hoare" data-view="hoare"><span class="de">Hoare-Kalkül</span><span class="en">Hoare logic</span></a>
       <a href="#practice" data-view="practice"><span class="de">Übungen</span><span class="en">Exercises</span></a>
       <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
