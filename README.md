@@ -16,7 +16,7 @@ Aufbau: **Erstes Jahr** (Startseite) → **Programmierung** (Modulübersicht) �
 ## Aufbau / Structure
 
 - `index.html` – die fertige Seite (eine Datei, ohne Abhängigkeiten außer Google Fonts).
-- `src/` – Quelltexte: `src.html` (Markup, CSS und alle Seiteninhalte), `core.js` (Parser, Auswertung, Prüfer), `langengines.js` (Mini-Prolog, Haskell-Typvergleich), `lx.js` (Klausur-Training der Sprachen), `exercises.js` und `exercises2.js` (Aufgaben), `app.js` (Oberfläche).
+- `src/` – Quelltexte: `src.html` (Markup, CSS und alle Seiteninhalte), `core.js` (Parser, Auswertung, Prüfer), `langengines.js` (Mini-Prolog, Haskell-Typvergleich), `lx.js` (Klausur-Training der Sprachen), `wiki.js` (Wikipedia-Links für Fachbegriffe), `exercises.js` und `exercises2.js` (Aufgaben), `app.js` (Oberfläche).
 - Neu bauen / rebuild: `cd src && python3 build.py`
 
 Unabhängige Lernhilfe, kein offizielles Angebot der RWTH Aachen.

@@ -595,6 +595,7 @@ function setLang(l) {
   document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === l)));
   try { localStorage.setItem('hoarelab-lang', l); } catch (e) {}
   renderBW(); renderTracer();
+  try { wikiLang(); } catch (e) {}
   if (ST.view === 'practice') renderPractice();
   if (ST.view === 'exam-hoare') renderExam();
   if (ST.view.startsWith('exam-') && LX[ST.view.slice(5)]) renderLX(ST.view.slice(5));
@@ -637,6 +638,7 @@ function start(data) {
     const target = p.querySelector(`body[data-lang] .${lang} [data-why="${open ? 'close' : 'open'}"]`) || p.querySelector(`.${lang} [data-why="${open ? 'close' : 'open'}"]`);
     if (target) target.focus({ preventScroll: true });
   });
+  try { autoWiki(); } catch (e) { console.error(e); }
   setLang(lang);
   showView(location.hash.slice(1) || (data && data.view) || 'plan', false);
 }
