@@ -326,11 +326,61 @@ strong .wiki,strong.brick .wiki{color:inherit}
 
 /* ===== week plan ===== */
 .wk-disc{max-width:72ch;color:var(--muted);border-left:3px solid var(--warn);padding-left:12px}
-.wk-wrap{display:grid;gap:16px;padding:22px 0 30px;max-width:900px}
+.wk-wrap{display:grid;gap:16px;padding:22px 0 30px}
+.wk-wrap > .wk-list,.wk-wrap > .fb{max-width:900px;width:100%}
+.cal-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+@media (max-width:1060px){.cal-split{grid-template-columns:1fr}}
 .wk-top{display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:space-between;position:sticky;top:var(--hdr,104px);z-index:6;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(6px);padding:10px 0}
 .wk-prog{display:grid;gap:6px;flex:1 1 260px;max-width:460px}
 .wk-prog-bar{height:8px;border-radius:999px;background:var(--rule);overflow:hidden}
 .wk-prog-bar span{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .3s}
+
+/* compact calendar */
+.cal-wrap{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:16px 18px 14px;display:grid;gap:10px}
+.cal-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cal-top h2{font-family:var(--display);font-size:20px;font-weight:800;letter-spacing:-.01em;margin:0}
+.cal-legend{display:flex;flex-wrap:wrap;gap:6px 14px}
+.cal-leg{display:inline-flex;gap:6px;align-items:center;font-family:var(--display);font-size:13px;color:var(--muted)}
+.cal-leg i{width:12px;height:12px;border-radius:3px;background:var(--tc);display:block}
+.cal-leg.k-pause i{background:transparent;border:1.5px dashed var(--muted)}
+.k-java{--tc:var(--brick)}.k-hoare{--tc:var(--accent)}.k-haskell{--tc:#7A4BC2}.k-prolog{--tc:var(--ok)}.k-pause{--tc:var(--muted)}.k-exam{--tc:var(--warn)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .k-haskell{--tc:#B99BF0}}
+:root[data-theme="dark"] .k-haskell{--tc:#B99BF0}
+.cal{display:grid;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--paper)}
+.cal-row{display:grid;grid-template-columns:46px repeat(5,minmax(0,1fr));grid-template-rows:17px 21px;column-gap:0;row-gap:1px;padding:3px 0 4px;border-top:1px solid var(--rule);position:relative}
+.cal-row.cur{background:var(--accent-soft)}
+.cal-head{grid-template-rows:auto;padding:6px 0;border-top:0;background:var(--surface);font-family:var(--display);font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.cal-head span{text-align:left;padding-left:8px}
+.cal-month{padding:5px 12px 3px;border-top:1px solid var(--rule);font-family:var(--display);font-size:13px;font-weight:700;color:var(--ink);background:var(--surface)}
+.cal-kw{grid-row:1 / span 2;grid-column:1;display:grid;place-items:center;font-size:11px;color:var(--muted);border-right:1px solid var(--rule);margin:-3px 0 -4px}
+.cal-head .cal-kw{grid-row:auto;margin:0;padding:0;font-family:var(--mono)}
+.cal-day{grid-row:1;display:flex;gap:6px;align-items:center;padding:0 8px;min-width:0;border-left:1px solid color-mix(in srgb,var(--rule) 55%,transparent);margin-top:-3px;padding-top:3px}
+.cal-day:nth-of-type(2){border-left:0}
+.cal-day i{font-style:normal;font-family:var(--display);font-size:11.5px;color:var(--muted);min-width:19px;height:17px;display:inline-grid;place-items:center;border-radius:999px;white-space:nowrap}
+.cal-day.today i{background:var(--accent);color:var(--accent-ink);font-weight:700;padding:0 6px}
+.cal-day em,.cal-keys em{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--brick);flex:none}
+.cal-keys{display:flex;flex-wrap:wrap;gap:4px 16px;font-family:var(--display);font-size:12.5px;color:var(--muted)}
+.cal-keys span{display:inline-flex;align-items:center;gap:6px}
+.cal-keys b{color:var(--ink);font-weight:600}
+.cal-ev{grid-row:2;margin:0 3px;min-width:0;border:0;border-left:3px solid var(--tc);border-radius:6px;background:color-mix(in srgb,var(--tc) 15%,var(--paper));color:var(--ink);font-family:var(--display);font-size:12px;text-align:left;padding:0 8px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .15s}
+.cal-ev b{color:var(--tc);font-weight:700}
+.cal-ev:hover{background:color-mix(in srgb,var(--tc) 26%,var(--paper))}
+.cal-ev:focus-visible{outline:2px solid var(--tc);outline-offset:1px}
+.cal-ev.k-pause{background:repeating-linear-gradient(135deg,transparent 0 6px,color-mix(in srgb,var(--muted) 12%,transparent) 6px 12px);border-left-style:dashed;color:var(--muted)}
+.cal-ev.done{opacity:.55}
+.cal-ev.now{box-shadow:0 0 0 2px var(--tc)}
+.wk-list-h{font-family:var(--display);font-size:20px;font-weight:800;letter-spacing:-.01em;margin:10px 0 0}
+@media (max-width:720px){
+  .cal-wrap{padding:12px 10px 10px;border-radius:14px}
+  .cal-row{grid-template-columns:30px repeat(5,minmax(0,1fr));grid-template-rows:17px 21px}
+  .cal-day{padding:0 3px;gap:2px}
+  .cal-day i{font-size:10.5px;min-width:17px;height:17px}
+  .cal-ev{font-size:11.5px;padding:0 5px;margin:0 2px}
+  .cal-ev span{display:none}
+  .cal-ev[style*="/ 7"] span,.cal-ev[style*="2 / 7"] span{display:inline}
+  .cal-top .btn{width:100%}
+}
+
 .wk-list{list-style:none;margin:0;padding:0;display:grid}
 .wk{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;scroll-margin-top:calc(var(--hdr,104px) + 80px)}
 .wk-rail{position:relative;display:flex;justify-content:center}
@@ -6188,6 +6238,10 @@ const WT = {
     res_kicker: 'Programmierung · Ergänzungen', res_title: 'Weiterlernen',
     res_lede: 'Kostenlose Seiten, mit denen du neben den Übungsblättern trainieren kannst. Zu jeder steht, wofür sie sich eignet und zu welchem Kapitel der Vorlesung sie passt.',
     res_note: 'Alle Angebote sind kostenlos nutzbar, die meisten auf Englisch. Sie sind keine offiziellen Materialien der RWTH; maßgeblich bleiben Vorlesung, Moodle und Übungsblätter.',
+    cal_h: 'Semester auf einen Blick', list_h: 'Woche für Woche im Detail', kw: 'KW', ics: 'In den Kalender übernehmen (.ics)', ics_note: 'Für Google Kalender, Apple Kalender oder Outlook: Datei herunterladen und dort importieren.',
+    leg_java: 'Java', leg_hoare: 'Hoare-Kalkül', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'vorlesungsfrei', leg_exam: 'Klausur',
+    m_start: 'Vorlesungsbeginn', m_end: 'Vorlesungsende', m_resume: 'Vorlesungen wieder', today_l: 'heute', wd5: ['Mo', 'Di', 'Mi', 'Do', 'Fr'],
+    ics_desc: 'Orientierungsplan aus dem Hoare Lab (keine offizielle Zeitplanung der RWTH). Verbindlich sind Moodle und die Übungsblätter.',
     fits: 'Passt zu', lang_en: 'Englisch', free: 'kostenlos', open: 'Öffnen ↗', how: 'So nutzt du es', used_in: 'Im Wochenplan: {w}'
   },
   en: {
@@ -6200,6 +6254,10 @@ const WT = {
     res_kicker: 'Programmierung · extras', res_title: 'Learn more',
     res_lede: 'Free sites to train with alongside the exercise sheets. For each one you see what it is good for and which chapter of the lecture it fits.',
     res_note: 'All of these are free to use, most of them in English. They are not official RWTH material; the lecture, Moodle and the exercise sheets remain what counts.',
+    cal_h: 'The semester at a glance', list_h: 'Week by week in detail', kw: 'CW', ics: 'Add to your calendar (.ics)', ics_note: 'For Google Calendar, Apple Calendar or Outlook: download the file and import it there.',
+    leg_java: 'Java', leg_hoare: 'Hoare logic', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'no lectures', leg_exam: 'Exam',
+    m_start: 'Lectures start', m_end: 'Lectures end', m_resume: 'Lectures resume', today_l: 'today', wd5: ['Mo', 'Tu', 'We', 'Th', 'Fr'],
+    ics_desc: 'Orientation plan from Hoare Lab (not an official RWTH schedule). Moodle and the exercise sheets are what counts.',
     fits: 'Fits', lang_en: 'English', free: 'free', open: 'Open ↗', how: 'How to use it', used_in: 'In the week plan: {w}'
   }
 };
@@ -6245,55 +6303,55 @@ const RES_GROUPS = [['java', 'Java'], ['hoare', { de: 'Hoare-Kalkül', en: 'Hoar
 
 /* weeks: d = Monday (ISO), lab = [href, label], ext = [resKey, detail?, url?] */
 const WEEKS = [
-  { n: 1, d: '2026-10-12', ch: 'I · II.1.1', t: { de: 'Einführung, erste Java-Programme', en: 'Introduction, first Java programs' },
+  { n: 1, k: 'java', s: { de: 'Einführung, erste Programme', en: 'Intro, first programs' }, d: '2026-10-12', ch: 'I · II.1.1', t: { de: 'Einführung, erste Java-Programme', en: 'Introduction, first Java programs' },
     x: { de: 'Was ist ein Programm, wie übersetzt und startet man es? Variablen, Ausgabe, die ersten Programme.', en: 'What is a program, how is it compiled and run? Variables, output, the first programs.' },
     lab: [['#prog', { de: 'Überblick Programmierung', en: 'Programmierung overview' }], ['#java', { de: 'Java-Seite', en: 'Java page' }]], ext: [['cb', 'Warmup-1', 'https://codingbat.com/java/Warmup-1'], ['dj']], daily: 'java' },
-  { n: 2, d: '2026-10-19', ch: 'II.1.2 · II.1.3', t: { de: 'Datentypen und Kontrollstrukturen', en: 'Data types and control structures' },
+  { n: 2, k: 'java', s: { de: 'Datentypen, Kontrollstrukturen', en: 'Data types, control flow' }, d: '2026-10-19', ch: 'II.1.2 · II.1.3', t: { de: 'Datentypen und Kontrollstrukturen', en: 'Data types and control structures' },
     x: { de: 'int, double, boolean, char; if, while, for. Ganzzahldivision und Modulo sind klassische Fallen.', en: 'int, double, boolean, char; if, while, for. Integer division and modulo are classic traps.' },
     lab: [['#daily', { de: 'Täglich: Java verfolgen', en: 'Daily: tracing Java' }]], ext: [['cb', 'Logic-1', 'https://codingbat.com/java/Logic-1'], ['cb', 'Warmup-2', 'https://codingbat.com/java/Warmup-2']], daily: 'java' },
-  { n: 3, d: '2026-10-26', ch: 'II.1.4', t: { de: 'Verifikation I: Hoare-Tripel und Zuweisung', en: 'Verification I: Hoare triples and assignment' },
+  { n: 3, k: 'hoare', s: { de: 'Hoare: Zuweisung', en: 'Hoare: assignment' }, d: '2026-10-26', ch: 'II.1.4', t: { de: 'Verifikation I: Hoare-Tripel und Zuweisung', en: 'Verification I: Hoare triples and assignment' },
     x: { de: 'Zusicherungen, Vor- und Nachbedingung, die Zuweisungsregel: von unten nach oben rechnen.', en: 'Assertions, pre- and postconditions, the assignment rule: working from the bottom up.' },
     lab: [['#hoare', { de: 'Lektion Hoare-Kalkül', en: 'Hoare logic lesson' }], ['#daily', { de: 'Täglich: schwächste Vorbedingung', en: 'Daily: weakest precondition' }]], ext: [['ptb']], daily: 'hwp' },
-  { n: 4, d: '2026-11-02', ch: 'II.1.4', t: { de: 'Verifikation II: Schleifen und Invarianten', en: 'Verification II: loops and invariants' },
+  { n: 4, k: 'hoare', s: { de: 'Hoare: Invarianten', en: 'Hoare: invariants' }, d: '2026-11-02', ch: 'II.1.4', t: { de: 'Verifikation II: Schleifen und Invarianten', en: 'Verification II: loops and invariants' },
     x: { de: 'Die while-Regel: Invariante am Anfang, Erhalt im Rumpf, Nachbedingung am Ende.', en: 'The while rule: invariant at the start, preserved by the body, postcondition at the end.' },
     lab: [['#practice', { de: 'Übungen mit gegebener Invariante', en: 'Exercises with a given invariant' }], ['#daily', { de: 'Täglich: Invariante prüfen', en: 'Daily: checking an invariant' }]], ext: [], daily: 'hinv' },
-  { n: 5, d: '2026-11-09', ch: 'II.1.4 · II.1.5', t: { de: 'Invarianten finden, Terminierung, Arrays', en: 'Finding invariants, termination, arrays' },
+  { n: 5, k: 'hoare', s: { de: 'Invariante finden, Arrays', en: 'Finding invariants, arrays' }, d: '2026-11-09', ch: 'II.1.4 · II.1.5', t: { de: 'Invarianten finden, Terminierung, Arrays', en: 'Finding invariants, termination, arrays' },
     x: { de: 'Invariante selbst finden, Terminierung mit einer Variante zeigen; Reihungen (Arrays) in Java.', en: 'Finding the invariant yourself, proving termination with a variant; arrays in Java.' },
     lab: [['#practice', { de: 'Invariante finden, if/else, Arrays', en: 'Find the invariant, if/else, arrays' }], ['#exam-hoare', { de: 'Hoare-Klausur-Simulation', en: 'Hoare exam simulation' }]], ext: [['cb', 'Array-1', 'https://codingbat.com/java/Array-1']], daily: 'hinv' },
-  { n: 6, d: '2026-11-16', ch: 'II.2', t: { de: 'Objekte, Klassen und Methoden', en: 'Objects, classes and methods' },
+  { n: 6, k: 'java', s: { de: 'Objekte, Klassen', en: 'Objects, classes' }, d: '2026-11-16', ch: 'II.2', t: { de: 'Objekte, Klassen und Methoden', en: 'Objects, classes and methods' },
     x: { de: 'Klassen und Objekte, Methoden und Parameterübergabe: Werte gegen Referenzen.', en: 'Classes and objects, methods and parameter passing: values versus references.' },
     lab: [['#exam-java', { de: 'Java-Training: Parameter und Referenzen', en: 'Java training: parameters and references' }]], ext: [['exj'], ['cb', 'Array-2', 'https://codingbat.com/java/Array-2']], daily: 'java' },
-  { n: 7, d: '2026-11-23', ch: 'II.2', t: { de: 'Datenabstraktion, Konstruktoren, Strings', en: 'Data abstraction, constructors, strings' },
+  { n: 7, k: 'java', s: { de: 'Datenabstraktion, Strings', en: 'Abstraction, strings' }, d: '2026-11-23', ch: 'II.2', t: { de: 'Datenabstraktion, Konstruktoren, Strings', en: 'Data abstraction, constructors, strings' },
     x: { de: 'Kapselung mit private, Konstruktoren, vordefinierte Klassen wie String.', en: 'Encapsulation with private, constructors, predefined classes such as String.' },
     lab: [['#exam-java', { de: 'Java-Training: Ausgaben mit int und String', en: 'Java training: output with int and String' }]], ext: [['cb', 'String-1', 'https://codingbat.com/java/String-1']], daily: 'java' },
-  { n: 8, d: '2026-11-30', ch: 'II.3', t: { de: 'Rekursion und dynamische Datenstrukturen', en: 'Recursion and dynamic data structures' },
+  { n: 8, k: 'java', s: { de: 'Rekursion, Listen', en: 'Recursion, lists' }, d: '2026-11-30', ch: 'II.3', t: { de: 'Rekursion und dynamische Datenstrukturen', en: 'Recursion and dynamic data structures' },
     x: { de: 'Rekursive Methoden, Aufrufe zählen; verkettete Listen.', en: 'Recursive methods, counting calls; linked lists.' },
     lab: [['#exam-java', { de: 'Java-Training: Rekursion, verkettete Liste', en: 'Java training: recursion, linked list' }]], ext: [['cb', 'Recursion-1', 'https://codingbat.com/java/Recursion-1']], daily: 'java' },
-  { n: 9, d: '2026-12-07', ch: 'II.4', t: { de: 'Vererbung, abstrakte Klassen, Interfaces', en: 'Inheritance, abstract classes, interfaces' },
+  { n: 9, k: 'java', s: { de: 'Vererbung, Interfaces', en: 'Inheritance, interfaces' }, d: '2026-12-07', ch: 'II.4', t: { de: 'Vererbung, abstrakte Klassen, Interfaces', en: 'Inheritance, abstract classes, interfaces' },
     x: { de: 'Unterklassen, dynamisches Binden, Überladen gegen Überschreiben, Interfaces und Pakete.', en: 'Subclasses, dynamic binding, overloading versus overriding, interfaces and packages.' },
     lab: [['#exam-java', { de: 'Java-Training: dynamisches Binden', en: 'Java training: dynamic binding' }]], ext: [['exj'], ['dj']], daily: 'java' },
-  { n: 10, d: '2026-12-14', ch: 'III', t: { de: 'Haskell: Prinzipien, Deklarationen, Ausdrücke', en: 'Haskell: principles, declarations, expressions' },
+  { n: 10, k: 'haskell', s: { de: 'Haskell: Grundlagen', en: 'Haskell basics' }, d: '2026-12-14', ch: 'III', t: { de: 'Haskell: Prinzipien, Deklarationen, Ausdrücke', en: 'Haskell: principles, declarations, expressions' },
     x: { de: 'Funktionen statt Anweisungen, GHCi, Ausdrücke und ihre Typen.', en: 'Functions instead of statements, GHCi, expressions and their types.' },
     lab: [['#haskell', { de: 'Haskell-Seite', en: 'Haskell page' }], ['#daily', { de: 'Täglich: Typ bestimmen', en: 'Daily: finding the type' }]], ext: [['mooc', { de: 'Lektion 1', en: 'Lecture 1' }, 'https://haskell.mooc.fi/part1#lecture-1-and-so-it-begins'], ['play']], daily: 'htype' },
-  { pause: true, d: '2026-12-21', t: { de: 'Weihnachtspause (23.12. – 5.1.)', en: 'Christmas break (23 Dec – 5 Jan)' },
+  { pause: true, k: 'pause', s: { de: 'Weihnachtspause', en: 'Christmas break' }, d: '2026-12-21', t: { de: 'Weihnachtspause (23.12. – 5.1.)', en: 'Christmas break (23 Dec – 5 Jan)' },
     x: { de: 'Keine Vorlesung. Ein guter Moment, den Java-Teil und den Hoare-Kalkül zu wiederholen, bevor es mit Haskell weitergeht.', en: 'No lectures. A good moment to review the Java part and Hoare logic before Haskell continues.' },
     lab: [['#exam-hoare', { de: 'Hoare-Klausur-Simulation', en: 'Hoare exam simulation' }], ['#exam-java', { de: 'Java-Training', en: 'Java training' }]], ext: [['lyah']] },
-  { n: 11, d: '2027-01-04', ch: 'III', t: { de: 'Muster, Listen, Rekursion', en: 'Patterns, lists, recursion' },
+  { n: 11, k: 'haskell', s: { de: 'Muster, Listen', en: 'Patterns, lists' }, d: '2027-01-04', ch: 'III', t: { de: 'Muster, Listen, Rekursion', en: 'Patterns, lists, recursion' },
     x: { de: 'Pattern Matching, Listen und rekursive Funktionen auf Listen. Vorlesung ab 6. Januar.', en: 'Pattern matching, lists and recursive functions on lists. Lectures from 6 January.' },
     lab: [['#exam-haskell', { de: 'Haskell-Training: Pattern Matching', en: 'Haskell training: pattern matching' }]], ext: [['mooc', { de: 'Lektion 2–3', en: 'Lectures 2–3' }, 'https://haskell.mooc.fi/part1#lecture-2-either-you-die-a-hero']], daily: 'htype' },
-  { n: 12, d: '2027-01-11', ch: 'III', t: { de: 'Typen und Datenstrukturen', en: 'Types and data structures' },
+  { n: 12, k: 'haskell', s: { de: 'Typen, Typklassen', en: 'Types, type classes' }, d: '2027-01-11', ch: 'III', t: { de: 'Typen und Datenstrukturen', en: 'Types and data structures' },
     x: { de: 'Polymorphie, Typklassen, eigene Datentypen mit data, Bäume.', en: 'Polymorphism, type classes, your own data types with data, trees.' },
     lab: [['#exam-haskell', { de: 'Haskell-Training: Typen bestimmen', en: 'Haskell training: determining types' }], ['#daily', { de: 'Täglich: Typ bestimmen', en: 'Daily: finding the type' }]], ext: [['mooc', { de: 'Lektion 4–5', en: 'Lectures 4–5' }, 'https://haskell.mooc.fi/part1#lecture-4-real-classy']], daily: 'htype' },
-  { n: 13, d: '2027-01-18', ch: 'III', t: { de: 'Funktionale Programmiertechniken', en: 'Functional programming techniques' },
+  { n: 13, k: 'haskell', s: { de: 'Höhere Ordnung, Lazy', en: 'Higher order, laziness' }, d: '2027-01-18', ch: 'III', t: { de: 'Funktionale Programmiertechniken', en: 'Functional programming techniques' },
     x: { de: 'Funktionen höherer Ordnung, map, filter, foldr und foldl, Lazy Evaluation.', en: 'Higher-order functions, map, filter, foldr and foldl, lazy evaluation.' },
     lab: [['#exam-haskell', { de: 'Haskell-Training: Auswerten und Lazy Evaluation', en: 'Haskell training: evaluation and lazy evaluation' }]], ext: [['exh'], ['play']], daily: 'htype' },
-  { n: 14, d: '2027-01-25', ch: 'IV', t: { de: 'Prolog: Fakten, Regeln, Unifikation', en: 'Prolog: facts, rules, unification' },
+  { n: 14, k: 'prolog', s: { de: 'Prolog: Unifikation', en: 'Prolog: unification' }, d: '2027-01-25', ch: 'IV', t: { de: 'Prolog: Fakten, Regeln, Unifikation', en: 'Prolog: facts, rules, unification' },
     x: { de: 'Logisches Programmieren: Fakten, Regeln, Anfragen und die Unifikation mit Occurs-Check.', en: 'Logic programming: facts, rules, queries and unification with the occurs check.' },
     lab: [['#prolog', { de: 'Prolog-Seite', en: 'Prolog page' }], ['#exam-prolog', { de: 'Prolog-Training: Unifikation', en: 'Prolog training: unification' }], ['#daily', { de: 'Täglich: Unifikation', en: 'Daily: unification' }]], ext: [['lpn', { de: 'Kapitel 1–2', en: 'Chapters 1–2' }, 'https://lpn.swi-prolog.org/lpnpage.php?pagetype=html&pageid=lpn-htmlch1'], ['swish']], daily: 'unify' },
-  { n: 15, d: '2027-02-01', ch: 'IV', t: { de: 'Resolution, Backtracking, Listen, Arithmetik', en: 'Resolution, backtracking, lists, arithmetic' },
+  { n: 15, k: 'prolog', s: { de: 'Resolution, Listen', en: 'Resolution, lists' }, d: '2027-02-01', ch: 'IV', t: { de: 'Resolution, Backtracking, Listen, Arithmetik', en: 'Resolution, backtracking, lists, arithmetic' },
     x: { de: 'Wie Prolog Antworten sucht, rekursive Prädikate auf Listen, Rechnen mit is.', en: 'How Prolog searches for answers, recursive predicates on lists, arithmetic with is.' },
     lab: [['#exam-prolog', { de: 'Prolog-Training: Anfragen und Prädikate', en: 'Prolog training: queries and predicates' }]], ext: [['lpn', { de: 'Kapitel 3–5', en: 'Chapters 3–5' }, 'https://lpn.swi-prolog.org/lpnpage.php?pagetype=html&pageid=lpn-htmlch3'], ['exp']], daily: 'unify' },
-  { exam: true, d: '2027-02-08', t: { de: 'Klausurvorbereitung', en: 'Exam preparation' },
+  { exam: true, k: 'exam', s: { de: 'Klausurphase · Termin in RWTHonline', en: 'Exam period · date in RWTHonline' }, d: '2027-02-08', t: { de: 'Klausurvorbereitung', en: 'Exam preparation' },
     x: { de: 'Die Vorlesungszeit endet am 5. Februar. Die Klausur liegt meist im Februar; den Termin findest du in RWTHonline. Jetzt alle vier Klausur-Trainings unter Zeitdruck durchspielen.', en: 'The lecture period ends on 5 February. The exam is usually in February; you will find the date in RWTHonline. Now work through all four exam trainings under time pressure.' },
     lab: [['#exam', { de: 'Alle Klausur-Trainings', en: 'All exam trainings' }], ['#daily', { de: 'Täglich mit Bonusrunden', en: 'Daily with bonus rounds' }]], ext: [] }
 ];
@@ -6330,6 +6388,107 @@ function wCard(w, i, cur) {
     </div>
   </li>`;
 }
+
+/* ---------- compact semester calendar (Google-Calendar-like week rows) ---------- */
+const CAL_FROM = '2026-10-12', CAL_TO = '2027-02-12', BREAK = ['2026-12-23', '2027-01-05'], LECT_END = '2027-02-05';
+const CAL_MARK = { '2026-10-12': 'm_start', '2027-01-06': 'm_resume', '2027-02-05': 'm_end' };
+function calEntry(day) { // index into WEEKS for a weekday (day number)
+  const b0 = dNum(BREAK[0]), b1 = dNum(BREAK[1]);
+  const pause = WEEKS.findIndex(w => w.pause), exam = WEEKS.findIndex(w => w.exam);
+  if (day >= b0 && day <= b1) return pause;
+  if (day > dNum(LECT_END)) return exam;
+  let idx = -1; WEEKS.forEach((w, i) => { if (!w.pause && !w.exam && dNum(w.d) <= day) idx = i; });
+  return idx;
+}
+function calRows() {
+  const rows = [];
+  for (let m = dNum(CAL_FROM); m <= dNum(CAL_TO); m += 7) {
+    const days = [0, 1, 2, 3, 4].map(c => ({ n: m + c, e: calEntry(m + c) }));
+    const segs = [];
+    days.forEach((d, c) => { const last = segs[segs.length - 1]; if (last && last.e === d.e) last.to = c; else segs.push({ e: d.e, from: c, to: c }); });
+    rows.push({ m, days, segs });
+  }
+  return rows;
+}
+function isoWeek(n) { const t = new Date(n * 864e5); const d = (t.getUTCDay() + 6) % 7; t.setUTCDate(t.getUTCDate() - d + 3); const y = t.getUTCFullYear(); const f = new Date(Date.UTC(y, 0, 4)); return 1 + Math.round(((t - f) / 864e5 - 3 + ((f.getUTCDay() + 6) % 7)) / 7); }
+function calHTML(cur) {
+  const today = dNum(dToday()), loc = lang === 'de' ? 'de-DE' : 'en-GB';
+  const mName = n => new Date(n * 864e5).toLocaleDateString(loc, { month: 'long', year: 'numeric', timeZone: 'UTC' });
+  const table = rows => {
+    let h = `<div class="cal" role="table" aria-label="${esc(wt('cal_h'))}"><div class="cal-row cal-head" role="row"><span class="cal-kw" role="columnheader">${esc(wt('kw'))}</span>${WT[lang].wd5.map(d => `<span role="columnheader">${d}</span>`).join('')}</div>`;
+    let lastMonth = -1;
+    for (const r of rows) {
+      const mo = new Date(r.m * 864e5).getUTCMonth();
+      if (mo !== lastMonth) { h += `<div class="cal-month" role="row"><span role="cell">${esc(mName(r.m))}</span></div>`; lastMonth = mo; }
+      const isCur = today >= r.m && today < r.m + 7;
+      h += `<div class="cal-row ${isCur ? 'cur' : ''}" role="row"><span class="cal-kw mono" role="rowheader">${isoWeek(r.m)}</span>`;
+      r.days.forEach((d, c) => {
+        const dt = new Date(d.n * 864e5), dd = dt.getUTCDate();
+        const lbl = dd === 1 ? dt.toLocaleDateString(loc, { day: 'numeric', month: 'short', timeZone: 'UTC' }) : dd;
+        const mk = CAL_MARK[dStr(d.n)];
+        h += `<span class="cal-day ${d.n === today ? 'today' : ''}" style="grid-column:${c + 2}" role="cell"><i>${esc(lbl)}</i>${mk ? `<em title="${esc(wt(mk))}" aria-label="${esc(wt(mk))}"></em>` : ''}</span>`;
+      });
+      r.segs.forEach(sg => {
+        if (sg.e < 0) return;
+        const w = WEEKS[sg.e], done = w.n && WDONE.has(w.n);
+        const head = w.n ? `W${w.n}` : w.pause ? '❄' : '★';
+        h += `<button type="button" class="cal-ev k-${w.k} ${done ? 'done' : ''} ${sg.e === cur ? 'now' : ''}" style="grid-column:${sg.from + 2} / ${sg.to + 3}" data-wjump="${sg.e}" title="${esc((w.n ? wt('week', { n: w.n }) + ': ' : '') + wL(w.t))}"><b>${done ? '✓ ' : ''}${head}</b> <span>${esc(wL(w.s))}</span></button>`;
+      });
+      h += `</div>`;
+    }
+    return h + `</div>`;
+  };
+  const all = calRows(), cut = all.findIndex(r => r.m >= dNum('2026-12-01'));
+  let html = `<div class="cal-split">${table(all.slice(0, cut))}${table(all.slice(cut))}</div>`;
+  const leg = ['java', 'hoare', 'haskell', 'prolog', 'pause', 'exam'].map(k => `<span class="cal-leg k-${k}"><i></i>${esc(wt('leg_' + k))}</span>`).join('');
+  return `<section class="cal-wrap" aria-labelledby="cal-h">
+    <div class="cal-top"><h2 id="cal-h">${esc(wt('cal_h'))}</h2><button type="button" class="btn" data-ics="1">⤓ ${esc(wt('ics'))}</button></div>
+    <div class="cal-legend">${leg}</div>
+    <div class="cal-keys">${Object.entries(CAL_MARK).map(([d, k]) => `<span><em></em><b>${esc(wDate(d))}</b> ${esc(wt(k))}</span>`).join('')}</div>
+    ${html}
+    <p class="small muted">${esc(wt('ics_note'))}</p>
+  </section>`;
+}
+
+/* ---------- .ics export ---------- */
+function icsEsc(t) { return String(t).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n'); }
+function icsFold(line) { // fold at 73 bytes (UTF-8 safe)
+  const out = []; let cur = '', len = 0;
+  for (const ch of line) { const b = new TextEncoder().encode(ch).length; if (len + b > 73) { out.push(cur); cur = ' ' + ch; len = 1 + b; } else { cur += ch; len += b; } }
+  out.push(cur); return out.join('\r\n');
+}
+const icsDate = n => dStr(n).replace(/-/g, '');
+function buildICS() {
+  const ranges = {};
+  for (let n = dNum(CAL_FROM); n <= dNum(CAL_TO); n++) {
+    const wd = new Date(n * 864e5).getUTCDay(); if (wd === 0 || wd === 6) continue;
+    const e = calEntry(n); if (e < 0) continue;
+    const r = ranges[e] || (ranges[e] = { a: n, b: n }); r.a = Math.min(r.a, n); r.b = Math.max(r.b, n);
+  }
+  const pauseI = WEEKS.findIndex(w => w.pause); if (ranges[pauseI]) { ranges[pauseI] = { a: dNum(BREAK[0]), b: dNum(BREAK[1]) }; }
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+Z$/, 'Z');
+  const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Hoare Lab//Wochenplan Programmierung WS 2026-27//' + lang.toUpperCase(), 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+    'X-WR-CALNAME:' + icsEsc('Programmierung WS 2026/27 · Hoare Lab'), 'X-WR-TIMEZONE:Europe/Berlin'];
+  Object.entries(ranges).sort((x, y) => x[1].a - y[1].a).forEach(([i, r]) => {
+    const w = WEEKS[i];
+    const title = (w.n ? `Programmierung W${w.n}: ` : 'Programmierung: ') + wL(w.t);
+    const lab = w.lab.map(l => '• ' + wL(l[1]) + ': ' + DSYNC_URL + l[0]).join('\n');
+    const ext = w.ext.map(e => '• ' + RES[e[0]].name + (e[1] ? ' ' + wL(e[1]) : '') + ': ' + (e[2] || RES[e[0]].url)).join('\n');
+    const desc = [wL(w.x), lab && (wt('lab') + ':\n' + lab), ext && (wt('ext') + ':\n' + ext), wt('ics_desc')].filter(Boolean).join('\n\n');
+    L.push('BEGIN:VEVENT', `UID:hoarelab-ws2627-${w.n ? 'w' + w.n : w.pause ? 'pause' : 'exam'}@superzep.github.io`, 'DTSTAMP:' + stamp,
+      'DTSTART;VALUE=DATE:' + icsDate(r.a), 'DTEND;VALUE=DATE:' + icsDate(r.b + 1),
+      'SUMMARY:' + icsEsc(title), 'DESCRIPTION:' + icsEsc(desc), 'URL:' + DSYNC_URL + '#weeks', 'TRANSP:TRANSPARENT',
+      'CATEGORIES:' + icsEsc(wt('leg_' + w.k)), 'END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  return L.map(icsFold).join('\r\n') + '\r\n';
+}
+function downloadICS() {
+  const blob = new Blob([buildICS()], { type: 'text/calendar;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'programmierung-ws2026-27.ics';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+
 function renderWeeks() {
   const root = document.getElementById('weeks'); if (!root) return;
   const { i: cur } = wCurrent(), teaching = WEEKS.filter(w => w.n).length, k = [...WDONE].filter(n => n <= teaching).length;
@@ -6339,6 +6498,8 @@ function renderWeeks() {
       ${cur >= 0 ? `<button type="button" class="btn" data-wjump="${cur}">${esc(wt('jump'))}</button>` : ''}
     </div>
     ${status ? `<div class="fb info">${esc(status)}</div>` : ''}
+    ${calHTML(cur)}
+    <h2 class="wk-list-h">${esc(wt('list_h'))}</h2>
     <ol class="wk-list">${WEEKS.map((w, j) => wCard(w, j, cur)).join('')}</ol>`;
 }
 function renderThisWeek() {
@@ -6370,6 +6531,7 @@ function initWeeks() {
     const el = document.querySelector(`#weeks [data-wk="${n}"]`); if (el) el.focus({ preventScroll: true });
   });
   root.addEventListener('click', e => {
+    if (e.target.closest('[data-ics]')) { downloadICS(); return; }
     const b = e.target.closest('[data-wjump]'); if (!b) return;
     const el = document.getElementById('wk-' + b.dataset.wjump); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' });
   });
