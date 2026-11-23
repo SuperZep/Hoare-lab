@@ -15,6 +15,7 @@ const WT = {
     cal_h: 'Semester auf einen Blick', list_h: 'Woche für Woche im Detail', kw: 'KW', ics: 'In den Kalender übernehmen (.ics)', ics_note: 'Für Google Kalender, Apple Kalender oder Outlook: Datei herunterladen und dort importieren.',
     leg_java: 'Java', leg_hoare: 'Hoare-Kalkül', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'vorlesungsfrei', leg_exam: 'Klausur',
     m_start: 'Vorlesungsbeginn', m_end: 'Vorlesungsende', m_resume: 'Vorlesungen wieder', today_l: 'heute', wd5: ['Mo', 'Di', 'Mi', 'Do', 'Fr'],
+    ics_ext: 'Kalenderdatei auf der öffentlichen Seite ↗', ics_ext_note: 'In dieser Vorschau sind Kalender-Downloads gesperrt. Auf der öffentlichen Seite funktioniert der Knopf „In den Kalender übernehmen“; die Datei dann in Google Kalender, Apple Kalender oder Outlook importieren.',
     ics_desc: 'Orientierungsplan aus dem Hoare Lab (keine offizielle Zeitplanung der RWTH). Verbindlich sind Moodle und die Übungsblätter.',
     fits: 'Passt zu', lang_en: 'Englisch', free: 'kostenlos', open: 'Öffnen ↗', how: 'So nutzt du es', used_in: 'Im Wochenplan: {w}'
   },
@@ -31,6 +32,7 @@ const WT = {
     cal_h: 'The semester at a glance', list_h: 'Week by week in detail', kw: 'CW', ics: 'Add to your calendar (.ics)', ics_note: 'For Google Calendar, Apple Calendar or Outlook: download the file and import it there.',
     leg_java: 'Java', leg_hoare: 'Hoare logic', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'no lectures', leg_exam: 'Exam',
     m_start: 'Lectures start', m_end: 'Lectures end', m_resume: 'Lectures resume', today_l: 'today', wd5: ['Mo', 'Tu', 'We', 'Th', 'Fr'],
+    ics_ext: 'Calendar file on the public site ↗', ics_ext_note: 'Calendar downloads are blocked in this preview. On the public site the “Add to your calendar” button works; then import the file into Google Calendar, Apple Calendar or Outlook.',
     ics_desc: 'Orientation plan from Hoare Lab (not an official RWTH schedule). Moodle and the exercise sheets are what counts.',
     fits: 'Fits', lang_en: 'English', free: 'free', open: 'Open ↗', how: 'How to use it', used_in: 'In the week plan: {w}'
   }
@@ -216,15 +218,17 @@ function calHTML(cur) {
   let html = `<div class="cal-split">${table(all.slice(0, cut))}${table(all.slice(cut))}</div>`;
   const leg = ['java', 'hoare', 'haskell', 'prolog', 'pause', 'exam'].map(k => `<span class="cal-leg k-${k}"><i></i>${esc(wt('leg_' + k))}</span>`).join('');
   return `<section class="cal-wrap" aria-labelledby="cal-h">
-    <div class="cal-top"><h2 id="cal-h">${esc(wt('cal_h'))}</h2><button type="button" class="btn" data-ics="1">⤓ ${esc(wt('ics'))}</button></div>
+    <div class="cal-top"><h2 id="cal-h">${esc(wt('cal_h'))}</h2>${icsBlocked() ? `<a class="btn" href="${DSYNC_URL}#weeks" target="_blank" rel="noopener">⤓ ${esc(wt('ics_ext'))}</a>` : `<button type="button" class="btn" data-ics="1">⤓ ${esc(wt('ics'))}</button>`}</div>
     <div class="cal-legend">${leg}</div>
     <div class="cal-keys">${Object.entries(CAL_MARK).map(([d, k]) => `<span><em></em><b>${esc(wDate(d))}</b> ${esc(wt(k))}</span>`).join('')}</div>
     ${html}
-    <p class="small muted">${esc(wt('ics_note'))}</p>
+    <p class="small muted">${esc(wt(icsBlocked() ? 'ics_ext_note' : 'ics_note'))}</p>
   </section>`;
 }
 
 /* ---------- .ics export ---------- */
+/* inside the claude.ai artifact viewer .ics downloads are not allowed: link to the public site instead */
+function icsBlocked() { try { return !!(window.claude && typeof window.claude.use === 'function') && location.hostname !== 'superzep.github.io'; } catch (e) { return false; } }
 function icsEsc(t) { return String(t).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n'); }
 function icsFold(line) { // fold at 73 bytes (UTF-8 safe)
   const out = []; let cur = '', len = 0;
