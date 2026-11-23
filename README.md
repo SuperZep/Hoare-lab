@@ -6,6 +6,9 @@ Interactive study site for Hoare logic in the first year of computer science (*P
 
 ## Inhalt / Contents
 
+Aufbau: **Erstes Jahr** (Startseite) → **Programmierung** (Modulübersicht) → Seiten zu **Java**, **Haskell**, **Prolog** und zum **Hoare-Kalkül**, dazu Übungen und Klausur-Simulation.
+
+- **Java, Haskell, Prolog:** Entstehung und Problem, Entwicklung, Einsatz heute, Kapitel der Vorlesung, erstes Beispiel.
 - **Hoare-Kalkül:** Motivation, Geschichte, die sieben Regeln, Rückwärts-Rechner für die Zuweisungsregel, Invarianten-Tracer, Terminierung, Spickzettel.
 - **Übungen (11):** geführte Aufgaben mit gegebener oder selbst zu findender Schleifeninvariante, dazu if/else und Arrays. Ein Prüfer testet Invarianten automatisch und zeigt Gegenbeispiele.
 - **Klausur-Simulation:** Aufgabe im Stil der schriftlichen Prüfung, mit optionalem Zeitlimit und Punktebewertung.
@@ -13,7 +16,7 @@ Interactive study site for Hoare logic in the first year of computer science (*P
 ## Aufbau / Structure
 
 - `index.html` – die fertige Seite (eine Datei, ohne Abhängigkeiten außer Google Fonts).
-- `src/` – Quelltexte: `src.html` (Markup und CSS), `core.js` (Parser, Auswertung, Prüfer), `exercises.js` und `exercises2.js` (Aufgaben), `app.js` (Oberfläche).
+- `src/` – Quelltexte: `src.html` (Markup und CSS), `views-prog.html` (Modul- und Sprachseiten), `core.js` (Parser, Auswertung, Prüfer), `exercises.js` und `exercises2.js` (Aufgaben), `app.js` (Oberfläche).
 - Neu bauen / rebuild: `cd src && python3 build.py`
 
 Unabhängige Lernhilfe, kein offizielles Angebot der RWTH Aachen.

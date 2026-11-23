@@ -249,7 +249,8 @@ a.chip{color:var(--accent);text-decoration:none;font-weight:600}
 
 /* exam */
 .kstart{display:grid;gap:16px;padding-top:26px;max-width:640px}
-.kstart select{font-family:var(--display);font-size:15px}
+.kstart select{font-family:var(--display);font-size:15px;width:100%;max-width:100%}
+.kstart{min-width:0}.kstart label.f{min-width:0}
 .kcheck{display:flex;gap:10px;align-items:center;font-family:var(--display);font-size:15px;cursor:pointer}
 .kcheck input{width:18px;height:18px;accent-color:var(--accent)}
 .kpaper{display:grid;gap:26px;padding-top:24px;max-width:980px}
@@ -269,7 +270,54 @@ a.chip{color:var(--accent);text-decoration:none;font-weight:600}
 .kscore .big{font-family:var(--display);font-weight:800;font-size:clamp(26px,3.4vw,38px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .kscore .bar{height:8px;border-radius:999px;background:var(--code-bg);overflow:hidden}
 .kscore .bar span{display:block;height:100%;background:var(--accent)}
-@media (max-width:600px){header.top{position:static}.top-in{gap:10px}nav.views a{padding:6px 9px}.kbar{top:0}.toc{display:none}}
+@media (max-width:600px){nav.views a[data-view="practice"],nav.views a[data-view="exam"]{display:none}header.top{position:static}.top-in{gap:10px}nav.views a{padding:6px 9px}.kbar{top:0}.toc{display:none}}
+/* site structure */
+.subnav-row{display:none;border-top:1px solid var(--rule)}
+body[data-group="prog"] .subnav-row{display:block}
+.subnav{max-width:1180px;margin:0 auto;padding:6px 20px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.subnav a{font-family:var(--display);font-size:14px;font-weight:600;text-decoration:none;color:var(--muted);padding:5px 11px;border-radius:8px;white-space:nowrap}
+.subnav a:hover{color:var(--ink)}
+.subnav a[aria-current="page"]{color:var(--accent);background:var(--accent-soft)}
+.crumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:22px;font-family:var(--display);font-size:13.5px;color:var(--muted)}
+.crumbs a{color:var(--muted);text-decoration:none}
+.crumbs a:hover{color:var(--accent);text-decoration:underline}
+.crumbs>span:last-child{color:var(--ink)}
+.page-h{padding:22px 0 30px;display:grid;gap:14px;border-bottom:1px solid var(--rule)}
+.page-h h1{font-size:clamp(40px,6vw,72px);font-weight:800;letter-spacing:-.035em}
+.page-h .lede{font-size:20px;max-width:60ch}
+.facts{display:flex;flex-wrap:wrap;gap:10px}
+.fact{display:grid;gap:0;padding:8px 14px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);min-width:120px}
+.fact b{font-family:var(--display);font-size:19px;font-weight:800;letter-spacing:-.01em}
+.fact>span{font-family:var(--display);font-size:12.5px;color:var(--muted)}
+.lang-page .sec,#view-prog .sec{max-width:980px}
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:12px}
+.part-card{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;transition:border-color .15s,transform .15s}
+.part-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.part-card.accent{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.part-card .pn{font-family:var(--mono);font-size:13px;color:var(--accent)}
+.part-card .pt{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.02em}
+.part-card .pd{font-size:15.5px;color:var(--muted);line-height:1.5}
+.part-card .go{font-family:var(--display);font-size:13.5px;font-weight:600;color:var(--accent);margin-top:4px}
+.trio{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px}
+.lang-box{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:14px;display:grid;gap:10px;align-content:start;min-width:0}
+.lang-box .lb-h{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--display)}
+.lang-box .lb-h b{font-size:18px}
+.lang-box .lb-h span{font-size:13px;color:var(--muted)}
+.lang-box p{font-size:15.5px}
+pre.code{font-family:var(--mono);font-size:14.5px;line-height:1.6;background:var(--code-bg);border-radius:10px;padding:14px 16px;margin:0;overflow-x:auto;color:var(--ink);max-width:100%}
+.chapters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px}
+.chapters.one{grid-template-columns:minmax(0,560px)}
+.ch{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;display:grid;gap:10px;align-content:start}
+.ch-h{display:flex;gap:12px;align-items:baseline}
+.ch-h .cn{font-family:var(--mono);font-size:13px;color:var(--accent);flex:none}
+.ch-h h3{font-size:17px}
+.ch ol{margin:0;padding-left:22px;display:grid;gap:4px;font-size:16px}
+.ch ol a{font-weight:600}
+.link-card{text-decoration:none;color:var(--ink);transition:border-color .15s}
+.link-card:hover{border-color:var(--accent)}
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:10px}
+.mod-link{color:var(--ink);text-decoration:none}
+.mod-link:hover{color:var(--accent)}
 footer{border-top:1px solid var(--rule);padding:26px 20px 40px;max-width:1180px;margin:0 auto;display:grid;gap:8px;font-size:15px;color:var(--muted)}
 footer a{color:var(--muted)}
 </style>
@@ -277,10 +325,10 @@ footer a{color:var(--muted)}
 <body data-lang="de">
 <header class="top">
   <div class="top-in">
-    <a class="brand" href="#hoare"><span class="as">⟨⟩</span> Hoare Lab</a>
+    <a class="brand" href="#plan"><span class="as">⟨⟩</span> Hoare Lab</a>
     <nav class="views" aria-label="Views">
       <a href="#plan" data-view="plan"><img class="flag" src="data:image/png;base64,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" width="24" height="16" alt="Flagge der Stadt Aachen / Flag of the city of Aachen"><span class="de">Erstes Jahr</span><span class="en">First year</span></a>
-      <a href="#hoare" data-view="hoare"><span class="de">Hoare-Kalkül</span><span class="en">Hoare logic</span></a>
+      <a href="#prog" data-view="prog">Programmierung</a>
       <a href="#practice" data-view="practice"><span class="de">Übungen</span><span class="en">Exercises</span></a>
       <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
     </nav>
@@ -288,6 +336,17 @@ footer a{color:var(--muted)}
       <button type="button" id="lang-de" data-lang="de" aria-pressed="true">DE</button>
       <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
     </div>
+  </div>
+  <div class="subnav-row">
+    <nav class="subnav" aria-label="Programmierung">
+      <a href="#prog" data-view="prog"><span class="de">Überblick</span><span class="en">Overview</span></a>
+      <a href="#java" data-view="java">Java</a>
+      <a href="#haskell" data-view="haskell">Haskell</a>
+      <a href="#prolog" data-view="prolog">Prolog</a>
+      <a href="#hoare" data-view="hoare"><span class="de">Hoare-Kalkül</span><span class="en">Hoare logic</span></a>
+      <a href="#practice" data-view="practice"><span class="de">Übungen</span><span class="en">Exercises</span></a>
+      <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
+    </nav>
   </div>
 </header>
 
@@ -298,17 +357,17 @@ footer a{color:var(--muted)}
     <div class="kicker"><span class="de">B.Sc. Informatik · RWTH Aachen · Studienstart</span><span class="en">B.Sc. Computer Science · RWTH Aachen · getting started</span></div>
     <h1 id="plan-title"><span class="de">Das erste Studienjahr</span><span class="en">The first year</span></h1>
     <p class="prose muted">
-      <span class="de">Für jedes Modul des ersten Jahres entsteht hier eine Lernseite. Begonnen haben wir mit dem Teil, an dem viele im ersten Semester hängen bleiben: dem Hoare-Kalkül aus der Vorlesung Programmierung.</span>
-      <span class="en">Every first-year module will get a study page here. We started with the part many students get stuck on in their first semester: Hoare logic from the Programmierung lecture.</span>
+      <span class="de">Für jedes Modul des ersten Jahres entsteht hier eine Lernseite. Begonnen haben wir mit Programmierung: je eine Seite zu Java, Haskell und Prolog und ein ausführlicher Teil zum Hoare-Kalkül, an dem viele im ersten Semester hängen bleiben.</span>
+      <span class="en">Every first-year module will get a study page here. We started with Programmierung: one page each for Java, Haskell and Prolog, plus an in-depth section on Hoare logic, where many first-semester students get stuck.</span>
     </p>
   </div>
   <div class="sem">
     <div class="sem-col">
       <h2><span><span class="de">1. Semester</span><span class="en">Semester 1</span></span><span>WS</span></h2>
       <div class="mod live">
-        <div class="mod-t"><h3>Programmierung</h3><a class="pill live" href="#hoare"><span class="de">Zur Lernseite →</span><span class="en">Open study page →</span></a></div>
-        <p><span class="de">Programmierkonzepte in drei Paradigmen, dazu die Einführung in die Programmverifikation.</span><span class="en">Programming concepts across three paradigms, plus an introduction to program verification.</span></p>
-        <div class="chips"><span class="chip">Java</span><span class="chip">Haskell</span><span class="chip">Prolog</span><a class="chip" href="#hoare">Hoare-Kalkül →</a></div>
+        <div class="mod-t"><h3><a href="#prog" class="mod-link">Programmierung</a></h3><a class="pill live" href="#prog"><span class="de">Zum Modul →</span><span class="en">Open module →</span></a></div>
+        <p><span class="de">Drei Paradigmen und die Einführung in die Programmverifikation. Für jede Sprache gibt es eine eigene Seite, für den Hoare-Kalkül Lektion, Übungen und Klausur-Simulation.</span><span class="en">Three paradigms plus an introduction to program verification. Each language has its own page; Hoare logic has a lesson, exercises and an exam simulation.</span></p>
+        <div class="chips"><a class="chip" href="#java">Java</a><a class="chip" href="#haskell">Haskell</a><a class="chip" href="#prolog">Prolog</a><a class="chip" href="#hoare">Hoare-Kalkül</a><a class="chip" href="#practice"><span class="de">Übungen</span><span class="en">Exercises</span></a><a class="chip" href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a></div>
       </div>
       <div class="mod"><div class="mod-t"><h3>Einführung in die Technische Informatik</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
         <p><span class="de">Vom Bit zum Rechner: Zahlendarstellung, Schaltnetze, Schaltwerke.</span><span class="en">From bits to computers: number representation, combinational and sequential circuits.</span></p></div>
@@ -334,8 +393,300 @@ footer a{color:var(--muted)}
   </div>
 </section>
 
+<!-- ================= PROGRAMMIERUNG HUB ================= -->
+<section class="view" id="view-prog" aria-labelledby="prog-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><span>Programmierung</span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">1. Semester · Pflichtmodul · Lehr- und Forschungsgebiet Informatik 2</span><span class="en">Semester 1 · compulsory module · Research Group Computer Science 2</span></div>
+    <h1 id="prog-title">Programmierung</h1>
+    <p class="lede">
+      <span class="de">Die Vorlesung zeigt drei Arten zu programmieren: imperativ und objektorientiert mit Java, funktional mit Haskell und logisch mit Prolog. Dazu kommt die Programmverifikation mit dem Hoare-Kalkül. Wer mehrere Paradigmen kennt, drückt eigene Ideen besser aus, wählt für ein Problem die passende Sprache und lernt neue Sprachen schneller.</span>
+      <span class="en">The lecture shows three ways of programming: imperative and object-oriented with Java, functional with Haskell and logic-based with Prolog. On top comes program verification with Hoare logic. Knowing several paradigms helps you express your ideas, pick the right language for a problem and learn new languages faster.</span>
+    </p>
+  </div>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">01</span><h2><span class="de">Aufbau der Vorlesung</span><span class="en">How the lecture is organised</span></h2></div>
+    <div class="parts">
+      <a class="part-card" href="#java"><span class="pn">II</span><span class="pt">Java</span><span class="pd"><span class="de">Imperative und objektorientierte Programmierung, Rekursion, dynamische Datenstrukturen, Vererbung.</span><span class="en">Imperative and object-oriented programming, recursion, dynamic data structures, inheritance.</span></span><span class="go"><span class="de">Zur Seite →</span><span class="en">Open →</span></span></a>
+      <a class="part-card accent" href="#hoare"><span class="pn">II.1.4</span><span class="pt">Hoare-Kalkül</span><span class="pd"><span class="de">Verifikation: Zusicherungen, Schleifeninvarianten, Terminierung. Teil des Java-Kapitels.</span><span class="en">Verification: assertions, loop invariants, termination. Part of the Java chapter.</span></span><span class="go"><span class="de">Lektion, Übungen, Klausur →</span><span class="en">Lesson, exercises, exam →</span></span></a>
+      <a class="part-card" href="#haskell"><span class="pn">III</span><span class="pt">Haskell</span><span class="pd"><span class="de">Funktionale Programmierung: Deklarationen, Muster, Typen, Funktionen höherer Ordnung.</span><span class="en">Functional programming: declarations, patterns, types, higher-order functions.</span></span><span class="go"><span class="de">Zur Seite →</span><span class="en">Open →</span></span></a>
+      <a class="part-card" href="#prolog"><span class="pn">IV</span><span class="pt">Prolog</span><span class="pd"><span class="de">Logische Programmierung: Fakten, Regeln, Anfragen, Unifikation und Resolution.</span><span class="en">Logic programming: facts, rules, queries, unification and resolution.</span></span><span class="go"><span class="de">Zur Seite →</span><span class="en">Open →</span></span></a>
+    </div>
+    <p class="small muted"><span class="de">Teil I der Vorlesung führt in die Grundlagen von Programmiersprachen ein. Die Kapitelnummern folgen den öffentlich zugänglichen Vorlesungsfolien des Lehrstuhls; die aktuelle Fassung steht im Moodle-Kurs.</span><span class="en">Part I of the lecture introduces the foundations of programming languages. Chapter numbers follow the chair’s publicly available lecture slides; the current version is in the Moodle course.</span></p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">02</span><h2><span class="de">Ein Problem, drei Sprachen</span><span class="en">One problem, three languages</span></h2></div>
+    <p class="prose"><span class="de">Die Vorlesung vergleicht die Paradigmen an einer einfachen Aufgabe: Wie lang ist eine Liste? Derselbe Gedanke sieht in jeder Sprache anders aus.</span><span class="en">The lecture compares the paradigms on a simple task: how long is a list? The same idea looks different in each language.</span></p>
+    <div class="trio">
+      <div class="lang-box"><div class="lb-h"><b>Java</b><span><span class="de">imperativ</span><span class="en">imperative</span></span></div>
+<pre class="code">static int len(Liste x) {
+  int n = 0;
+  Element e = x.kopf;
+  while (e != null) {
+    n = n + 1;
+    e = e.next;
+  }
+  return n;
+}</pre>
+        <p><span class="de">Anweisungen ändern Schritt für Schritt Variablen.</span><span class="en">Statements change variables step by step.</span></p></div>
+      <div class="lang-box"><div class="lb-h"><b>Haskell</b><span><span class="de">funktional</span><span class="en">functional</span></span></div>
+<pre class="code">len :: [a] -> Int
+len []       = 0
+len (x:rest) = 1 + len rest</pre>
+        <p><span class="de">Rekursion statt Schleife, keine Seiteneffekte.</span><span class="en">Recursion instead of loops, no side effects.</span></p></div>
+      <div class="lang-box"><div class="lb-h"><b>Prolog</b><span><span class="de">logisch</span><span class="en">logic</span></span></div>
+<pre class="code">len([], 0).
+len([_|Rest], N) :-
+    len(Rest, M),
+    N is M + 1.
+
+?- len([15,70,36], N).
+N = 3.</pre>
+        <p><span class="de">Regeln beschreiben eine Relation, Prolog sucht die Antwort.</span><span class="en">Rules describe a relation, Prolog searches for the answer.</span></p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">03</span><h2><span class="de">Üben und prüfen</span><span class="en">Practise and test yourself</span></h2></div>
+    <div class="cards">
+      <a class="card link-card" href="#practice"><span class="tag"><span class="de">11 Aufgaben</span><span class="en">11 exercises</span></span><h3><span class="de">Geführte Übungen zum Hoare-Kalkül</span><span class="en">Guided Hoare logic exercises</span></h3><p><span class="de">Invariante gegeben oder selbst finden, if/else und Arrays, mit automatischem Prüfer.</span><span class="en">Invariant given or found yourself, if/else and arrays, with an automatic checker.</span></p></a>
+      <a class="card link-card" href="#exam"><span class="tag"><span class="de">mit Punkten</span><span class="en">with points</span></span><h3><span class="de">Klausur-Simulation</span><span class="en">Exam simulation</span></h3><p><span class="de">Eine Aufgabe wie in der Prüfung, optional mit 20 Minuten Zeitlimit.</span><span class="en">A task like in the exam, optionally with a 20-minute time limit.</span></p></a>
+    </div>
+  </section>
+</section>
+
+<!-- ================= JAVA ================= -->
+<section class="view lang-page" id="view-java" aria-labelledby="java-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span>Java</span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Teil II der Vorlesung · imperativ und objektorientiert</span><span class="en">Part II of the lecture · imperative and object-oriented</span></div>
+    <h1 id="java-title">Java</h1>
+    <p class="lede"><span class="de">Gebaut, damit ein Programm auf jedem Gerät läuft, ohne neu übersetzt zu werden. Heute eine der meistgenutzten Sprachen der Welt.</span><span class="en">Built so that a program runs on any device without being recompiled. Today one of the most widely used languages in the world.</span></p>
+    <div class="facts">
+      <span class="fact"><b>1995</b><span><span class="de">erste Version</span><span class="en">first release</span></span></span>
+      <span class="fact"><b>Java 27</b><span><span class="de">aktuell, Sept. 2026</span><span class="en">current, Sept. 2026</span></span></span>
+      <span class="fact"><b>Java 25</b><span><span class="de">aktuelle LTS</span><span class="en">current LTS</span></span></span>
+      <span class="fact"><b><span class="de">statisch</span><span class="en">static</span></b><span><span class="de">Typisierung</span><span class="en">typing</span></span></span>
+    </div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">01</span><h2><span class="de">Warum Java entstand</span><span class="en">Why Java was created</span></h2></div>
+    <div class="prose">
+      <p class="de">1991 startete bei Sun Microsystems das <strong>Green Project</strong> um James Gosling, Mike Sheridan und Patrick Naughton. Ziel war Software für Unterhaltungselektronik wie Set-Top-Boxen und interaktives Fernsehen. Das Problem: Jedes Gerät hatte einen anderen Prozessor und wenig Speicher. Ein Programm hätte für jedes Gerät neu geschrieben oder übersetzt werden müssen.</p>
+      <p class="en">In 1991 the <strong>Green Project</strong> started at Sun Microsystems around James Gosling, Mike Sheridan and Patrick Naughton. The goal was software for consumer electronics such as set-top boxes and interactive TV. The problem: every device had a different processor and little memory. A program would have had to be rewritten or recompiled for each device.</p>
+      <p class="de">Die Lösung war eine Sprache, die in <strong>Bytecode</strong> übersetzt wird. Diesen führt eine virtuelle Maschine (JVM) auf jedem Gerät aus: „Write once, run anywhere“. Die Syntax ähnelt C und C++, damit Programmierer sich schnell zurechtfinden, aber ohne Zeigerarithmetik und mit automatischer Speicherbereinigung. Die Sprache hieß zuerst <em>Oak</em>, nach einer Eiche vor Goslings Büro, und wurde später nach einer Kaffeesorte in Java umbenannt. Der Fernsehmarkt war noch nicht bereit, aber das gerade entstehende Web brauchte genau diese Plattformunabhängigkeit.</p>
+      <p class="en">The solution was a language compiled to <strong>bytecode</strong>, which a virtual machine (JVM) executes on every device: “write once, run anywhere”. The syntax resembles C and C++ so programmers feel at home quickly, but without pointer arithmetic and with automatic garbage collection. The language was first called <em>Oak</em>, after an oak tree outside Gosling’s office, and later renamed Java after a kind of coffee. The TV market was not ready yet, but the emerging web needed exactly this platform independence.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">02</span><h2><span class="de">Entwicklung in Kürze</span><span class="en">Evolution in brief</span></h2></div>
+    <div class="timeline">
+      <div class="tl"><div class="yr">1991</div><div><h4>Oak</h4><p><span class="de">Erste Programme laufen im Green Project.</span><span class="en">First programs run in the Green Project.</span></p></div></div>
+      <div class="tl key"><div class="yr">1995</div><div><h4><span class="de">Java wird veröffentlicht</span><span class="en">Java is released</span></h4><p><span class="de">Am 23. Mai 1995 stellt Sun Java vor, zusammen mit der Einbindung in den Browser Netscape Navigator.</span><span class="en">On 23 May 1995 Sun presents Java, together with its integration into the Netscape Navigator browser.</span></p></div></div>
+      <div class="tl"><div class="yr">2004</div><div><h4>Java 5</h4><p><span class="de">Generische Typen, erweiterte for-Schleife, Annotationen.</span><span class="en">Generics, enhanced for loop, annotations.</span></p></div></div>
+      <div class="tl"><div class="yr">2007</div><div><h4>OpenJDK</h4><p><span class="de">Sun veröffentlicht Java als freie Software unter der GPL.</span><span class="en">Sun releases Java as free software under the GPL.</span></p></div></div>
+      <div class="tl"><div class="yr">2010</div><div><h4>Oracle</h4><p><span class="de">Oracle übernimmt Sun und damit Java.</span><span class="en">Oracle acquires Sun and with it Java.</span></p></div></div>
+      <div class="tl"><div class="yr">2014</div><div><h4>Java 8</h4><p><span class="de">Lambda-Ausdrücke und Streams: Ideen aus der funktionalen Programmierung kommen in Java an.</span><span class="en">Lambda expressions and streams: ideas from functional programming arrive in Java.</span></p></div></div>
+      <div class="tl"><div class="yr">2017</div><div><h4><span class="de">Halbjährlicher Takt</span><span class="en">Six-month cadence</span></h4><p><span class="de">Ab Java 9 (Module) erscheint jeden März und September eine neue Version, alle zwei Jahre eine mit Langzeitunterstützung (LTS).</span><span class="en">From Java 9 (modules) a new version appears every March and September, every two years one with long-term support (LTS).</span></p></div></div>
+      <div class="tl"><div class="yr">2023</div><div><h4>Java 21 LTS</h4><p><span class="de">Virtuelle Threads für massenhaft nebenläufige Server.</span><span class="en">Virtual threads for massively concurrent servers.</span></p></div></div>
+      <div class="tl key"><div class="yr">2026</div><div><h4>Java 27</h4><p><span class="de">Erschienen am 15. September 2026, unter anderem mit Post-Quanten-Kryptografie und dem G1-Garbage-Collector als Standard überall.</span><span class="en">Released on 15 September 2026, among other things with post-quantum cryptography and the G1 garbage collector as the default everywhere.</span></p></div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">03</span><h2><span class="de">Wo Java heute gefragt ist</span><span class="en">Where Java is in demand today</span></h2></div>
+    <div class="cards">
+      <div class="card"><span class="tag"><span class="de">Finanzen</span><span class="en">finance</span></span><h3><span class="de">Banken und Versicherungen</span><span class="en">Banks and insurers</span></h3><p><span class="de">Kernsysteme, Zahlungsverkehr und Handelsplattformen laufen oft seit Jahrzehnten auf der JVM.</span><span class="en">Core systems, payments and trading platforms have often run on the JVM for decades.</span></p></div>
+      <div class="card"><span class="tag">backend</span><h3><span class="de">Unternehmenssoftware und Cloud</span><span class="en">Enterprise software and cloud</span></h3><p><span class="de">Web-Backends und Microservices mit Spring Boot, Jakarta EE oder Helidon.</span><span class="en">Web backends and microservices with Spring Boot, Jakarta EE or Helidon.</span></p></div>
+      <div class="card"><span class="tag">mobile</span><h3>Android</h3><p><span class="de">Android-Apps werden in Java und Kotlin geschrieben, beide laufen auf derselben Plattform.</span><span class="en">Android apps are written in Java and Kotlin, both running on the same platform.</span></p></div>
+      <div class="card"><span class="tag">data</span><h3><span class="de">Big Data und Streaming</span><span class="en">Big data and streaming</span></h3><p><span class="de">Werkzeuge wie Hadoop, Kafka und Spark stammen aus dem JVM-Ökosystem.</span><span class="en">Tools such as Hadoop, Kafka and Spark come from the JVM ecosystem.</span></p></div>
+    </div>
+    <p class="small muted"><span class="de">Im TIOBE-Index vom November 2026 steht Java auf Platz 3 (8,89 %), knapp vor C++. Der Index misst Suchanfragen, nicht direkt Stellenangebote.</span><span class="en">In the November 2026 TIOBE index Java ranks third (8.89 %), just ahead of C++. The index measures search activity, not job offers directly.</span></p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">04</span><h2><span class="de">Java in der Vorlesung Programmierung</span><span class="en">Java in the Programmierung lecture</span></h2></div>
+    <div class="chapters">
+      <div class="ch"><div class="ch-h"><span class="cn">II.1</span><h3><span class="de">Grundelemente der Programmierung</span><span class="en">Basic elements of programming</span></h3></div>
+        <ol><li>Erste Schritte</li><li>Einfache Datentypen</li><li>Anweisungen und Kontrollstrukturen</li><li><a href="#hoare">Verifikation (Hoare-Kalkül) →</a></li><li>Reihungen (Arrays)</li></ol></div>
+      <div class="ch"><div class="ch-h"><span class="cn">II.2</span><h3><span class="de">Objekte, Klassen und Methoden</span><span class="en">Objects, classes and methods</span></h3></div>
+        <ol><li>Grundzüge der Objektorientierung</li><li>Methoden, Unterprogramme und Parameter</li><li>Datenabstraktion</li><li>Konstruktoren</li><li>Vordefinierte Klassen</li></ol></div>
+      <div class="ch"><div class="ch-h"><span class="cn">II.3</span><h3><span class="de">Rekursion und dynamische Datenstrukturen</span><span class="en">Recursion and dynamic data structures</span></h3></div>
+        <ol><li>Rekursive Algorithmen</li><li>Rekursive (dynamische) Datenstrukturen</li></ol></div>
+      <div class="ch"><div class="ch-h"><span class="cn">II.4</span><h3><span class="de">Erweiterung von Klassen und fortgeschrittene Konzepte</span><span class="en">Extending classes and advanced concepts</span></h3></div>
+        <ol><li>Unterklassen und Vererbung</li><li>Abstrakte Klassen und Interfaces</li><li>Modularität und Pakete</li></ol></div>
+    </div>
+    <p class="small muted"><span class="de">Kapitelnamen wie in den Vorlesungsfolien (auf Deutsch).</span><span class="en">Chapter names as in the lecture slides (in German).</span></p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">05</span><h2><span class="de">Ein erster Blick</span><span class="en">A first look</span></h2></div>
+    <p class="prose"><span class="de">Die Fakultät, das Standardbeispiel der Vorlesung. Genau dieses Programm wird im Kapitel Verifikation mit dem Hoare-Kalkül bewiesen.</span><span class="en">The factorial, the lecture’s standard example. Exactly this program is proved correct with Hoare logic in the verification chapter.</span></p>
+<pre class="code">public static int fak(int n) {
+    int i = n, res = 1;
+    while (i &gt; 1) {
+        res = res * i;
+        i = i - 1;
+    }
+    return res;
+}</pre>
+    <div class="pager"><a class="btn" href="#prog">← Programmierung</a><a class="btn primary" href="#haskell"><span class="de">Weiter: Haskell →</span><span class="en">Next: Haskell →</span></a></div>
+  </section>
+</section>
+
+<!-- ================= HASKELL ================= -->
+<section class="view lang-page" id="view-haskell" aria-labelledby="haskell-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span>Haskell</span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Teil III der Vorlesung · funktional</span><span class="en">Part III of the lecture · functional</span></div>
+    <h1 id="haskell-title">Haskell</h1>
+    <p class="lede"><span class="de">Von einem Komitee entworfen, um die zersplitterte Welt der funktionalen Sprachen zu vereinen. Heute ein Labor für Ideen, die später in Java, Rust oder Swift landen.</span><span class="en">Designed by a committee to unite the fragmented world of functional languages. Today a laboratory for ideas that later land in Java, Rust or Swift.</span></p>
+    <div class="facts">
+      <span class="fact"><b>1990</b><span>Haskell 1.0</span></span>
+      <span class="fact"><b>Haskell 2010</b><span><span class="de">letzter Standard</span><span class="en">latest standard</span></span></span>
+      <span class="fact"><b>GHC 9.14</b><span><span class="de">aktueller Compiler</span><span class="en">current compiler</span></span></span>
+      <span class="fact"><b>lazy</b><span><span class="de">Auswertung</span><span class="en">evaluation</span></span></span>
+    </div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">01</span><h2><span class="de">Warum Haskell entstand</span><span class="en">Why Haskell was created</span></h2></div>
+    <div class="prose">
+      <p class="de">Nach der Sprache Miranda (1985) wuchs das Interesse an <strong>lazy</strong> ausgewerteten, rein funktionalen Sprachen. 1987 gab es mehr als ein Dutzend davon, alle ähnlich, aber nicht kompatibel. Miranda war die verbreitetste, gehörte aber einer Firma. Das bremste Forschung und Anwendungen.</p>
+      <p class="en">After the language Miranda (1985), interest in <strong>lazily</strong> evaluated, purely functional languages grew. By 1987 there were more than a dozen of them, all similar but incompatible. Miranda was the most widespread, but it was proprietary. That held back research and applications.</p>
+      <p class="de">Im September 1987 beschlossen Forschende auf der Konferenz FPCA in Portland, Oregon, ein Komitee zu gründen. Es sollte eine gemeinsame, offene Sprache entwerfen: als stabile Grundlage für Anwendungen, für die Lehre und als Plattform für neue Ideen. Benannt wurde sie nach dem Logiker <strong>Haskell Curry</strong>. Ihre Kennzeichen sind Funktionen ohne Seiteneffekte, Lazy Evaluation, ein starkes statisches Typsystem mit Typinferenz, Typklassen und Monaden für Ein- und Ausgabe.</p>
+      <p class="en">In September 1987, researchers at the FPCA conference in Portland, Oregon decided to form a committee. It was to design a common, open language: a stable foundation for applications, for teaching and a platform for new ideas. It was named after the logician <strong>Haskell Curry</strong>. Its hallmarks are functions without side effects, lazy evaluation, a strong static type system with type inference, type classes and monads for input and output.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">02</span><h2><span class="de">Entwicklung in Kürze</span><span class="en">Evolution in brief</span></h2></div>
+    <div class="timeline">
+      <div class="tl"><div class="yr">1985</div><div><h4>Miranda</h4><p><span class="de">Lazy und rein funktional, aber proprietär.</span><span class="en">Lazy and purely functional, but proprietary.</span></p></div></div>
+      <div class="tl"><div class="yr">1987</div><div><h4>FPCA ’87</h4><p><span class="de">Beschluss, ein Komitee für eine offene Sprache zu bilden.</span><span class="en">Decision to form a committee for an open language.</span></p></div></div>
+      <div class="tl key"><div class="yr">1990</div><div><h4>Haskell 1.0</h4><p><span class="de">Der erste Haskell Report trägt das Datum 1. April 1990.</span><span class="en">The first Haskell Report is dated 1 April 1990.</span></p></div></div>
+      <div class="tl"><div class="yr">1999</div><div><h4>Haskell 98</h4><p><span class="de">Ein stabiler Standard für Lehrbücher und Compiler.</span><span class="en">A stable standard for textbooks and compilers.</span></p></div></div>
+      <div class="tl"><div class="yr">2010</div><div><h4>Haskell 2010</h4><p><span class="de">Bis heute die letzte formale Sprachdefinition. Seitdem wächst Haskell vor allem über Erweiterungen des Compilers GHC.</span><span class="en">Still the latest formal language definition. Since then Haskell has grown mainly through extensions of the GHC compiler.</span></p></div></div>
+      <div class="tl"><div class="yr">2021</div><div><h4>GHC2021</h4><p><span class="de">Ein Bündel bewährter Erweiterungen wird mit GHC 9.2 zum Standardumfang.</span><span class="en">A bundle of proven extensions becomes the default set with GHC 9.2.</span></p></div></div>
+      <div class="tl key"><div class="yr">2025</div><div><h4>GHC 9.14</h4><p><span class="de">Erschienen im Dezember 2025, 2026 mit Fehlerbehebungen weitergeführt.</span><span class="en">Released in December 2025, continued with bug-fix releases in 2026.</span></p></div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">03</span><h2><span class="de">Wo Haskell heute gefragt ist</span><span class="en">Where Haskell is in demand today</span></h2></div>
+    <div class="cards">
+      <div class="card"><span class="tag"><span class="de">Finanzen</span><span class="en">finance</span></span><h3><span class="de">Banken und Zahlungsverkehr</span><span class="en">Banks and payments</span></h3><p><span class="de">Standard Chartered nutzt seit 2009 einen eigenen Haskell-Dialekt, ABN AMRO berechnet damit Kontrahentenrisiken, Juspay baut Zahlungssysteme.</span><span class="en">Standard Chartered has used its own Haskell dialect since 2009, ABN AMRO computes counterparty risk with it, Juspay builds payment systems.</span></p></div>
+      <div class="card"><span class="tag">big tech</span><h3><span class="de">Sicherheit bei Meta</span><span class="en">Safety at Meta</span></h3><p><span class="de">Sigma, die Plattform gegen Spam und Missbrauch, und das Code-Index-System Glean sind in Haskell geschrieben.</span><span class="en">Sigma, the platform against spam and abuse, and the code-indexing system Glean are written in Haskell.</span></p></div>
+      <div class="card"><span class="tag">hardware</span><h3><span class="de">Chip-Entwurf</span><span class="en">Chip design</span></h3><p><span class="de">Mit Clash wird Hardware in Haskell beschrieben; auch der KI-Chiphersteller Groq setzt Haskell ein.</span><span class="en">With Clash, hardware is described in Haskell; the AI chip maker Groq also uses Haskell.</span></p></div>
+      <div class="card"><span class="tag"><span class="de">Werkzeuge</span><span class="en">tools</span></span><h3><span class="de">Compiler und Entwicklerwerkzeuge</span><span class="en">Compilers and developer tools</span></h3><p><span class="de">Der Dokumentkonverter Pandoc und der Shell-Prüfer ShellCheck sind bekannte Haskell-Programme, ebenso Blockchain-Plattformen wie Cardano.</span><span class="en">The document converter Pandoc and the shell checker ShellCheck are well-known Haskell programs, as are blockchain platforms such as Cardano.</span></p></div>
+    </div>
+    <p class="small muted"><span class="de">Haskell ist eine Nische: Oft arbeiten nur einzelne Teams einer Firma damit. Viel größer ist sein Einfluss auf andere Sprachen, etwa Lambdas und Streams in Java.</span><span class="en">Haskell is a niche: often only individual teams within a company use it. Its influence on other languages, such as lambdas and streams in Java, is much larger.</span></p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">04</span><h2><span class="de">Haskell in der Vorlesung Programmierung</span><span class="en">Haskell in the Programmierung lecture</span></h2></div>
+    <div class="chapters one">
+      <div class="ch"><div class="ch-h"><span class="cn">III</span><h3><span class="de">Funktionale Programmierung</span><span class="en">Functional programming</span></h3></div>
+        <ol><li>Prinzipien der funktionalen Programmierung</li><li>Deklarationen</li><li>Ausdrücke</li><li>Muster (Patterns)</li><li>Typen und Datenstrukturen</li><li>Funktionale Programmiertechniken</li></ol></div>
+    </div>
+    <p class="small muted"><span class="de">Gearbeitet wird mit dem interaktiven Modus des Glasgow Haskell Compilers (GHCi).</span><span class="en">You work with the interactive mode of the Glasgow Haskell Compiler (GHCi).</span></p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">05</span><h2><span class="de">Ein erster Blick</span><span class="en">A first look</span></h2></div>
+    <p class="prose"><span class="de">Dieselbe Fakultät wie bei Java, diesmal als Gleichungen mit Mustern. Dazu eine Funktion höherer Ordnung: Sie bekommt eine andere Funktion als Argument.</span><span class="en">The same factorial as in Java, this time as equations with patterns. Plus a higher-order function: it takes another function as an argument.</span></p>
+<pre class="code">fak :: Integer -> Integer
+fak 0 = 1
+fak n = n * fak (n - 1)
+
+quadrate :: [Integer] -> [Integer]
+quadrate xs = map (\x -> x * x) xs
+
+-- GHCi&gt; quadrate [1, 2, 3]
+-- [1,4,9]</pre>
+    <div class="pager"><a class="btn" href="#java">← Java</a><a class="btn primary" href="#prolog"><span class="de">Weiter: Prolog →</span><span class="en">Next: Prolog →</span></a></div>
+  </section>
+</section>
+
+<!-- ================= PROLOG ================= -->
+<section class="view lang-page" id="view-prolog" aria-labelledby="prolog-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span>Prolog</span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Teil IV der Vorlesung · logisch</span><span class="en">Part IV of the lecture · logic</span></div>
+    <h1 id="prolog-title">Prolog</h1>
+    <p class="lede"><span class="de">Man beschreibt, was gilt, nicht wie gerechnet wird. Prolog sucht selbst nach Antworten. Entstanden, um Fragen in natürlicher Sprache zu verstehen.</span><span class="en">You describe what holds, not how to compute. Prolog searches for answers itself. Created to understand questions in natural language.</span></p>
+    <div class="facts">
+      <span class="fact"><b>1972</b><span>Marseille</span></span>
+      <span class="fact"><b>ISO 1995</b><span><span class="de">Standard Teil 1</span><span class="en">standard part 1</span></span></span>
+      <span class="fact"><b>SWI-Prolog</b><span><span class="de">verbreitetes System</span><span class="en">widely used system</span></span></span>
+      <span class="fact"><b><span class="de">Terme</span><span class="en">terms</span></b><span><span class="de">einziger Datentyp</span><span class="en">single data type</span></span></span>
+    </div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">01</span><h2><span class="de">Warum Prolog entstand</span><span class="en">Why Prolog was created</span></h2></div>
+    <div class="prose">
+      <p class="de">Im Sommer 1972 entwickelten <strong>Alain Colmerauer</strong> und <strong>Philippe Roussel</strong> an der Universität Marseille ein Frage-Antwort-System für natürliche Sprache. Sie brauchten eine Möglichkeit, Grammatik und Wissen in Logik aufzuschreiben und Sätze durch logisches Schließen zu analysieren. Grundlage war <strong>Robert Kowalskis</strong> Idee aus Edinburgh, logische Formeln (Horn-Klauseln) selbst als Programm zu lesen.</p>
+      <p class="en">In the summer of 1972, <strong>Alain Colmerauer</strong> and <strong>Philippe Roussel</strong> at the University of Marseille were developing a question-answering system for natural language. They needed a way to write down grammar and knowledge in logic and to analyse sentences by logical inference. The basis was <strong>Robert Kowalski’s</strong> idea from Edinburgh of reading logical formulas (Horn clauses) as a program.</p>
+      <p class="de">So entstand <strong>PRO</strong>grammation en <strong>LOG</strong>ique: Ein Programm besteht aus Fakten und Regeln, eine Anfrage fragt, was daraus folgt. Prolog findet die Antwort mit <strong>Unifikation</strong> und <strong>Resolution</strong> und probiert dabei Alternativen durch (Backtracking).</p>
+      <p class="en">This became <strong>PRO</strong>grammation en <strong>LOG</strong>ique: a program consists of facts and rules, and a query asks what follows from them. Prolog finds the answer through <strong>unification</strong> and <strong>resolution</strong>, trying alternatives along the way (backtracking).</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">02</span><h2><span class="de">Entwicklung in Kürze</span><span class="en">Evolution in brief</span></h2></div>
+    <div class="timeline">
+      <div class="tl key"><div class="yr">1972</div><div><h4>Prolog</h4><p><span class="de">Erste Version in Marseille.</span><span class="en">First version in Marseille.</span></p></div></div>
+      <div class="tl"><div class="yr">1975</div><div><h4>DEC-10 Prolog</h4><p><span class="de">David H. D. Warren in Edinburgh macht Prolog durch einen Compiler schnell. Daraus wird der Edinburgh-Dialekt.</span><span class="en">David H. D. Warren in Edinburgh makes Prolog fast with a compiler. This becomes the Edinburgh dialect.</span></p></div></div>
+      <div class="tl"><div class="yr">1982</div><div><h4><span class="de">Fünfte Generation</span><span class="en">Fifth Generation</span></h4><p><span class="de">Japans Großprojekt FGCS setzt auf logische Programmierung als Grundlage für KI-Rechner.</span><span class="en">Japan’s large FGCS project bets on logic programming as the basis for AI computers.</span></p></div></div>
+      <div class="tl"><div class="yr">1983</div><div><h4>WAM</h4><p><span class="de">Die Warren Abstract Machine wird zum Vorbild fast aller späteren Prolog-Systeme.</span><span class="en">The Warren Abstract Machine becomes the model for almost all later Prolog systems.</span></p></div></div>
+      <div class="tl"><div class="yr">1986</div><div><h4>SWI-Prolog, SICStus</h4><p><span class="de">Zwei Systeme, die bis heute weiterentwickelt werden.</span><span class="en">Two systems still being developed today.</span></p></div></div>
+      <div class="tl"><div class="yr">1995</div><div><h4>ISO-Prolog</h4><p><span class="de">Internationaler Standard für den Sprachkern, 2000 ergänzt um Module.</span><span class="en">International standard for the core language, extended with modules in 2000.</span></p></div></div>
+      <div class="tl key"><div class="yr">2025</div><div><h4><span class="de">ISO Teil 3</span><span class="en">ISO part 3</span></h4><p><span class="de">Im Juni 2025 wird auch die Grammatik-Notation DCG standardisiert, drei Jahre nach dem 50. Geburtstag der Sprache.</span><span class="en">In June 2025 the DCG grammar notation is standardised too, three years after the language’s 50th birthday.</span></p></div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">03</span><h2><span class="de">Wo Prolog heute gefragt ist</span><span class="en">Where Prolog is in demand today</span></h2></div>
+    <div class="cards">
+      <div class="card"><span class="tag"><span class="de">KI</span><span class="en">AI</span></span><h3><span class="de">Sprachverarbeitung</span><span class="en">Language processing</span></h3><p><span class="de">IBM Watson, das 2011 bei Jeopardy! gewann, zerlegte die Fragen mit Prolog-Regeln.</span><span class="en">IBM Watson, which won Jeopardy! in 2011, parsed the questions with Prolog rules.</span></p></div>
+      <div class="card"><span class="tag"><span class="de">Regeln</span><span class="en">rules</span></span><h3><span class="de">Geschäfts- und Rechtsregeln</span><span class="en">Business and legal rules</span></h3><p><span class="de">Regelbasierte Systeme für Verträge, Vorschriften oder Tarife; oft steckt Prolog unsichtbar im Kern.</span><span class="en">Rule-based systems for contracts, regulations or tariffs; Prolog often sits invisibly at the core.</span></p></div>
+      <div class="card"><span class="tag"><span class="de">Verifikation</span><span class="en">verification</span></span><h3><span class="de">Formale Methoden</span><span class="en">Formal methods</span></h3><p><span class="de">Der Modellprüfer ProB ist in Prolog geschrieben, und die Spezifikation der Java Virtual Machine enthält Prolog-Code für die Typprüfung.</span><span class="en">The model checker ProB is written in Prolog, and the Java Virtual Machine specification contains Prolog code for type checking.</span></p></div>
+      <div class="card"><span class="tag">planning</span><h3><span class="de">Planung und Datalog</span><span class="en">Planning and Datalog</span></h3><p><span class="de">Constraint-Programmierung für Stundenpläne und Logistik; die Teilsprache Datalog in Datenbanken und Programmanalyse.</span><span class="en">Constraint programming for timetables and logistics; the sublanguage Datalog in databases and program analysis.</span></p></div>
+    </div>
+    <p class="small muted"><span class="de">Prolog ist in der Industrie eine kleine Nische. SWI-Prolog wird laut Projekt rund 250.000 Mal im Jahr heruntergeladen.</span><span class="en">Prolog is a small niche in industry. According to the project, SWI-Prolog is downloaded about 250,000 times a year.</span></p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">04</span><h2><span class="de">Prolog in der Vorlesung Programmierung</span><span class="en">Prolog in the Programmierung lecture</span></h2></div>
+    <div class="chapters one">
+      <div class="ch"><div class="ch-h"><span class="cn">IV</span><h3><span class="de">Logische Programmierung</span><span class="en">Logic programming</span></h3></div>
+        <ol><li>Grundkonzepte der logischen Programmierung</li><li>Syntax von Prolog</li><li>Rechnen in Prolog <span class="muted small">(Unifikation, allgemeinster Unifikator, Resolution)</span></li></ol></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><span class="num">05</span><h2><span class="de">Ein erster Blick</span><span class="en">A first look</span></h2></div>
+    <p class="prose"><span class="de">Fakten über eine Familie und eine Regel, wie in den Vorlesungsfolien. Die Anfrage fragt nach der Großmutter; Prolog findet die Antwort durch Unifikation.</span><span class="en">Facts about a family and a rule, as in the lecture slides. The query asks for the grandmother; Prolog finds the answer by unification.</span></p>
+<pre class="code">mutterVon(renate, susanne).
+mutterVon(susanne, aline).
+
+grossmutterVon(G, K) :- mutterVon(G, M), mutterVon(M, K).
+
+?- grossmutterVon(Oma, aline).
+Oma = renate.</pre>
+    <div class="pager"><a class="btn" href="#haskell">← Haskell</a><a class="btn primary" href="#hoare"><span class="de">Weiter: Hoare-Kalkül →</span><span class="en">Next: Hoare logic →</span></a></div>
+  </section>
+</section>
+
+
 <!-- ================= HOARE LESSON ================= -->
 <section class="view" id="view-hoare" aria-labelledby="hoare-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#java">Java</a><span>›</span><span><span class="de">II.1.4 Verifikation</span><span class="en">II.1.4 Verification</span></span></nav>
   <div class="hero">
     <div class="kicker"><span class="de">Programmierung · 1. Semester · Programmverifikation</span><span class="en">Programmierung · semester 1 · program verification</span></div>
     <h1 id="hoare-title"><span class="de">Tests finden Fehler. <em>Beweise</em> zeigen, dass es keine gibt.</span><span class="en">Tests find bugs. <em>Proofs</em> show there are none.</span></h1>
@@ -558,6 +909,7 @@ footer a{color:var(--muted)}
 
 <!-- ================= PRACTICE ================= -->
 <section class="view" id="view-practice" aria-label="Übungen / Exercises">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#hoare">Hoare-Kalkül</a><span>›</span><span><span class="de">Übungen</span><span class="en">Exercises</span></span></nav>
   <div class="prac">
     <aside class="exlist" id="exlist"></aside>
     <div class="ws" id="ws"></div>
@@ -566,6 +918,7 @@ footer a{color:var(--muted)}
 
 <!-- ================= EXAM ================= -->
 <section class="view" id="view-exam" aria-labelledby="exam-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#hoare">Hoare-Kalkül</a><span>›</span><span><span class="de">Klausur</span><span class="en">Exam</span></span></nav>
   <div id="exam"></div>
 </section>
 </main>
@@ -575,7 +928,10 @@ footer a{color:var(--muted)}
   <p><span class="de">Quellen:</span><span class="en">Sources:</span>
     <a href="https://sc.informatik.rwth-aachen.de/wp-content/uploads/2025/10/2025-WS-Erstsemestereinfuehrung-BSInf.pdf">Erstsemester-Facheinführung BSInf WS 2025/26</a> ·
     <a href="https://verify.rwth-aachen.de/">LuFG Informatik 2 (Programmierung)</a> ·
-    <a href="https://doi.org/10.1145/363235.363259">C. A. R. Hoare, An Axiomatic Basis for Computer Programming (1969)</a></p>
+    <a href="https://doi.org/10.1145/363235.363259">C. A. R. Hoare, An Axiomatic Basis for Computer Programming (1969)</a> ·
+    <a href="https://doi.org/10.1017/S1471068422000102">Körner et al., Fifty Years of Prolog and Beyond (2022)</a> ·
+    <a href="https://www.oracle.com/news/announcement/oracle-releases-java-27-and-strengthens-post-quantum-cryptography-support-2026-09-15/">Oracle, Java 27 (2026)</a> ·
+    <a href="https://www.haskell.org/ghc/blog/20251219-ghc-9.14.1-released.html">GHC 9.14.1</a></p>
 </footer>
 
 <script>
@@ -1767,12 +2123,19 @@ function renderTracer() {
 }
 
 /* ---- view routing & language ---- */
-const VIEWS = ['plan', 'hoare', 'practice', 'exam'];
+const VIEWS = ['plan', 'prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam'];
+const PROG_VIEWS = ['prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam'];
+const TOP_OF = { java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog' };
+const TITLES = { plan: 'Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab' };
 function showView(v, scroll) {
-  if (!VIEWS.includes(v)) v = 'hoare';
+  if (!VIEWS.includes(v)) v = 'plan';
   ST.view = v;
   VIEWS.forEach(n => document.getElementById('view-' + n).classList.toggle('on', n === v));
-  document.querySelectorAll('nav.views a').forEach(a => { if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  document.body.dataset.group = PROG_VIEWS.includes(v) ? 'prog' : 'none';
+  const top = TOP_OF[v] || v;
+  document.querySelectorAll('nav.views a').forEach(a => { if (a.dataset.view === top) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  document.querySelectorAll('nav.subnav a').forEach(a => { if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  try { document.title = TITLES[v] || 'Hoare Lab'; } catch (e) {}
   if (v === 'practice') renderPractice();
   if (v === 'exam') { renderExam(); kArmTimer(); }
   if (scroll) window.scrollTo(0, 0);
@@ -1816,7 +2179,7 @@ function start(data) {
   document.getElementById('tr-reset').addEventListener('click', () => { ST.tr.hl = 0; renderTracer(); });
   window.addEventListener('hashchange', () => showView(location.hash.slice(1), true));
   setLang(lang);
-  showView(location.hash.slice(1) || (data && data.view) || 'hoare', false);
+  showView(location.hash.slice(1) || (data && data.view) || 'plan', false);
 }
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 

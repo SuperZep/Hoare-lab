@@ -569,12 +569,19 @@ function renderTracer() {
 }
 
 /* ---- view routing & language ---- */
-const VIEWS = ['plan', 'hoare', 'practice', 'exam'];
+const VIEWS = ['plan', 'prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam'];
+const PROG_VIEWS = ['prog', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam'];
+const TOP_OF = { java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog' };
+const TITLES = { plan: 'Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab' };
 function showView(v, scroll) {
-  if (!VIEWS.includes(v)) v = 'hoare';
+  if (!VIEWS.includes(v)) v = 'plan';
   ST.view = v;
   VIEWS.forEach(n => document.getElementById('view-' + n).classList.toggle('on', n === v));
-  document.querySelectorAll('nav.views a').forEach(a => { if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  document.body.dataset.group = PROG_VIEWS.includes(v) ? 'prog' : 'none';
+  const top = TOP_OF[v] || v;
+  document.querySelectorAll('nav.views a').forEach(a => { if (a.dataset.view === top) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  document.querySelectorAll('nav.subnav a').forEach(a => { if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  try { document.title = TITLES[v] || 'Hoare Lab'; } catch (e) {}
   if (v === 'practice') renderPractice();
   if (v === 'exam') { renderExam(); kArmTimer(); }
   if (scroll) window.scrollTo(0, 0);
@@ -618,6 +625,6 @@ function start(data) {
   document.getElementById('tr-reset').addEventListener('click', () => { ST.tr.hl = 0; renderTracer(); });
   window.addEventListener('hashchange', () => showView(location.hash.slice(1), true));
   setLang(lang);
-  showView(location.hash.slice(1) || (data && data.view) || 'hoare', false);
+  showView(location.hash.slice(1) || (data && data.view) || 'plan', false);
 }
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
