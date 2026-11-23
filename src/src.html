@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoare Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout idea: lecture notes as a manuscript. Prose in a reading column, code panels where ⟨assertions⟩ are set in ultramarine ink between the lines. */
+  --paper:#F1F2EE; --surface:#FAFAF8; --ink:#14171F; --muted:#585E6A; --rule:#D5D8D0;
+  --accent:#2C40CF; --accent-soft:rgba(44,64,207,.08); --accent-ink:#FFFFFF;
+  --code-bg:#E9EBF0;
+  --ok:#1B7445; --ok-soft:rgba(27,116,69,.10); --bad:#B3341B; --bad-soft:rgba(179,52,27,.09); --warn:#8E610B;
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Source Serif 4","Iowan Old Style",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1016; --surface:#151821; --ink:#E6E8E3; --muted:#9BA1AD; --rule:#2A2F3B;
+    --accent:#8E9CFF; --accent-soft:rgba(142,156,255,.12); --accent-ink:#0E1016;
+    --code-bg:#1A1E29;
+    --ok:#5DC88D; --ok-soft:rgba(93,200,141,.12); --bad:#FF8B6F; --bad-soft:rgba(255,139,111,.12); --warn:#E1B04B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1016; --surface:#151821; --ink:#E6E8E3; --muted:#9BA1AD; --rule:#2A2F3B;
+  --accent:#8E9CFF; --accent-soft:rgba(142,156,255,.12); --accent-ink:#0E1016;
+  --code-bg:#1A1E29;
+  --ok:#5DC88D; --ok-soft:rgba(93,200,141,.12); --bad:#FF8B6F; --bad-soft:rgba(255,139,111,.12); --warn:#E1B04B;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body[data-lang="de"] .en, body[data-lang="en"] .de{display:none !important}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,3.4vw,40px);font-weight:800;letter-spacing:-.02em}
+h3{font-size:21px;font-weight:600;letter-spacing:-.01em}
+p{margin:0}
+.prose{max-width:66ch;display:grid;gap:14px}
+.mono,code,.prog{font-family:var(--mono)}
+code{font-size:.86em;background:var(--code-bg);padding:.08em .35em;border-radius:5px}
+.as{color:var(--accent);font-family:var(--mono)}
+.muted{color:var(--muted)}
+.small{font-size:15px}
+button{font:inherit;color:inherit}
+.btn{font-family:var(--display);font-size:15px;font-weight:600;border:1px solid var(--rule);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* header */
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.top-in{max-width:1180px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.02em;text-decoration:none;color:var(--ink);display:flex;align-items:baseline;gap:6px}
+.brand .as{font-weight:600}
+nav.views{display:flex;gap:4px;flex-wrap:wrap}
+nav.views a{font-family:var(--display);font-size:15px;font-weight:600;text-decoration:none;color:var(--muted);padding:7px 12px;border-radius:999px}
+nav.views a[aria-current="page"]{color:var(--ink);background:var(--accent-soft)}
+nav.views a:hover{color:var(--ink)}
+.lang{margin-left:auto;display:flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:transparent;padding:6px 12px;font-family:var(--display);font-weight:600;font-size:14px;cursor:pointer;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+main{max-width:1180px;margin:0 auto;padding:0 20px 80px}
+.view{display:none}
+.view.on{display:block}
+
+/* hero */
+.hero{padding:56px 0 40px;display:grid;gap:26px;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(38px,6vw,76px);font-weight:800;letter-spacing:-.035em;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.triple{display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px 22px;font-family:var(--mono)}
+.triple .part{display:grid;gap:4px}
+.triple .big{font-size:clamp(28px,4.4vw,52px);font-weight:600;line-height:1.1}
+.triple .cap{font-family:var(--display);font-size:13px;color:var(--muted);letter-spacing:.02em}
+.triple .as .big, .triple .big.as{color:var(--accent)}
+.hero .lede{font-size:20px;max-width:58ch}
+.hero-row{display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center}
+.hero-demo{font-family:var(--mono);font-size:17px;background:var(--code-bg);border-radius:12px;padding:16px 22px;display:inline-grid;gap:4px;border-left:4px solid var(--accent)}
+.hero-demo .cap{font-family:var(--display);font-size:12px;color:var(--muted);margin-bottom:4px}
+@media (prefers-reduced-motion: no-preference){
+  .triple .part{animation:rise .6s ease-out both}
+  .triple .part:nth-child(2){animation-delay:.15s}
+  .triple .part:nth-child(3){animation-delay:.3s}
+  @keyframes rise{from{transform:translateY(6px);opacity:.25}to{transform:none;opacity:1}}
+}
+
+/* lesson layout */
+.lesson{display:grid;grid-template-columns:200px minmax(0,1fr);gap:48px;padding-top:36px}
+.toc{position:sticky;top:76px;align-self:start;display:grid;gap:2px}
+.toc button{border:0;background:transparent;text-align:left;padding:6px 10px;border-radius:8px;font-family:var(--display);font-size:15px;color:var(--muted);cursor:pointer;display:flex;gap:10px}
+.toc button:hover{color:var(--ink);background:var(--accent-soft)}
+.toc .n{font-variant-numeric:tabular-nums;color:var(--accent);width:1.4em}
+.sec{padding:30px 0 40px;border-bottom:1px solid var(--rule);display:grid;gap:22px;scroll-margin-top:70px}
+.sec-h{display:grid;gap:6px}
+.sec-h .num{font-family:var(--mono);font-size:14px;color:var(--accent)}
+@media (max-width:900px){.lesson{grid-template-columns:minmax(0,1fr);gap:0}.toc{display:none}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px 18px 20px;display:grid;gap:8px;align-content:start}
+.card h3{font-size:18px}
+.card p{font-size:16px;line-height:1.55}
+.card .tag{font-family:var(--mono);font-size:13px;color:var(--accent)}
+
+/* timeline */
+.timeline{display:grid;gap:0;border-left:2px solid var(--rule);margin-left:6px}
+.tl{display:grid;grid-template-columns:92px 1fr;gap:16px;padding:12px 0 12px 18px;position:relative}
+.tl::before{content:"";position:absolute;left:-7px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--accent)}
+.tl.key::before{background:var(--accent)}
+.tl .yr{font-family:var(--display);font-weight:800;font-size:26px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.tl h4{font-size:17px;font-weight:600;margin-bottom:2px}
+.tl p{font-size:16px;color:var(--muted)}
+@media (max-width:520px){.tl{grid-template-columns:1fr;gap:2px}}
+
+/* program panels */
+.prog{background:var(--code-bg);border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.75;overflow-x:auto}
+.ln{display:flex;align-items:baseline;gap:14px;white-space:pre;padding-left:calc(var(--ind,0) * 1.8em)}
+.ln.a .tx{color:var(--accent)}
+.ln .nt{font-family:var(--display);font-size:12px;color:var(--muted);white-space:nowrap;margin-left:auto;padding-left:18px}
+.ln.hl{background:var(--accent-soft);border-radius:6px}
+.ln.ask .tx{color:var(--warn)}
+.ln input.fx{font-family:var(--mono);font-size:15px;color:var(--accent);background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;min-width:200px;width:min(560px,60vw)}
+.ln input.fx:focus{border-color:var(--accent);outline:none}
+
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:14px}
+.rule{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;display:grid;gap:10px;align-content:start}
+.rule .nm{font-family:var(--display);font-weight:600;font-size:16px;display:flex;justify-content:space-between;gap:8px}
+.rule .nm .rn{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400}
+.rule,.card,.tool,.step,.mod{min-width:0}
+.frac{max-width:100%}
+.lesson>div,.sec>*,.tool>*,.hero>*{min-width:0}
+label.f input{width:100%;min-width:0}
+.frac{font-family:var(--mono);font-size:14.5px;display:grid;justify-items:center;text-align:center;gap:4px;padding:6px 0;overflow-x:auto}
+.frac .prem{display:flex;gap:22px;flex-wrap:wrap;justify-content:center}
+.frac .bar{height:1.5px;background:var(--ink);width:100%;max-width:360px}
+.frac .as{color:var(--accent)}
+.rule p{font-size:15.5px;line-height:1.5}
+
+.tool{background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:14px;padding:18px 20px;display:grid;gap:14px}
+.tool h3{display:flex;gap:10px;align-items:baseline}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label.f{display:grid;gap:4px;font-family:var(--display);font-size:13px;color:var(--muted)}
+label.f input, label.f select{font-family:var(--mono);font-size:15px;padding:8px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink)}
+.err{color:var(--bad);font-family:var(--display);font-size:14px}
+
+.steps3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;counter-reset:s}
+.steps3 .card{border-top:3px solid var(--accent)}
+
+table.vt{border-collapse:collapse;font-family:var(--mono);font-size:14.5px;font-variant-numeric:tabular-nums;min-width:100%}
+table.vt th{font-family:var(--display);font-weight:600;font-size:13px;color:var(--muted);text-align:right;padding:6px 12px;border-bottom:1px solid var(--rule);white-space:nowrap}
+table.vt td{text-align:right;padding:5px 12px;border-bottom:1px solid var(--rule)}
+table.vt th:first-child,table.vt td:first-child{text-align:left}
+table.vt tr.hl td{background:var(--accent-soft)}
+table.vt tr.ghost td{color:transparent}
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:12px}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--bad);font-weight:600}
+
+.cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.cheat ol{margin:0;padding-left:20px;display:grid;gap:6px;font-size:16px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding-top:6px}
+
+/* plan view */
+.plan-h{padding:44px 0 22px;display:grid;gap:12px;border-bottom:1px solid var(--rule)}
+.plan-h h1{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-.03em}
+.sem{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:22px;padding-top:28px}
+.sem-col{display:grid;gap:10px;align-content:start}
+.sem-col h2{font-size:22px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline}
+.sem-col h2 span{font-family:var(--mono);font-size:13px;color:var(--muted);font-weight:400}
+.mod{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:6px}
+.mod.live{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.mod-t{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.mod-t h3{font-size:17px}
+.pill{font-family:var(--display);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid var(--rule);color:var(--muted);white-space:nowrap}
+.pill.live{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.mod p{font-size:15.5px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:12.5px;padding:2px 8px;border-radius:6px;background:var(--code-bg)}
+a.chip{color:var(--accent);text-decoration:none;font-weight:600}
+
+/* practice */
+.prac{display:grid;grid-template-columns:270px minmax(0,1fr);gap:32px;padding-top:32px}
+@media (max-width:900px){.prac{grid-template-columns:minmax(0,1fr)}}
+.exlist{display:grid;gap:18px;align-content:start;position:sticky;top:76px}
+@media (max-width:900px){.exlist{position:static}}
+.exgroup{display:grid;gap:6px}
+.exgroup h3{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.exbtn{display:grid;grid-template-columns:1fr auto;gap:2px 10px;text-align:left;border:1px solid var(--rule);background:var(--surface);border-radius:10px;padding:10px 12px;cursor:pointer}
+.exbtn[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.exbtn .t{font-family:var(--display);font-weight:600;font-size:15px}
+.exbtn .lv{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:2px}
+.exbtn .pr{grid-column:1/-1;font-family:var(--display);font-size:12px;color:var(--muted)}
+.ws{display:grid;gap:20px;align-content:start;min-width:0}
+.ws-h{display:grid;gap:8px}
+.ws-h h2{font-size:clamp(26px,3vw,36px)}
+.badge{font-family:var(--display);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);justify-self:start}
+.invbox{font-family:var(--mono);font-size:15px;padding:10px 14px;border:1px dashed var(--accent);border-radius:10px;color:var(--accent);background:var(--accent-soft)}
+
+.steps{display:grid;gap:10px}
+.step{border:1px solid var(--rule);border-radius:14px;background:var(--surface)}
+.step.open{border-color:color-mix(in srgb,var(--accent) 45%,var(--rule))}
+.step-h{width:100%;display:flex;gap:12px;align-items:center;border:0;background:transparent;padding:12px 16px;cursor:pointer;text-align:left}
+.step-h .dot{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:13px;border:1.5px solid var(--rule);color:var(--muted)}
+.step.open .dot{border-color:var(--accent);color:var(--accent)}
+.step.done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.step-h .st{font-family:var(--display);font-weight:600;font-size:16px}
+.step-h .code{font-family:var(--mono);font-size:13px;color:var(--muted);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%}
+.step-b{padding:0 16px 18px 56px;display:grid;gap:14px}
+@media (max-width:560px){.step-b{padding:0 14px 16px}}
+.step-b p{font-size:16.5px}
+.fb{border-radius:10px;padding:10px 14px;font-size:16px;display:grid;gap:6px}
+.fb.ok{background:var(--ok-soft);border-left:3px solid var(--ok)}
+.fb.bad{background:var(--bad-soft);border-left:3px solid var(--bad)}
+.fb.info{background:var(--accent-soft);border-left:3px solid var(--accent)}
+.fb .lab{font-family:var(--display);font-weight:600}
+.cands{display:grid;gap:8px}
+.cand{display:grid;gap:8px;border:1px solid var(--rule);border-radius:10px;padding:10px 12px;background:var(--paper)}
+.cand>button{all:unset;cursor:pointer;font-family:var(--mono);font-size:15px;color:var(--accent);display:flex;gap:10px;align-items:center}
+.cand>button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.cand .key{font-family:var(--display);font-size:13px;color:var(--muted);width:1.2em}
+.chk{display:grid;gap:6px}
+.chk-r{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;font-size:15.5px}
+.chk-r .m{font-family:var(--mono);font-weight:600;text-align:center;border-radius:6px;padding:0 4px}
+.chk-r .m.y{color:var(--ok);background:var(--ok-soft)}.chk-r .m.n{color:var(--bad);background:var(--bad-soft)}
+.chk-r .lab{font-family:var(--mono);font-size:14px}
+.chk-r .d{color:var(--muted);font-size:14.5px}
+.syntax{font-family:var(--display);font-size:13px;color:var(--muted)}
+.inline-in{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.inline-in input{font-family:var(--mono);font-size:15px;padding:8px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink);min-width:0;flex:1}
+.hints{display:grid;gap:6px;margin:0;padding-left:20px;font-size:16px}
+
+/* exam */
+.kstart{display:grid;gap:16px;padding-top:26px;max-width:640px}
+.kstart select{font-family:var(--display);font-size:15px}
+.kcheck{display:flex;gap:10px;align-items:center;font-family:var(--display);font-size:15px;cursor:pointer}
+.kcheck input{width:18px;height:18px;accent-color:var(--accent)}
+.kpaper{display:grid;gap:26px;padding-top:24px;max-width:980px}
+.kpart{display:grid;gap:12px;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:20px 22px}
+.kpart h2{font-size:22px;font-weight:600}
+.kpart>p{font-size:16.5px;max-width:72ch}
+.kinv{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--display);font-size:15px}
+.kinv input.fx,.kpart .inline-in input{font-family:var(--mono);font-size:15px;color:var(--accent);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:5px 8px;flex:1;min-width:200px}
+.kmark{font-family:var(--mono);font-size:13px;font-weight:600;white-space:nowrap}
+.ln .kmark{margin-left:auto;padding-left:14px}
+.ln.kexp .tx{color:var(--bad);font-size:13.5px;white-space:normal}
+.ln input.fx:disabled,.kpaper input:disabled{opacity:1;color:var(--ink);background:transparent;border-style:dashed}
+.kbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:sticky;top:62px;z-index:5;background:var(--paper);padding:8px 0}
+.kclock{font-family:var(--mono);font-size:15px}
+.kclock .warn,#k-clock.warn{color:var(--bad);font-weight:600}
+.kscore{display:grid;gap:10px;background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:14px;padding:18px 22px}
+.kscore .big{font-family:var(--display);font-weight:800;font-size:clamp(26px,3.4vw,38px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kscore .bar{height:8px;border-radius:999px;background:var(--code-bg);overflow:hidden}
+.kscore .bar span{display:block;height:100%;background:var(--accent)}
+@media (max-width:600px){header.top{position:static}.top-in{gap:10px}nav.views a{padding:6px 9px}.kbar{top:0}.toc{display:none}}
+footer{border-top:1px solid var(--rule);padding:26px 20px 40px;max-width:1180px;margin:0 auto;display:grid;gap:8px;font-size:15px;color:var(--muted)}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body data-lang="de">
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#hoare"><span class="as">⟨⟩</span> Hoare Lab</a>
+    <nav class="views" aria-label="Views">
+      <a href="#plan" data-view="plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a>
+      <a href="#hoare" data-view="hoare"><span class="de">Hoare-Kalkül</span><span class="en">Hoare logic</span></a>
+      <a href="#practice" data-view="practice"><span class="de">Übungen</span><span class="en">Exercises</span></a>
+      <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Sprache / Language">
+      <button type="button" id="lang-de" data-lang="de" aria-pressed="true">DE</button>
+      <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ================= FIRST YEAR ================= -->
+<section class="view" id="view-plan" aria-labelledby="plan-title">
+  <div class="plan-h">
+    <div class="kicker"><span class="de">B.Sc. Informatik · RWTH Aachen · Studienstart</span><span class="en">B.Sc. Computer Science · RWTH Aachen · getting started</span></div>
+    <h1 id="plan-title"><span class="de">Das erste Studienjahr</span><span class="en">The first year</span></h1>
+    <p class="prose muted">
+      <span class="de">Für jedes Modul des ersten Jahres entsteht hier eine Lernseite. Begonnen haben wir mit dem Teil, an dem viele im ersten Semester hängen bleiben: dem Hoare-Kalkül aus der Vorlesung Programmierung.</span>
+      <span class="en">Every first-year module will get a study page here. We started with the part many students get stuck on in their first semester: Hoare logic from the Programmierung lecture.</span>
+    </p>
+  </div>
+  <div class="sem">
+    <div class="sem-col">
+      <h2><span><span class="de">1. Semester</span><span class="en">Semester 1</span></span><span>WS</span></h2>
+      <div class="mod live">
+        <div class="mod-t"><h3>Programmierung</h3><span class="pill live"><span class="de">Lernseite verfügbar</span><span class="en">Study page live</span></span></div>
+        <p><span class="de">Programmierkonzepte in drei Paradigmen, dazu die Einführung in die Programmverifikation.</span><span class="en">Programming concepts across three paradigms, plus an introduction to program verification.</span></p>
+        <div class="chips"><span class="chip">Java</span><span class="chip">Haskell</span><span class="chip">Prolog</span><a class="chip" href="#hoare">Hoare-Kalkül →</a></div>
+      </div>
+      <div class="mod"><div class="mod-t"><h3>Einführung in die Technische Informatik</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Vom Bit zum Rechner: Zahlendarstellung, Schaltnetze, Schaltwerke.</span><span class="en">From bits to computers: number representation, combinational and sequential circuits.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Diskrete Strukturen</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Mengen, Relationen, Induktion, Kombinatorik, Graphen. Induktion ist das Fundament für Invarianten.</span><span class="en">Sets, relations, induction, combinatorics, graphs. Induction is the foundation for invariants.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Analysis für Informatik</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Folgen, Reihen, Stetigkeit, Differential- und Integralrechnung.</span><span class="en">Sequences, series, continuity, differential and integral calculus.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Mentoring</h3><span class="pill"><span class="de">Kleingruppen</span><span class="en">small groups</span></span></div>
+        <p><span class="de">Pflicht im 1. und 2. Semester, Unterstützung beim Studienstart.</span><span class="en">Mandatory in semesters 1 and 2, support for the start of your studies.</span></p></div>
+    </div>
+    <div class="sem-col">
+      <h2><span><span class="de">2. Semester</span><span class="en">Semester 2</span></span><span>SS</span></h2>
+      <div class="mod"><div class="mod-t"><h3>Datenstrukturen und Algorithmen</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Sortieren, Suchen, Bäume, Hashing, Graphalgorithmen. Invarianten begründen hier die Korrektheit.</span><span class="en">Sorting, searching, trees, hashing, graph algorithms. Invariants justify correctness here too.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Formale Systeme, Automaten, Prozesse</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Automaten, reguläre Sprachen, Grammatiken, Petrinetze.</span><span class="en">Automata, regular languages, grammars, Petri nets.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Lineare Algebra</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Vektorräume, lineare Abbildungen, Matrizen, Eigenwerte.</span><span class="en">Vector spaces, linear maps, matrices, eigenvalues.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Betriebssysteme und Systemsoftware</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Prozesse, Speicherverwaltung, Synchronisation, Dateisysteme.</span><span class="en">Processes, memory management, synchronisation, file systems.</span></p></div>
+      <p class="small muted"><span class="de">Stand: Erstsemester-Einführung WS 2025/26. Die Zuordnung der Module zum 2. Semester bitte im Studienplan in RWTHonline prüfen.</span><span class="en">Source: first-semester introduction WS 2025/26. Please check the semester-2 assignment in the RWTHonline study plan.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOARE LESSON ================= -->
+<section class="view" id="view-hoare" aria-labelledby="hoare-title">
+  <div class="hero">
+    <div class="kicker"><span class="de">Programmierung · 1. Semester · Programmverifikation</span><span class="en">Programmierung · semester 1 · program verification</span></div>
+    <h1 id="hoare-title"><span class="de">Tests finden Fehler. <em>Beweise</em> zeigen, dass es keine gibt.</span><span class="en">Tests find bugs. <em>Proofs</em> show there are none.</span></h1>
+    <div class="triple" aria-label="Hoare-Tripel">
+      <div class="part"><span class="big as">⟨φ⟩</span><span class="cap"><span class="de">Vorbedingung</span><span class="en">precondition</span></span></div>
+      <div class="part"><span class="big">P</span><span class="cap"><span class="de">Programm</span><span class="en">program</span></span></div>
+      <div class="part"><span class="big as">⟨ψ⟩</span><span class="cap"><span class="de">Nachbedingung</span><span class="en">postcondition</span></span></div>
+    </div>
+    <div class="hero-row">
+    <p class="lede">
+      <span class="de">Gilt vor dem Programm P die Bedingung φ, dann gilt nach P die Bedingung ψ, falls P anhält. Auf dieser einen Idee von Tony Hoare baut die gesamte Programmverifikation auf. Hier lernst du sie Schritt für Schritt, mit Übungen im Stil der Aachener Klausuren.</span>
+      <span class="en">If condition φ holds before program P, then condition ψ holds after P, provided P terminates. All of program verification is built on this single idea by Tony Hoare. Here you learn it step by step, with exercises in the style of the Aachen exams.</span>
+    </p>
+    <div class="hero-demo" aria-label="Beispiel">
+      <span class="cap"><span class="de">Ein gültiges Hoare-Tripel</span><span class="en">A valid Hoare triple</span></span>
+      <span class="as">⟨x ≥ 0⟩</span>
+      <span>y = x + 1;</span>
+      <span class="as">⟨y &gt; 0⟩</span>
+    </div>
+    </div>
+    <div class="cta">
+      <button class="btn primary" type="button" data-scroll="s-idea"><span class="de">Mit der Idee anfangen</span><span class="en">Start with the idea</span></button>
+      <a class="btn" href="#practice"><span class="de">Direkt zu den Übungen</span><span class="en">Go to the exercises</span></a>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <nav class="toc" aria-label="Inhalt">
+      <button type="button" data-scroll="s-why"><span class="n">01</span><span><span class="de">Warum?</span><span class="en">Why?</span></span></button>
+      <button type="button" data-scroll="s-history"><span class="n">02</span><span><span class="de">Geschichte</span><span class="en">History</span></span></button>
+      <button type="button" data-scroll="s-idea"><span class="n">03</span><span><span class="de">Die Idee</span><span class="en">The idea</span></span></button>
+      <button type="button" data-scroll="s-rules"><span class="n">04</span><span><span class="de">Die 7 Regeln</span><span class="en">The 7 rules</span></span></button>
+      <button type="button" data-scroll="s-inv"><span class="n">05</span><span><span class="de">Invarianten</span><span class="en">Invariants</span></span></button>
+      <button type="button" data-scroll="s-term"><span class="n">06</span><span><span class="de">Terminierung</span><span class="en">Termination</span></span></button>
+      <button type="button" data-scroll="s-cheat"><span class="n">07</span><span><span class="de">Spickzettel</span><span class="en">Cheat sheet</span></span></button>
+    </nav>
+    <div>
+      <!-- 01 WHY -->
+      <section class="sec" id="s-why">
+        <div class="sec-h"><span class="num">01</span><h2><span class="de">Warum der Hoare-Kalkül wichtig ist</span><span class="en">Why Hoare logic matters</span></h2></div>
+        <div class="prose">
+          <p class="de">Ein Test prüft ein Programm für einige Eingaben. Ein Programm hat aber meist unendlich viele mögliche Eingaben. Edsger Dijkstra hat das so zusammengefasst: Testen kann die Anwesenheit von Fehlern zeigen, nie ihre Abwesenheit. Ein Beweis mit dem Hoare-Kalkül gilt dagegen für <em>jede</em> Eingabe, die die Vorbedingung erfüllt.</p>
+          <p class="en">A test checks a program on some inputs. Most programs, however, have infinitely many possible inputs. Edsger Dijkstra summed it up: testing can show the presence of bugs, never their absence. A proof in Hoare logic, by contrast, holds for <em>every</em> input that satisfies the precondition.</p>
+        </div>
+        <div class="cards">
+          <div class="card"><span class="tag">4. Juni 1996 / June 4, 1996</span><h3><span class="de">Ariane 5, Flug 501</span><span class="en">Ariane 5, flight 501</span></h3>
+            <p><span class="de">Rund 40 Sekunden nach dem Start zerstört sich die Rakete. Ursache: Eine 64-Bit-Gleitkommazahl wurde in eine 16-Bit-Ganzzahl umgewandelt und lief über. Eine Vorbedingung wie ⟨|v| &lt; 32768⟩ hätte die Annahme sichtbar gemacht. Die Aachener Globalübung zum Hoare-Kalkül beginnt mit genau diesem Beispiel.</span><span class="en">About 40 seconds after lift-off the rocket destroys itself. The cause: a 64-bit floating-point value was converted to a 16-bit integer and overflowed. A precondition such as ⟨|v| &lt; 32768⟩ would have made the hidden assumption explicit. The Aachen tutorial on Hoare logic opens with exactly this example.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Entwurf</span><span class="en">design</span></span><h3><span class="de">Besser programmieren</span><span class="en">Better programs</span></h3>
+            <p><span class="de">Wer zuerst die Schleifeninvariante formuliert, schreibt Schleifen ohne Off-by-one-Fehler. Die Invariante sagt dir, wo die Schleife starten, was sie pro Runde tun und wann sie aufhören muss.</span><span class="en">If you write down the loop invariant first, your loops stop having off-by-one errors. The invariant tells you where the loop must start, what each round must do and when it must stop.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Industrie</span><span class="en">industry</span></span><h3><span class="de">Heute im Einsatz</span><span class="en">In use today</span></h3>
+            <p><span class="de">Der Betriebssystemkern seL4 wurde 2009 vollständig formal verifiziert. Werkzeuge wie Dafny, Frama-C, Why3 oder KeY prüfen Vor- und Nachbedingungen automatisch. Alle stehen auf Hoares Regeln.</span><span class="en">The seL4 operating-system kernel was fully formally verified in 2009. Tools such as Dafny, Frama-C, Why3 and KeY check pre- and postconditions automatically. All of them rest on Hoare's rules.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Klausur</span><span class="en">exam</span></span><h3><span class="de">Fester Teil der Prüfung</span><span class="en">A fixed part of the exam</span></h3>
+            <p><span class="de">Typische Aufgabe: (a) partielle Korrektheit mit Zusicherungen nachweisen, (b) Terminierung mit einer Variante zeigen. Genau diese zwei Teile trainierst du in den Übungen.</span><span class="en">Typical task: (a) prove partial correctness by writing assertions, (b) prove termination with a variant. Those are exactly the two parts you practise in the exercises.</span></p></div>
+        </div>
+      </section>
+
+      <!-- 02 HISTORY -->
+      <section class="sec" id="s-history">
+        <div class="sec-h"><span class="num">02</span><h2><span class="de">Eine kurze Geschichte</span><span class="en">A short history</span></h2></div>
+        <div class="timeline">
+          <div class="tl"><div class="yr">1949</div><div><h4>Alan Turing</h4><p><span class="de">„Checking a Large Routine“: Turing zeigt, dass man ein Programm prüfen kann, indem man an bestimmten Stellen Aussagen über die Variablen festhält.</span><span class="en">“Checking a Large Routine”: Turing shows that a program can be checked by recording statements about its variables at certain points.</span></p></div></div>
+          <div class="tl"><div class="yr">1967</div><div><h4>Robert W. Floyd</h4><p><span class="de">„Assigning Meanings to Programs“: Zusicherungen an den Kanten von Flussdiagrammen, dazu Terminierungsbeweise über eine fallende Größe.</span><span class="en">“Assigning Meanings to Programs”: assertions on the edges of flowcharts, plus termination proofs via a decreasing quantity.</span></p></div></div>
+          <div class="tl key"><div class="yr">1969</div><div><h4>C. A. R. (Tony) Hoare</h4><p><span class="de">„An Axiomatic Basis for Computer Programming“ in den Communications of the ACM: Floyds Idee wird zu einem Kalkül mit Tripeln und Regeln für jede Anweisungsart. Hoare hatte zuvor schon Quicksort erfunden.</span><span class="en">“An Axiomatic Basis for Computer Programming” in Communications of the ACM: Floyd's idea becomes a calculus of triples with a rule for every kind of statement. Hoare had already invented Quicksort.</span></p></div></div>
+          <div class="tl"><div class="yr">1975</div><div><h4>Edsger W. Dijkstra</h4><p><span class="de">Die schwächste Vorbedingung wp(P, ψ): Man rechnet von der Nachbedingung rückwärts. Genau das tust du bei der Zuweisungsregel.</span><span class="en">The weakest precondition wp(P, ψ): you compute backwards from the postcondition. That is exactly what you do with the assignment rule.</span></p></div></div>
+          <div class="tl"><div class="yr">1980</div><div><h4>Turing Award</h4><p><span class="de">Hoare erhält den Turing Award, unter anderem für seine Beiträge zu Definition und Entwurf von Programmiersprachen.</span><span class="en">Hoare receives the Turing Award, among other things for his contributions to the definition and design of programming languages.</span></p></div></div>
+          <div class="tl"><div class="yr">2009</div><div><h4>seL4</h4><p><span class="de">Erster vollständig maschinell bewiesener Betriebssystemkern für den allgemeinen Einsatz. Aus der Tafelmethode ist Ingenieurpraxis geworden.</span><span class="en">The first general-purpose operating-system kernel with a complete machine-checked proof. The blackboard method has become engineering practice.</span></p></div></div>
+        </div>
+      </section>
+
+      <!-- 03 IDEA -->
+      <section class="sec" id="s-idea">
+        <div class="sec-h"><span class="num">03</span><h2><span class="de">Die Idee in drei Minuten</span><span class="en">The idea in three minutes</span></h2></div>
+        <div class="prose">
+          <p class="de">Stell dir ein Programm als <strong>Vertrag</strong> vor. Die Vorbedingung φ ist, was der Aufrufer garantiert. Die Nachbedingung ψ ist, was das Programm dafür verspricht. Das Hoare-Tripel <span class="as">⟨φ⟩</span> P <span class="as">⟨ψ⟩</span> behauptet: Wenn φ vorher gilt und P anhält, dann gilt ψ hinterher.</p>
+          <p class="en">Think of a program as a <strong>contract</strong>. The precondition φ is what the caller guarantees. The postcondition ψ is what the program promises in return. The Hoare triple <span class="as">⟨φ⟩</span> P <span class="as">⟨ψ⟩</span> claims: if φ holds before and P terminates, then ψ holds afterwards.</p>
+          <p class="de">Dieses „falls P anhält“ heißt <strong>partielle Korrektheit</strong>. Kommt der Nachweis hinzu, dass P immer anhält, spricht man von <strong>totaler Korrektheit</strong>. In Aachen schreibt man Zusicherungen in spitzen Klammern ⟨…⟩, in vielen Büchern stehen geschweifte {…}. Gemeint ist dasselbe.</p>
+          <p class="en">That “provided P terminates” is called <strong>partial correctness</strong>. Add a proof that P always terminates and you have <strong>total correctness</strong>. In Aachen, assertions are written in angle brackets ⟨…⟩; many textbooks use braces {…}. They mean the same thing.</p>
+          <p class="de">Der wichtigste Trick: Man rechnet <strong>rückwärts</strong>. Im Beispiel oben fragst du: Was muss vor <code>y = x + 1;</code> gelten, damit danach y &gt; 0 gilt? Ersetze y durch x + 1, und du erhältst x + 1 &gt; 0. Das folgt aus x ≥ 0.</p>
+          <p class="en">The key trick: you work <strong>backwards</strong>. In the example above you ask: what must hold before <code>y = x + 1;</code> so that y &gt; 0 holds afterwards? Replace y by x + 1 and you get x + 1 &gt; 0, which follows from x ≥ 0.</p>
+        </div>
+        <div class="prog" aria-label="Annotiertes Beispiel">
+          <div class="ln a"><span class="tx">⟨x ≥ 0⟩</span><span class="nt"><span class="de">Vorbedingung</span><span class="en">precondition</span></span></div>
+          <div class="ln a"><span class="tx">⟨x + 1 &gt; 0⟩</span><span class="nt"><span class="de">folgt aus darüber</span><span class="en">follows from above</span></span></div>
+          <div class="ln c"><span class="tx">y = x + 1;</span></div>
+          <div class="ln a"><span class="tx">⟨y &gt; 0⟩</span><span class="nt"><span class="de">Zuweisungsregel</span><span class="en">assignment rule</span></span></div>
+        </div>
+        <div class="fb info"><span class="lab"><span class="de">Merksatz aus den RWTH-Übungen</span><span class="en">Rule of thumb from the RWTH tutorials</span></span>
+          <span><span class="de">Zwei Zusicherungen dürfen nur dann direkt untereinander stehen, wenn die untere aus der oberen folgt. Nach einer Anweisung steht genau eine Zusicherung, und die muss durch eine Regel begründet sein.</span><span class="en">Two assertions may stand directly below each other only if the lower one follows from the upper one. After a statement there is exactly one assertion, and it must be justified by a rule.</span></span></div>
+      </section>
+
+      <!-- 04 RULES -->
+      <section class="sec" id="s-rules">
+        <div class="sec-h"><span class="num">04</span><h2><span class="de">Die sieben Regeln</span><span class="en">The seven rules</span></h2></div>
+        <p class="prose"><span class="de">Über dem Strich stehen die Voraussetzungen, darunter die Folgerung. Mit diesen sieben Regeln kannst du jedes Programm aus Zuweisungen, Sequenzen, Bedingungen und while-Schleifen beweisen.</span><span class="en">Above the line are the premises, below it the conclusion. These seven rules let you prove any program built from assignments, sequences, conditionals and while loops.</span></p>
+        <div class="rules">
+          <div class="rule"><div class="nm"><span><span class="de">Zuweisungsregel</span><span class="en">Assignment rule</span></span><span class="rn">1</span></div>
+            <div class="frac"><div><span class="as">⟨φ[x/t]⟩</span> x = t; <span class="as">⟨φ⟩</span></div></div>
+            <p><span class="de">φ[x/t] heißt: ersetze in φ jedes x durch t. Das ist ein Axiom, es hat keine Voraussetzungen. Rechne immer von unten nach oben.</span><span class="en">φ[x/t] means: replace every x in φ by t. It is an axiom with no premises. Always compute from the bottom up.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Sequenzregel</span><span class="en">Sequence rule</span></span><span class="rn">2</span></div>
+            <div class="frac"><div class="prem"><span><span class="as">⟨φ⟩</span> P <span class="as">⟨ξ⟩</span></span><span><span class="as">⟨ξ⟩</span> Q <span class="as">⟨ψ⟩</span></span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> P Q <span class="as">⟨ψ⟩</span></div></div>
+            <p><span class="de">Die Zwischenzusicherung ξ verbindet zwei Anweisungen. Im annotierten Programm steht ξ einfach zwischen P und Q.</span><span class="en">The intermediate assertion ξ connects two statements. In the annotated program ξ simply sits between P and Q.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Bedingungsregel 1</span><span class="en">Conditional rule 1</span></span><span class="rn">3</span></div>
+            <div class="frac"><div class="prem"><span><span class="as">⟨φ ∧ B⟩</span> P <span class="as">⟨ψ⟩</span></span><span>(φ ∧ ¬B) ⇒ ψ</span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> if (B) {P} <span class="as">⟨ψ⟩</span></div></div>
+            <p><span class="de">Ohne else: Ist B falsch, passiert nichts. Dann muss ψ schon aus φ ∧ ¬B folgen.</span><span class="en">Without else: if B is false, nothing happens, so ψ must already follow from φ ∧ ¬B.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Bedingungsregel 2</span><span class="en">Conditional rule 2</span></span><span class="rn">4</span></div>
+            <div class="frac"><div class="prem"><span><span class="as">⟨φ ∧ B⟩</span> P <span class="as">⟨ψ⟩</span></span><span><span class="as">⟨φ ∧ ¬B⟩</span> Q <span class="as">⟨ψ⟩</span></span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> if (B) {P} else {Q} <span class="as">⟨ψ⟩</span></div></div>
+            <p><span class="de">Beide Zweige müssen bei derselben Nachbedingung ψ ankommen.</span><span class="en">Both branches must arrive at the same postcondition ψ.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Schleifenregel</span><span class="en">Loop rule</span></span><span class="rn">5</span></div>
+            <div class="frac"><div><span class="as">⟨φ ∧ B⟩</span> P <span class="as">⟨φ⟩</span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> while (B) {P} <span class="as">⟨φ ∧ ¬B⟩</span></div></div>
+            <p><span class="de">φ ist die Schleifeninvariante: Sie gilt vor der Schleife, bleibt in jeder Runde erhalten und gilt deshalb auch danach, zusammen mit ¬B.</span><span class="en">φ is the loop invariant: it holds before the loop, is preserved by every round and therefore also holds afterwards, together with ¬B.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Konsequenzregel 1</span><span class="en">Consequence rule 1</span></span><span class="rn">6</span></div>
+            <div class="frac"><div class="prem"><span>α ⇒ φ</span><span><span class="as">⟨φ⟩</span> P <span class="as">⟨ψ⟩</span></span></div><div class="bar"></div><div><span class="as">⟨α⟩</span> P <span class="as">⟨ψ⟩</span></div></div>
+            <p><span class="de">Vorbedingung verstärken: Was aus mehr Wissen folgt, folgt auch. Das ist der „folgt aus darüber“-Schritt.</span><span class="en">Strengthen the precondition: more knowledge never hurts. This is the “follows from above” step.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Konsequenzregel 2</span><span class="en">Consequence rule 2</span></span><span class="rn">7</span></div>
+            <div class="frac"><div class="prem"><span><span class="as">⟨φ⟩</span> P <span class="as">⟨ψ⟩</span></span><span>ψ ⇒ β</span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> P <span class="as">⟨β⟩</span></div></div>
+            <p><span class="de">Nachbedingung abschwächen: Am Ende der Schleife folgerst du so aus φ ∧ ¬B die eigentliche Nachbedingung.</span><span class="en">Weaken the postcondition: this is how, after the loop, you derive the actual postcondition from φ ∧ ¬B.</span></p></div>
+        </div>
+
+        <div class="tool" id="bw">
+          <h3><span class="as">⟨?⟩</span><span><span class="de">Rückwärts-Rechner für die Zuweisungsregel</span><span class="en">Backwards calculator for the assignment rule</span></span></h3>
+          <p class="small muted"><span class="de">Gib eine Zuweisung und die Zusicherung danach ein. Der Rechner setzt für dich ein.</span><span class="en">Enter an assignment and the assertion after it. The calculator substitutes for you.</span></p>
+          <div class="fields">
+            <label class="f" for="bw-var"><span><span class="de">Variable x</span><span class="en">variable x</span></span><input id="bw-var" value="s" autocomplete="off" spellcheck="false"></label>
+            <label class="f" for="bw-expr"><span><span class="de">Ausdruck t</span><span class="en">expression t</span></span><input id="bw-expr" value="s + i" autocomplete="off" spellcheck="false"></label>
+            <label class="f" for="bw-post"><span><span class="de">Zusicherung danach φ</span><span class="en">assertion after φ</span></span><input id="bw-post" value="2 * s = i * (i + 1)" autocomplete="off" spellcheck="false"></label>
+          </div>
+          <div id="bw-out"></div>
+        </div>
+      </section>
+
+      <!-- 05 INVARIANT -->
+      <section class="sec" id="s-inv">
+        <div class="sec-h"><span class="num">05</span><h2><span class="de">Schleifeninvarianten verstehen und finden</span><span class="en">Understanding and finding loop invariants</span></h2></div>
+        <div class="prose">
+          <p class="de">Eine Invariante funktioniert wie eine Reihe <strong>Dominosteine</strong>, also wie vollständige Induktion: Der erste Stein fällt (die Invariante gilt am Anfang), jeder Stein stößt den nächsten um (eine Runde erhält die Invariante), und wenn die Reihe zu Ende ist, liegt alles (Invariante und ¬B ergeben das Ergebnis).</p>
+          <p class="en">An invariant works like a row of <strong>dominoes</strong>, i.e. like mathematical induction: the first domino falls (the invariant holds at the start), each domino knocks over the next (one round preserves the invariant), and when the row ends everything has fallen (invariant plus ¬B give the result).</p>
+        </div>
+        <div class="steps3">
+          <div class="card"><span class="tag"><span class="de">Pflicht 1 · Start</span><span class="en">Duty 1 · start</span></span><h3><span class="de">Vorbedingung ⇒ I</span><span class="en">Precondition ⇒ I</span></h3><p><span class="de">Nach den Initialisierungen gilt die Invariante.</span><span class="en">After the initialisations the invariant holds.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Pflicht 2 · Erhaltung</span><span class="en">Duty 2 · preservation</span></span><h3><span class="as">⟨I ∧ B⟩</span> <span class="de">Rumpf</span><span class="en">body</span> <span class="as">⟨I⟩</span></h3><p><span class="de">Gilt I und läuft die Schleife noch, dann gilt I auch nach einer Runde.</span><span class="en">If I holds and the loop is still running, then I still holds after one round.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Pflicht 3 · Ende</span><span class="en">Duty 3 · exit</span></span><h3>I ∧ ¬B ⇒ ψ</h3><p><span class="de">Ist die Schleife fertig, folgt aus I die Nachbedingung.</span><span class="en">When the loop is done, the postcondition follows from I.</span></p></div>
+        </div>
+        <div class="prose">
+          <h3><span class="de">Rezept zum Finden</span><span class="en">A recipe for finding one</span></h3>
+          <ol class="hints">
+            <li><span class="de"><strong>Wertetabelle:</strong> Führe die Schleife für ein kleines Beispiel aus und notiere die Variablen nach jeder Runde.</span><span class="en"><strong>Value table:</strong> run the loop on a small example and write down the variables after every round.</span></li>
+            <li><span class="de"><strong>Was bleibt gleich?</strong> Suche eine Gleichung zwischen dem Zähler (z. B. i) und dem Akkumulator (z. B. s), die in jeder Zeile stimmt.</span><span class="en"><strong>What stays the same?</strong> Look for an equation between the counter (e.g. i) and the accumulator (e.g. s) that holds in every row.</span></li>
+            <li><span class="de"><strong>Nachbedingung verallgemeinern:</strong> Oft ersetzt du in ψ den Endwert (n) durch den Zähler (i).</span><span class="en"><strong>Generalise the postcondition:</strong> often you replace the final value (n) in ψ by the counter (i).</span></li>
+            <li><span class="de"><strong>Schranke ergänzen:</strong> Die abgeschwächte Schleifenbedingung (z. B. i ≤ n statt i &lt; n) sorgt dafür, dass am Ende aus I ∧ ¬B wirklich i = n folgt.</span><span class="en"><strong>Add a bound:</strong> the weakened loop condition (e.g. i ≤ n instead of i &lt; n) ensures that I ∧ ¬B really gives i = n at the end.</span></li>
+          </ol>
+        </div>
+        <div class="prose">
+          <h3><span class="de">Mit if und Arrays</span><span class="en">With if and arrays</span></h3>
+          <p class="de">Steht im Rumpf ein <code>if</code>, bekommt jeder Zweig seine eigene Eintrittszusicherung: ⟨I ∧ B ∧ C⟩ im then-Zweig, ⟨I ∧ B ∧ ¬C⟩ im else-Zweig. Beide Zweige müssen bei derselben Zusicherung ankommen. Bei Arrays beschreibt die Invariante den Teil, der schon bearbeitet ist, zum Beispiel res = sum(a, 0, i − 1) für a[0] + … + a[i − 1]. Die Schranke 0 ≤ i ≤ a.length sorgt dafür, dass a[i] im Rumpf definiert ist.</p>
+          <p class="en">If the body contains an <code>if</code>, each branch gets its own entry assertion: ⟨I ∧ B ∧ C⟩ in the then branch, ⟨I ∧ B ∧ ¬C⟩ in the else branch. Both branches must arrive at the same assertion. With arrays, the invariant describes the part already processed, for example res = sum(a, 0, i − 1) for a[0] + … + a[i − 1]. The bound 0 ≤ i ≤ a.length ensures that a[i] in the body is defined.</p>
+        </div>
+        <div class="tool" id="tracer">
+          <h3><span class="as">I</span><span><span class="de">Invarianten-Tracer: Gaußsche Summe</span><span class="en">Invariant tracer: Gauss sum</span></span></h3>
+          <div class="prog" id="tr-prog"></div>
+          <div class="row">
+            <label class="f" for="tr-n" style="min-width:200px"><span>n = <b id="tr-nv">5</b></span><input id="tr-n" type="range" min="0" max="8" value="5"></label>
+            <button class="btn" type="button" id="tr-step"><span class="de">Eine Runde weiter</span><span class="en">Next round</span></button>
+            <button class="btn ghost" type="button" id="tr-reset"><span class="de">Zurück auf Start</span><span class="en">Back to start</span></button>
+          </div>
+          <div class="tblwrap" id="tr-table"></div>
+          <p class="small muted"><span class="de">In jeder Zeile gilt I. In der letzten Zeile ist B falsch, also i = n, und aus I wird die Nachbedingung 2 · s = n · (n + 1).</span><span class="en">I holds in every row. In the last row B is false, so i = n, and I turns into the postcondition 2 · s = n · (n + 1).</span></p>
+        </div>
+      </section>
+
+      <!-- 06 TERMINATION -->
+      <section class="sec" id="s-term">
+        <div class="sec-h"><span class="num">06</span><h2><span class="de">Terminierung: die Variante</span><span class="en">Termination: the variant</span></h2></div>
+        <div class="prose">
+          <p class="de">Partielle Korrektheit sagt nichts darüber, ob die Schleife überhaupt anhält. Dafür brauchst du eine <strong>Variante</strong> V: einen ganzzahligen Ausdruck, der nie negativ wird, solange die Schleife läuft, und in jeder Runde echt kleiner wird. Eine natürliche Zahl kann nicht unendlich oft echt kleiner werden, also hält die Schleife an.</p>
+          <p class="en">Partial correctness says nothing about whether the loop stops at all. For that you need a <strong>variant</strong> V: an integer expression that never becomes negative while the loop runs and strictly decreases in every round. A natural number cannot decrease forever, so the loop terminates.</p>
+        </div>
+        <div class="cards">
+          <div class="card"><span class="tag"><span class="de">Bedingung 1</span><span class="en">condition 1</span></span><h3>B ⇒ V ≥ 0</h3><p><span class="de">Solange die Schleife läuft, ist V nicht negativ. Manchmal brauchst du dafür die Invariante dazu.</span><span class="en">While the loop runs, V is not negative. Sometimes you need the invariant for this as well.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Bedingung 2</span><span class="en">condition 2</span></span><h3><span class="as">⟨V = m ∧ B⟩</span> P <span class="as">⟨V &lt; m⟩</span></h3><p><span class="de">m ist eine Hilfsvariable für den alten Wert. Rechne wieder rückwärts mit der Zuweisungsregel.</span><span class="en">m is an auxiliary variable for the old value. Again, compute backwards with the assignment rule.</span></p></div>
+        </div>
+        <div class="prog" aria-label="Variante Beispiel">
+          <div class="ln a" style="--ind:1"><span class="tx">⟨n − i = m ∧ i &lt; n⟩</span><span class="nt"><span class="de">Variante V = n − i</span><span class="en">variant V = n − i</span></span></div>
+          <div class="ln a" style="--ind:1"><span class="tx">⟨n − (i + 1) &lt; m⟩</span><span class="nt"><span class="de">folgt aus darüber</span><span class="en">follows from above</span></span></div>
+          <div class="ln c" style="--ind:1"><span class="tx">i = i + 1;</span></div>
+          <div class="ln a" style="--ind:1"><span class="tx">⟨n − i &lt; m⟩</span><span class="nt"><span class="de">Zuweisungsregel</span><span class="en">assignment rule</span></span></div>
+        </div>
+      </section>
+
+      <!-- 07 CHEAT -->
+      <section class="sec" id="s-cheat">
+        <div class="sec-h"><span class="num">07</span><h2><span class="de">Spickzettel für die Klausur</span><span class="en">Exam cheat sheet</span></h2></div>
+        <div class="cheat">
+          <div class="card"><h3><span class="de">Partielle Korrektheit</span><span class="en">Partial correctness</span></h3>
+            <ol><li><span class="de">Invariante finden (Wertetabelle).</span><span class="en">Find the invariant (value table).</span></li>
+              <li><span class="de">⟨I⟩ vor die Schleife, ⟨I ∧ B⟩ an den Rumpfanfang, ⟨I⟩ ans Rumpfende, ⟨I ∧ ¬B⟩ hinter die Schleife.</span><span class="en">Put ⟨I⟩ before the loop, ⟨I ∧ B⟩ at the start of the body, ⟨I⟩ at the end of the body, ⟨I ∧ ¬B⟩ after the loop.</span></li>
+              <li><span class="de">Im Rumpf und bei der Initialisierung von unten nach oben einsetzen.</span><span class="en">In the body and in the initialisation, substitute from the bottom up.</span></li>
+              <li><span class="de">Jede „folgt“-Stelle kurz begründen.</span><span class="en">Briefly justify every “follows” step.</span></li></ol></div>
+          <div class="card"><h3><span class="de">Terminierung</span><span class="en">Termination</span></h3>
+            <ol><li><span class="de">V meist: Abstand zum Ziel, z. B. n − i oder der Zähler selbst.</span><span class="en">V is usually the distance to the goal, e.g. n − i or the counter itself.</span></li>
+              <li><span class="de">B ⇒ V ≥ 0 zeigen.</span><span class="en">Show B ⇒ V ≥ 0.</span></li>
+              <li><span class="de">⟨V = m ∧ B⟩ Rumpf ⟨V &lt; m⟩ rückwärts nachrechnen.</span><span class="en">Verify ⟨V = m ∧ B⟩ body ⟨V &lt; m⟩ backwards.</span></li></ol></div>
+          <div class="card"><h3><span class="de">Typische Fehler</span><span class="en">Typical mistakes</span></h3>
+            <ol><li><span class="de">Schranke i ≤ n vergessen.</span><span class="en">Forgetting the bound i ≤ n.</span></li>
+              <li><span class="de">Beim Einsetzen Klammern weglassen: 3 · i wird zu 3 · (i + 1).</span><span class="en">Dropping parentheses when substituting: 3 · i becomes 3 · (i + 1).</span></li>
+              <li><span class="de">Von oben nach unten einsetzen statt rückwärts.</span><span class="en">Substituting top-down instead of backwards.</span></li>
+              <li><span class="de">Die Nachbedingung selbst als Invariante nehmen.</span><span class="en">Using the postcondition itself as the invariant.</span></li></ol></div>
+          <div class="card"><h3><span class="de">if/else und Arrays</span><span class="en">if/else and arrays</span></h3>
+            <ol><li><span class="de">then-Zweig beginnt mit ⟨φ ∧ C⟩, else-Zweig mit ⟨φ ∧ ¬C⟩.</span><span class="en">The then branch starts with ⟨φ ∧ C⟩, the else branch with ⟨φ ∧ ¬C⟩.</span></li>
+              <li><span class="de">Ohne else: zusätzlich φ ∧ ¬C ⇒ ψ zeigen.</span><span class="en">Without else: also show φ ∧ ¬C ⇒ ψ.</span></li>
+              <li><span class="de">Arrays: Invariante über a[0] … a[i − 1], Schranke 0 ≤ i ≤ a.length.</span><span class="en">Arrays: invariant over a[0] … a[i − 1], bound 0 ≤ i ≤ a.length.</span></li></ol></div>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="#practice"><span class="de">Jetzt üben: 11 geführte Aufgaben</span><span class="en">Practise now: 11 guided exercises</span></a>
+          <a class="btn" href="#exam"><span class="de">Klausur-Simulation</span><span class="en">Exam simulation</span></a>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRACTICE ================= -->
+<section class="view" id="view-practice" aria-label="Übungen / Exercises">
+  <div class="prac">
+    <aside class="exlist" id="exlist"></aside>
+    <div class="ws" id="ws"></div>
+  </div>
+</section>
+
+<!-- ================= EXAM ================= -->
+<section class="view" id="view-exam" aria-labelledby="exam-title">
+  <div id="exam"></div>
+</section>
+</main>
+
+<footer>
+  <p><span class="de">Unabhängige Lernhilfe für Studierende im ersten Jahr. Kein offizielles Angebot der RWTH Aachen.</span><span class="en">Independent study aid for first-year students. Not an official RWTH Aachen offering.</span></p>
+  <p><span class="de">Quellen:</span><span class="en">Sources:</span>
+    <a href="https://sc.informatik.rwth-aachen.de/wp-content/uploads/2025/10/2025-WS-Erstsemestereinfuehrung-BSInf.pdf">Erstsemester-Facheinführung BSInf WS 2025/26</a> ·
+    <a href="https://verify.rwth-aachen.de/">LuFG Informatik 2 (Programmierung)</a> ·
+    <a href="https://doi.org/10.1145/363235.363259">C. A. R. Hoare, An Axiomatic Basis for Computer Programming (1969)</a></p>
+</footer>
+
+<script>
+/*ENGINE*/
+</script>
+<script>
+/*APP*/
+</script>
+</body>
+</html>

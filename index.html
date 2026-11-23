@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoare Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout idea: lecture notes as a manuscript. Prose in a reading column, code panels where ⟨assertions⟩ are set in ultramarine ink between the lines. */
+  --paper:#F1F2EE; --surface:#FAFAF8; --ink:#14171F; --muted:#585E6A; --rule:#D5D8D0;
+  --accent:#2C40CF; --accent-soft:rgba(44,64,207,.08); --accent-ink:#FFFFFF;
+  --code-bg:#E9EBF0;
+  --ok:#1B7445; --ok-soft:rgba(27,116,69,.10); --bad:#B3341B; --bad-soft:rgba(179,52,27,.09); --warn:#8E610B;
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Source Serif 4","Iowan Old Style",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1016; --surface:#151821; --ink:#E6E8E3; --muted:#9BA1AD; --rule:#2A2F3B;
+    --accent:#8E9CFF; --accent-soft:rgba(142,156,255,.12); --accent-ink:#0E1016;
+    --code-bg:#1A1E29;
+    --ok:#5DC88D; --ok-soft:rgba(93,200,141,.12); --bad:#FF8B6F; --bad-soft:rgba(255,139,111,.12); --warn:#E1B04B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1016; --surface:#151821; --ink:#E6E8E3; --muted:#9BA1AD; --rule:#2A2F3B;
+  --accent:#8E9CFF; --accent-soft:rgba(142,156,255,.12); --accent-ink:#0E1016;
+  --code-bg:#1A1E29;
+  --ok:#5DC88D; --ok-soft:rgba(93,200,141,.12); --bad:#FF8B6F; --bad-soft:rgba(255,139,111,.12); --warn:#E1B04B;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body[data-lang="de"] .en, body[data-lang="en"] .de{display:none !important}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,3.4vw,40px);font-weight:800;letter-spacing:-.02em}
+h3{font-size:21px;font-weight:600;letter-spacing:-.01em}
+p{margin:0}
+.prose{max-width:66ch;display:grid;gap:14px}
+.mono,code,.prog{font-family:var(--mono)}
+code{font-size:.86em;background:var(--code-bg);padding:.08em .35em;border-radius:5px}
+.as{color:var(--accent);font-family:var(--mono)}
+.muted{color:var(--muted)}
+.small{font-size:15px}
+button{font:inherit;color:inherit}
+.btn{font-family:var(--display);font-size:15px;font-weight:600;border:1px solid var(--rule);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* header */
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.top-in{max-width:1180px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.02em;text-decoration:none;color:var(--ink);display:flex;align-items:baseline;gap:6px}
+.brand .as{font-weight:600}
+nav.views{display:flex;gap:4px;flex-wrap:wrap}
+nav.views a{font-family:var(--display);font-size:15px;font-weight:600;text-decoration:none;color:var(--muted);padding:7px 12px;border-radius:999px}
+nav.views a[aria-current="page"]{color:var(--ink);background:var(--accent-soft)}
+nav.views a:hover{color:var(--ink)}
+.lang{margin-left:auto;display:flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:transparent;padding:6px 12px;font-family:var(--display);font-weight:600;font-size:14px;cursor:pointer;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+main{max-width:1180px;margin:0 auto;padding:0 20px 80px}
+.view{display:none}
+.view.on{display:block}
+
+/* hero */
+.hero{padding:56px 0 40px;display:grid;gap:26px;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(38px,6vw,76px);font-weight:800;letter-spacing:-.035em;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.triple{display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px 22px;font-family:var(--mono)}
+.triple .part{display:grid;gap:4px}
+.triple .big{font-size:clamp(28px,4.4vw,52px);font-weight:600;line-height:1.1}
+.triple .cap{font-family:var(--display);font-size:13px;color:var(--muted);letter-spacing:.02em}
+.triple .as .big, .triple .big.as{color:var(--accent)}
+.hero .lede{font-size:20px;max-width:58ch}
+.hero-row{display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center}
+.hero-demo{font-family:var(--mono);font-size:17px;background:var(--code-bg);border-radius:12px;padding:16px 22px;display:inline-grid;gap:4px;border-left:4px solid var(--accent)}
+.hero-demo .cap{font-family:var(--display);font-size:12px;color:var(--muted);margin-bottom:4px}
+@media (prefers-reduced-motion: no-preference){
+  .triple .part{animation:rise .6s ease-out both}
+  .triple .part:nth-child(2){animation-delay:.15s}
+  .triple .part:nth-child(3){animation-delay:.3s}
+  @keyframes rise{from{transform:translateY(6px);opacity:.25}to{transform:none;opacity:1}}
+}
+
+/* lesson layout */
+.lesson{display:grid;grid-template-columns:200px minmax(0,1fr);gap:48px;padding-top:36px}
+.toc{position:sticky;top:76px;align-self:start;display:grid;gap:2px}
+.toc button{border:0;background:transparent;text-align:left;padding:6px 10px;border-radius:8px;font-family:var(--display);font-size:15px;color:var(--muted);cursor:pointer;display:flex;gap:10px}
+.toc button:hover{color:var(--ink);background:var(--accent-soft)}
+.toc .n{font-variant-numeric:tabular-nums;color:var(--accent);width:1.4em}
+.sec{padding:30px 0 40px;border-bottom:1px solid var(--rule);display:grid;gap:22px;scroll-margin-top:70px}
+.sec-h{display:grid;gap:6px}
+.sec-h .num{font-family:var(--mono);font-size:14px;color:var(--accent)}
+@media (max-width:900px){.lesson{grid-template-columns:minmax(0,1fr);gap:0}.toc{display:none}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px 18px 20px;display:grid;gap:8px;align-content:start}
+.card h3{font-size:18px}
+.card p{font-size:16px;line-height:1.55}
+.card .tag{font-family:var(--mono);font-size:13px;color:var(--accent)}
+
+/* timeline */
+.timeline{display:grid;gap:0;border-left:2px solid var(--rule);margin-left:6px}
+.tl{display:grid;grid-template-columns:92px 1fr;gap:16px;padding:12px 0 12px 18px;position:relative}
+.tl::before{content:"";position:absolute;left:-7px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--accent)}
+.tl.key::before{background:var(--accent)}
+.tl .yr{font-family:var(--display);font-weight:800;font-size:26px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.tl h4{font-size:17px;font-weight:600;margin-bottom:2px}
+.tl p{font-size:16px;color:var(--muted)}
+@media (max-width:520px){.tl{grid-template-columns:1fr;gap:2px}}
+
+/* program panels */
+.prog{background:var(--code-bg);border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.75;overflow-x:auto}
+.ln{display:flex;align-items:baseline;gap:14px;white-space:pre;padding-left:calc(var(--ind,0) * 1.8em)}
+.ln.a .tx{color:var(--accent)}
+.ln .nt{font-family:var(--display);font-size:12px;color:var(--muted);white-space:nowrap;margin-left:auto;padding-left:18px}
+.ln.hl{background:var(--accent-soft);border-radius:6px}
+.ln.ask .tx{color:var(--warn)}
+.ln input.fx{font-family:var(--mono);font-size:15px;color:var(--accent);background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;min-width:200px;width:min(560px,60vw)}
+.ln input.fx:focus{border-color:var(--accent);outline:none}
+
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:14px}
+.rule{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;display:grid;gap:10px;align-content:start}
+.rule .nm{font-family:var(--display);font-weight:600;font-size:16px;display:flex;justify-content:space-between;gap:8px}
+.rule .nm .rn{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400}
+.rule,.card,.tool,.step,.mod{min-width:0}
+.frac{max-width:100%}
+.lesson>div,.sec>*,.tool>*,.hero>*{min-width:0}
+label.f input{width:100%;min-width:0}
+.frac{font-family:var(--mono);font-size:14.5px;display:grid;justify-items:center;text-align:center;gap:4px;padding:6px 0;overflow-x:auto}
+.frac .prem{display:flex;gap:22px;flex-wrap:wrap;justify-content:center}
+.frac .bar{height:1.5px;background:var(--ink);width:100%;max-width:360px}
+.frac .as{color:var(--accent)}
+.rule p{font-size:15.5px;line-height:1.5}
+
+.tool{background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:14px;padding:18px 20px;display:grid;gap:14px}
+.tool h3{display:flex;gap:10px;align-items:baseline}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label.f{display:grid;gap:4px;font-family:var(--display);font-size:13px;color:var(--muted)}
+label.f input, label.f select{font-family:var(--mono);font-size:15px;padding:8px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink)}
+.err{color:var(--bad);font-family:var(--display);font-size:14px}
+
+.steps3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;counter-reset:s}
+.steps3 .card{border-top:3px solid var(--accent)}
+
+table.vt{border-collapse:collapse;font-family:var(--mono);font-size:14.5px;font-variant-numeric:tabular-nums;min-width:100%}
+table.vt th{font-family:var(--display);font-weight:600;font-size:13px;color:var(--muted);text-align:right;padding:6px 12px;border-bottom:1px solid var(--rule);white-space:nowrap}
+table.vt td{text-align:right;padding:5px 12px;border-bottom:1px solid var(--rule)}
+table.vt th:first-child,table.vt td:first-child{text-align:left}
+table.vt tr.hl td{background:var(--accent-soft)}
+table.vt tr.ghost td{color:transparent}
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:12px}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--bad);font-weight:600}
+
+.cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.cheat ol{margin:0;padding-left:20px;display:grid;gap:6px;font-size:16px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding-top:6px}
+
+/* plan view */
+.plan-h{padding:44px 0 22px;display:grid;gap:12px;border-bottom:1px solid var(--rule)}
+.plan-h h1{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-.03em}
+.sem{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:22px;padding-top:28px}
+.sem-col{display:grid;gap:10px;align-content:start}
+.sem-col h2{font-size:22px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline}
+.sem-col h2 span{font-family:var(--mono);font-size:13px;color:var(--muted);font-weight:400}
+.mod{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:6px}
+.mod.live{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.mod-t{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.mod-t h3{font-size:17px}
+.pill{font-family:var(--display);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid var(--rule);color:var(--muted);white-space:nowrap}
+.pill.live{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.mod p{font-size:15.5px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:12.5px;padding:2px 8px;border-radius:6px;background:var(--code-bg)}
+a.chip{color:var(--accent);text-decoration:none;font-weight:600}
+
+/* practice */
+.prac{display:grid;grid-template-columns:270px minmax(0,1fr);gap:32px;padding-top:32px}
+@media (max-width:900px){.prac{grid-template-columns:minmax(0,1fr)}}
+.exlist{display:grid;gap:18px;align-content:start;position:sticky;top:76px}
+@media (max-width:900px){.exlist{position:static}}
+.exgroup{display:grid;gap:6px}
+.exgroup h3{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.exbtn{display:grid;grid-template-columns:1fr auto;gap:2px 10px;text-align:left;border:1px solid var(--rule);background:var(--surface);border-radius:10px;padding:10px 12px;cursor:pointer}
+.exbtn[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.exbtn .t{font-family:var(--display);font-weight:600;font-size:15px}
+.exbtn .lv{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:2px}
+.exbtn .pr{grid-column:1/-1;font-family:var(--display);font-size:12px;color:var(--muted)}
+.ws{display:grid;gap:20px;align-content:start;min-width:0}
+.ws-h{display:grid;gap:8px}
+.ws-h h2{font-size:clamp(26px,3vw,36px)}
+.badge{font-family:var(--display);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);justify-self:start}
+.invbox{font-family:var(--mono);font-size:15px;padding:10px 14px;border:1px dashed var(--accent);border-radius:10px;color:var(--accent);background:var(--accent-soft)}
+
+.steps{display:grid;gap:10px}
+.step{border:1px solid var(--rule);border-radius:14px;background:var(--surface)}
+.step.open{border-color:color-mix(in srgb,var(--accent) 45%,var(--rule))}
+.step-h{width:100%;display:flex;gap:12px;align-items:center;border:0;background:transparent;padding:12px 16px;cursor:pointer;text-align:left}
+.step-h .dot{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:13px;border:1.5px solid var(--rule);color:var(--muted)}
+.step.open .dot{border-color:var(--accent);color:var(--accent)}
+.step.done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.step-h .st{font-family:var(--display);font-weight:600;font-size:16px}
+.step-h .code{font-family:var(--mono);font-size:13px;color:var(--muted);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%}
+.step-b{padding:0 16px 18px 56px;display:grid;gap:14px}
+@media (max-width:560px){.step-b{padding:0 14px 16px}}
+.step-b p{font-size:16.5px}
+.fb{border-radius:10px;padding:10px 14px;font-size:16px;display:grid;gap:6px}
+.fb.ok{background:var(--ok-soft);border-left:3px solid var(--ok)}
+.fb.bad{background:var(--bad-soft);border-left:3px solid var(--bad)}
+.fb.info{background:var(--accent-soft);border-left:3px solid var(--accent)}
+.fb .lab{font-family:var(--display);font-weight:600}
+.cands{display:grid;gap:8px}
+.cand{display:grid;gap:8px;border:1px solid var(--rule);border-radius:10px;padding:10px 12px;background:var(--paper)}
+.cand>button{all:unset;cursor:pointer;font-family:var(--mono);font-size:15px;color:var(--accent);display:flex;gap:10px;align-items:center}
+.cand>button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.cand .key{font-family:var(--display);font-size:13px;color:var(--muted);width:1.2em}
+.chk{display:grid;gap:6px}
+.chk-r{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;font-size:15.5px}
+.chk-r .m{font-family:var(--mono);font-weight:600;text-align:center;border-radius:6px;padding:0 4px}
+.chk-r .m.y{color:var(--ok);background:var(--ok-soft)}.chk-r .m.n{color:var(--bad);background:var(--bad-soft)}
+.chk-r .lab{font-family:var(--mono);font-size:14px}
+.chk-r .d{color:var(--muted);font-size:14.5px}
+.syntax{font-family:var(--display);font-size:13px;color:var(--muted)}
+.inline-in{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.inline-in input{font-family:var(--mono);font-size:15px;padding:8px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink);min-width:0;flex:1}
+.hints{display:grid;gap:6px;margin:0;padding-left:20px;font-size:16px}
+
+/* exam */
+.kstart{display:grid;gap:16px;padding-top:26px;max-width:640px}
+.kstart select{font-family:var(--display);font-size:15px}
+.kcheck{display:flex;gap:10px;align-items:center;font-family:var(--display);font-size:15px;cursor:pointer}
+.kcheck input{width:18px;height:18px;accent-color:var(--accent)}
+.kpaper{display:grid;gap:26px;padding-top:24px;max-width:980px}
+.kpart{display:grid;gap:12px;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:20px 22px}
+.kpart h2{font-size:22px;font-weight:600}
+.kpart>p{font-size:16.5px;max-width:72ch}
+.kinv{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--display);font-size:15px}
+.kinv input.fx,.kpart .inline-in input{font-family:var(--mono);font-size:15px;color:var(--accent);background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:5px 8px;flex:1;min-width:200px}
+.kmark{font-family:var(--mono);font-size:13px;font-weight:600;white-space:nowrap}
+.ln .kmark{margin-left:auto;padding-left:14px}
+.ln.kexp .tx{color:var(--bad);font-size:13.5px;white-space:normal}
+.ln input.fx:disabled,.kpaper input:disabled{opacity:1;color:var(--ink);background:transparent;border-style:dashed}
+.kbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:sticky;top:62px;z-index:5;background:var(--paper);padding:8px 0}
+.kclock{font-family:var(--mono);font-size:15px}
+.kclock .warn,#k-clock.warn{color:var(--bad);font-weight:600}
+.kscore{display:grid;gap:10px;background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:14px;padding:18px 22px}
+.kscore .big{font-family:var(--display);font-weight:800;font-size:clamp(26px,3.4vw,38px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kscore .bar{height:8px;border-radius:999px;background:var(--code-bg);overflow:hidden}
+.kscore .bar span{display:block;height:100%;background:var(--accent)}
+@media (max-width:600px){header.top{position:static}.top-in{gap:10px}nav.views a{padding:6px 9px}.kbar{top:0}.toc{display:none}}
+footer{border-top:1px solid var(--rule);padding:26px 20px 40px;max-width:1180px;margin:0 auto;display:grid;gap:8px;font-size:15px;color:var(--muted)}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body data-lang="de">
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#hoare"><span class="as">⟨⟩</span> Hoare Lab</a>
+    <nav class="views" aria-label="Views">
+      <a href="#plan" data-view="plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a>
+      <a href="#hoare" data-view="hoare"><span class="de">Hoare-Kalkül</span><span class="en">Hoare logic</span></a>
+      <a href="#practice" data-view="practice"><span class="de">Übungen</span><span class="en">Exercises</span></a>
+      <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Sprache / Language">
+      <button type="button" id="lang-de" data-lang="de" aria-pressed="true">DE</button>
+      <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ================= FIRST YEAR ================= -->
+<section class="view" id="view-plan" aria-labelledby="plan-title">
+  <div class="plan-h">
+    <div class="kicker"><span class="de">B.Sc. Informatik · RWTH Aachen · Studienstart</span><span class="en">B.Sc. Computer Science · RWTH Aachen · getting started</span></div>
+    <h1 id="plan-title"><span class="de">Das erste Studienjahr</span><span class="en">The first year</span></h1>
+    <p class="prose muted">
+      <span class="de">Für jedes Modul des ersten Jahres entsteht hier eine Lernseite. Begonnen haben wir mit dem Teil, an dem viele im ersten Semester hängen bleiben: dem Hoare-Kalkül aus der Vorlesung Programmierung.</span>
+      <span class="en">Every first-year module will get a study page here. We started with the part many students get stuck on in their first semester: Hoare logic from the Programmierung lecture.</span>
+    </p>
+  </div>
+  <div class="sem">
+    <div class="sem-col">
+      <h2><span><span class="de">1. Semester</span><span class="en">Semester 1</span></span><span>WS</span></h2>
+      <div class="mod live">
+        <div class="mod-t"><h3>Programmierung</h3><span class="pill live"><span class="de">Lernseite verfügbar</span><span class="en">Study page live</span></span></div>
+        <p><span class="de">Programmierkonzepte in drei Paradigmen, dazu die Einführung in die Programmverifikation.</span><span class="en">Programming concepts across three paradigms, plus an introduction to program verification.</span></p>
+        <div class="chips"><span class="chip">Java</span><span class="chip">Haskell</span><span class="chip">Prolog</span><a class="chip" href="#hoare">Hoare-Kalkül →</a></div>
+      </div>
+      <div class="mod"><div class="mod-t"><h3>Einführung in die Technische Informatik</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Vom Bit zum Rechner: Zahlendarstellung, Schaltnetze, Schaltwerke.</span><span class="en">From bits to computers: number representation, combinational and sequential circuits.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Diskrete Strukturen</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Mengen, Relationen, Induktion, Kombinatorik, Graphen. Induktion ist das Fundament für Invarianten.</span><span class="en">Sets, relations, induction, combinatorics, graphs. Induction is the foundation for invariants.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Analysis für Informatik</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Folgen, Reihen, Stetigkeit, Differential- und Integralrechnung.</span><span class="en">Sequences, series, continuity, differential and integral calculus.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Mentoring</h3><span class="pill"><span class="de">Kleingruppen</span><span class="en">small groups</span></span></div>
+        <p><span class="de">Pflicht im 1. und 2. Semester, Unterstützung beim Studienstart.</span><span class="en">Mandatory in semesters 1 and 2, support for the start of your studies.</span></p></div>
+    </div>
+    <div class="sem-col">
+      <h2><span><span class="de">2. Semester</span><span class="en">Semester 2</span></span><span>SS</span></h2>
+      <div class="mod"><div class="mod-t"><h3>Datenstrukturen und Algorithmen</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Sortieren, Suchen, Bäume, Hashing, Graphalgorithmen. Invarianten begründen hier die Korrektheit.</span><span class="en">Sorting, searching, trees, hashing, graph algorithms. Invariants justify correctness here too.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Formale Systeme, Automaten, Prozesse</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Automaten, reguläre Sprachen, Grammatiken, Petrinetze.</span><span class="en">Automata, regular languages, grammars, Petri nets.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Lineare Algebra</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Vektorräume, lineare Abbildungen, Matrizen, Eigenwerte.</span><span class="en">Vector spaces, linear maps, matrices, eigenvalues.</span></p></div>
+      <div class="mod"><div class="mod-t"><h3>Betriebssysteme und Systemsoftware</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
+        <p><span class="de">Prozesse, Speicherverwaltung, Synchronisation, Dateisysteme.</span><span class="en">Processes, memory management, synchronisation, file systems.</span></p></div>
+      <p class="small muted"><span class="de">Stand: Erstsemester-Einführung WS 2025/26. Die Zuordnung der Module zum 2. Semester bitte im Studienplan in RWTHonline prüfen.</span><span class="en">Source: first-semester introduction WS 2025/26. Please check the semester-2 assignment in the RWTHonline study plan.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOARE LESSON ================= -->
+<section class="view" id="view-hoare" aria-labelledby="hoare-title">
+  <div class="hero">
+    <div class="kicker"><span class="de">Programmierung · 1. Semester · Programmverifikation</span><span class="en">Programmierung · semester 1 · program verification</span></div>
+    <h1 id="hoare-title"><span class="de">Tests finden Fehler. <em>Beweise</em> zeigen, dass es keine gibt.</span><span class="en">Tests find bugs. <em>Proofs</em> show there are none.</span></h1>
+    <div class="triple" aria-label="Hoare-Tripel">
+      <div class="part"><span class="big as">⟨φ⟩</span><span class="cap"><span class="de">Vorbedingung</span><span class="en">precondition</span></span></div>
+      <div class="part"><span class="big">P</span><span class="cap"><span class="de">Programm</span><span class="en">program</span></span></div>
+      <div class="part"><span class="big as">⟨ψ⟩</span><span class="cap"><span class="de">Nachbedingung</span><span class="en">postcondition</span></span></div>
+    </div>
+    <div class="hero-row">
+    <p class="lede">
+      <span class="de">Gilt vor dem Programm P die Bedingung φ, dann gilt nach P die Bedingung ψ, falls P anhält. Auf dieser einen Idee von Tony Hoare baut die gesamte Programmverifikation auf. Hier lernst du sie Schritt für Schritt, mit Übungen im Stil der Aachener Klausuren.</span>
+      <span class="en">If condition φ holds before program P, then condition ψ holds after P, provided P terminates. All of program verification is built on this single idea by Tony Hoare. Here you learn it step by step, with exercises in the style of the Aachen exams.</span>
+    </p>
+    <div class="hero-demo" aria-label="Beispiel">
+      <span class="cap"><span class="de">Ein gültiges Hoare-Tripel</span><span class="en">A valid Hoare triple</span></span>
+      <span class="as">⟨x ≥ 0⟩</span>
+      <span>y = x + 1;</span>
+      <span class="as">⟨y &gt; 0⟩</span>
+    </div>
+    </div>
+    <div class="cta">
+      <button class="btn primary" type="button" data-scroll="s-idea"><span class="de">Mit der Idee anfangen</span><span class="en">Start with the idea</span></button>
+      <a class="btn" href="#practice"><span class="de">Direkt zu den Übungen</span><span class="en">Go to the exercises</span></a>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <nav class="toc" aria-label="Inhalt">
+      <button type="button" data-scroll="s-why"><span class="n">01</span><span><span class="de">Warum?</span><span class="en">Why?</span></span></button>
+      <button type="button" data-scroll="s-history"><span class="n">02</span><span><span class="de">Geschichte</span><span class="en">History</span></span></button>
+      <button type="button" data-scroll="s-idea"><span class="n">03</span><span><span class="de">Die Idee</span><span class="en">The idea</span></span></button>
+      <button type="button" data-scroll="s-rules"><span class="n">04</span><span><span class="de">Die 7 Regeln</span><span class="en">The 7 rules</span></span></button>
+      <button type="button" data-scroll="s-inv"><span class="n">05</span><span><span class="de">Invarianten</span><span class="en">Invariants</span></span></button>
+      <button type="button" data-scroll="s-term"><span class="n">06</span><span><span class="de">Terminierung</span><span class="en">Termination</span></span></button>
+      <button type="button" data-scroll="s-cheat"><span class="n">07</span><span><span class="de">Spickzettel</span><span class="en">Cheat sheet</span></span></button>
+    </nav>
+    <div>
+      <!-- 01 WHY -->
+      <section class="sec" id="s-why">
+        <div class="sec-h"><span class="num">01</span><h2><span class="de">Warum der Hoare-Kalkül wichtig ist</span><span class="en">Why Hoare logic matters</span></h2></div>
+        <div class="prose">
+          <p class="de">Ein Test prüft ein Programm für einige Eingaben. Ein Programm hat aber meist unendlich viele mögliche Eingaben. Edsger Dijkstra hat das so zusammengefasst: Testen kann die Anwesenheit von Fehlern zeigen, nie ihre Abwesenheit. Ein Beweis mit dem Hoare-Kalkül gilt dagegen für <em>jede</em> Eingabe, die die Vorbedingung erfüllt.</p>
+          <p class="en">A test checks a program on some inputs. Most programs, however, have infinitely many possible inputs. Edsger Dijkstra summed it up: testing can show the presence of bugs, never their absence. A proof in Hoare logic, by contrast, holds for <em>every</em> input that satisfies the precondition.</p>
+        </div>
+        <div class="cards">
+          <div class="card"><span class="tag">4. Juni 1996 / June 4, 1996</span><h3><span class="de">Ariane 5, Flug 501</span><span class="en">Ariane 5, flight 501</span></h3>
+            <p><span class="de">Rund 40 Sekunden nach dem Start zerstört sich die Rakete. Ursache: Eine 64-Bit-Gleitkommazahl wurde in eine 16-Bit-Ganzzahl umgewandelt und lief über. Eine Vorbedingung wie ⟨|v| &lt; 32768⟩ hätte die Annahme sichtbar gemacht. Die Aachener Globalübung zum Hoare-Kalkül beginnt mit genau diesem Beispiel.</span><span class="en">About 40 seconds after lift-off the rocket destroys itself. The cause: a 64-bit floating-point value was converted to a 16-bit integer and overflowed. A precondition such as ⟨|v| &lt; 32768⟩ would have made the hidden assumption explicit. The Aachen tutorial on Hoare logic opens with exactly this example.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Entwurf</span><span class="en">design</span></span><h3><span class="de">Besser programmieren</span><span class="en">Better programs</span></h3>
+            <p><span class="de">Wer zuerst die Schleifeninvariante formuliert, schreibt Schleifen ohne Off-by-one-Fehler. Die Invariante sagt dir, wo die Schleife starten, was sie pro Runde tun und wann sie aufhören muss.</span><span class="en">If you write down the loop invariant first, your loops stop having off-by-one errors. The invariant tells you where the loop must start, what each round must do and when it must stop.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Industrie</span><span class="en">industry</span></span><h3><span class="de">Heute im Einsatz</span><span class="en">In use today</span></h3>
+            <p><span class="de">Der Betriebssystemkern seL4 wurde 2009 vollständig formal verifiziert. Werkzeuge wie Dafny, Frama-C, Why3 oder KeY prüfen Vor- und Nachbedingungen automatisch. Alle stehen auf Hoares Regeln.</span><span class="en">The seL4 operating-system kernel was fully formally verified in 2009. Tools such as Dafny, Frama-C, Why3 and KeY check pre- and postconditions automatically. All of them rest on Hoare's rules.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Klausur</span><span class="en">exam</span></span><h3><span class="de">Fester Teil der Prüfung</span><span class="en">A fixed part of the exam</span></h3>
+            <p><span class="de">Typische Aufgabe: (a) partielle Korrektheit mit Zusicherungen nachweisen, (b) Terminierung mit einer Variante zeigen. Genau diese zwei Teile trainierst du in den Übungen.</span><span class="en">Typical task: (a) prove partial correctness by writing assertions, (b) prove termination with a variant. Those are exactly the two parts you practise in the exercises.</span></p></div>
+        </div>
+      </section>
+
+      <!-- 02 HISTORY -->
+      <section class="sec" id="s-history">
+        <div class="sec-h"><span class="num">02</span><h2><span class="de">Eine kurze Geschichte</span><span class="en">A short history</span></h2></div>
+        <div class="timeline">
+          <div class="tl"><div class="yr">1949</div><div><h4>Alan Turing</h4><p><span class="de">„Checking a Large Routine“: Turing zeigt, dass man ein Programm prüfen kann, indem man an bestimmten Stellen Aussagen über die Variablen festhält.</span><span class="en">“Checking a Large Routine”: Turing shows that a program can be checked by recording statements about its variables at certain points.</span></p></div></div>
+          <div class="tl"><div class="yr">1967</div><div><h4>Robert W. Floyd</h4><p><span class="de">„Assigning Meanings to Programs“: Zusicherungen an den Kanten von Flussdiagrammen, dazu Terminierungsbeweise über eine fallende Größe.</span><span class="en">“Assigning Meanings to Programs”: assertions on the edges of flowcharts, plus termination proofs via a decreasing quantity.</span></p></div></div>
+          <div class="tl key"><div class="yr">1969</div><div><h4>C. A. R. (Tony) Hoare</h4><p><span class="de">„An Axiomatic Basis for Computer Programming“ in den Communications of the ACM: Floyds Idee wird zu einem Kalkül mit Tripeln und Regeln für jede Anweisungsart. Hoare hatte zuvor schon Quicksort erfunden.</span><span class="en">“An Axiomatic Basis for Computer Programming” in Communications of the ACM: Floyd's idea becomes a calculus of triples with a rule for every kind of statement. Hoare had already invented Quicksort.</span></p></div></div>
+          <div class="tl"><div class="yr">1975</div><div><h4>Edsger W. Dijkstra</h4><p><span class="de">Die schwächste Vorbedingung wp(P, ψ): Man rechnet von der Nachbedingung rückwärts. Genau das tust du bei der Zuweisungsregel.</span><span class="en">The weakest precondition wp(P, ψ): you compute backwards from the postcondition. That is exactly what you do with the assignment rule.</span></p></div></div>
+          <div class="tl"><div class="yr">1980</div><div><h4>Turing Award</h4><p><span class="de">Hoare erhält den Turing Award, unter anderem für seine Beiträge zu Definition und Entwurf von Programmiersprachen.</span><span class="en">Hoare receives the Turing Award, among other things for his contributions to the definition and design of programming languages.</span></p></div></div>
+          <div class="tl"><div class="yr">2009</div><div><h4>seL4</h4><p><span class="de">Erster vollständig maschinell bewiesener Betriebssystemkern für den allgemeinen Einsatz. Aus der Tafelmethode ist Ingenieurpraxis geworden.</span><span class="en">The first general-purpose operating-system kernel with a complete machine-checked proof. The blackboard method has become engineering practice.</span></p></div></div>
+        </div>
+      </section>
+
+      <!-- 03 IDEA -->
+      <section class="sec" id="s-idea">
+        <div class="sec-h"><span class="num">03</span><h2><span class="de">Die Idee in drei Minuten</span><span class="en">The idea in three minutes</span></h2></div>
+        <div class="prose">
+          <p class="de">Stell dir ein Programm als <strong>Vertrag</strong> vor. Die Vorbedingung φ ist, was der Aufrufer garantiert. Die Nachbedingung ψ ist, was das Programm dafür verspricht. Das Hoare-Tripel <span class="as">⟨φ⟩</span> P <span class="as">⟨ψ⟩</span> behauptet: Wenn φ vorher gilt und P anhält, dann gilt ψ hinterher.</p>
+          <p class="en">Think of a program as a <strong>contract</strong>. The precondition φ is what the caller guarantees. The postcondition ψ is what the program promises in return. The Hoare triple <span class="as">⟨φ⟩</span> P <span class="as">⟨ψ⟩</span> claims: if φ holds before and P terminates, then ψ holds afterwards.</p>
+          <p class="de">Dieses „falls P anhält“ heißt <strong>partielle Korrektheit</strong>. Kommt der Nachweis hinzu, dass P immer anhält, spricht man von <strong>totaler Korrektheit</strong>. In Aachen schreibt man Zusicherungen in spitzen Klammern ⟨…⟩, in vielen Büchern stehen geschweifte {…}. Gemeint ist dasselbe.</p>
+          <p class="en">That “provided P terminates” is called <strong>partial correctness</strong>. Add a proof that P always terminates and you have <strong>total correctness</strong>. In Aachen, assertions are written in angle brackets ⟨…⟩; many textbooks use braces {…}. They mean the same thing.</p>
+          <p class="de">Der wichtigste Trick: Man rechnet <strong>rückwärts</strong>. Im Beispiel oben fragst du: Was muss vor <code>y = x + 1;</code> gelten, damit danach y &gt; 0 gilt? Ersetze y durch x + 1, und du erhältst x + 1 &gt; 0. Das folgt aus x ≥ 0.</p>
+          <p class="en">The key trick: you work <strong>backwards</strong>. In the example above you ask: what must hold before <code>y = x + 1;</code> so that y &gt; 0 holds afterwards? Replace y by x + 1 and you get x + 1 &gt; 0, which follows from x ≥ 0.</p>
+        </div>
+        <div class="prog" aria-label="Annotiertes Beispiel">
+          <div class="ln a"><span class="tx">⟨x ≥ 0⟩</span><span class="nt"><span class="de">Vorbedingung</span><span class="en">precondition</span></span></div>
+          <div class="ln a"><span class="tx">⟨x + 1 &gt; 0⟩</span><span class="nt"><span class="de">folgt aus darüber</span><span class="en">follows from above</span></span></div>
+          <div class="ln c"><span class="tx">y = x + 1;</span></div>
+          <div class="ln a"><span class="tx">⟨y &gt; 0⟩</span><span class="nt"><span class="de">Zuweisungsregel</span><span class="en">assignment rule</span></span></div>
+        </div>
+        <div class="fb info"><span class="lab"><span class="de">Merksatz aus den RWTH-Übungen</span><span class="en">Rule of thumb from the RWTH tutorials</span></span>
+          <span><span class="de">Zwei Zusicherungen dürfen nur dann direkt untereinander stehen, wenn die untere aus der oberen folgt. Nach einer Anweisung steht genau eine Zusicherung, und die muss durch eine Regel begründet sein.</span><span class="en">Two assertions may stand directly below each other only if the lower one follows from the upper one. After a statement there is exactly one assertion, and it must be justified by a rule.</span></span></div>
+      </section>
+
+      <!-- 04 RULES -->
+      <section class="sec" id="s-rules">
+        <div class="sec-h"><span class="num">04</span><h2><span class="de">Die sieben Regeln</span><span class="en">The seven rules</span></h2></div>
+        <p class="prose"><span class="de">Über dem Strich stehen die Voraussetzungen, darunter die Folgerung. Mit diesen sieben Regeln kannst du jedes Programm aus Zuweisungen, Sequenzen, Bedingungen und while-Schleifen beweisen.</span><span class="en">Above the line are the premises, below it the conclusion. These seven rules let you prove any program built from assignments, sequences, conditionals and while loops.</span></p>
+        <div class="rules">
+          <div class="rule"><div class="nm"><span><span class="de">Zuweisungsregel</span><span class="en">Assignment rule</span></span><span class="rn">1</span></div>
+            <div class="frac"><div><span class="as">⟨φ[x/t]⟩</span> x = t; <span class="as">⟨φ⟩</span></div></div>
+            <p><span class="de">φ[x/t] heißt: ersetze in φ jedes x durch t. Das ist ein Axiom, es hat keine Voraussetzungen. Rechne immer von unten nach oben.</span><span class="en">φ[x/t] means: replace every x in φ by t. It is an axiom with no premises. Always compute from the bottom up.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Sequenzregel</span><span class="en">Sequence rule</span></span><span class="rn">2</span></div>
+            <div class="frac"><div class="prem"><span><span class="as">⟨φ⟩</span> P <span class="as">⟨ξ⟩</span></span><span><span class="as">⟨ξ⟩</span> Q <span class="as">⟨ψ⟩</span></span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> P Q <span class="as">⟨ψ⟩</span></div></div>
+            <p><span class="de">Die Zwischenzusicherung ξ verbindet zwei Anweisungen. Im annotierten Programm steht ξ einfach zwischen P und Q.</span><span class="en">The intermediate assertion ξ connects two statements. In the annotated program ξ simply sits between P and Q.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Bedingungsregel 1</span><span class="en">Conditional rule 1</span></span><span class="rn">3</span></div>
+            <div class="frac"><div class="prem"><span><span class="as">⟨φ ∧ B⟩</span> P <span class="as">⟨ψ⟩</span></span><span>(φ ∧ ¬B) ⇒ ψ</span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> if (B) {P} <span class="as">⟨ψ⟩</span></div></div>
+            <p><span class="de">Ohne else: Ist B falsch, passiert nichts. Dann muss ψ schon aus φ ∧ ¬B folgen.</span><span class="en">Without else: if B is false, nothing happens, so ψ must already follow from φ ∧ ¬B.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Bedingungsregel 2</span><span class="en">Conditional rule 2</span></span><span class="rn">4</span></div>
+            <div class="frac"><div class="prem"><span><span class="as">⟨φ ∧ B⟩</span> P <span class="as">⟨ψ⟩</span></span><span><span class="as">⟨φ ∧ ¬B⟩</span> Q <span class="as">⟨ψ⟩</span></span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> if (B) {P} else {Q} <span class="as">⟨ψ⟩</span></div></div>
+            <p><span class="de">Beide Zweige müssen bei derselben Nachbedingung ψ ankommen.</span><span class="en">Both branches must arrive at the same postcondition ψ.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Schleifenregel</span><span class="en">Loop rule</span></span><span class="rn">5</span></div>
+            <div class="frac"><div><span class="as">⟨φ ∧ B⟩</span> P <span class="as">⟨φ⟩</span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> while (B) {P} <span class="as">⟨φ ∧ ¬B⟩</span></div></div>
+            <p><span class="de">φ ist die Schleifeninvariante: Sie gilt vor der Schleife, bleibt in jeder Runde erhalten und gilt deshalb auch danach, zusammen mit ¬B.</span><span class="en">φ is the loop invariant: it holds before the loop, is preserved by every round and therefore also holds afterwards, together with ¬B.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Konsequenzregel 1</span><span class="en">Consequence rule 1</span></span><span class="rn">6</span></div>
+            <div class="frac"><div class="prem"><span>α ⇒ φ</span><span><span class="as">⟨φ⟩</span> P <span class="as">⟨ψ⟩</span></span></div><div class="bar"></div><div><span class="as">⟨α⟩</span> P <span class="as">⟨ψ⟩</span></div></div>
+            <p><span class="de">Vorbedingung verstärken: Was aus mehr Wissen folgt, folgt auch. Das ist der „folgt aus darüber“-Schritt.</span><span class="en">Strengthen the precondition: more knowledge never hurts. This is the “follows from above” step.</span></p></div>
+          <div class="rule"><div class="nm"><span><span class="de">Konsequenzregel 2</span><span class="en">Consequence rule 2</span></span><span class="rn">7</span></div>
+            <div class="frac"><div class="prem"><span><span class="as">⟨φ⟩</span> P <span class="as">⟨ψ⟩</span></span><span>ψ ⇒ β</span></div><div class="bar"></div><div><span class="as">⟨φ⟩</span> P <span class="as">⟨β⟩</span></div></div>
+            <p><span class="de">Nachbedingung abschwächen: Am Ende der Schleife folgerst du so aus φ ∧ ¬B die eigentliche Nachbedingung.</span><span class="en">Weaken the postcondition: this is how, after the loop, you derive the actual postcondition from φ ∧ ¬B.</span></p></div>
+        </div>
+
+        <div class="tool" id="bw">
+          <h3><span class="as">⟨?⟩</span><span><span class="de">Rückwärts-Rechner für die Zuweisungsregel</span><span class="en">Backwards calculator for the assignment rule</span></span></h3>
+          <p class="small muted"><span class="de">Gib eine Zuweisung und die Zusicherung danach ein. Der Rechner setzt für dich ein.</span><span class="en">Enter an assignment and the assertion after it. The calculator substitutes for you.</span></p>
+          <div class="fields">
+            <label class="f" for="bw-var"><span><span class="de">Variable x</span><span class="en">variable x</span></span><input id="bw-var" value="s" autocomplete="off" spellcheck="false"></label>
+            <label class="f" for="bw-expr"><span><span class="de">Ausdruck t</span><span class="en">expression t</span></span><input id="bw-expr" value="s + i" autocomplete="off" spellcheck="false"></label>
+            <label class="f" for="bw-post"><span><span class="de">Zusicherung danach φ</span><span class="en">assertion after φ</span></span><input id="bw-post" value="2 * s = i * (i + 1)" autocomplete="off" spellcheck="false"></label>
+          </div>
+          <div id="bw-out"></div>
+        </div>
+      </section>
+
+      <!-- 05 INVARIANT -->
+      <section class="sec" id="s-inv">
+        <div class="sec-h"><span class="num">05</span><h2><span class="de">Schleifeninvarianten verstehen und finden</span><span class="en">Understanding and finding loop invariants</span></h2></div>
+        <div class="prose">
+          <p class="de">Eine Invariante funktioniert wie eine Reihe <strong>Dominosteine</strong>, also wie vollständige Induktion: Der erste Stein fällt (die Invariante gilt am Anfang), jeder Stein stößt den nächsten um (eine Runde erhält die Invariante), und wenn die Reihe zu Ende ist, liegt alles (Invariante und ¬B ergeben das Ergebnis).</p>
+          <p class="en">An invariant works like a row of <strong>dominoes</strong>, i.e. like mathematical induction: the first domino falls (the invariant holds at the start), each domino knocks over the next (one round preserves the invariant), and when the row ends everything has fallen (invariant plus ¬B give the result).</p>
+        </div>
+        <div class="steps3">
+          <div class="card"><span class="tag"><span class="de">Pflicht 1 · Start</span><span class="en">Duty 1 · start</span></span><h3><span class="de">Vorbedingung ⇒ I</span><span class="en">Precondition ⇒ I</span></h3><p><span class="de">Nach den Initialisierungen gilt die Invariante.</span><span class="en">After the initialisations the invariant holds.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Pflicht 2 · Erhaltung</span><span class="en">Duty 2 · preservation</span></span><h3><span class="as">⟨I ∧ B⟩</span> <span class="de">Rumpf</span><span class="en">body</span> <span class="as">⟨I⟩</span></h3><p><span class="de">Gilt I und läuft die Schleife noch, dann gilt I auch nach einer Runde.</span><span class="en">If I holds and the loop is still running, then I still holds after one round.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Pflicht 3 · Ende</span><span class="en">Duty 3 · exit</span></span><h3>I ∧ ¬B ⇒ ψ</h3><p><span class="de">Ist die Schleife fertig, folgt aus I die Nachbedingung.</span><span class="en">When the loop is done, the postcondition follows from I.</span></p></div>
+        </div>
+        <div class="prose">
+          <h3><span class="de">Rezept zum Finden</span><span class="en">A recipe for finding one</span></h3>
+          <ol class="hints">
+            <li><span class="de"><strong>Wertetabelle:</strong> Führe die Schleife für ein kleines Beispiel aus und notiere die Variablen nach jeder Runde.</span><span class="en"><strong>Value table:</strong> run the loop on a small example and write down the variables after every round.</span></li>
+            <li><span class="de"><strong>Was bleibt gleich?</strong> Suche eine Gleichung zwischen dem Zähler (z. B. i) und dem Akkumulator (z. B. s), die in jeder Zeile stimmt.</span><span class="en"><strong>What stays the same?</strong> Look for an equation between the counter (e.g. i) and the accumulator (e.g. s) that holds in every row.</span></li>
+            <li><span class="de"><strong>Nachbedingung verallgemeinern:</strong> Oft ersetzt du in ψ den Endwert (n) durch den Zähler (i).</span><span class="en"><strong>Generalise the postcondition:</strong> often you replace the final value (n) in ψ by the counter (i).</span></li>
+            <li><span class="de"><strong>Schranke ergänzen:</strong> Die abgeschwächte Schleifenbedingung (z. B. i ≤ n statt i &lt; n) sorgt dafür, dass am Ende aus I ∧ ¬B wirklich i = n folgt.</span><span class="en"><strong>Add a bound:</strong> the weakened loop condition (e.g. i ≤ n instead of i &lt; n) ensures that I ∧ ¬B really gives i = n at the end.</span></li>
+          </ol>
+        </div>
+        <div class="prose">
+          <h3><span class="de">Mit if und Arrays</span><span class="en">With if and arrays</span></h3>
+          <p class="de">Steht im Rumpf ein <code>if</code>, bekommt jeder Zweig seine eigene Eintrittszusicherung: ⟨I ∧ B ∧ C⟩ im then-Zweig, ⟨I ∧ B ∧ ¬C⟩ im else-Zweig. Beide Zweige müssen bei derselben Zusicherung ankommen. Bei Arrays beschreibt die Invariante den Teil, der schon bearbeitet ist, zum Beispiel res = sum(a, 0, i − 1) für a[0] + … + a[i − 1]. Die Schranke 0 ≤ i ≤ a.length sorgt dafür, dass a[i] im Rumpf definiert ist.</p>
+          <p class="en">If the body contains an <code>if</code>, each branch gets its own entry assertion: ⟨I ∧ B ∧ C⟩ in the then branch, ⟨I ∧ B ∧ ¬C⟩ in the else branch. Both branches must arrive at the same assertion. With arrays, the invariant describes the part already processed, for example res = sum(a, 0, i − 1) for a[0] + … + a[i − 1]. The bound 0 ≤ i ≤ a.length ensures that a[i] in the body is defined.</p>
+        </div>
+        <div class="tool" id="tracer">
+          <h3><span class="as">I</span><span><span class="de">Invarianten-Tracer: Gaußsche Summe</span><span class="en">Invariant tracer: Gauss sum</span></span></h3>
+          <div class="prog" id="tr-prog"></div>
+          <div class="row">
+            <label class="f" for="tr-n" style="min-width:200px"><span>n = <b id="tr-nv">5</b></span><input id="tr-n" type="range" min="0" max="8" value="5"></label>
+            <button class="btn" type="button" id="tr-step"><span class="de">Eine Runde weiter</span><span class="en">Next round</span></button>
+            <button class="btn ghost" type="button" id="tr-reset"><span class="de">Zurück auf Start</span><span class="en">Back to start</span></button>
+          </div>
+          <div class="tblwrap" id="tr-table"></div>
+          <p class="small muted"><span class="de">In jeder Zeile gilt I. In der letzten Zeile ist B falsch, also i = n, und aus I wird die Nachbedingung 2 · s = n · (n + 1).</span><span class="en">I holds in every row. In the last row B is false, so i = n, and I turns into the postcondition 2 · s = n · (n + 1).</span></p>
+        </div>
+      </section>
+
+      <!-- 06 TERMINATION -->
+      <section class="sec" id="s-term">
+        <div class="sec-h"><span class="num">06</span><h2><span class="de">Terminierung: die Variante</span><span class="en">Termination: the variant</span></h2></div>
+        <div class="prose">
+          <p class="de">Partielle Korrektheit sagt nichts darüber, ob die Schleife überhaupt anhält. Dafür brauchst du eine <strong>Variante</strong> V: einen ganzzahligen Ausdruck, der nie negativ wird, solange die Schleife läuft, und in jeder Runde echt kleiner wird. Eine natürliche Zahl kann nicht unendlich oft echt kleiner werden, also hält die Schleife an.</p>
+          <p class="en">Partial correctness says nothing about whether the loop stops at all. For that you need a <strong>variant</strong> V: an integer expression that never becomes negative while the loop runs and strictly decreases in every round. A natural number cannot decrease forever, so the loop terminates.</p>
+        </div>
+        <div class="cards">
+          <div class="card"><span class="tag"><span class="de">Bedingung 1</span><span class="en">condition 1</span></span><h3>B ⇒ V ≥ 0</h3><p><span class="de">Solange die Schleife läuft, ist V nicht negativ. Manchmal brauchst du dafür die Invariante dazu.</span><span class="en">While the loop runs, V is not negative. Sometimes you need the invariant for this as well.</span></p></div>
+          <div class="card"><span class="tag"><span class="de">Bedingung 2</span><span class="en">condition 2</span></span><h3><span class="as">⟨V = m ∧ B⟩</span> P <span class="as">⟨V &lt; m⟩</span></h3><p><span class="de">m ist eine Hilfsvariable für den alten Wert. Rechne wieder rückwärts mit der Zuweisungsregel.</span><span class="en">m is an auxiliary variable for the old value. Again, compute backwards with the assignment rule.</span></p></div>
+        </div>
+        <div class="prog" aria-label="Variante Beispiel">
+          <div class="ln a" style="--ind:1"><span class="tx">⟨n − i = m ∧ i &lt; n⟩</span><span class="nt"><span class="de">Variante V = n − i</span><span class="en">variant V = n − i</span></span></div>
+          <div class="ln a" style="--ind:1"><span class="tx">⟨n − (i + 1) &lt; m⟩</span><span class="nt"><span class="de">folgt aus darüber</span><span class="en">follows from above</span></span></div>
+          <div class="ln c" style="--ind:1"><span class="tx">i = i + 1;</span></div>
+          <div class="ln a" style="--ind:1"><span class="tx">⟨n − i &lt; m⟩</span><span class="nt"><span class="de">Zuweisungsregel</span><span class="en">assignment rule</span></span></div>
+        </div>
+      </section>
+
+      <!-- 07 CHEAT -->
+      <section class="sec" id="s-cheat">
+        <div class="sec-h"><span class="num">07</span><h2><span class="de">Spickzettel für die Klausur</span><span class="en">Exam cheat sheet</span></h2></div>
+        <div class="cheat">
+          <div class="card"><h3><span class="de">Partielle Korrektheit</span><span class="en">Partial correctness</span></h3>
+            <ol><li><span class="de">Invariante finden (Wertetabelle).</span><span class="en">Find the invariant (value table).</span></li>
+              <li><span class="de">⟨I⟩ vor die Schleife, ⟨I ∧ B⟩ an den Rumpfanfang, ⟨I⟩ ans Rumpfende, ⟨I ∧ ¬B⟩ hinter die Schleife.</span><span class="en">Put ⟨I⟩ before the loop, ⟨I ∧ B⟩ at the start of the body, ⟨I⟩ at the end of the body, ⟨I ∧ ¬B⟩ after the loop.</span></li>
+              <li><span class="de">Im Rumpf und bei der Initialisierung von unten nach oben einsetzen.</span><span class="en">In the body and in the initialisation, substitute from the bottom up.</span></li>
+              <li><span class="de">Jede „folgt“-Stelle kurz begründen.</span><span class="en">Briefly justify every “follows” step.</span></li></ol></div>
+          <div class="card"><h3><span class="de">Terminierung</span><span class="en">Termination</span></h3>
+            <ol><li><span class="de">V meist: Abstand zum Ziel, z. B. n − i oder der Zähler selbst.</span><span class="en">V is usually the distance to the goal, e.g. n − i or the counter itself.</span></li>
+              <li><span class="de">B ⇒ V ≥ 0 zeigen.</span><span class="en">Show B ⇒ V ≥ 0.</span></li>
+              <li><span class="de">⟨V = m ∧ B⟩ Rumpf ⟨V &lt; m⟩ rückwärts nachrechnen.</span><span class="en">Verify ⟨V = m ∧ B⟩ body ⟨V &lt; m⟩ backwards.</span></li></ol></div>
+          <div class="card"><h3><span class="de">Typische Fehler</span><span class="en">Typical mistakes</span></h3>
+            <ol><li><span class="de">Schranke i ≤ n vergessen.</span><span class="en">Forgetting the bound i ≤ n.</span></li>
+              <li><span class="de">Beim Einsetzen Klammern weglassen: 3 · i wird zu 3 · (i + 1).</span><span class="en">Dropping parentheses when substituting: 3 · i becomes 3 · (i + 1).</span></li>
+              <li><span class="de">Von oben nach unten einsetzen statt rückwärts.</span><span class="en">Substituting top-down instead of backwards.</span></li>
+              <li><span class="de">Die Nachbedingung selbst als Invariante nehmen.</span><span class="en">Using the postcondition itself as the invariant.</span></li></ol></div>
+          <div class="card"><h3><span class="de">if/else und Arrays</span><span class="en">if/else and arrays</span></h3>
+            <ol><li><span class="de">then-Zweig beginnt mit ⟨φ ∧ C⟩, else-Zweig mit ⟨φ ∧ ¬C⟩.</span><span class="en">The then branch starts with ⟨φ ∧ C⟩, the else branch with ⟨φ ∧ ¬C⟩.</span></li>
+              <li><span class="de">Ohne else: zusätzlich φ ∧ ¬C ⇒ ψ zeigen.</span><span class="en">Without else: also show φ ∧ ¬C ⇒ ψ.</span></li>
+              <li><span class="de">Arrays: Invariante über a[0] … a[i − 1], Schranke 0 ≤ i ≤ a.length.</span><span class="en">Arrays: invariant over a[0] … a[i − 1], bound 0 ≤ i ≤ a.length.</span></li></ol></div>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="#practice"><span class="de">Jetzt üben: 11 geführte Aufgaben</span><span class="en">Practise now: 11 guided exercises</span></a>
+          <a class="btn" href="#exam"><span class="de">Klausur-Simulation</span><span class="en">Exam simulation</span></a>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRACTICE ================= -->
+<section class="view" id="view-practice" aria-label="Übungen / Exercises">
+  <div class="prac">
+    <aside class="exlist" id="exlist"></aside>
+    <div class="ws" id="ws"></div>
+  </div>
+</section>
+
+<!-- ================= EXAM ================= -->
+<section class="view" id="view-exam" aria-labelledby="exam-title">
+  <div id="exam"></div>
+</section>
+</main>
+
+<footer>
+  <p><span class="de">Unabhängige Lernhilfe für Studierende im ersten Jahr. Kein offizielles Angebot der RWTH Aachen.</span><span class="en">Independent study aid for first-year students. Not an official RWTH Aachen offering.</span></p>
+  <p><span class="de">Quellen:</span><span class="en">Sources:</span>
+    <a href="https://sc.informatik.rwth-aachen.de/wp-content/uploads/2025/10/2025-WS-Erstsemestereinfuehrung-BSInf.pdf">Erstsemester-Facheinführung BSInf WS 2025/26</a> ·
+    <a href="https://verify.rwth-aachen.de/">LuFG Informatik 2 (Programmierung)</a> ·
+    <a href="https://doi.org/10.1145/363235.363259">C. A. R. Hoare, An Axiomatic Basis for Computer Programming (1969)</a></p>
+</footer>
+
+<script>
+/* ===== Hoare Lab engine: parser, evaluator, substitution, bounded checker ===== */
+const UNDEF = { undef: true };
+function perr(code, detail) { const e = new Error(code); e.code = code; e.detail = detail || ''; return e; }
+
+const SYMS = [['<=>','iff'],['⇔','iff'],['==>','imp'],['=>','imp'],['->','imp'],['⇒','imp'],['→','imp'],
+  ['&&','and'],['∧','and'],['&','and'],['||','or'],['∨','or'],['|','or'],
+  ['<=','le'],['≤','le'],['>=','ge'],['≥','ge'],['!=','ne'],['≠','ne'],['==','eq'],['=','eq'],['<','lt'],['>','gt'],
+  ['!','not'],['¬','not'],['+','+'],['-','-'],['−','-'],['–','-'],['*','*'],['·','*'],['⋅','*'],['×','*'],['/','/'],['^','^'],
+  ['(','('],[')',')'],['[','['],[']',']'],[',',','],['∑','sumsym']];
+const FNS = { sum: 'sum', max: 'max', min: 'min', gcd: 'gcd', ggt: 'gcd', abs: 'abs', fact: 'fact' };
+const ARRFN = ['sum', 'max', 'min'];
+
+function tokenize(src) {
+  const toks = []; let i = 0;
+  while (i < src.length) {
+    const c = src[i];
+    if (/\s/.test(c)) { i++; continue; }
+    if (/[0-9]/.test(c)) { let j = i; while (j < src.length && /[0-9]/.test(src[j])) j++; toks.push({ k: 'num', v: Number(src.slice(i, j)), s: src.slice(i, j) }); i = j; continue; }
+    if (/[A-Za-z_]/.test(c)) {
+      let j = i; while (j < src.length && /[A-Za-z0-9_]/.test(src[j])) j++;
+      const w = src.slice(i, j), lw = w.toLowerCase();
+      if (src.startsWith('.length', j)) { toks.push({ k: 'len', v: w, s: w + '.length' }); i = j + 7; continue; }
+      if (lw === 'and' || lw === 'und') toks.push({ k: 'and', s: w });
+      else if (lw === 'or' || lw === 'oder') toks.push({ k: 'or', s: w });
+      else if (lw === 'not' || lw === 'nicht') toks.push({ k: 'not', s: w });
+      else if (lw === 'true' || lw === 'wahr') toks.push({ k: 'bool', v: true, s: w });
+      else if (lw === 'false' || lw === 'falsch') toks.push({ k: 'bool', v: false, s: w });
+      else toks.push({ k: 'id', v: w, s: w });
+      i = j; continue;
+    }
+    let m = null;
+    for (const [s, k] of SYMS) { if (src.startsWith(s, i)) { m = [s, k]; break; } }
+    if (!m) throw perr('char', c);
+    if (m[1] === 'sumsym') toks.push({ k: 'id', v: 'sum', s: '∑' }); else toks.push({ k: m[1], s: m[0] });
+    i += m[0].length;
+  }
+  return toks;
+}
+
+const CMPK = ['eq', 'ne', 'lt', 'le', 'gt', 'ge'];
+function parse(src) {
+  const toks = tokenize(String(src)); let pos = 0;
+  if (!toks.length) throw perr('empty');
+  const is = k => toks[pos] && toks[pos].k === k;
+  const next = () => toks[pos++];
+  const expect = k => { if (!is(k)) throw perr(k === ')' || k === ']' ? 'paren' : 'tok', toks[pos] ? toks[pos].s : ''); next(); };
+  function iff() { let a = imp(); while (is('iff')) { next(); a = { t: 'iff', a, b: imp() }; } return a; }
+  function imp() { const a = or(); if (is('imp')) { next(); return { t: 'imp', a, b: imp() }; } return a; }
+  function or() { let a = and(); while (is('or')) { next(); a = { t: 'or', a, b: and() }; } return a; }
+  function and() { let a = not(); while (is('and')) { next(); a = { t: 'and', a, b: not() }; } return a; }
+  function not() { if (is('not')) { next(); return { t: 'not', a: not() }; } return cmp(); }
+  function cmp() {
+    let a = add();
+    if (!toks[pos] || !CMPK.includes(toks[pos].k)) return a;
+    let res = null;
+    while (toks[pos] && CMPK.includes(toks[pos].k)) {
+      const op = next().k; const b = add(); const c = { t: 'cmp', op, a, b };
+      res = res ? { t: 'and', a: res, b: c } : c; a = b;
+    }
+    return res;
+  }
+  function add() { let a = mul(); while (is('+') || is('-')) { const op = next().k; a = { t: 'bin', op, a, b: mul() }; } return a; }
+  function mul() { let a = un(); while (is('*') || is('/')) { const op = next().k; a = { t: 'bin', op, a, b: un() }; } return a; }
+  function un() { if (is('-')) { next(); return { t: 'neg', a: un() }; } return pow(); }
+  function pow() { const a = atom(); if (is('^')) { next(); return { t: 'bin', op: '^', a, b: un() }; } return a; }
+  function atom() {
+    const tk = next();
+    if (!tk) throw perr('end');
+    if (tk.k === 'num') return { t: 'num', v: tk.v };
+    if (tk.k === 'len') return { t: 'fn', f: 'len', arr: tk.v };
+    if (tk.k === 'id') {
+      const f = FNS[tk.v.toLowerCase()];
+      if (f && is('(')) {
+        next();
+        if (ARRFN.includes(f)) {
+          const at = next(); if (!at || at.k !== 'id') throw perr('arrarg', f);
+          expect(','); const a = iff(); expect(','); const b = iff(); expect(')');
+          return { t: 'fn', f, arr: at.v, a, b };
+        }
+        const a = iff();
+        if (f === 'gcd') { expect(','); const b = iff(); expect(')'); return { t: 'fn', f, a, b }; }
+        expect(')'); return { t: 'fn', f, a };
+      }
+      if (is('[')) { next(); const a = iff(); expect(']'); return { t: 'idx', arr: tk.v, a }; }
+      return { t: 'var', v: tk.v };
+    }
+    if (tk.k === 'bool') return { t: 'bool', v: tk.v };
+    if (tk.k === '(') { const e = iff(); expect(')'); return e; }
+    throw perr('tok', tk.s);
+  }
+  const e = iff();
+  if (pos < toks.length) throw perr('tok', toks[pos].s);
+  return e;
+}
+
+function ty(n) {
+  switch (n.t) {
+    case 'num': case 'var': return 'N';
+    case 'bool': return 'B';
+    case 'idx': need(n.a, 'N'); return 'N';
+    case 'fn': if (n.a) need(n.a, 'N'); if (n.b) need(n.b, 'N'); return 'N';
+    case 'neg': need(n.a, 'N'); return 'N';
+    case 'bin': need(n.a, 'N'); need(n.b, 'N'); return 'N';
+    case 'cmp': need(n.a, 'N'); need(n.b, 'N'); return 'B';
+    case 'not': need(n.a, 'B'); return 'B';
+    default: need(n.a, 'B'); need(n.b, 'B'); return 'B';
+  }
+}
+function need(n, k) { if (ty(n) !== k) throw perr(k === 'B' ? 'needbool' : 'neednum'); }
+function varsOf(n, acc = new Set()) { if (n.t === 'var') acc.add(n.v); if (n.arr) acc.add(n.arr); if (n.a) varsOf(n.a, acc); if (n.b) varsOf(n.b, acc); return acc; }
+function usage(n, sc = new Set(), ar = new Set()) { if (n.t === 'var') sc.add(n.v); if (n.arr) ar.add(n.arr); if (n.a) usage(n.a, sc, ar); if (n.b) usage(n.b, sc, ar); return [sc, ar]; }
+
+const isInt = v => Number.isInteger(v);
+function arrOf(s, name) { const a = s[name]; if (!Array.isArray(a)) throw perr('notarray', name); return a; }
+function ev(n, s) {
+  switch (n.t) {
+    case 'num': case 'bool': return n.v;
+    case 'var': if (!(n.v in s)) throw perr('var', n.v); return s[n.v];
+    case 'idx': { const A = arrOf(s, n.arr), i = ev(n.a, s); if (!isInt(i) || i < 0 || i >= A.length) throw UNDEF; return A[i]; }
+    case 'fn': {
+      if (n.f === 'len') return arrOf(s, n.arr).length;
+      if (ARRFN.includes(n.f)) {
+        const A = arrOf(s, n.arr), lo = ev(n.a, s), hi = ev(n.b, s);
+        if (!isInt(lo) || !isInt(hi)) throw UNDEF;
+        if (hi < lo) { if (n.f === 'sum') return 0; throw UNDEF; }
+        if (lo < 0 || hi >= A.length) throw UNDEF;
+        const part = A.slice(lo, hi + 1);
+        return n.f === 'sum' ? part.reduce((x, y) => x + y, 0) : n.f === 'max' ? Math.max(...part) : Math.min(...part);
+      }
+      if (n.f === 'abs') return Math.abs(ev(n.a, s));
+      if (n.f === 'fact') { const k = ev(n.a, s); if (!isInt(k) || k < 0 || k > 20) throw UNDEF; let r = 1; for (let j = 2; j <= k; j++) r *= j; return r; }
+      if (n.f === 'gcd') { let x = ev(n.a, s), y = ev(n.b, s); if (!isInt(x) || !isInt(y) || x < 0 || y < 0) throw UNDEF; while (y) [x, y] = [y, x % y]; return x; }
+      throw perr('tok', n.f);
+    }
+    case 'neg': return -ev(n.a, s);
+    case 'bin': {
+      const a = ev(n.a, s), b = ev(n.b, s); let r;
+      switch (n.op) {
+        case '+': r = a + b; break; case '-': r = a - b; break; case '*': r = a * b; break;
+        case '/': if (b === 0) throw UNDEF; r = a / b; break;
+        case '^': r = Math.pow(a, b); break;
+      }
+      if (!Number.isFinite(r)) throw UNDEF; return r;
+    }
+    case 'cmp': {
+      const a = ev(n.a, s), b = ev(n.b, s), eq = Math.abs(a - b) < 1e-9;
+      switch (n.op) { case 'eq': return eq; case 'ne': return !eq; case 'lt': return a < b && !eq; case 'le': return a < b || eq; case 'gt': return a > b && !eq; case 'ge': return a > b || eq; }
+    }
+    case 'not': return !ev(n.a, s);
+    case 'and': return ev(n.a, s) && ev(n.b, s);
+    case 'or': return ev(n.a, s) || ev(n.b, s);
+    case 'imp': return !ev(n.a, s) || ev(n.b, s);
+    case 'iff': return ev(n.a, s) === ev(n.b, s);
+  }
+}
+function tryEv(n, s) { try { return ev(n, s); } catch (e) { if (e === UNDEF) return null; throw e; } }
+
+const PREC = { iff: 0, imp: 1, or: 2, and: 3, not: 4, cmp: 5, '+': 6, '-': 6, '*': 7, '/': 7, neg: 8, '^': 9 };
+function prec(n) { if (n.t === 'bin') return PREC[n.op]; if (n.t in PREC) return PREC[n.t]; return 10; }
+const CMPS = { eq: '=', ne: '≠', lt: '<', le: '≤', gt: '>', ge: '≥' };
+function pr(n, min = 0) {
+  let s;
+  switch (n.t) {
+    case 'num': s = String(n.v); break;
+    case 'var': s = n.v; break;
+    case 'bool': s = n.v ? 'true' : 'false'; break;
+    case 'idx': s = `${n.arr}[${pr(n.a)}]`; break;
+    case 'fn':
+      if (n.f === 'len') s = `${n.arr}.length`;
+      else if (ARRFN.includes(n.f)) s = `${n.f}(${n.arr}, ${pr(n.a)}, ${pr(n.b)})`;
+      else if (n.f === 'gcd') s = `gcd(${pr(n.a)}, ${pr(n.b)})`;
+      else s = `${n.f}(${pr(n.a)})`;
+      break;
+    case 'iff': s = pr(n.a, 1) + ' ⇔ ' + pr(n.b, 1); break;
+    case 'imp': s = pr(n.a, 2) + ' ⇒ ' + pr(n.b, 1); break;
+    case 'or': s = pr(n.a, 2) + ' ∨ ' + pr(n.b, 2); break;
+    case 'and': s = pr(n.a, 3) + ' ∧ ' + pr(n.b, 3); break;
+    case 'not': s = '¬' + ((n.a.t === 'var' || n.a.t === 'bool') ? pr(n.a) : '(' + pr(n.a) + ')'); break;
+    case 'cmp': s = pr(n.a, 6) + ' ' + CMPS[n.op] + ' ' + pr(n.b, 6); break;
+    case 'neg': s = '−' + pr(n.a, 9); break;
+    case 'bin': {
+      const p = PREC[n.op];
+      if (n.op === '^') s = pr(n.a, 10) + '^' + pr(n.b, 10);
+      else s = pr(n.a, p) + ({ '+': ' + ', '-': ' − ', '*': ' · ', '/': ' / ' })[n.op] + pr(n.b, p + 1);
+      break;
+    }
+  }
+  return prec(n) < min ? '(' + s + ')' : s;
+}
+function sub(n, x, r) {
+  if (n.t === 'var') return n.v === x ? r : n;
+  if (n.t === 'num' || n.t === 'bool') return n;
+  const o = { ...n }; if (n.a) o.a = sub(n.a, x, r); if (n.b) o.b = sub(n.b, x, r); return o;
+}
+const mkAnd = (a, b) => (a.t === 'bool' && a.v === true) ? b : { t: 'and', a, b };
+const mkNot = a => ({ t: 'not', a });
+const mkImp = (a, b) => ({ t: 'imp', a, b });
+
+/* ---- statements ---- */
+function compileStmts(list) {
+  return list.map(s => Array.isArray(s)
+    ? { k: 'asg', x: s[0], e: parse(s[1]), src: s[1] }
+    : { k: 'if', c: parse(s.if), csrc: s.if, th: compileStmts(s.then), el: s.else ? compileStmts(s.else) : null });
+}
+function compile(ex) {
+  if (ex._c) return ex._c;
+  const c = {
+    pre: parse(ex.pre), post: parse(ex.post),
+    cond: ex.cond ? parse(ex.cond) : null, inv: ex.inv ? parse(ex.inv) : null, variant: ex.variant ? parse(ex.variant) : null,
+    init: compileStmts(ex.init), body: ex.body ? compileStmts(ex.body) : [],
+    scalars: Object.keys(ex.vars), arrays: Object.keys(ex.arrays || {})
+  };
+  c.names = [...c.arrays, ...c.scalars];
+  c.allAsg = c.init.every(s => s.k === 'asg');
+  // precompute all arrays for the grid
+  c.arrVals = {};
+  for (const a of c.arrays) {
+    const { maxLen, range: [lo, hi] } = ex.arrays[a]; const out = [[]];
+    let layer = [[]];
+    for (let L = 1; L <= maxLen; L++) { const nl = []; for (const p of layer) for (let v = lo; v <= hi; v++) nl.push([...p, v]); out.push(...nl); layer = nl; }
+    c.arrVals[a] = out;
+  }
+  Object.defineProperty(ex, '_c', { value: c, enumerable: false });
+  return c;
+}
+function run(stmts, s) {
+  let st = { ...s };
+  for (const x of stmts) {
+    if (x.k === 'asg') st[x.x] = ev(x.e, st);
+    else st = ev(x.c, st) ? run(x.th, st) : (x.el ? run(x.el, st) : st);
+  }
+  return st;
+}
+function tryRun(stmts, s) { try { return run(stmts, s); } catch (e) { if (e === UNDEF) return null; throw e; } }
+
+function* grid(ex, names) {
+  const c = compile(ex), cur = {};
+  function* rec(i) {
+    if (i === names.length) { yield cur; return; }
+    const n = names[i];
+    if (c.arrVals[n]) { for (const A of c.arrVals[n]) { cur[n] = A; yield* rec(i + 1); } }
+    else { const [lo, hi] = ex.vars[n]; for (let v = lo; v <= hi; v++) { cur[n] = v; yield* rec(i + 1); } }
+  }
+  yield* rec(0);
+}
+function gridSize(ex, names) { const c = compile(ex); return names.reduce((p, n) => p * (c.arrVals[n] ? c.arrVals[n].length : ex.vars[n][1] - ex.vars[n][0] + 1), 1); }
+function* gridS(ex, names, limit = 90000) {
+  if (gridSize(ex, names) <= limit) { yield* grid(ex, names); return; }
+  const c = compile(ex); let seed = 12345;
+  const rnd = () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const cur = {};
+  for (let k = 0; k < limit; k++) {
+    for (const n of names) { if (c.arrVals[n]) cur[n] = c.arrVals[n][Math.floor(rnd() * c.arrVals[n].length)]; else { const [lo, hi] = ex.vars[n]; cur[n] = lo + Math.floor(rnd() * (hi - lo + 1)); } }
+    yield cur;
+  }
+}
+const pick = (s, ns) => { const o = {}; ns.forEach(n => o[n] = s[n]); return o; };
+function baseState(ex) { const c = compile(ex), s = {}; c.scalars.forEach(n => s[n] = 0); c.arrays.forEach(n => s[n] = []); return s; }
+
+function userFormula(ex, src, kind) {
+  let ast;
+  try { ast = parse(src); } catch (e) { return { err: e.code || 'tok', detail: e.detail }; }
+  const c = compile(ex);
+  const [sc, ar] = usage(ast);
+  for (const v of sc) { if (c.arrays.includes(v)) return { err: 'arrscalar', detail: v }; if (!c.scalars.includes(v)) return { err: 'var', detail: v }; }
+  for (const v of ar) if (!c.arrays.includes(v)) return { err: 'notarray', detail: v };
+  try { need(ast, kind); } catch (e) { return { err: e.code }; }
+  return { ast };
+}
+
+function checkInv(ex, inv) {
+  const c = compile(ex);
+  const R = { start: { ok: true }, keep: { ok: true, n: 0 }, end: { ok: true, n: 0 } };
+  for (const g of grid(ex, ex.inputs)) {
+    const s0 = Object.assign(baseState(ex), g);
+    if (tryEv(c.pre, s0) !== true) continue;
+    const s1 = tryRun(c.init, s0); if (!s1) continue;
+    if (tryEv(inv, s1) !== true) { R.start = { ok: false, input: pick(s0, ex.inputs), state: s1 }; break; }
+  }
+  for (const g of grid(ex, c.names)) {
+    if (tryEv(inv, g) !== true) continue;
+    const b = tryEv(c.cond, g); if (b === null) continue;
+    if (b) {
+      if (!R.keep.ok) continue;
+      const s2 = tryRun(c.body, g);
+      if (!s2) { R.keep.n++; R.keep = { ok: false, before: { ...g }, undef: true }; continue; }
+      R.keep.n++;
+      if (tryEv(inv, s2) !== true) R.keep = { ok: false, before: { ...g }, after: s2 };
+    } else {
+      if (!R.end.ok) continue;
+      R.end.n++;
+      if (tryEv(c.post, g) !== true) R.end = { ok: false, state: { ...g } };
+    }
+    if (!R.keep.ok && !R.end.ok) break;
+  }
+  R.ok = R.start.ok && R.keep.ok && R.end.ok;
+  return R;
+}
+
+function checkVariant(ex, V, invAst) {
+  const c = compile(ex), I = invAst || c.inv;
+  const R = { nonneg: { ok: true }, dec: { ok: true }, n: 0 };
+  for (const g of grid(ex, c.names)) {
+    if (tryEv(I, g) !== true || tryEv(c.cond, g) !== true) continue;
+    const v0 = tryEv(V, g); if (v0 === null) continue;
+    R.n++;
+    if (R.nonneg.ok && v0 < 0) R.nonneg = { ok: false, state: { ...g }, v: v0 };
+    const s2 = tryRun(c.body, g); if (!s2) continue;
+    const v1 = tryEv(V, s2);
+    if (v1 !== null && R.dec.ok && !(v1 < v0)) R.dec = { ok: false, before: { ...g }, after: s2, v0, v1 };
+    if (!R.nonneg.ok && !R.dec.ok) break;
+  }
+  R.ok = R.nonneg.ok && R.dec.ok;
+  return R;
+}
+
+function equiv(ex, a, b) {
+  const c = compile(ex);
+  for (const g of gridS(ex, c.names)) {
+    const va = tryEv(a, g), vb = tryEv(b, g);
+    if (va === null || vb === null) continue;
+    if (va !== vb) return { ok: false, state: { ...g }, va, vb };
+  }
+  return { ok: true };
+}
+function implies(ex, a, b) {
+  const c = compile(ex);
+  for (const g of gridS(ex, c.names)) {
+    if (tryEv(a, g) !== true) continue;
+    if (tryEv(b, g) === false) return { ok: false, state: { ...g } };
+  }
+  return { ok: true };
+}
+
+/* weakest preconditions */
+function wp(s, Q) {
+  if (s.k === 'asg') return sub(Q, s.x, s.e);
+  const t = wpList(s.th, Q)[0], e = s.el ? wpList(s.el, Q)[0] : Q;
+  return mkAnd(mkImp(s.c, t), mkImp(mkNot(s.c), e));
+}
+function wpList(stmts, Q) { const arr = [Q]; for (let j = stmts.length - 1; j >= 0; j--) arr.unshift(wp(stmts[j], arr[0])); return arr; }
+const stmtCode = s => s.k === 'asg' ? `${s.x} = ${s.src};` : `if (${s.csrc}) { … }${s.el ? ' else { … }' : ''}`;
+
+/* annotated program lines, RWTH style */
+function annotateList(stmts, ctx, post, ind, L) {
+  const pres = wpList(stmts, post);
+  const A = (f, i, note) => L.push({ k: 'a', s: pr(f), f, ind: i, note });
+  stmts.forEach((s, j) => {
+    if (s.k === 'asg') {
+      if (j === 0) A(pres[0], ind, 'imp');
+      L.push({ k: 'c', s: `${s.x} = ${s.src};`, ind });
+      A(pres[j + 1], ind, 'asg');
+    } else {
+      const phi = j === 0 ? ctx : pres[j];
+      L.push({ k: 'c', s: `if (${s.csrc}) {`, ind });
+      A(mkAnd(phi, s.c), ind + 1, 'cond');
+      annotateList(s.th, mkAnd(phi, s.c), pres[j + 1], ind + 1, L);
+      if (s.el) {
+        L.push({ k: 'c', s: '} else {', ind });
+        A(mkAnd(phi, mkNot(s.c)), ind + 1, 'cond');
+        annotateList(s.el, mkAnd(phi, mkNot(s.c)), pres[j + 1], ind + 1, L);
+        L.push({ k: 'c', s: '}', ind });
+        A(pres[j + 1], ind, 'if2');
+      } else {
+        L.push({ k: 'c', s: '}', ind });
+        A(pres[j + 1], ind, 'if1');
+      }
+    }
+  });
+  return L;
+}
+function annotate(ex, invAst) {
+  const c = compile(ex), L = [];
+  L.push({ k: 'a', s: pr(c.pre), f: c.pre, ind: 0, note: 'pre' });
+  if (c.cond) {
+    const I = invAst || c.inv;
+    if (c.init.length) annotateList(c.init, c.pre, I, 0, L); else L.push({ k: 'a', s: pr(I), f: I, ind: 0, note: 'imp' });
+    L.push({ k: 'c', s: `while (${ex.cond}) {`, ind: 0 });
+    const IB = mkAnd(I, c.cond);
+    L.push({ k: 'a', s: pr(IB), f: IB, ind: 1, note: 'loop' });
+    annotateList(c.body, IB, I, 1, L);
+    L.push({ k: 'c', s: '}', ind: 0 });
+    const IN = mkAnd(I, mkNot(c.cond));
+    L.push({ k: 'a', s: pr(IN), f: IN, ind: 0, note: 'loop' });
+    L.push({ k: 'a', s: pr(c.post), f: c.post, ind: 0, note: 'imp' });
+  } else annotateList(c.init, c.pre, c.post, 0, L);
+  return L;
+}
+function auxName(ex) { const c = compile(ex); return c.names.includes('m') ? 'm0' : 'm'; }
+function auxEx(ex) {
+  if (ex._aux) return ex._aux;
+  const a = { ...ex, id: ex.id + '_aux', vars: { ...ex.vars, [auxName(ex)]: [-3, 14] } };
+  Object.defineProperty(ex, '_aux', { value: a, enumerable: false });
+  return a;
+}
+function annotateVariant(ex, Vast, invAst) {
+  const c = compile(ex), L = [], m = { t: 'var', v: auxName(ex) }, V = Vast || c.variant;
+  const ctx = mkAnd({ t: 'cmp', op: 'eq', a: V, b: m }, ex.varNeedsInv ? mkAnd(invAst || c.inv, c.cond) : c.cond);
+  L.push({ k: 'a', s: pr(ctx), f: ctx, ind: 1, note: 'var' });
+  annotateList(c.body, ctx, { t: 'cmp', op: 'lt', a: V, b: m }, 1, L);
+  return L;
+}
+
+/* guided steps (language-neutral) */
+function genSteps(list, post, ctx, ind, prefix, out) {
+  const pres = wpList(list, post);
+  for (let j = list.length - 1; j >= 0; j--) {
+    const s = list[j];
+    if (s.k === 'asg') out.push({ k: 'input', id: prefix + j, code: `${s.x} = ${s.src};`, ind, after: pres[j + 1], expect: pres[j], x: s.x, tsrc: pr(s.e), br: prefix.slice(-1) });
+    else {
+      const phi = j === 0 ? ctx : pres[j];
+      genSteps(s.th, pres[j + 1], mkAnd(phi, s.c), ind + 1, prefix + j + 't', out);
+      if (s.el) genSteps(s.el, pres[j + 1], mkAnd(phi, mkNot(s.c)), ind + 1, prefix + j + 'e', out);
+      else out.push({ k: 'implies', id: 'imp-' + prefix + j + 'n', upper: mkAnd(phi, mkNot(s.c)), lower: pres[j + 1], ind });
+    }
+  }
+  if (list.length && list[0].k === 'asg') out.push({ k: 'implies', id: 'imp-' + prefix, upper: ctx, lower: pres[0], ind });
+  return out;
+}
+function codeLines(stmts, ind, out = []) {
+  for (const s of stmts) {
+    if (s.k === 'asg') out.push({ k: 'c', s: `${s.x} = ${s.src};`, ind });
+    else {
+      out.push({ k: 'c', s: `if (${s.csrc}) {`, ind }); codeLines(s.th, ind + 1, out);
+      if (s.el) { out.push({ k: 'c', s: '} else {', ind }); codeLines(s.el, ind + 1, out); }
+      out.push({ k: 'c', s: '}', ind });
+    }
+  }
+  return out;
+}
+
+function trace(ex, sample, max = 40) {
+  const c = compile(ex);
+  let s = Object.assign(baseState(ex), sample);
+  s = run(c.init, s);
+  if (!c.cond) return [{ it: 0, s: { ...s }, b: false }];
+  const rows = [{ it: 0, s: { ...s }, b: ev(c.cond, s) }];
+  let k = 0;
+  while (ev(c.cond, s) && k < max) { s = run(c.body, s); k++; rows.push({ it: k, s: { ...s }, b: ev(c.cond, s) }); }
+  return rows;
+}
+
+/* ---- exercises ---- */
+const EX = [
+  { id: 'g1', group: 'given', mode: 'given', level: 1,
+    title: { de: 'Verdreifachen', en: 'Tripling' },
+    story: { de: 'Das Programm berechnet 3 · n nur durch Addieren. Die Invariante ist gegeben. Du ergänzt die Zusicherungen von unten nach oben, so wie in der Klausur.', en: 'The program computes 3 · n using only addition. The invariant is given. You fill in the assertions from the bottom up, exactly as in the exam.' },
+    vars: { n: [0, 9], i: [-2, 11], res: [-3, 36] }, inputs: ['n'], sample: { n: 4 },
+    pre: 'n >= 0', init: [['i', '0'], ['res', '0']], cond: 'i < n',
+    body: [['i', 'i + 1'], ['res', 'res + 3']], post: 'res = 3 * n',
+    inv: 'i <= n && res = 3 * i', variant: 'n - i',
+    notes: {
+      'imp-b': { de: 'Für ganze Zahlen gilt: aus i < n folgt i + 1 ≤ n. Und aus res = 3 · i folgt res + 3 = 3 · (i + 1).', en: 'For integers, i < n implies i + 1 ≤ n. And res = 3 · i implies res + 3 = 3 · (i + 1).' },
+      exit: { de: 'Aus i ≤ n und ¬(i < n), also i ≥ n, folgt i = n. Eingesetzt in res = 3 · i ergibt das res = 3 · n.', en: 'From i ≤ n and ¬(i < n), i.e. i ≥ n, we get i = n. Substituting into res = 3 · i gives res = 3 · n.' },
+      'imp-i': { de: '0 ≤ n ∧ 0 = 3 · 0 vereinfacht sich zu n ≥ 0. Das ist genau die Vorbedingung.', en: '0 ≤ n ∧ 0 = 3 · 0 simplifies to n ≥ 0, which is exactly the precondition.' }
+    } },
+  { id: 'g2', group: 'given', mode: 'given', level: 2,
+    title: { de: 'Gaußsche Summe', en: 'Gauss sum' },
+    story: { de: 'Das Programm berechnet 1 + 2 + … + n. Die Nachbedingung ist ohne Division geschrieben: 2 · s = n · (n + 1).', en: 'The program computes 1 + 2 + … + n. The postcondition avoids division: 2 · s = n · (n + 1).' },
+    vars: { n: [0, 9], i: [-1, 11], s: [-2, 70] }, inputs: ['n'], sample: { n: 5 },
+    pre: 'n >= 0', init: [['i', '0'], ['s', '0']], cond: 'i < n',
+    body: [['i', 'i + 1'], ['s', 's + i']], post: '2 * s = n * (n + 1)',
+    inv: 'i <= n && 2 * s = i * (i + 1)', variant: 'n - i',
+    notes: {
+      'imp-b': { de: 'i < n ⇒ i + 1 ≤ n. Und 2 · (s + (i + 1)) = 2 · s + 2 · (i + 1) = i · (i + 1) + 2 · (i + 1) = (i + 1) · (i + 2).', en: 'i < n ⇒ i + 1 ≤ n. And 2 · (s + (i + 1)) = 2 · s + 2 · (i + 1) = i · (i + 1) + 2 · (i + 1) = (i + 1) · (i + 2).' },
+      exit: { de: 'i ≤ n und i ≥ n ergeben i = n, also 2 · s = n · (n + 1).', en: 'i ≤ n and i ≥ n give i = n, hence 2 · s = n · (n + 1).' },
+      'imp-i': { de: '0 ≤ n ∧ 2 · 0 = 0 · (0 + 1) ist äquivalent zu n ≥ 0.', en: '0 ≤ n ∧ 2 · 0 = 0 · (0 + 1) is equivalent to n ≥ 0.' }
+    } },
+  { id: 'g3', group: 'given', mode: 'given', level: 3,
+    title: { de: 'Potenz', en: 'Power' },
+    story: { de: 'Das Programm berechnet x^y durch wiederholtes Multiplizieren. In der Invariante steht eine Potenz: Achte beim Rückwärtsrechnen auf die Klammern im Exponenten.', en: 'The program computes x^y by repeated multiplication. The invariant contains a power, so watch the parentheses in the exponent when you work backwards.' },
+    vars: { x: [-2, 4], y: [0, 6], z: [-1, 7], res: [-8, 70] }, inputs: ['x', 'y'], sample: { x: 2, y: 5 },
+    pre: 'y >= 0', init: [['z', 'y'], ['res', '1']], cond: 'z > 0',
+    body: [['res', 'res * x'], ['z', 'z - 1']], post: 'res = x ^ y',
+    inv: 'z >= 0 && res * x ^ z = x ^ y', variant: 'z',
+    notes: {
+      'imp-b': { de: 'z > 0 ⇒ z − 1 ≥ 0. Außerdem ist x · x^(z − 1) = x^z, also res · x · x^(z − 1) = res · x^z = x^y.', en: 'z > 0 ⇒ z − 1 ≥ 0. Also x · x^(z − 1) = x^z, so res · x · x^(z − 1) = res · x^z = x^y.' },
+      exit: { de: 'z ≥ 0 und ¬(z > 0) ergeben z = 0. Wegen x^0 = 1 folgt res = x^y.', en: 'z ≥ 0 and ¬(z > 0) give z = 0. Since x^0 = 1, res = x^y follows.' },
+      'imp-i': { de: 'y ≥ 0 ∧ 1 · x^y = x^y ist äquivalent zu y ≥ 0.', en: 'y ≥ 0 ∧ 1 · x^y = x^y is equivalent to y ≥ 0.' }
+    } },
+  { id: 'f1', group: 'find', mode: 'find', level: 1,
+    title: { de: 'Multiplikation durch Addition', en: 'Multiplication by addition' },
+    story: { de: 'Das Programm berechnet a · b, ohne zu multiplizieren. Diesmal findest du die Invariante selbst.', en: 'The program computes a · b without multiplying. This time you find the invariant yourself.' },
+    vars: { a: [0, 7], b: [-3, 5], i: [-2, 9], p: [-27, 45] }, inputs: ['a', 'b'], sample: { a: 4, b: 3 },
+    pre: 'a >= 0', init: [['i', '0'], ['p', '0']], cond: 'i < a',
+    body: [['p', 'p + b'], ['i', 'i + 1']], post: 'p = a * b',
+    inv: 'i <= a && p = i * b', variant: 'a - i',
+    cands: [
+      { f: 'p = i * b', note: { de: 'Die Beziehung stimmt. Am Ende weißt du aber nur i ≥ a; ohne die Schranke i ≤ a folgt nicht i = a.', en: 'The relation is right. At the end, though, you only know i ≥ a; without the bound i ≤ a you cannot conclude i = a.' } },
+      { f: 'i <= a && p = i * b', ok: true, note: { de: 'Beziehung zwischen Akkumulator p und Zähler i, plus die Schranke i ≤ a.', en: 'The relation between accumulator p and counter i, plus the bound i ≤ a.' } },
+      { f: 'p = a * b', note: { de: 'Das ist die Nachbedingung selbst. Am Anfang ist p = 0, also gilt sie im Allgemeinen nicht.', en: 'That is the postcondition itself. At the start p = 0, so in general it does not hold.' } },
+      { f: 'i <= a && p >= 0', note: { de: 'Zu schwach: Über den Wert von p sagt das nichts, und für negatives b stimmt es nicht einmal.', en: 'Too weak: it says nothing about the value of p, and for negative b it is not even true.' } }
+    ],
+    hints: { de: ['Vergleiche in der Tabelle p mit dem Produkt i · b.', 'Nimm die Nachbedingung p = a · b und ersetze das a durch den Zähler i.', 'Ergänze eine Schranke für i, die am Ende zusammen mit ¬B die Gleichheit i = a liefert.'],
+             en: ['In the table, compare p with the product i · b.', 'Take the postcondition p = a · b and replace a by the counter i.', 'Add a bound on i that, together with ¬B, gives i = a at the end.'] } },
+  { id: 'f2', group: 'find', mode: 'find', level: 2,
+    title: { de: 'Quadratzahlen', en: 'Square numbers' },
+    story: { de: 'Das Programm addiert die ungeraden Zahlen 1, 3, 5, … und erhält so n · n.', en: 'The program adds the odd numbers 1, 3, 5, … and obtains n · n.' },
+    vars: { n: [0, 8], i: [-1, 10], s: [-2, 100] }, inputs: ['n'], sample: { n: 5 },
+    pre: 'n >= 0', init: [['i', '0'], ['s', '0']], cond: 'i < n',
+    body: [['s', 's + 2 * i + 1'], ['i', 'i + 1']], post: 's = n * n',
+    inv: 'i <= n && s = i * i', variant: 'n - i',
+    cands: [
+      { f: 's = (i + 1) * (i + 1)', note: { de: 'Am Start ist s = 0, aber (0 + 1) · (0 + 1) = 1.', en: 'At the start s = 0, but (0 + 1) · (0 + 1) = 1.' } },
+      { f: 'i <= n && s = i * i', ok: true, note: { de: 'Nach i Runden sind die ersten i ungeraden Zahlen addiert: 1 + 3 + … + (2i − 1) = i · i.', en: 'After i rounds the first i odd numbers have been added: 1 + 3 + … + (2i − 1) = i · i.' } },
+      { f: 's = i * i', note: { de: 'Fast. Ohne i ≤ n fehlt am Ende die Gleichheit i = n.', en: 'Almost. Without i ≤ n you are missing i = n at the end.' } },
+      { f: 's >= i', note: { de: 'Das stimmt oft, ist aber viel zu schwach für die Nachbedingung.', en: 'Often true, but far too weak for the postcondition.' } }
+    ],
+    hints: { de: ['Schau dir die Spalte s an: 0, 1, 4, 9, 16 …', 'Ersetze in der Nachbedingung s = n · n das n durch i.', 'Vergiss die Schranke i ≤ n nicht.'],
+             en: ['Look at column s: 0, 1, 4, 9, 16 …', 'Replace n by i in the postcondition s = n · n.', 'Do not forget the bound i ≤ n.'] } },
+  { id: 'f3', group: 'find', mode: 'find', level: 2,
+    title: { de: 'Division mit Rest', en: 'Division with remainder' },
+    story: { de: 'Ganzzahlige Division durch wiederholtes Subtrahieren: q wird der Quotient, r der Rest.', en: 'Integer division by repeated subtraction: q becomes the quotient, r the remainder.' },
+    vars: { x: [0, 16], y: [-1, 6], q: [-1, 10], r: [-2, 17] }, inputs: ['x', 'y'], sample: { x: 14, y: 4 },
+    pre: 'x >= 0 && y > 0', init: [['q', '0'], ['r', 'x']], cond: 'r >= y',
+    body: [['r', 'r - y'], ['q', 'q + 1']], post: 'x = q * y + r && 0 <= r && r < y',
+    inv: 'x = q * y + r && r >= 0 && y > 0', variant: 'r', varNeedsInv: true,
+    cands: [
+      { f: 'x = q * y + r', note: { de: 'Das ist die Kernbeziehung. Am Ende brauchst du aber auch 0 ≤ r.', en: 'That is the core relation. At the end, though, you also need 0 ≤ r.' } },
+      { f: 'x = q * y + r && r >= 0', ok: true, note: { de: 'Reicht für die partielle Korrektheit. Für die Terminierung brauchst du zusätzlich y > 0.', en: 'Enough for partial correctness. For termination you additionally need y > 0.' } },
+      { f: 'x = q * y + r && r < y', note: { de: 'Am Start ist r = x, und x kann größer als y sein.', en: 'At the start r = x, and x may be larger than y.' } },
+      { f: 'r >= 0 && q >= 0', note: { de: 'Sagt nichts über den Zusammenhang von x, q, y und r.', en: 'Says nothing about how x, q, y and r are related.' } }
+    ],
+    hints: { de: ['Rechne für jede Zeile der Tabelle q · y + r aus. Was fällt auf?', 'Diese Größe bleibt immer gleich x. Was weißt du außerdem über r?', 'r wird nur verkleinert, wenn vorher r ≥ y galt. Danach ist r ≥ 0.'],
+             en: ['Compute q · y + r for every row of the table. What do you notice?', 'That quantity always equals x. What else do you know about r?', 'r is only decreased when r ≥ y held before, so afterwards r ≥ 0.'] } },
+  { id: 'f4', group: 'find', mode: 'find', level: 3,
+    title: { de: 'Summe rückwärts', en: 'Summing backwards' },
+    story: { de: 'k zählt von n herunter. Schwieriger, weil die Invariante n und k gleichzeitig enthält.', en: 'k counts down from n. Harder, because the invariant involves n and k at the same time.' },
+    vars: { n: [0, 8], k: [-2, 10], s: [-2, 45] }, inputs: ['n'], sample: { n: 5 },
+    pre: 'n >= 0', init: [['k', 'n'], ['s', '0']], cond: 'k > 0',
+    body: [['s', 's + k'], ['k', 'k - 1']], post: '2 * s = n * (n + 1)',
+    inv: 'k >= 0 && 2 * s = n * (n + 1) - k * (k + 1)', variant: 'k',
+    cands: [
+      { f: '2 * s = k * (k + 1)', note: { de: 'Am Start ist k = n und s = 0. Das passt nur für n = 0.', en: 'At the start k = n and s = 0. That only fits n = 0.' } },
+      { f: '2 * s = n * (n + 1) - k * (k + 1)', note: { de: 'Fast. Was wäre, wenn k negativ ist? Der Prüfer findet ein Gegenbeispiel.', en: 'Almost. What if k were negative? The checker finds a counterexample.' } },
+      { f: 'k >= 0 && 2 * s = n * (n + 1) - k * (k + 1)', ok: true, note: { de: 's ist die Gesamtsumme minus der Zahlen 1 … k, die noch fehlen. k ≥ 0 liefert am Ende k = 0.', en: 's is the total minus the numbers 1 … k still missing. k ≥ 0 gives k = 0 at the end.' } },
+      { f: 'k >= 0 && s >= 0', note: { de: 'Zu schwach für die Nachbedingung.', en: 'Too weak for the postcondition.' } }
+    ],
+    hints: { de: ['Nach einigen Runden enthält s schon n + (n − 1) + … + (k + 1).', 'Mit der Gauß-Formel: 2 · s = n · (n + 1) − k · (k + 1).', 'Ergänze k ≥ 0, damit am Ende aus ¬(k > 0) folgt: k = 0.'],
+             en: ['After a few rounds s already contains n + (n − 1) + … + (k + 1).', 'With the Gauss formula: 2 · s = n · (n + 1) − k · (k + 1).', 'Add k ≥ 0 so that ¬(k > 0) gives k = 0 at the end.'] } }
+];
+
+/* ---- conditionals & arrays ---- */
+EX.push(
+  { id: 'c1', group: 'ifarr', mode: 'given', level: 1,
+    title: { de: 'Maximum zweier Zahlen', en: 'Maximum of two numbers' },
+    story: { de: 'Keine Schleife, nur eine Fallunterscheidung. Du übst die Bedingungsregel 2: Beide Zweige müssen bei derselben Nachbedingung ankommen.', en: 'No loop, just a case distinction. You practise conditional rule 2: both branches must arrive at the same postcondition.' },
+    vars: { x: [-3, 4], y: [-3, 4], m: [-3, 4] }, inputs: ['x', 'y'], sample: { x: 3, y: 1 },
+    pre: 'true', init: [{ if: 'x > y', then: [['m', 'x']], else: [['m', 'y']] }],
+    post: 'm >= x && m >= y && (m = x || m = y)',
+    notes: {
+      'imp-i0t': { de: 'Im then-Zweig gilt x > y. Dann sind x ≥ x und x ≥ y wahr, und x = x ist sowieso wahr.', en: 'In the then branch x > y holds. So x ≥ x and x ≥ y are true, and x = x is trivially true.' },
+      'imp-i0e': { de: 'Im else-Zweig gilt ¬(x > y), also y ≥ x. Damit sind y ≥ x und y ≥ y wahr, und y = y gilt trivial.', en: 'In the else branch ¬(x > y) holds, i.e. y ≥ x. So y ≥ x and y ≥ y are true, and y = y holds trivially.' }
+    } },
+  { id: 'c2', group: 'ifarr', mode: 'given', level: 3,
+    title: { de: 'Euklid: größter gemeinsamer Teiler', en: 'Euclid: greatest common divisor' },
+    story: { de: 'Der klassische Euklid mit Subtraktion. X und Y sind die Eingaben und werden nie verändert. Im Rumpf steht ein if/else: Du rechnest jeden Zweig getrennt rückwärts.', en: 'Classic Euclid with subtraction. X and Y are the inputs and are never changed. The body is an if/else: you work backwards through each branch separately.' },
+    vars: { X: [1, 7], Y: [1, 7], x: [-1, 8], y: [-1, 8] }, inputs: ['X', 'Y'], sample: { X: 12, Y: 18 },
+    pre: 'X > 0 && Y > 0', init: [['x', 'X'], ['y', 'Y']], cond: 'x != y',
+    body: [{ if: 'x > y', then: [['x', 'x - y']], else: [['y', 'y - x']] }],
+    post: 'x = gcd(X, Y)', inv: 'x > 0 && y > 0 && gcd(x, y) = gcd(X, Y)', variant: 'x + y', varNeedsInv: true,
+    notes: {
+      'imp-b0t': { de: 'Aus x > y folgt x − y > 0, und y > 0 steht schon in I. Außerdem gilt gcd(x − y, y) = gcd(x, y): Jeder gemeinsame Teiler von x und y teilt auch x − y, und umgekehrt.', en: 'From x > y we get x − y > 0, and y > 0 is already in I. Moreover gcd(x − y, y) = gcd(x, y): every common divisor of x and y also divides x − y, and vice versa.' },
+      'imp-b0e': { de: 'Aus x ≠ y und ¬(x > y) folgt y > x, also y − x > 0. Genauso gilt gcd(x, y − x) = gcd(x, y).', en: 'From x ≠ y and ¬(x > y) we get y > x, so y − x > 0. Likewise gcd(x, y − x) = gcd(x, y).' },
+      exit: { de: 'Aus ¬(x ≠ y) folgt x = y. Dann ist gcd(x, y) = gcd(x, x) = x, und I liefert x = gcd(X, Y).', en: 'From ¬(x ≠ y) we get x = y. Then gcd(x, y) = gcd(x, x) = x, and I gives x = gcd(X, Y).' },
+      'imp-i': { de: 'Nach dem Einsetzen steht da X > 0 ∧ Y > 0 ∧ gcd(X, Y) = gcd(X, Y). Das folgt direkt aus der Vorbedingung.', en: 'After substitution it reads X > 0 ∧ Y > 0 ∧ gcd(X, Y) = gcd(X, Y), which follows directly from the precondition.' }
+    } },
+  { id: 'a1', group: 'ifarr', mode: 'find', level: 2,
+    title: { de: 'Array-Summe', en: 'Array sum' },
+    story: { de: 'Die Summe aller Einträge eines Arrays. Bei Arrays beschreibt die Invariante den Teil a[0] … a[i − 1], der schon bearbeitet ist.', en: 'The sum of all entries of an array. With arrays, the invariant describes the part a[0] … a[i − 1] that has already been processed.' },
+    vars: { i: [-1, 5], res: [-5, 9] }, arrays: { a: { maxLen: 4, range: [-1, 2] } }, inputs: ['a'], sample: { a: [3, -1, 4, 2] },
+    pre: 'true', init: [['i', '0'], ['res', '0']], cond: 'i < a.length',
+    body: [['res', 'res + a[i]'], ['i', 'i + 1']], post: 'res = sum(a, 0, a.length - 1)',
+    inv: '0 <= i && i <= a.length && res = sum(a, 0, i - 1)', variant: 'a.length - i',
+    cands: [
+      { f: 'res = sum(a, 0, i)', note: { de: 'Um eins verschoben: Am Start ist res = 0, aber sum(a, 0, 0) = a[0].', en: 'Off by one: at the start res = 0, but sum(a, 0, 0) = a[0].' } },
+      { f: 'i <= a.length && res = sum(a, 0, i - 1)', note: { de: 'Fast. Ohne 0 ≤ i erlaubt I den Wert i = −1, und dann ist a[i] im Rumpf gar nicht definiert.', en: 'Almost. Without 0 ≤ i, I allows i = −1, and then a[i] in the body is not even defined.' } },
+      { f: '0 <= i && i <= a.length && res = sum(a, 0, i - 1)', ok: true, note: { de: 'res ist die Summe der ersten i Einträge, und i bleibt ein gültiger Index oder genau a.length.', en: 'res is the sum of the first i entries, and i stays a valid index or exactly a.length.' } },
+      { f: 'res = sum(a, 0, a.length - 1)', note: { de: 'Das ist die Nachbedingung selbst. Am Start gilt sie nur, wenn die Summe zufällig 0 ist.', en: 'That is the postcondition itself. At the start it only holds if the sum happens to be 0.' } }
+    ],
+    hints: { de: ['sum(a, von, bis) steht für a[von] + … + a[bis]. Ist bis < von, ist die Summe 0.', 'Nach i Runden enthält res genau a[0] + … + a[i − 1].', 'Ergänze die Schranken 0 ≤ i und i ≤ a.length.'],
+             en: ['sum(a, from, to) means a[from] + … + a[to]. If to < from, the sum is 0.', 'After i rounds res contains exactly a[0] + … + a[i − 1].', 'Add the bounds 0 ≤ i and i ≤ a.length.'] } },
+  { id: 'a2', group: 'ifarr', mode: 'find', level: 3,
+    title: { de: 'Maximum im Array', en: 'Maximum of an array' },
+    story: { de: 'Array und if zusammen: m merkt sich das bisher größte Element. Das if hat keinen else-Zweig, also brauchst du die Bedingungsregel 1.', en: 'Array and if together: m remembers the largest element so far. The if has no else branch, so you need conditional rule 1.' },
+    vars: { i: [-1, 5], m: [-2, 3] }, arrays: { a: { maxLen: 4, range: [-1, 2] } }, inputs: ['a'], sample: { a: [2, 5, 1, 7, 3] },
+    pre: 'a.length >= 1', init: [['m', 'a[0]'], ['i', '1']], cond: 'i < a.length',
+    body: [{ if: 'a[i] > m', then: [['m', 'a[i]']] }, ['i', 'i + 1']], post: 'm = max(a, 0, a.length - 1)',
+    inv: '1 <= i && i <= a.length && m = max(a, 0, i - 1)', variant: 'a.length - i',
+    cands: [
+      { f: 'm = a[i - 1]', note: { de: 'm ist nicht immer das zuletzt gelesene Element, sondern das größte bisher.', en: 'm is not always the last element read, but the largest so far.' } },
+      { f: '1 <= i && i <= a.length && m = max(a, 0, i - 1)', ok: true, note: { de: 'm ist das Maximum von a[0] … a[i − 1]. Wegen i ≥ 1 ist dieser Bereich nie leer.', en: 'm is the maximum of a[0] … a[i − 1]. Because i ≥ 1 this range is never empty.' } },
+      { f: 'm = max(a, 0, i)', note: { de: 'Um eins verschoben: a[i] wurde noch nicht angeschaut.', en: 'Off by one: a[i] has not been looked at yet.' } },
+      { f: 'i <= a.length && m >= a[0]', note: { de: 'Stimmt, ist aber viel zu schwach für die Nachbedingung.', en: 'True, but far too weak for the postcondition.' } }
+    ],
+    hints: { de: ['max(a, von, bis) ist das größte Element von a[von] … a[bis].', 'Nach dem Rumpf mit Index i ist m = max(a, 0, i). Danach wird i erhöht.', 'Ergänze 1 ≤ i ≤ a.length, damit der Bereich nie leer ist und am Ende i = a.length folgt.'],
+             en: ['max(a, from, to) is the largest element of a[from] … a[to].', 'After the body for index i, m = max(a, 0, i). Then i is incremented.', 'Add 1 ≤ i ≤ a.length so the range is never empty and i = a.length follows at the end.'] } }
+);
+
+/* ---- exam-only tasks ---- */
+const EXAM = [
+  { id: 'k1', title: { de: 'Fakultät', en: 'Factorial' },
+    vars: { n: [0, 6], i: [-1, 7], f: [-2, 30] }, inputs: ['n'], sample: { n: 4 },
+    pre: 'n >= 0', init: [['i', '0'], ['f', '1']], cond: 'i < n',
+    body: [['i', 'i + 1'], ['f', 'f * i']], post: 'f = fact(n)', inv: 'i <= n && f = fact(i)', variant: 'n - i' },
+  { id: 'k2', title: { de: 'Zweierpotenz', en: 'Power of two' },
+    vars: { n: [0, 6], k: [-1, 7], p: [-2, 70] }, inputs: ['n'], sample: { n: 5 },
+    pre: 'n >= 0', init: [['k', 'n'], ['p', '1']], cond: 'k > 0',
+    body: [['p', 'p * 2'], ['k', 'k - 1']], post: 'p = 2 ^ n', inv: 'k >= 0 && p * 2 ^ k = 2 ^ n', variant: 'k' },
+  { id: 'k3', title: { de: 'Summe der Quadrate', en: 'Sum of squares' },
+    vars: { n: [0, 6], i: [-1, 7], s: [-2, 95] }, inputs: ['n'], sample: { n: 4 },
+    pre: 'n >= 0', init: [['i', '0'], ['s', '0']], cond: 'i < n',
+    body: [['i', 'i + 1'], ['s', 's + i * i']], post: '6 * s = n * (n + 1) * (2 * n + 1)', inv: 'i <= n && 6 * s = i * (i + 1) * (2 * i + 1)', variant: 'n - i' }
+];
+
+</script>
+<script>
+/* ===== App ===== */
+const T = {
+  de: {
+    given: 'Invariante gegeben', find: 'Invariante finden', ifarr: 'if/else & Arrays', progress: '{d} von {n} Schritten',
+    s_plan: 'Das Gerüst', s_before: 'Zusicherung vor', s_entry: 'Schleifeneintritt', s_exit: 'Schleifenende',
+    s_init: 'Initialisierung', s_pre: 'Vorbedingung', s_var: 'Terminierung', s_sol: 'Vollständige Lösung',
+    s_tab: 'Wertetabelle', s_cand: 'Kandidaten testen', s_own: 'Eigene Invariante',
+    s_then: 'then-Zweig', s_else: 'else-Zweig', s_then_in: 'Eintritt in den then-Zweig', s_else_in: 'Eintritt in den else-Zweig', s_noelse: 'Bedingungsregel 1: B ist falsch',
+    check: 'Prüfen', hint: 'Tipp', show: 'Lösung zeigen', next: 'Weiter', yes: 'Ja, folgt', no: 'Nein, folgt nicht',
+    row: 'Nächste Runde', allrows: 'Alle Runden', reset: 'Aufgabe neu beginnen',
+    ph: 'z. B. i <= n && res = 3*i', phv: 'z. B. n - i', pha: 'Zusicherung',
+    syntax: 'Eingabe: = ≠ < <= > >= sowie && || ! => (oder ∧ ∨ ¬ ⇒ ≤ ≥). Multiplikation *, Potenz ^, Klammern ( ).',
+    syntax_arr: 'Arrays: a[i], a.length, sum(a, von, bis) = a[von] + … + a[bis] (leerer Bereich: 0), max(a, von, bis).',
+    syntax_gcd: 'gcd(x, y) ist der größte gemeinsame Teiler (ggT(x, y) geht auch).', syntax_fact: 'fact(n) = n!',
+    ok_eq: 'Richtig. Deine Zusicherung ist äquivalent zur Musterlösung', neq: 'Noch nicht äquivalent. Gegenbeispiel:',
+    neq_d: 'Hier ist deine Zusicherung {u}, die richtige aber {e}.', tr: 'wahr', fa: 'falsch',
+    expected: 'Musterlösung (direkt eingesetzt, darf vereinfacht werden):',
+    err_char: 'Unbekanntes Zeichen „{d}“.', err_end: 'Der Ausdruck endet zu früh.', err_paren: 'Eine schließende Klammer fehlt.',
+    err_tok: 'Unerwartetes Symbol „{d}“.', err_empty: 'Bitte gib einen Ausdruck ein.', err_var: 'Die Variable „{d}“ kommt im Programm nicht vor.',
+    err_needbool: 'Hier wird eine Bedingung (wahr oder falsch) erwartet, kein Zahlenwert.', err_neednum: 'Hier wird ein Zahlenwert erwartet, keine Bedingung.',
+    err_arrscalar: '„{d}“ ist ein Array. Verwende a[i], a.length, sum(…) oder max(…).', err_notarray: '„{d}“ ist kein Array.',
+    err_arrarg: 'Das erste Argument von {d}(…) muss ein Array sein, z. B. sum(a, 0, i - 1).',
+    c_start: 'Start: Vorbedingung, dann Initialisierung ⇒ I', c_keep: 'Erhaltung: ⟨I ∧ B⟩ Rumpf ⟨I⟩', c_end: 'Ende: I ∧ ¬B ⇒ Nachbedingung',
+    c_start_bad: 'Eingabe {i}: nach der Initialisierung ist {s}, aber I ist falsch.',
+    c_keep_bad: 'Vorher {b} (I und B wahr). Nach dem Rumpf {a}: I ist falsch.',
+    c_keep_undef: 'Im Zustand {b} gelten I und B, aber der Rumpf ist dort nicht ausführbar (z. B. Arrayindex außerhalb des Arrays).',
+    c_end_bad: 'Im Zustand {s} gelten I und ¬B, die Nachbedingung aber nicht.',
+    c_n: '{n} Zustände geprüft', c_all: 'Alle drei Pflichten erfüllt. Das ist eine gültige Schleifeninvariante.',
+    c_note: 'Der Prüfer testet automatisch alle Zustände auf einem endlichen Zahlengitter. Das ersetzt keinen Beweis, findet aber fast jeden Fehler.',
+    c_hint_start: 'Tipp: Die Invariante ist am Anfang zu stark. Setze die Startwerte ein und prüfe.',
+    c_hint_keep: 'Tipp: Eine Runde zerstört die Invariante. Meist fehlt eine Beziehung oder eine Schranke, die den Rumpf absichert.',
+    c_hint_end: 'Tipp: Die Invariante ist zu schwach. Oft fehlt eine Schranke wie i ≤ n.',
+    v_prompt: 'Gib eine Variante V an: einen ganzzahligen Ausdruck, der nicht negativ ist, solange die Schleife läuft, und in jeder Runde echt kleiner wird.',
+    v_nonneg: 'I ∧ B ⇒ V ≥ 0', v_dec: '⟨V = m ∧ B⟩ Rumpf ⟨V < m⟩',
+    v_nonneg_bad: 'Im Zustand {s} gilt I ∧ B, aber V = {v} ist negativ.',
+    v_dec_bad: 'Von {b} nach {a} wird V nicht kleiner ({v0} → {v1}).',
+    v_ok: 'Gültige Variante. Die Schleife terminiert, aus partieller wird totale Korrektheit.',
+    v_hint: 'Welche Größe misst den „Abstand zum Ziel“? Sie wird pro Runde kleiner und bleibt ≥ 0, solange B gilt.',
+    plan_txt: 'Die Invariante I steht vor der Schleife und am Ende des Rumpfs. Du arbeitest wie in der Klausur rückwärts, also von unten nach oben, und nutzt bei jeder Zuweisung die Zuweisungsregel. Zu zeigen sind drei Dinge: Start, Erhaltung, Ende.',
+    plan_txt_if: 'Hier gibt es keine Schleife. Nach der Bedingungsregel 2 bekommt der then-Zweig ⟨φ ∧ B⟩ und der else-Zweig ⟨φ ∧ ¬B⟩, und beide müssen bei derselben Nachbedingung ankommen. In jedem Zweig rechnest du von unten nach oben.',
+    plan_txt_loopif: 'Im Rumpf steht ein if. Jeder Zweig bekommt seine eigene Eintrittszusicherung (φ ∧ B bzw. φ ∧ ¬B) und muss bei I ankommen.',
+    plan_btn: 'Verstanden, los geht’s',
+    before_txt: 'Was muss vor dieser Anweisung gelten, damit danach die Zusicherung darunter gilt? Du darfst vereinfachen.',
+    before_hint: 'Ersetze in der Zusicherung darunter jedes {x} durch ({t}).',
+    init_txt: 'Jetzt die Initialisierungen: Welche Zusicherung steht ganz oben, vor allen Startzuweisungen?',
+    init_hint: 'Zwei Schritte von unten nach oben. Zwischenergebnis vor der letzten Startzuweisung:',
+    imp_txt: 'Hier stehen zwei Zusicherungen direkt untereinander. Folgt die untere aus der oberen?',
+    imp_txt_n: 'Das if hat keinen else-Zweig. Ist B falsch, passiert nichts. Dann muss die Zusicherung nach dem if schon aus φ ∧ ¬B folgen. Folgt sie?',
+    imp_ok: 'Richtig.', imp_bad: 'Nicht ganz.', imp_generic: 'Setze die bekannten Fakten ein und vereinfache, dann siehst du es.',
+    tab_txt: 'Führe das Programm mit {s} aus. Jede Zeile zeigt die Werte nach einer Runde. Suche eine Beziehung, die in jeder Zeile gilt.',
+    tab_done: 'Siehst du eine Beziehung? Dann weiter.',
+    cand_txt: 'Welcher Kandidat ist eine Invariante, mit der sich die Nachbedingung beweisen lässt? Klicke einen an. Der Prüfer testet alle drei Pflichten.',
+    own_txt: 'Formuliere jetzt eine eigene Invariante. Sie darf anders aussehen als die Musterlösung, solange sie alle drei Pflichten erfüllt.',
+    sol_txt: 'Die vollständig annotierte Lösung im Stil der RWTH-Übungen.',
+    sol_var: 'Terminierung mit der Variante V = {v}:',
+    n_pre: 'Vorbedingung', n_imp: 'folgt aus darüber', n_asg: 'Zuweisungsregel', n_loop: 'Schleifenregel', n_var: 'Variante',
+    n_cond: 'Bedingungsregel', n_if1: 'Bedingungsregel 1', n_if2: 'Bedingungsregel 2',
+    round: 'Runde', start: 'Start', inv_label: 'Invariante I', bw_need: 'Die Variable muss ein einfacher Name sein, z. B. i.',
+    k_title: 'Klausur-Simulation', k_kicker: 'Programmierung · Aufgabe zum Hoare-Kalkül',
+    k_intro: 'Eine Aufgabe wie in der schriftlichen Prüfung: Du bekommst ein Programm mit Vor- und Nachbedingung und füllst alle Zusicherungen selbst aus, ohne Tipps. Erst nach der Abgabe wird bewertet. Hast du eine eigene gültige Invariante gewählt, werden die übrigen Zeilen mit deiner Invariante bewertet, wie bei einer echten Korrektur.',
+    k_pick: 'Aufgabe', k_random: 'Zufällige Aufgabe', k_timer: 'Mit Zeitlimit (20 Minuten)', k_start: 'Klausur starten',
+    k_rules: 'Bewertung: Invariante 2 Punkte, jede Zusicherung 1 Punkt, Variante 1 Punkt.',
+    k_a: 'a) Partielle Korrektheit', k_a_txt: 'Beweisen Sie die partielle Korrektheit des folgenden Programms mit dem Hoare-Kalkül. Ergänzen Sie dazu alle Zusicherungen. Zwei Zusicherungen dürfen nur dann direkt untereinander stehen, wenn die untere aus der oberen folgt.',
+    k_inv: 'Die verwendete Schleifeninvariante ist', k_b: 'b) Terminierung',
+    k_b_txt: 'Geben Sie eine Variante V an und beweisen Sie damit die Terminierung. {m} bezeichnet den Wert von V zu Beginn eines Schleifendurchlaufs.',
+    k_submit: 'Abgeben und bewerten', k_left: 'verbleibend', k_score: '{p} von {t} Punkten', k_new: 'Neue Klausur', k_retry: 'Gleiche Aufgabe neu',
+    k_expected: 'Erwartet:', k_timeup: 'Die Zeit ist abgelaufen. Die Klausur wurde automatisch abgegeben.',
+    k_inv_used: 'Deine Invariante ist gültig. Die Zusicherungen wurden mit deiner Invariante bewertet.',
+    k_inv_bad: 'Keine gültige Invariante. Die Zusicherungen wurden mit der Musterinvariante bewertet:',
+    k_var_bad: 'Keine gültige Variante. Die Zeilen in b) wurden mit der Mustervariante bewertet:',
+    k_g1: 'Sehr gut. So kannst du in die Prüfung gehen.', k_g2: 'Solide. Schau dir die roten Zeilen genau an.', k_g3: 'Übe die geführten Aufgaben noch einmal und versuche es dann erneut.',
+    k_empty: 'leer', k_points: 'Punkte', k_practice: 'aus den Übungen', k_examonly: 'nur in der Klausur'
+  },
+  en: {
+    given: 'Invariant given', find: 'Find the invariant', ifarr: 'if/else & arrays', progress: '{d} of {n} steps',
+    s_plan: 'The skeleton', s_before: 'Assertion before', s_entry: 'Loop entry', s_exit: 'Loop exit',
+    s_init: 'Initialisation', s_pre: 'Precondition', s_var: 'Termination', s_sol: 'Complete solution',
+    s_tab: 'Value table', s_cand: 'Test candidates', s_own: 'Your own invariant',
+    s_then: 'then branch', s_else: 'else branch', s_then_in: 'Entering the then branch', s_else_in: 'Entering the else branch', s_noelse: 'Conditional rule 1: B is false',
+    check: 'Check', hint: 'Hint', show: 'Show solution', next: 'Next', yes: 'Yes, it follows', no: 'No, it does not',
+    row: 'Next round', allrows: 'All rounds', reset: 'Restart exercise',
+    ph: 'e.g. i <= n && res = 3*i', phv: 'e.g. n - i', pha: 'assertion',
+    syntax: 'Input: = ≠ < <= > >= and && || ! => (or ∧ ∨ ¬ ⇒ ≤ ≥). Multiply with *, power with ^, parentheses ( ).',
+    syntax_arr: 'Arrays: a[i], a.length, sum(a, from, to) = a[from] + … + a[to] (empty range: 0), max(a, from, to).',
+    syntax_gcd: 'gcd(x, y) is the greatest common divisor.', syntax_fact: 'fact(n) = n!',
+    ok_eq: 'Correct. Your assertion is equivalent to the model answer', neq: 'Not equivalent yet. Counterexample:',
+    neq_d: 'Here your assertion is {u}, but the correct one is {e}.', tr: 'true', fa: 'false',
+    expected: 'Model answer (substituted directly, may be simplified):',
+    err_char: 'Unknown character “{d}”.', err_end: 'The expression ends too early.', err_paren: 'A closing parenthesis is missing.',
+    err_tok: 'Unexpected symbol “{d}”.', err_empty: 'Please enter an expression.', err_var: 'The variable “{d}” does not occur in the program.',
+    err_needbool: 'A condition (true or false) is expected here, not a number.', err_neednum: 'A number is expected here, not a condition.',
+    err_arrscalar: '“{d}” is an array. Use a[i], a.length, sum(…) or max(…).', err_notarray: '“{d}” is not an array.',
+    err_arrarg: 'The first argument of {d}(…) must be an array, e.g. sum(a, 0, i - 1).',
+    c_start: 'Start: precondition, then initialisation ⇒ I', c_keep: 'Preservation: ⟨I ∧ B⟩ body ⟨I⟩', c_end: 'Exit: I ∧ ¬B ⇒ postcondition',
+    c_start_bad: 'Input {i}: after initialisation we have {s}, but I is false.',
+    c_keep_bad: 'Before {b} (I and B true). After the body {a}: I is false.',
+    c_keep_undef: 'In state {b}, I and B hold, but the body cannot run there (e.g. array index out of bounds).',
+    c_end_bad: 'In state {s}, I and ¬B hold but the postcondition does not.',
+    c_n: '{n} states checked', c_all: 'All three duties hold. This is a valid loop invariant.',
+    c_note: 'The checker automatically tests every state on a finite grid of numbers. That is no substitute for a proof, but it catches almost every mistake.',
+    c_hint_start: 'Hint: the invariant is too strong at the start. Plug in the initial values and check.',
+    c_hint_keep: 'Hint: one round breaks the invariant. Usually a relation or a bound that protects the body is missing.',
+    c_hint_end: 'Hint: the invariant is too weak. Often a bound like i ≤ n is missing.',
+    v_prompt: 'Enter a variant V: an integer expression that is non-negative while the loop runs and strictly decreases every round.',
+    v_nonneg: 'I ∧ B ⇒ V ≥ 0', v_dec: '⟨V = m ∧ B⟩ body ⟨V < m⟩',
+    v_nonneg_bad: 'In state {s}, I ∧ B holds but V = {v} is negative.',
+    v_dec_bad: 'From {b} to {a}, V does not decrease ({v0} → {v1}).',
+    v_ok: 'Valid variant. The loop terminates, so partial correctness becomes total correctness.',
+    v_hint: 'Which quantity measures the “distance to the goal”? It shrinks every round and stays ≥ 0 while B holds.',
+    plan_txt: 'The invariant I sits before the loop and at the end of the body. As in the exam, you work backwards, from the bottom up, applying the assignment rule at each assignment. Three things must be shown: start, preservation, exit.',
+    plan_txt_if: 'There is no loop here. By conditional rule 2, the then branch gets ⟨φ ∧ B⟩ and the else branch gets ⟨φ ∧ ¬B⟩, and both must arrive at the same postcondition. In each branch you compute from the bottom up.',
+    plan_txt_loopif: 'The body contains an if. Each branch gets its own entry assertion (φ ∧ B or φ ∧ ¬B) and must arrive at I.',
+    plan_btn: 'Got it, let’s go',
+    before_txt: 'What must hold before this statement so that the assertion below holds afterwards? You may simplify.',
+    before_hint: 'In the assertion below, replace every {x} by ({t}).',
+    init_txt: 'Now the initialisations: which assertion sits at the very top, before all initial assignments?',
+    init_hint: 'Two steps from the bottom up. Intermediate result before the last initial assignment:',
+    imp_txt: 'Two assertions stand directly below each other here. Does the lower one follow from the upper one?',
+    imp_txt_n: 'The if has no else branch. If B is false, nothing happens, so the assertion after the if must already follow from φ ∧ ¬B. Does it?',
+    imp_ok: 'Correct.', imp_bad: 'Not quite.', imp_generic: 'Plug in what you know and simplify, and you will see it.',
+    tab_txt: 'Run the program with {s}. Each row shows the values after one round. Look for a relation that holds in every row.',
+    tab_done: 'Do you see a relation? Then move on.',
+    cand_txt: 'Which candidate is an invariant that lets you prove the postcondition? Click one. The checker tests all three duties.',
+    own_txt: 'Now write your own invariant. It may look different from the model answer, as long as it satisfies all three duties.',
+    sol_txt: 'The fully annotated solution in the style of the RWTH tutorials.',
+    sol_var: 'Termination with the variant V = {v}:',
+    n_pre: 'precondition', n_imp: 'follows from above', n_asg: 'assignment rule', n_loop: 'loop rule', n_var: 'variant',
+    n_cond: 'conditional rule', n_if1: 'conditional rule 1', n_if2: 'conditional rule 2',
+    round: 'Round', start: 'Start', inv_label: 'Invariant I', bw_need: 'The variable must be a simple name, e.g. i.',
+    k_title: 'Exam simulation', k_kicker: 'Programmierung · Hoare logic exam task',
+    k_intro: 'A task like in the written exam: you get a program with pre- and postcondition and fill in every assertion yourself, without hints. Grading happens only after you submit. If you choose your own valid invariant, the remaining lines are graded against your invariant, just as a real marker would.',
+    k_pick: 'Task', k_random: 'Random task', k_timer: 'With time limit (20 minutes)', k_start: 'Start the exam',
+    k_rules: 'Grading: invariant 2 points, each assertion 1 point, variant 1 point.',
+    k_a: 'a) Partial correctness', k_a_txt: 'Prove the partial correctness of the following program using Hoare logic. To do so, fill in all assertions. Two assertions may stand directly below each other only if the lower one follows from the upper one.',
+    k_inv: 'The loop invariant used is', k_b: 'b) Termination',
+    k_b_txt: 'Give a variant V and use it to prove termination. {m} denotes the value of V at the start of a loop iteration.',
+    k_submit: 'Submit and grade', k_left: 'left', k_score: '{p} of {t} points', k_new: 'New exam', k_retry: 'Same task again',
+    k_expected: 'Expected:', k_timeup: 'Time is up. The exam was submitted automatically.',
+    k_inv_used: 'Your invariant is valid. The assertions were graded against your invariant.',
+    k_inv_bad: 'Not a valid invariant. The assertions were graded against the model invariant:',
+    k_var_bad: 'Not a valid variant. The lines in b) were graded against the model variant:',
+    k_g1: 'Very good. You are ready for the exam.', k_g2: 'Solid. Look closely at the red lines.', k_g3: 'Practise the guided exercises again, then try once more.',
+    k_empty: 'empty', k_points: 'points', k_practice: 'from the exercises', k_examonly: 'exam only'
+  }
+};
+let lang = 'de';
+try { const s = localStorage.getItem('hoarelab-lang'); if (s === 'de' || s === 'en') lang = s; else if ((navigator.language || '').toLowerCase().startsWith('en')) lang = 'en'; } catch (e) {}
+const t = (k, rep) => { let s = (T[lang][k] ?? T.de[k] ?? k); if (rep) for (const r in rep) s = s.split('{' + r + '}').join(rep[r]); return s; };
+const L = o => (o && typeof o === 'object') ? (o[lang] ?? o.de) : o;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmtN = v => { if (Array.isArray(v)) return '[' + v.map(fmtN).join(', ') + ']'; if (typeof v === 'boolean') return v ? t('tr') : t('fa'); const r = Number.isInteger(v) ? String(v) : String(Math.round(v * 1000) / 1000); return r.replace('-', '−'); };
+const fmtS = (s, names) => (names || Object.keys(s)).filter(n => n in s).map(n => `${n} = ${fmtN(s[n])}`).join(', ');
+const errMsg = r => t('err_' + r.err, { d: esc(r.detail || '') });
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* state */
+const ST = { view: 'hoare', ex: 'g1', P: {}, tr: { n: 5, hl: -1 }, K: { phase: 'start', pick: 'random', timed: true, id: null, vals: {}, ends: 0, res: null, timeup: false } };
+const prog = id => (ST.P[id] ||= { cur: 0, done: {}, val: {}, res: {}, rows: 1, hints: 0, vhint: false });
+const exById = id => EX.find(e => e.id === id) || EXAM.find(e => e.id === id);
+
+/* ---- annotated program rendering ---- */
+function lnHTML(l, extra = '') {
+  const note = l.note ? `<span class="nt">${t('n_' + l.note)}</span>` : '';
+  const tx = l.k === 'a' ? `⟨${esc(l.s)}⟩` : esc(l.s);
+  return `<div class="ln ${l.k === 'a' ? 'a' : 'c'} ${extra}" style="--ind:${l.ind || 0}"><span class="tx">${tx}</span>${note}</div>`;
+}
+function linesHTML(Ls) { return `<div class="prog">${Ls.map(l => lnHTML(l)).join('')}</div>`; }
+function programHTML(ex, opts = {}) {
+  const c = compile(ex), lines = [];
+  lines.push(lnHTML({ k: 'a', s: pr(c.pre), ind: 0, note: 'pre' }));
+  codeLines(c.init, 0).forEach(l => lines.push(lnHTML(l)));
+  if (c.cond) {
+    if (opts.showInv) lines.push(lnHTML({ k: 'a', s: pr(c.inv), ind: 0 }));
+    else lines.push(`<div class="ln ask"><span class="tx">⟨ ? ⟩</span></div>`);
+    lines.push(lnHTML({ k: 'c', s: `while (${ex.cond}) {`, ind: 0 }));
+    codeLines(c.body, 1).forEach(l => lines.push(lnHTML(l)));
+    lines.push(lnHTML({ k: 'c', s: '}', ind: 0 }));
+  }
+  lines.push(lnHTML({ k: 'a', s: pr(c.post), ind: 0 }));
+  return `<div class="prog">${lines.join('')}</div>`;
+}
+function syntaxHTML(ex) {
+  const extra = [];
+  if (ex.arrays) extra.push(t('syntax_arr'));
+  if (/gcd/.test(ex.post)) extra.push(t('syntax_gcd'));
+  if (/fact/.test(ex.post)) extra.push(t('syntax_fact'));
+  return `<p class="syntax">${t('syntax')}${extra.length ? '<br>' + extra.join(' ') : ''}</p>`;
+}
+
+/* ---- step generation ---- */
+function stepTitle(s) {
+  switch (s.k) {
+    case 'info': return t('s_plan');
+    case 'input': return (s.br === 't' ? t('s_then') + ': ' : s.br === 'e' ? t('s_else') + ': ' : '') + t('s_before');
+    case 'init': return t('s_init');
+    case 'implies':
+      if (s.id === 'exit') return t('s_exit');
+      if (s.id === 'imp-b') return t('s_entry');
+      if (s.id === 'imp-i') return t('s_pre');
+      if (s.id.endsWith('n')) return t('s_noelse');
+      if (s.id.endsWith('t')) return t('s_then_in');
+      if (s.id.endsWith('e')) return t('s_else_in');
+      return t('s_entry');
+    case 'table': return t('s_tab');
+    case 'cands': return t('s_cand');
+    case 'own': return t('s_own');
+    case 'variant': return t('s_var');
+    case 'sol': return t('s_sol');
+  }
+}
+function stepsFor(ex) {
+  const c = compile(ex), S = [];
+  if (ex.mode === 'given') {
+    S.push({ k: 'info', id: 'plan' });
+    if (c.cond) {
+      genSteps(c.body, c.inv, mkAnd(c.inv, c.cond), 1, 'b', S);
+      S.push({ k: 'implies', id: 'exit', upper: mkAnd(c.inv, mkNot(c.cond)), lower: c.post, ind: 0 });
+      if (c.allAsg) {
+        const ia = wpList(c.init, c.inv);
+        S.push({ k: 'init', id: 'init', code: c.init.map(stmtCode).join(' '), after: c.inv, expect: ia[0], mid: ia[ia.length - 2] });
+        S.push({ k: 'implies', id: 'imp-i', upper: c.pre, lower: ia[0], ind: 0 });
+      } else genSteps(c.init, c.inv, c.pre, 0, 'i', S);
+    } else genSteps(c.init, c.post, c.pre, 0, 'i', S);
+  } else {
+    S.push({ k: 'table', id: 'tab' }, { k: 'cands', id: 'cand' }, { k: 'own', id: 'own' });
+  }
+  if (c.cond) S.push({ k: 'variant', id: 'var' });
+  S.push({ k: 'sol', id: 'sol' });
+  S.forEach(s => s.title = stepTitle(s));
+  return S;
+}
+
+/* ---- feedback blocks ---- */
+const chkRow = (ok, lab, d) => `<div class="chk-r"><span class="m ${ok ? 'y' : 'n'}">${ok ? '✓' : '✗'}</span><div><div class="lab">${lab}</div><div class="d">${d}</div></div></div>`;
+function checkHTML(R, ex, withHint = true) {
+  const c = compile(ex), parts = [];
+  parts.push(chkRow(R.start.ok, t('c_start'), R.start.ok ? '' : t('c_start_bad', { i: esc(fmtS(R.start.input)), s: esc(fmtS(R.start.state, c.names)) })));
+  parts.push(chkRow(R.keep.ok, t('c_keep'), R.keep.ok ? t('c_n', { n: R.keep.n }) : R.keep.undef ? t('c_keep_undef', { b: esc(fmtS(R.keep.before, c.names)) }) : t('c_keep_bad', { b: esc(fmtS(R.keep.before, c.names)), a: esc(fmtS(R.keep.after, c.names)) })));
+  parts.push(chkRow(R.end.ok, t('c_end'), R.end.ok ? t('c_n', { n: R.end.n }) : t('c_end_bad', { s: esc(fmtS(R.end.state, c.names)) })));
+  let hint = '';
+  if (R.ok) hint = `<div class="fb ok"><span class="lab">${t('c_all')}</span></div>`;
+  else if (withHint) hint = `<p class="small muted">${!R.start.ok ? t('c_hint_start') : !R.end.ok ? t('c_hint_end') : t('c_hint_keep')}</p>`;
+  return `<div class="chk">${parts.join('')}</div>${hint}`;
+}
+function variantHTML(R, ex) {
+  const c = compile(ex);
+  return `<div class="chk">${chkRow(R.nonneg.ok, t('v_nonneg'), R.nonneg.ok ? t('c_n', { n: R.n }) : t('v_nonneg_bad', { s: esc(fmtS(R.nonneg.state, c.names)), v: fmtN(R.nonneg.v) }))}
+    ${chkRow(R.dec.ok, t('v_dec'), R.dec.ok ? t('c_n', { n: R.n }) : t('v_dec_bad', { b: esc(fmtS(R.dec.before, c.names)), a: esc(fmtS(R.dec.after, c.names)), v0: fmtN(R.dec.v0), v1: fmtN(R.dec.v1) }))}</div>
+    ${R.ok ? `<div class="fb ok"><span class="lab">${t('v_ok')}</span></div>` : ''}`;
+}
+const errHTML = r => `<div class="fb bad"><span>${errMsg(r)}</span></div>`;
+
+/* ---- step bodies ---- */
+function stepBody(ex, S, i, P) {
+  const s = S[i], c = compile(ex), res = P.res[s.id], val = P.val[s.id] ?? '';
+  const nextBtn = `<button class="btn ${P.done[s.id] ? 'primary' : 'ghost'}" type="button" data-act="next">${t('next')} →</button>`;
+  const inputLine = (ph, ind) => `<div class="ln a" style="--ind:${ind || 0}"><span class="tx">⟨</span><input class="fx" id="in-${ex.id}-${s.id}" data-in="${s.id}" value="${esc(val)}" placeholder="${esc(ph)}" autocomplete="off" spellcheck="false" aria-label="${esc(s.title)}"><span class="tx">⟩</span></div>`;
+  switch (s.k) {
+    case 'info':
+      return `<p>${!c.cond ? t('plan_txt_if') : t('plan_txt') + (c.body.some(x => x.k === 'if') ? ' ' + t('plan_txt_loopif') : '')}</p>${annotSkeleton(ex)}<div class="row"><button class="btn primary" type="button" data-act="done-next">${t('plan_btn')}</button></div>`;
+    case 'input': case 'init': {
+      let fb = '';
+      if (res) {
+        if (res.err) fb = errHTML(res);
+        else if (res.ok) fb = `<div class="fb ok"><span class="lab">${t('ok_eq')}</span><span class="as">⟨${esc(pr(s.expect))}⟩</span></div>`;
+        else if (res.shown) fb = `<div class="fb info"><span class="lab">${t('expected')}</span><span class="as">⟨${esc(pr(s.expect))}⟩</span></div>`;
+        else fb = `<div class="fb bad"><span class="lab">${t('neq')}</span><span class="mono small">${esc(fmtS(res.state, c.names.filter(n => !res.vars || res.vars.includes(n))))}</span><span>${t('neq_d', { u: fmtN(res.va), e: fmtN(res.vb) })}</span></div>`;
+      }
+      const hint = P.res[s.id + '_h'] ? (s.k === 'input'
+        ? `<div class="fb info">${t('before_hint', { x: `<b class="mono">${esc(s.x)}</b>`, t: `<b class="mono">${esc(s.tsrc)}</b>` })}</div>`
+        : `<div class="fb info"><span>${t('init_hint')}</span><span class="as">⟨${esc(pr(s.mid))}⟩</span></div>`) : '';
+      const codeLns = s.k === 'input'
+        ? `<div class="ln c" style="--ind:${s.ind}"><span class="tx">${esc(s.code)}</span></div>${lnHTML({ k: 'a', s: pr(s.after), ind: s.ind })}`
+        : codeLines(c.init, 0).map(l => lnHTML(l)).join('') + lnHTML({ k: 'a', s: pr(s.after), ind: 0 });
+      return `<p>${s.k === 'input' ? t('before_txt') : t('init_txt')}</p>
+        <div class="prog">${inputLine(t('ph'), s.k === 'input' ? s.ind : 0)}${codeLns}</div>
+        ${syntaxHTML(ex)}
+        <div class="row"><button class="btn primary" type="button" data-act="check">${t('check')}</button><button class="btn" type="button" data-act="hint">${t('hint')}</button><button class="btn ghost" type="button" data-act="show">${t('show')}</button>${nextBtn}</div>${hint}${fb}`;
+    }
+    case 'implies': {
+      let fb = '';
+      const note = ex.notes && ex.notes[s.id] ? L(ex.notes[s.id]) : t('imp_generic');
+      if (res) fb = `<div class="fb ${res.correct ? 'ok' : 'bad'}"><span class="lab">${res.correct ? t('imp_ok') : t('imp_bad')}</span><span>${esc(note)}</span></div>`;
+      return `<p>${s.id.endsWith('n') ? t('imp_txt_n') : t('imp_txt')}</p>${linesHTML([{ k: 'a', s: pr(s.upper), ind: s.ind }, { k: 'a', s: pr(s.lower), ind: s.ind, note: s.id.endsWith('n') ? 'if1' : 'imp' }])}
+        <div class="row"><button class="btn" type="button" data-act="yes">${t('yes')}</button><button class="btn" type="button" data-act="no">${t('no')}</button>${nextBtn}</div>${fb}`;
+    }
+    case 'table': {
+      const rows = trace(ex, ex.sample), shown = Math.min(P.rows, rows.length);
+      const th = `<tr><th>${t('round')}</th>${c.names.map(n => `<th>${n}</th>`).join('')}<th>B: ${esc(pr(c.cond))}</th></tr>`;
+      const tb = rows.map((r, k) => `<tr class="${k < shown ? (k === shown - 1 ? 'hl' : '') : 'ghost'}"><td>${k === 0 ? t('start') : k}</td>${c.names.map(n => `<td>${k < shown ? fmtN(r.s[n]) : '·'}</td>`).join('')}<td>${k < shown ? `<span class="${r.b ? 'yes' : 'no'}">${fmtN(r.b)}</span>` : '·'}</td></tr>`).join('');
+      return `<p>${t('tab_txt', { s: `<span class="mono">${esc(fmtS(ex.sample))}</span>` })}</p>
+        <div class="tblwrap"><table class="vt">${th}${tb}</table></div>
+        <div class="row"><button class="btn" type="button" data-act="row" ${shown >= rows.length ? 'disabled' : ''}>${t('row')}</button><button class="btn ghost" type="button" data-act="allrows" ${shown >= rows.length ? 'disabled' : ''}>${t('allrows')}</button>${shown >= rows.length ? `<span class="small muted">${t('tab_done')}</span>` : ''}<span style="margin-left:auto"></span>${nextBtn}</div>`;
+    }
+    case 'cands': {
+      const picked = res ? res.picked : -1;
+      const list = ex.cands.map((cd, k) => {
+        let detail = '';
+        if (k === picked) detail = `${checkHTML(checkInv(ex, parse(cd.f)), ex)}<p class="small">${esc(L(cd.note))}</p>`;
+        return `<div class="cand"><button type="button" data-act="cand" data-k="${k}" aria-expanded="${k === picked}"><span class="key">${'ABCD'[k]}</span>⟨${esc(pr(parse(cd.f)))}⟩</button>${detail}</div>`;
+      }).join('');
+      return `<p>${t('cand_txt')}</p><div class="cands">${list}</div><div class="row">${nextBtn}</div><p class="small muted">${t('c_note')}</p>`;
+    }
+    case 'own': {
+      let fb = '';
+      if (res) fb = res.err ? errHTML(res) : checkHTML(res.R, ex);
+      const hints = ex.hints[lang].slice(0, P.hints).map(h => `<li>${esc(h)}</li>`).join('');
+      return `<p>${t('own_txt')}</p>
+        <div class="prog">${lnHTML({ k: 'a', s: pr(c.pre), ind: 0, note: 'pre' })}${codeLines(c.init, 0).map(l => lnHTML(l)).join('')}${inputLine(t('ph'), 0)}${lnHTML({ k: 'c', s: `while (${ex.cond}) { … }` })}${lnHTML({ k: 'a', s: pr(c.post), ind: 0 })}</div>
+        ${syntaxHTML(ex)}
+        <div class="row"><button class="btn primary" type="button" data-act="checkinv">${t('check')}</button><button class="btn" type="button" data-act="morehint" ${P.hints >= ex.hints[lang].length ? 'disabled' : ''}>${t('hint')} (${P.hints}/${ex.hints[lang].length})</button>${nextBtn}</div>
+        ${hints ? `<ol class="hints">${hints}</ol>` : ''}${fb}<p class="small muted">${t('c_note')}</p>`;
+    }
+    case 'variant': {
+      let fb = '';
+      if (res) fb = res.err ? errHTML(res) : variantHTML(res.R, ex);
+      return `<p>${t('v_prompt')}</p>
+        <div class="inline-in"><span class="mono">V =</span><input id="in-${ex.id}-var" data-in="var" value="${esc(val)}" placeholder="${esc(t('phv'))}" autocomplete="off" spellcheck="false" aria-label="V"></div>
+        <div class="row"><button class="btn primary" type="button" data-act="checkvar">${t('check')}</button><button class="btn" type="button" data-act="vhint">${t('hint')}</button>${nextBtn}</div>
+        ${P.vhint ? `<div class="fb info">${t('v_hint')}</div>` : ''}${fb}`;
+    }
+    case 'sol':
+      return `<p>${t('sol_txt')}</p>${linesHTML(annotate(ex))}${c.cond ? `<p>${t('sol_var', { v: `<span class="mono">${esc(pr(c.variant))}</span>` })}</p>${linesHTML(annotateVariant(ex))}` : ''}
+        <div class="row"><button class="btn ghost" type="button" data-act="reset">${t('reset')}</button></div>`;
+  }
+}
+function annotSkeleton(ex) {
+  const c = compile(ex);
+  if (!c.cond) return `<div class="prog">${annotate(ex).filter(l => l.note !== 'imp').map(l => lnHTML(l, l.note === 'asg' ? 'hl' : '')).join('')}</div>`;
+  const I = pr(c.inv), lines = [];
+  lines.push(lnHTML({ k: 'a', s: pr(c.pre), note: 'pre' }));
+  codeLines(c.init, 0).forEach(l => lines.push(lnHTML(l)));
+  lines.push(lnHTML({ k: 'a', s: I }, 'hl'));
+  lines.push(lnHTML({ k: 'c', s: `while (${ex.cond}) {` }));
+  lines.push(lnHTML({ k: 'a', s: pr(mkAnd(c.inv, c.cond)), ind: 1, note: 'loop' }));
+  codeLines(c.body, 1).forEach(l => lines.push(lnHTML(l)));
+  lines.push(lnHTML({ k: 'a', s: I, ind: 1 }, 'hl'));
+  lines.push(lnHTML({ k: 'c', s: '}' }));
+  lines.push(lnHTML({ k: 'a', s: pr(mkAnd(c.inv, mkNot(c.cond))), note: 'loop' }));
+  lines.push(lnHTML({ k: 'a', s: pr(c.post) }));
+  return `<div class="prog">${lines.join('')}</div>`;
+}
+
+/* ---- practice rendering ---- */
+function renderList() {
+  const grp = g => EX.filter(e => e.group === g).map(e => {
+    const P = prog(e.id), n = stepsFor(e).length, d = Object.keys(P.done).length;
+    return `<button type="button" class="exbtn" data-ex="${e.id}" aria-current="${ST.ex === e.id}"><span class="t">${esc(L(e.title))}</span><span class="lv" aria-label="level ${e.level}">${'●'.repeat(e.level)}${'○'.repeat(3 - e.level)}</span><span class="pr">${t('progress', { d: Math.min(d, n), n })}</span></button>`;
+  }).join('');
+  document.getElementById('exlist').innerHTML = ['given', 'find', 'ifarr'].map(g => `<div class="exgroup"><h3>${t(g)}</h3>${grp(g)}</div>`).join('')
+    + `<a class="btn" href="#exam" style="justify-self:start">${t('k_title')} →</a>`;
+}
+function renderWS() {
+  const ex = exById(ST.ex), P = prog(ex.id), S = stepsFor(ex), c = compile(ex);
+  const steps = S.map((s, i) => {
+    const open = i === P.cur, done = !!P.done[s.id];
+    return `<section class="step ${open ? 'open' : ''} ${done ? 'done' : ''}">
+      <button type="button" class="step-h" data-go="${i}" aria-expanded="${open}"><span class="dot">${done ? '✓' : i + 1}</span><span class="st">${esc(s.title)}</span>${s.code ? `<span class="code">${esc(s.code)}</span>` : ''}</button>
+      ${open ? `<div class="step-b">${stepBody(ex, S, i, P)}</div>` : ''}</section>`;
+  }).join('');
+  document.getElementById('ws').innerHTML = `
+    <div class="ws-h"><span class="badge">${t(ex.group)}${ex.group === 'ifarr' ? ' · ' + t(ex.mode) : ''}</span><h2>${esc(L(ex.title))}</h2><p class="prose">${esc(L(ex.story))}</p></div>
+    ${programHTML(ex, { showInv: ex.mode === 'given' })}
+    ${ex.mode === 'given' && c.cond ? `<div class="invbox">${t('inv_label')} = ⟨${esc(pr(c.inv))}⟩</div>` : ''}
+    <div class="steps">${steps}</div>`;
+}
+function renderPractice() { renderList(); renderWS(); }
+
+function handleWS(e) {
+  const go = e.target.closest('[data-go]');
+  const ex = exById(ST.ex), P = prog(ex.id), S = stepsFor(ex);
+  if (go) { const i = +go.dataset.go; P.cur = P.cur === i ? -1 : i; renderWS(); return; }
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const s = S[P.cur], act = b.dataset.act;
+  if (!s) return;
+  const readVal = () => { const el = document.querySelector(`[data-in="${s.id}"]`); const v = el ? el.value : ''; P.val[s.id] = v; return v; };
+  const advance = () => { P.cur = Math.min(P.cur + 1, S.length - 1); };
+  switch (act) {
+    case 'next': P.done[s.id] = P.done[s.id] || s.k === 'table' || s.k === 'sol'; advance(); break;
+    case 'done-next': P.done[s.id] = true; advance(); break;
+    case 'check': {
+      const r = userFormula(ex, readVal(), 'B');
+      if (r.err) P.res[s.id] = r;
+      else { const q = equiv(ex, r.ast, s.expect); if (!q.ok) q.vars = [...new Set([...varsOf(r.ast), ...varsOf(s.expect)])]; P.res[s.id] = q.ok ? { ok: true } : q; if (q.ok) P.done[s.id] = true; }
+      break; }
+    case 'hint': P.res[s.id + '_h'] = true; break;
+    case 'show': P.res[s.id] = { shown: true }; break;
+    case 'yes': case 'no': {
+      const truth = implies(ex, s.upper, s.lower).ok;
+      const correct = (act === 'yes') === truth; P.res[s.id] = { correct }; if (correct) P.done[s.id] = true; break; }
+    case 'row': P.rows++; break;
+    case 'allrows': P.rows = 99; P.done[s.id] = true; break;
+    case 'cand': { const k = +b.dataset.k; P.res[s.id] = { picked: k }; if (ex.cands[k].ok) P.done[s.id] = true; break; }
+    case 'checkinv': {
+      const r = userFormula(ex, readVal(), 'B');
+      if (r.err) P.res[s.id] = r; else { const R = checkInv(ex, r.ast); P.res[s.id] = { R }; if (R.ok) P.done[s.id] = true; }
+      break; }
+    case 'morehint': P.hints++; break;
+    case 'checkvar': {
+      const r = userFormula(ex, readVal(), 'N');
+      if (r.err) P.res[s.id] = r; else { const R = checkVariant(ex, r.ast); P.res[s.id] = { R }; if (R.ok) P.done[s.id] = true; }
+      break; }
+    case 'vhint': P.vhint = true; break;
+    case 'reset': delete ST.P[ex.id]; break;
+  }
+  const P2 = prog(ex.id);
+  if (S[P2.cur] && S[P2.cur].k === 'sol') P2.done.sol = true;
+  renderPractice();
+  if (act === 'next' || act === 'done-next') {
+    const el = document.querySelector('.step.open'); if (el) el.scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' });
+    const inp = document.querySelector('.step.open input'); if (inp) inp.focus({ preventScroll: true });
+  } else if (['check', 'checkinv', 'checkvar', 'hint', 'morehint', 'vhint'].includes(act)) {
+    const inp = document.querySelector('.step.open [data-in]'); if (inp) inp.focus({ preventScroll: true });
+  }
+  snapshot();
+}
+
+/* ---- exam simulation ---- */
+const POOL = () => [...EX.filter(e => e.cond), ...EXAM];
+let kTimer = null;
+function kBlankLines(ex) {
+  const A = annotate(ex), V = annotateVariant(ex);
+  return { A, V, aIdx: A.map((l, i) => (l.k === 'a' && i !== 0 && i !== A.length - 1) ? i : -1).filter(i => i >= 0), vIdx: V.map((l, i) => l.k === 'a' ? i : -1).filter(i => i >= 0) };
+}
+function kTotal(ex) { const b = kBlankLines(ex); return 2 + b.aIdx.length + 1 + b.vIdx.length; }
+function kStart() {
+  const pool = POOL();
+  const id = ST.K.pick === 'random' ? pool[Math.floor(Math.random() * pool.length)].id : ST.K.pick;
+  Object.assign(ST.K, { phase: 'run', id, vals: {}, res: null, timeup: false, ends: ST.K.timed ? Date.now() + 20 * 60 * 1000 : 0 });
+  renderExam(); kArmTimer();
+  const first = document.querySelector('#exam input.fx'); if (first) first.focus({ preventScroll: true });
+}
+function kArmTimer() {
+  clearInterval(kTimer); kTimer = null;
+  if (ST.K.phase !== 'run' || !ST.K.ends) return;
+  kTimer = setInterval(() => {
+    const left = ST.K.ends - Date.now();
+    const el = document.getElementById('k-clock');
+    if (left <= 0) { ST.K.timeup = true; kGrade(); return; }
+    if (el) { const m = Math.floor(left / 60000), s = Math.floor(left / 1000) % 60; el.textContent = `${m}:${String(s).padStart(2, '0')}`; el.classList.toggle('warn', left < 120000); }
+  }, 1000);
+}
+function kGrade() {
+  clearInterval(kTimer); kTimer = null;
+  const ex = exById(ST.K.id), c = compile(ex), V = ST.K.vals, res = { lines: {}, vlines: {}, pts: 0 };
+  const iu = userFormula(ex, V.inv || '', 'B');
+  let Igrade = c.inv;
+  if (iu.ast) { res.invR = checkInv(ex, iu.ast); if (res.invR.ok) { Igrade = iu.ast; res.invOK = true; res.pts += 2; } }
+  else res.invErr = iu;
+  const A = annotate(ex, Igrade), b = kBlankLines(ex);
+  b.aIdx.forEach(i => {
+    const u = userFormula(ex, V['a' + i] || '', 'B');
+    const ok = !!u.ast && equiv(ex, u.ast, A[i].f).ok;
+    res.lines[i] = { ok, exp: A[i].s, err: u.err && (V['a' + i] || '').trim() ? u : null };
+    if (ok) res.pts++;
+  });
+  const vu = userFormula(ex, V.var || '', 'N');
+  let Vgrade = c.variant;
+  if (vu.ast) { res.varR = checkVariant(ex, vu.ast, Igrade); if (res.varR.ok) { Vgrade = vu.ast; res.varOK = true; res.pts++; } }
+  else res.varErr = vu;
+  const VL = annotateVariant(ex, Vgrade, Igrade), ax = auxEx(ex);
+  b.vIdx.forEach(i => {
+    const u = userFormula(ax, V['v' + i] || '', 'B');
+    const ok = !!u.ast && equiv(ax, u.ast, VL[i].f).ok;
+    res.vlines[i] = { ok, exp: VL[i].s, err: u.err && (V['v' + i] || '').trim() ? u : null };
+    if (ok) res.pts++;
+  });
+  res.total = kTotal(ex);
+  ST.K.res = res; ST.K.phase = 'done';
+  renderExam(); window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
+  snapshot();
+}
+function kInputLine(key, ind, done, r) {
+  const v = ST.K.vals[key] ?? '';
+  const mark = done ? `<span class="nt kmark ${r.ok ? 'yes' : 'no'}">${r.ok ? '✓ 1' : '✗ 0'}</span>` : '';
+  const inp = `<div class="ln a" style="--ind:${ind}"><span class="tx">⟨</span><input class="fx" data-k="${key}" value="${esc(v)}" placeholder="${esc(t('pha'))}" autocomplete="off" spellcheck="false" aria-label="${esc(t('pha'))}" ${done ? 'disabled' : ''}><span class="tx">⟩</span>${mark}</div>`;
+  const exp = done && !r.ok ? `<div class="ln kexp" style="--ind:${ind}"><span class="tx">${t('k_expected')} ⟨${esc(r.exp)}⟩${r.err ? ' · ' + errMsg(r.err) : ''}</span></div>` : '';
+  return inp + exp;
+}
+function renderExam() {
+  const box = document.getElementById('exam'), K = ST.K;
+  if (K.phase === 'start') {
+    const pool = POOL();
+    const opt = e => `<option value="${e.id}" ${K.pick === e.id ? 'selected' : ''}>${esc(L(e.title))} (${kTotal(e)} ${t('k_points')}, ${EXAM.includes(e) ? t('k_examonly') : t('k_practice')})</option>`;
+    box.innerHTML = `
+      <div class="plan-h"><div class="kicker">${t('k_kicker')}</div><h1 id="exam-title">${t('k_title')}</h1><p class="prose muted">${t('k_intro')}</p></div>
+      <div class="kstart">
+        <label class="f" for="k-pick"><span>${t('k_pick')}</span><select id="k-pick"><option value="random" ${K.pick === 'random' ? 'selected' : ''}>${t('k_random')}</option>${pool.map(opt).join('')}</select></label>
+        <label class="kcheck" for="k-timed"><input type="checkbox" id="k-timed" ${K.timed ? 'checked' : ''}> <span>${t('k_timer')}</span></label>
+        <p class="small muted">${t('k_rules')}</p>
+        <div class="row"><button class="btn primary" type="button" data-k-act="start">${t('k_start')}</button></div>
+      </div>`;
+    return;
+  }
+  const ex = exById(K.id), c = compile(ex), b = kBlankLines(ex), done = K.phase === 'done', R = K.res;
+  const aux = auxName(ex);
+  const partA = b.A.map((l, i) => {
+    if (l.k === 'c') return lnHTML(l);
+    if (i === 0 || i === b.A.length - 1) return lnHTML({ ...l, note: null });
+    return kInputLine('a' + i, l.ind, done, done ? R.lines[i] : null);
+  }).join('');
+  const partB = [lnHTML({ k: 'c', s: `while (${ex.cond}) {`, ind: 0 }), ...b.V.map((l, i) => l.k === 'c' ? lnHTML(l) : kInputLine('v' + i, l.ind, done, done ? R.vlines[i] : null)), lnHTML({ k: 'c', s: '}', ind: 0 })].join('');
+  const invMark = done ? `<span class="kmark ${R.invOK ? 'yes' : 'no'}">${R.invOK ? '✓ 2' : '✗ 0'}</span>` : '';
+  const varMark = done ? `<span class="kmark ${R.varOK ? 'yes' : 'no'}">${R.varOK ? '✓ 1' : '✗ 0'}</span>` : '';
+  let invFb = '', varFb = '';
+  if (done) {
+    if (R.invOK) invFb = `<div class="fb ok">${t('k_inv_used')}</div>`;
+    else invFb = `<div class="fb bad"><span>${R.invErr && (K.vals.inv || '').trim() ? errMsg(R.invErr) + ' ' : ''}${t('k_inv_bad')}</span><span class="as">⟨${esc(pr(c.inv))}⟩</span></div>${R.invR ? checkHTML(R.invR, ex, false) : ''}`;
+    if (!R.varOK) varFb = `<div class="fb bad"><span>${R.varErr && (K.vals.var || '').trim() ? errMsg(R.varErr) + ' ' : ''}${t('k_var_bad')}</span><span class="as">V = ${esc(pr(c.variant))}</span></div>${R.varR ? variantHTML(R.varR, ex) : ''}`;
+  }
+  const pct = done ? R.pts / R.total : 0;
+  const head = done
+    ? `<div class="kscore"><div class="big">${t('k_score', { p: R.pts, t: R.total })}</div><div class="bar"><span style="width:${Math.round(pct * 100)}%"></span></div><p>${K.timeup ? t('k_timeup') + ' ' : ''}${pct >= 0.8 ? t('k_g1') : pct >= 0.5 ? t('k_g2') : t('k_g3')}</p>
+       <div class="row"><button class="btn primary" type="button" data-k-act="new">${t('k_new')}</button><button class="btn" type="button" data-k-act="retry">${t('k_retry')}</button></div></div>`
+    : `<div class="kbar"><span class="badge">${kTotal(ex)} ${t('k_points')}</span>${K.ends ? `<span class="kclock"><span id="k-clock">20:00</span> ${t('k_left')}</span>` : ''}</div>`;
+  box.innerHTML = `
+    <div class="plan-h"><div class="kicker">${t('k_kicker')}</div><h1 id="exam-title">${esc(L(ex.title))}</h1></div>
+    <div class="kpaper">
+      ${head}
+      <section class="kpart"><h2>${t('k_a')}</h2><p>${t('k_a_txt')}</p>${syntaxHTML(ex)}
+        <div class="prog">${partA}</div>
+        <div class="kinv"><span>${t('k_inv')}</span><span class="tx as">⟨</span><input class="fx" data-k="inv" value="${esc(K.vals.inv ?? '')}" placeholder="${esc(t('ph'))}" autocomplete="off" spellcheck="false" aria-label="${esc(t('k_inv'))}" ${done ? 'disabled' : ''}><span class="tx as">⟩</span>${invMark}</div>
+        ${invFb}
+      </section>
+      <section class="kpart"><h2>${t('k_b')}</h2><p>${t('k_b_txt', { m: `<span class="mono">${aux}</span>` })}</p>
+        <div class="inline-in"><span class="mono">V =</span><input data-k="var" value="${esc(K.vals.var ?? '')}" placeholder="${esc(t('phv'))}" autocomplete="off" spellcheck="false" aria-label="V" ${done ? 'disabled' : ''}>${varMark}</div>
+        <div class="prog">${partB}</div>
+        ${varFb}
+      </section>
+      ${done ? `<section class="kpart"><h2>${t('s_sol')}</h2>${linesHTML(annotate(ex))}${linesHTML(annotateVariant(ex))}</section>` : `<div class="row"><button class="btn primary" type="button" data-k-act="submit">${t('k_submit')}</button></div>`}
+    </div>`;
+  if (!done && K.ends) { const left = Math.max(0, K.ends - Date.now()), m = Math.floor(left / 60000), s = Math.floor(left / 1000) % 60; const el = document.getElementById('k-clock'); if (el) el.textContent = `${m}:${String(s).padStart(2, '0')}`; }
+}
+function handleExam(e) {
+  const b = e.target.closest('[data-k-act]'); if (!b) return;
+  const act = b.dataset.kAct;
+  if (act === 'start') kStart();
+  else if (act === 'submit') kGrade();
+  else if (act === 'new') { clearInterval(kTimer); ST.K.phase = 'start'; ST.K.res = null; renderExam(); window.scrollTo(0, 0); }
+  else if (act === 'retry') { ST.K.pick = ST.K.id; kStart(); window.scrollTo(0, 0); }
+  snapshot();
+}
+
+/* ---- lesson widgets ---- */
+function renderBW() {
+  const out = document.getElementById('bw-out');
+  const x = document.getElementById('bw-var').value.trim();
+  const tsrc = document.getElementById('bw-expr').value, psrc = document.getElementById('bw-post').value;
+  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(x)) { out.innerHTML = `<p class="err">${t('bw_need')}</p>`; return; }
+  let tA, pA;
+  try { tA = parse(tsrc); need(tA, 'N'); } catch (e) { out.innerHTML = `<p class="err">t: ${errMsg({ err: e.code, detail: e.detail })}</p>`; return; }
+  try { pA = parse(psrc); need(pA, 'B'); } catch (e) { out.innerHTML = `<p class="err">φ: ${errMsg({ err: e.code, detail: e.detail })}</p>`; return; }
+  out.innerHTML = linesHTML([{ k: 'a', s: pr(sub(pA, x, tA)), ind: 0, note: 'asg' }, { k: 'c', s: `${x} = ${tsrc.trim()};`, ind: 0 }, { k: 'a', s: pr(pA), ind: 0 }]);
+}
+function renderTracer() {
+  const ex = exById('g2'), c = compile(ex);
+  const rows = trace(ex, { n: ST.tr.n });
+  document.getElementById('tr-nv').textContent = ST.tr.n;
+  document.getElementById('tr-prog').innerHTML = [
+    lnHTML({ k: 'a', s: pr(c.pre), note: 'pre' }), lnHTML({ k: 'c', s: 'i = 0; s = 0;' }),
+    lnHTML({ k: 'c', s: `while (${ex.cond}) {   // I = ⟨${pr(c.inv)}⟩` }),
+    ...codeLines(c.body, 1).map(l => lnHTML(l)), lnHTML({ k: 'c', s: '}' }), lnHTML({ k: 'a', s: pr(c.post) })].join('');
+  const th = `<tr><th>${t('round')}</th><th>i</th><th>s</th><th>B: i &lt; n</th><th>i ≤ n</th><th>2 · s</th><th>i · (i + 1)</th><th>I</th></tr>`;
+  const tb = rows.map((r, k) => {
+    const I = ev(c.inv, { ...r.s });
+    return `<tr class="${k === ST.tr.hl ? 'hl' : ''}"><td>${k === 0 ? t('start') : k}</td><td>${r.s.i}</td><td>${r.s.s}</td><td><span class="${r.b ? 'yes' : 'no'}">${fmtN(r.b)}</span></td><td>${fmtN(r.s.i <= r.s.n)}</td><td>${2 * r.s.s}</td><td>${r.s.i * (r.s.i + 1)}</td><td><span class="${I ? 'yes' : 'no'}">${I ? '✓' : '✗'}</span></td></tr>`;
+  }).join('');
+  document.getElementById('tr-table').innerHTML = `<table class="vt">${th}${tb}</table>`;
+}
+
+/* ---- view routing & language ---- */
+const VIEWS = ['plan', 'hoare', 'practice', 'exam'];
+function showView(v, scroll) {
+  if (!VIEWS.includes(v)) v = 'hoare';
+  ST.view = v;
+  VIEWS.forEach(n => document.getElementById('view-' + n).classList.toggle('on', n === v));
+  document.querySelectorAll('nav.views a').forEach(a => { if (a.dataset.view === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  if (v === 'practice') renderPractice();
+  if (v === 'exam') { renderExam(); kArmTimer(); }
+  if (scroll) window.scrollTo(0, 0);
+}
+function setLang(l) {
+  lang = l;
+  document.body.dataset.lang = l; document.documentElement.lang = l;
+  document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === l)));
+  try { localStorage.setItem('hoarelab-lang', l); } catch (e) {}
+  renderBW(); renderTracer();
+  if (ST.view === 'practice') renderPractice();
+  if (ST.view === 'exam') renderExam();
+  snapshot();
+}
+function snapshot() { try { window.claude?.hot?.snapshot?.(() => ({ view: ST.view, ex: ST.ex, P: ST.P, tr: ST.tr, K: ST.K })); } catch (e) {} }
+
+function start(data) {
+  if (data && data.P) { ST.P = data.P; ST.ex = data.ex || ST.ex; if (data.tr) ST.tr = data.tr; if (data.K) ST.K = { ...ST.K, ...data.K }; }
+  document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
+  const ws = document.getElementById('ws');
+  ws.addEventListener('click', handleWS);
+  ws.addEventListener('input', e => { const i = e.target.closest('[data-in]'); if (i) prog(ST.ex).val[i.dataset.in] = i.value; });
+  ws.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return; const i = e.target.closest('[data-in]'); if (!i) return;
+    e.preventDefault(); const btn = document.querySelector('.step.open [data-act="check"], .step.open [data-act="checkinv"], .step.open [data-act="checkvar"]'); if (btn) btn.click();
+  });
+  const ek = document.getElementById('exam');
+  ek.addEventListener('click', handleExam);
+  ek.addEventListener('input', e => { const i = e.target.closest('[data-k]'); if (i) ST.K.vals[i.dataset.k] = i.value; });
+  ek.addEventListener('change', e => { if (e.target.id === 'k-pick') ST.K.pick = e.target.value; if (e.target.id === 'k-timed') ST.K.timed = e.target.checked; });
+  ek.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return; const i = e.target.closest('input[data-k]'); if (!i) return;
+    e.preventDefault(); const all = [...ek.querySelectorAll('input[data-k]:not([disabled])')]; const n = all[all.indexOf(i) + 1]; if (n) n.focus();
+  });
+  document.querySelectorAll('[data-scroll]').forEach(b => b.addEventListener('click', () => { const el = document.getElementById(b.dataset.scroll); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' }); }));
+  ['bw-var', 'bw-expr', 'bw-post'].forEach(id => document.getElementById(id).addEventListener('input', renderBW));
+  document.getElementById('tr-n').value = ST.tr.n;
+  document.getElementById('tr-n').addEventListener('input', e => { ST.tr.n = +e.target.value; ST.tr.hl = -1; renderTracer(); });
+  document.getElementById('tr-step').addEventListener('click', () => { const n = trace(exById('g2'), { n: ST.tr.n }).length; ST.tr.hl = (ST.tr.hl + 1) % n; renderTracer(); });
+  document.getElementById('tr-reset').addEventListener('click', () => { ST.tr.hl = 0; renderTracer(); });
+  window.addEventListener('hashchange', () => showView(location.hash.slice(1), true));
+  setLang(lang);
+  showView(location.hash.slice(1) || (data && data.view) || 'hoare', false);
+}
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+
+</script>
+</body>
+</html>
