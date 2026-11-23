@@ -13,7 +13,7 @@
   --paper:#F1F2EE; --surface:#FAFAF8; --ink:#14171F; --muted:#585E6A; --rule:#D5D8D0;
   --accent:#2C40CF; --accent-soft:rgba(44,64,207,.08); --accent-ink:#FFFFFF;
   --code-bg:#E9EBF0;
-  --ok:#1B7445; --ok-soft:rgba(27,116,69,.10); --bad:#B3341B; --bad-soft:rgba(179,52,27,.09); --warn:#8E610B;
+  --brick:#B4442C; --ok:#1B7445; --ok-soft:rgba(27,116,69,.10); --bad:#B3341B; --bad-soft:rgba(179,52,27,.09); --warn:#8E610B;
   --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
   --body:"Source Serif 4","Iowan Old Style",Georgia,serif;
   --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;
@@ -24,7 +24,7 @@
     --paper:#0E1016; --surface:#151821; --ink:#E6E8E3; --muted:#9BA1AD; --rule:#2A2F3B;
     --accent:#8E9CFF; --accent-soft:rgba(142,156,255,.12); --accent-ink:#0E1016;
     --code-bg:#1A1E29;
-    --ok:#5DC88D; --ok-soft:rgba(93,200,141,.12); --bad:#FF8B6F; --bad-soft:rgba(255,139,111,.12); --warn:#E1B04B;
+    --brick:#E8826A; --ok:#5DC88D; --ok-soft:rgba(93,200,141,.12); --bad:#FF8B6F; --bad-soft:rgba(255,139,111,.12); --warn:#E1B04B;
     color-scheme:dark;
   }
 }
@@ -32,7 +32,7 @@
   --paper:#0E1016; --surface:#151821; --ink:#E6E8E3; --muted:#9BA1AD; --rule:#2A2F3B;
   --accent:#8E9CFF; --accent-soft:rgba(142,156,255,.12); --accent-ink:#0E1016;
   --code-bg:#1A1E29;
-  --ok:#5DC88D; --ok-soft:rgba(93,200,141,.12); --bad:#FF8B6F; --bad-soft:rgba(255,139,111,.12); --warn:#E1B04B;
+  --brick:#E8826A; --ok:#5DC88D; --ok-soft:rgba(93,200,141,.12); --bad:#FF8B6F; --bad-soft:rgba(255,139,111,.12); --warn:#E1B04B;
   color-scheme:dark;
 }
 
@@ -290,6 +290,7 @@ body[data-group="prog"] .subnav-row{display:block}
 .intro-2col .lede{max-width:none;font-size:18px}
 @media (max-width:860px){.intro-2col{grid-template-columns:minmax(0,1fr)}}
 .page-h .lede strong{color:var(--accent)}
+.page-h .lede strong.brick{color:var(--brick);font-weight:700}
 .facts{display:flex;flex-wrap:wrap;gap:10px}
 .fact{display:grid;gap:0;padding:8px 14px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);min-width:120px}
 .fact b{font-family:var(--display);font-size:19px;font-weight:800;letter-spacing:-.01em}
@@ -454,8 +455,8 @@ footer a{color:var(--muted)}
       <span class="en">The lecture shows three ways of programming: imperative and object-oriented with Java, functional with Haskell and logic-based with Prolog. On top comes program verification with Hoare logic. Knowing several paradigms helps you express your ideas, pick the right language for a problem and learn new languages faster.</span>
     </p>
     <p class="lede why-langs">
-      <span class="de">Die Auswahl der drei Sprachen ist didaktisch gut begründet: Zusammen decken sie alle grundlegenden Programmierparadigmen ab, die man klassisch unterscheidet. Java steht für die <strong>imperative</strong> und die <strong>objektorientierte</strong> Programmierung, bei der Anweisungen Schritt für Schritt Zustände verändern. Haskell steht für die <strong>funktionale</strong> und Prolog für die <strong>logische</strong> Programmierung, die beiden deklarativen Paradigmen, bei denen man beschreibt, was berechnet werden soll, und nicht, wie. Wer diese vier Denkweisen einmal geübt hat, findet sich in fast jeder neuen Sprache schnell zurecht, denn moderne Sprachen wie Python, Kotlin oder Rust kombinieren genau diese Ideen.</span>
-      <span class="en">The choice of these three languages is didactically sound: together they cover all the fundamental programming paradigms that are classically distinguished. Java stands for <strong>imperative</strong> and <strong>object-oriented</strong> programming, where statements change state step by step. Haskell stands for <strong>functional</strong> and Prolog for <strong>logic</strong> programming, the two declarative paradigms in which you describe what to compute rather than how. Anyone who has practised these four ways of thinking quickly finds their way in almost any new language, because modern languages such as Python, Kotlin or Rust combine exactly these ideas.</span>
+      <span class="de">Die Auswahl der drei Sprachen ist didaktisch gut begründet: Zusammen decken sie alle grundlegenden Programmierparadigmen ab, die man klassisch unterscheidet. Java steht für die <strong>imperative</strong> und die <strong>objektorientierte</strong> Programmierung, bei der Anweisungen Schritt für Schritt Zustände verändern. Haskell steht für die <strong>funktionale</strong> und Prolog für die <strong>logische</strong> Programmierung, die beiden deklarativen Paradigmen, bei denen man beschreibt, was berechnet werden soll, und nicht, wie. <strong class="brick">Wer diese vier Denkweisen einmal geübt hat, findet sich in fast jeder neuen Sprache schnell zurecht, denn moderne Sprachen wie Python, Kotlin oder Rust kombinieren genau diese Ideen.</strong></span>
+      <span class="en">The choice of these three languages is didactically sound: together they cover all the fundamental programming paradigms that are classically distinguished. Java stands for <strong>imperative</strong> and <strong>object-oriented</strong> programming, where statements change state step by step. Haskell stands for <strong>functional</strong> and Prolog for <strong>logic</strong> programming, the two declarative paradigms in which you describe what to compute rather than how. <strong class="brick">Anyone who has practised these four ways of thinking quickly finds their way in almost any new language, because modern languages such as Python, Kotlin or Rust combine exactly these ideas.</strong></span>
     </p>
     </div>
   </div>
