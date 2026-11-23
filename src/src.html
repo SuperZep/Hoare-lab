@@ -295,6 +295,13 @@ body[data-group="prog"] .subnav-row{display:block}
 .pc-name{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.01em}
 .pc-org{font-size:14.5px;color:var(--muted)}
 .pc-go{font-family:var(--display);font-size:13px;font-weight:600;color:var(--accent);margin-top:2px}
+.person-card.sm{padding:8px 14px 8px 8px;gap:12px;margin-top:4px;justify-self:start;background:var(--paper)}
+.person-card.sm .mono-avatar{width:42px;height:42px;font-size:15px}
+.person-card.sm .pc-name{font-size:15px}
+.person-card.sm .pc-org,.person-card.sm .pc-extra{font-size:13px;color:var(--muted)}
+.person-card.sm .pc-go{font-size:12px}
+.person-card.tbd .mono-avatar{background:var(--code-bg);color:var(--muted)}
+.person-card.tbd{border-style:dashed}
 .intro-2col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 48px;align-items:start}
 .intro-2col .lede{max-width:none;font-size:18px}
 .why-wrap{display:grid;gap:6px;justify-items:start;min-width:0}
@@ -437,27 +444,107 @@ footer a{color:var(--muted)}
         <div class="mod-t"><h3><a href="#prog" class="mod-link">Programmierung</a></h3><a class="pill live" href="#prog"><span class="de">Zum Modul →</span><span class="en">Open module →</span></a></div>
         <p><span class="de">Drei Paradigmen und die Einführung in die Programmverifikation. Für jede Sprache gibt es eine eigene Seite, für den Hoare-Kalkül Lektion, Übungen und Klausur-Simulation.</span><span class="en">Three paradigms plus an introduction to program verification. Each language has its own page; Hoare logic has a lesson, exercises and an exam simulation.</span></p>
         <div class="chips"><a class="chip" href="#java">Java</a><a class="chip" href="#haskell">Haskell</a><a class="chip" href="#prolog">Prolog</a><a class="chip" href="#hoare">Hoare-Kalkül</a><a class="chip" href="#practice"><span class="de">Übungen</span><span class="en">Exercises</span></a><a class="chip" href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a></div>
+        <a class="person-card sm" href="https://rwthcontacts.rwth-aachen.de/person/PER-XXZ5FLM" target="_blank" rel="noopener">
+          <span class="mono-avatar" aria-hidden="true">JG</span>
+          <span class="pc-body">
+            <span class="pc-name">Prof. Dr. Jürgen Giesl</span>
+            <span class="pc-org"><span class="de">Programmiersprachen und Verifikation</span><span class="en">Programming Languages and Verification</span></span>
+            <span class="pc-go"><span class="de">Kontakt auf RWTHcontacts →</span><span class="en">Contact on RWTHcontacts →</span></span>
+          </span>
+        </a>
       </div>
       <div class="mod"><div class="mod-t"><h3>Einführung in die Technische Informatik</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
-        <p><span class="de">Vom Bit zum Rechner: Zahlendarstellung, Schaltnetze, Schaltwerke.</span><span class="en">From bits to computers: number representation, combinational and sequential circuits.</span></p></div>
+        <p><span class="de">Vom Bit zum Rechner: Zahlendarstellung, Schaltnetze, Schaltwerke.</span><span class="en">From bits to computers: number representation, combinational and sequential circuits.</span></p>
+        <a class="person-card sm" href="https://rwthcontacts.rwth-aachen.de/person/PER-5MBWLMY" target="_blank" rel="noopener">
+          <span class="mono-avatar" aria-hidden="true">SK</span>
+          <span class="pc-body">
+            <span class="pc-name">Prof. Dr.-Ing. Stefan Kowalewski</span>
+            <span class="pc-org"><span class="de">Embedded Software (Informatik 11)</span><span class="en">Embedded Software (Computer Science 11)</span></span>
+            <span class="pc-go"><span class="de">Kontakt auf RWTHcontacts →</span><span class="en">Contact on RWTHcontacts →</span></span>
+          </span>
+        </a>
+      </div>
       <div class="mod"><div class="mod-t"><h3>Diskrete Strukturen</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
-        <p><span class="de">Mengen, Relationen, Induktion, Kombinatorik, Graphen. Induktion ist das Fundament für Invarianten.</span><span class="en">Sets, relations, induction, combinatorics, graphs. Induction is the foundation for invariants.</span></p></div>
+        <p><span class="de">Mengen, Relationen, Induktion, Kombinatorik, Graphen. Induktion ist das Fundament für Invarianten.</span><span class="en">Sets, relations, induction, combinatorics, graphs. Induction is the foundation for invariants.</span></p>
+        <a class="person-card sm" href="https://rwthcontacts.rwth-aachen.de/person/PER-6DCTQU2" target="_blank" rel="noopener">
+          <span class="mono-avatar" aria-hidden="true">DR</span>
+          <span class="pc-body">
+            <span class="pc-name">Prof. Dr. Daniel Robertz</span>
+            <span class="pc-org"><span class="de">Algebra und Zahlentheorie</span><span class="en">Algebra and Number Theory</span></span>
+            <span class="pc-go"><span class="de">Kontakt auf RWTHcontacts →</span><span class="en">Contact on RWTHcontacts →</span></span>
+          </span>
+        </a>
+      </div>
       <div class="mod"><div class="mod-t"><h3>Analysis für Informatik</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
-        <p><span class="de">Folgen, Reihen, Stetigkeit, Differential- und Integralrechnung.</span><span class="en">Sequences, series, continuity, differential and integral calculus.</span></p></div>
+        <p><span class="de">Folgen, Reihen, Stetigkeit, Differential- und Integralrechnung.</span><span class="en">Sequences, series, continuity, differential and integral calculus.</span></p>
+        <a class="person-card sm" href="https://rwthcontacts.rwth-aachen.de/person/PER-XAMVHAD" target="_blank" rel="noopener">
+          <span class="mono-avatar" aria-hidden="true">AS</span>
+          <span class="pc-body">
+            <span class="pc-name">Dr. Aleksey Sikstel</span>
+            <span class="pc-org"><span class="de">Computational Mathematics</span><span class="en">Computational Mathematics</span></span>
+            <span class="pc-go"><span class="de">Kontakt auf RWTHcontacts →</span><span class="en">Contact on RWTHcontacts →</span></span>
+          </span>
+        </a>
+      </div>
       <div class="mod"><div class="mod-t"><h3>Mentoring</h3><span class="pill"><span class="de">Kleingruppen</span><span class="en">small groups</span></span></div>
-        <p><span class="de">Pflicht im 1. und 2. Semester, Unterstützung beim Studienstart.</span><span class="en">Mandatory in semesters 1 and 2, support for the start of your studies.</span></p></div>
+        <p><span class="de">Pflicht im 1. und 2. Semester, Unterstützung beim Studienstart.</span><span class="en">Mandatory in semesters 1 and 2, support for the start of your studies.</span></p>
+        <a class="person-card sm" href="https://rwthcontacts.rwth-aachen.de/person/PER-DUZKQCQ" target="_blank" rel="noopener">
+          <span class="mono-avatar" aria-hidden="true">UN</span>
+          <span class="pc-body">
+            <span class="pc-name">Prof. Dr. Uwe Naumann</span>
+            <span class="pc-org"><span class="de">Software und Werkzeuge für Computational Engineering</span><span class="en">Software and Tools for Computational Engineering</span></span><span class="pc-extra"><span class="de">zusammen mit Marion Brandt-Röhrig</span><span class="en">together with Marion Brandt-Röhrig</span></span>
+            <span class="pc-go"><span class="de">Kontakt auf RWTHcontacts →</span><span class="en">Contact on RWTHcontacts →</span></span>
+          </span>
+        </a>
+      </div>
     </div>
     <div class="sem-col">
       <h2><span><span class="de">2. Semester</span><span class="en">Semester 2</span></span><span>SS</span></h2>
       <div class="mod"><div class="mod-t"><h3>Datenstrukturen und Algorithmen</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
-        <p><span class="de">Sortieren, Suchen, Bäume, Hashing, Graphalgorithmen. Invarianten begründen hier die Korrektheit.</span><span class="en">Sorting, searching, trees, hashing, graph algorithms. Invariants justify correctness here too.</span></p></div>
+        <p><span class="de">Sortieren, Suchen, Bäume, Hashing, Graphalgorithmen. Invarianten begründen hier die Korrektheit.</span><span class="en">Sorting, searching, trees, hashing, graph algorithms. Invariants justify correctness here too.</span></p>
+        <a class="person-card sm tbd" href="https://online.rwth-aachen.de/" target="_blank" rel="noopener">
+          <span class="mono-avatar" aria-hidden="true">?</span>
+          <span class="pc-body">
+            <span class="pc-name"><span class="de">Dozent:in im Sommersemester</span><span class="en">Lecturer in the summer semester</span></span>
+            <span class="pc-org"><span class="de">wechselt je nach Jahr</span><span class="en">changes from year to year</span></span>
+            <span class="pc-go"><span class="de">In RWTHonline nachsehen →</span><span class="en">Check in RWTHonline →</span></span>
+          </span>
+        </a>
+      </div>
       <div class="mod"><div class="mod-t"><h3>Formale Systeme, Automaten, Prozesse</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
-        <p><span class="de">Automaten, reguläre Sprachen, Grammatiken, Petrinetze.</span><span class="en">Automata, regular languages, grammars, Petri nets.</span></p></div>
+        <p><span class="de">Automaten, reguläre Sprachen, Grammatiken, Petrinetze.</span><span class="en">Automata, regular languages, grammars, Petri nets.</span></p>
+        <a class="person-card sm tbd" href="https://online.rwth-aachen.de/" target="_blank" rel="noopener">
+          <span class="mono-avatar" aria-hidden="true">?</span>
+          <span class="pc-body">
+            <span class="pc-name"><span class="de">Dozent:in im Sommersemester</span><span class="en">Lecturer in the summer semester</span></span>
+            <span class="pc-org"><span class="de">wechselt je nach Jahr</span><span class="en">changes from year to year</span></span>
+            <span class="pc-go"><span class="de">In RWTHonline nachsehen →</span><span class="en">Check in RWTHonline →</span></span>
+          </span>
+        </a>
+      </div>
       <div class="mod"><div class="mod-t"><h3>Lineare Algebra</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
-        <p><span class="de">Vektorräume, lineare Abbildungen, Matrizen, Eigenwerte.</span><span class="en">Vector spaces, linear maps, matrices, eigenvalues.</span></p></div>
+        <p><span class="de">Vektorräume, lineare Abbildungen, Matrizen, Eigenwerte.</span><span class="en">Vector spaces, linear maps, matrices, eigenvalues.</span></p>
+        <a class="person-card sm tbd" href="https://online.rwth-aachen.de/" target="_blank" rel="noopener">
+          <span class="mono-avatar" aria-hidden="true">?</span>
+          <span class="pc-body">
+            <span class="pc-name"><span class="de">Dozent:in im Sommersemester</span><span class="en">Lecturer in the summer semester</span></span>
+            <span class="pc-org"><span class="de">wechselt je nach Jahr</span><span class="en">changes from year to year</span></span>
+            <span class="pc-go"><span class="de">In RWTHonline nachsehen →</span><span class="en">Check in RWTHonline →</span></span>
+          </span>
+        </a>
+      </div>
       <div class="mod"><div class="mod-t"><h3>Betriebssysteme und Systemsoftware</h3><span class="pill"><span class="de">geplant</span><span class="en">planned</span></span></div>
-        <p><span class="de">Prozesse, Speicherverwaltung, Synchronisation, Dateisysteme.</span><span class="en">Processes, memory management, synchronisation, file systems.</span></p></div>
-      <p class="small muted"><span class="de">Stand: Erstsemester-Einführung WS 2025/26. Die Zuordnung der Module zum 2. Semester bitte im Studienplan in RWTHonline prüfen.</span><span class="en">Source: first-semester introduction WS 2025/26. Please check the semester-2 assignment in the RWTHonline study plan.</span></p>
+        <p><span class="de">Prozesse, Speicherverwaltung, Synchronisation, Dateisysteme.</span><span class="en">Processes, memory management, synchronisation, file systems.</span></p>
+        <a class="person-card sm tbd" href="https://online.rwth-aachen.de/" target="_blank" rel="noopener">
+          <span class="mono-avatar" aria-hidden="true">?</span>
+          <span class="pc-body">
+            <span class="pc-name"><span class="de">Dozent:in im Sommersemester</span><span class="en">Lecturer in the summer semester</span></span>
+            <span class="pc-org"><span class="de">wechselt je nach Jahr</span><span class="en">changes from year to year</span></span>
+            <span class="pc-go"><span class="de">In RWTHonline nachsehen →</span><span class="en">Check in RWTHonline →</span></span>
+          </span>
+        </a>
+      </div>
+      <p class="small muted"><span class="de">Stand: Erstsemester-Einführung WS 2025/26, auch für die Dozierenden des 1. Semesters. Die Zuordnung der Module zum 2. Semester und die Dozierenden bitte im Studienplan in RWTHonline prüfen.</span><span class="en">Source: first-semester introduction WS 2025/26, including the semester-1 lecturers. Please check the semester-2 modules and lecturers in the RWTHonline study plan.</span></p>
     </div>
   </div>
 </section>
@@ -467,18 +554,7 @@ footer a{color:var(--muted)}
   <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><span>Programmierung</span></nav>
   <div class="page-h">
     <div class="kicker"><span class="de">1. Semester · Pflichtmodul · Lehr- und Forschungsgebiet Informatik 2</span><span class="en">Semester 1 · compulsory module · Research Group Computer Science 2</span></div>
-    <div class="title-row">
-      <h1 id="prog-title">Programmierung</h1>
-      <a class="person-card" href="https://rwthcontacts.rwth-aachen.de/person/PER-XXZ5FLM" target="_blank" rel="noopener">
-        <span class="mono-avatar" aria-hidden="true">JG</span>
-        <span class="pc-body">
-          <span class="pc-role"><span class="de">Dozent der Vorlesung · Stand WS 2025/26</span><span class="en">Lecturer · as of WS 2025/26</span></span>
-          <span class="pc-name">Prof. Dr. Jürgen Giesl</span>
-          <span class="pc-org"><span class="de">Programmiersprachen und Verifikation</span><span class="en">Programming Languages and Verification</span></span>
-          <span class="pc-go"><span class="de">Kontakt auf RWTHcontacts →</span><span class="en">Contact on RWTHcontacts →</span></span>
-        </span>
-      </a>
-    </div>
+    <h1 id="prog-title">Programmierung</h1>
     <div class="intro-2col">
     <p class="lede">
       <span class="de">Die Vorlesung zeigt drei Arten zu programmieren: imperativ und objektorientiert mit Java, funktional mit Haskell und logisch mit Prolog. Dazu kommt die Programmverifikation mit dem Hoare-Kalkül. Wer mehrere Paradigmen kennt, drückt eigene Ideen besser aus, wählt für ein Problem die passende Sprache und lernt neue Sprachen schneller.</span>
