@@ -335,6 +335,46 @@ strong .wiki,strong.brick .wiki{color:inherit}
 .wk-prog-bar{height:8px;border-radius:999px;background:var(--rule);overflow:hidden}
 .wk-prog-bar span{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .3s}
 
+
+/* header calendar button + popup */
+.cal-btn{margin-left:auto;position:relative;width:38px;height:38px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.cal-btn:hover,.cal-btn:focus-visible{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.cal-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cal-btn + .lang{margin-left:0}
+.cal-btn .tip{position:absolute;top:calc(100% + 9px);left:50%;transform:translate(-50%,-3px);white-space:nowrap;background:var(--ink);color:var(--paper);font-family:var(--display);font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:7px;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;z-index:30}
+.cal-btn .tip::before{content:"";position:absolute;top:-4px;left:50%;margin-left:-4px;width:8px;height:8px;background:inherit;transform:rotate(45deg)}
+.cal-btn:hover .tip,.cal-btn:focus-visible .tip{opacity:1;transform:translate(-50%,0)}
+.cal-dlg{border:0;padding:0;margin:auto;width:min(1040px,94vw);max-height:88vh;border-radius:18px;background:var(--surface);color:var(--ink);box-shadow:0 30px 80px -20px rgba(10,12,20,.55);overflow:auto}
+.cal-dlg::backdrop{background:rgba(10,12,20,.45);backdrop-filter:blur(2px)}
+.cal-dlg .cal-wrap.mini{border:0;border-radius:0;padding:16px 18px 18px;gap:8px}
+.cal-top-a{display:flex;gap:8px;align-items:center;flex:none}
+.cal-top-a .btn{white-space:nowrap}
+.cal-x{width:36px;height:36px;flex:none;padding:0;display:grid;place-items:center;font-size:15px}
+.mini .cal-top h2{font-size:18px}
+.mini .cal-legend{gap:4px 12px}.mini .cal-leg{font-size:12px}
+.mini .cal-row{grid-template-columns:34px repeat(5,minmax(0,1fr));grid-template-rows:14px 17px;padding:2px 0 3px}
+.mini .cal-kw{font-size:10px;margin:-2px 0 -3px}
+.mini .cal-day{margin-top:-2px;padding-top:2px}
+.mini .cal-day i{font-size:10px;min-width:16px;height:14px}
+.mini .cal-day.today i{padding:0 4px}
+.mini .cal-ev{font-size:11px;border-left-width:2px;border-radius:5px;padding:0 6px}
+.mini .cal-month{font-size:12px;padding:3px 10px 2px}
+.mini .cal-head{font-size:10.5px;padding:4px 0;grid-template-rows:auto}
+.mini .cal-top{position:sticky;top:-16px;z-index:3;background:var(--surface);margin:-16px -18px 0;padding:14px 18px 8px;border-bottom:1px solid var(--rule)}
+.mini .cal-split{gap:12px}
+@media (prefers-reduced-motion:no-preference){.cal-dlg[open]{animation:dlgIn .18s ease-out}@keyframes dlgIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}}
+@media (max-width:720px){
+  .cal-dlg{width:100vw;max-width:100vw;max-height:92vh;margin:auto 0 0;border-radius:18px 18px 0 0}
+  .cal-dlg .cal-wrap.mini{padding:14px 10px 16px}
+  .mini .cal-top{top:-14px;margin:-14px -10px 0;padding:14px 16px 8px 12px;gap:8px}
+  .mini .cal-top h2{flex:1 1 auto;min-width:0}
+  .mini .cal-top-a{flex:0 1 auto;min-width:0}
+  .mini .cal-top{flex-wrap:nowrap}.mini .cal-top h2{font-size:15px}.mini .cal-top .btn:not(.cal-x){font-size:12px;padding:5px 9px}
+  .mini .cal-row{grid-template-columns:26px repeat(5,minmax(0,1fr))}
+  .cal-btn .tip{display:none}
+}
+
+@media (max-width:380px){.mini .cal-top-a .btn:not(.cal-x){display:none}}
 /* compact calendar */
 .cal-wrap{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:16px 18px 14px;display:grid;gap:10px}
 .cal-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -378,7 +418,7 @@ strong .wiki,strong.brick .wiki{color:inherit}
   .cal-ev{font-size:11.5px;padding:0 5px;margin:0 2px}
   .cal-ev span{display:none}
   .cal-ev[style*="/ 7"] span,.cal-ev[style*="2 / 7"] span{display:inline}
-  .cal-top .btn{width:100%}
+  .cal-wrap:not(.mini) .cal-top .btn{width:100%}
 }
 
 .wk-list{list-style:none;margin:0;padding:0;display:grid}
@@ -673,6 +713,7 @@ footer a{color:var(--muted)}
       <a href="#practice" data-view="practice"><span class="de">Übungen</span><span class="en">Exercises</span></a>
       <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
     </nav>
+<button type="button" class="cal-btn" id="cal-btn" aria-haspopup="dialog" aria-controls="cal-dlg"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M7.5 13.5h3M13.5 13.5h3M7.5 17h3" stroke-width="2.2"/></svg><span class="tip" role="tooltip"><span class="de">Semester auf einen Blick</span><span class="en">The semester at a glance</span></span></button>
     <div class="lang" role="group" aria-label="Sprache / Language">
       <button type="button" id="lang-de" data-lang="de" aria-pressed="true">DE</button>
       <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
@@ -1461,6 +1502,7 @@ Oma = renate.</pre>
     <a href="https://www.haskell.org/ghc/blog/20251219-ghc-9.14.1-released.html">GHC 9.14.1</a></p>
 </footer>
 
+<dialog id="cal-dlg" class="cal-dlg" aria-labelledby="cal-dlg-h"><div id="cal-dlg-body"></div></dialog>
 <script>
 /* ===== Hoare Lab engine: parser, evaluator, substitution, bounded checker ===== */
 const UNDEF = { undef: true };
@@ -3068,6 +3110,8 @@ function setLang(l) {
   try { dNavBadge(); } catch (e) {}
   if (ST.view === 'daily') renderDaily();
   if (ST.view === 'weeks') renderWeeks();
+  try { calBtnLabel(); } catch (e) {}
+  try { const dd = document.getElementById('cal-dlg'); if (dd && dd.open) renderCalDlg(); } catch (e) {}
   if (ST.view === 'resources') renderResources();
   if (ST.view === 'prog') renderThisWeek();
   if (ST.view === 'practice') renderPractice();
@@ -3083,6 +3127,7 @@ function start(data) {
   initSecbar();
   initDaily();
   initWeeks();
+  initCalDlg();
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
   const ws = document.getElementById('ws');
   ws.addEventListener('click', handleWS);
@@ -6238,7 +6283,7 @@ const WT = {
     res_kicker: 'Programmierung · Ergänzungen', res_title: 'Weiterlernen',
     res_lede: 'Kostenlose Seiten, mit denen du neben den Übungsblättern trainieren kannst. Zu jeder steht, wofür sie sich eignet und zu welchem Kapitel der Vorlesung sie passt.',
     res_note: 'Alle Angebote sind kostenlos nutzbar, die meisten auf Englisch. Sie sind keine offiziellen Materialien der RWTH; maßgeblich bleiben Vorlesung, Moodle und Übungsblätter.',
-    cal_h: 'Semester auf einen Blick', list_h: 'Woche für Woche im Detail', kw: 'KW', ics: 'In den Kalender übernehmen (.ics)', ics_note: 'Für Google Kalender, Apple Kalender oder Outlook: Datei herunterladen und dort importieren.',
+    close: 'Schließen', cal_h: 'Semester auf einen Blick', list_h: 'Woche für Woche im Detail', kw: 'KW', ics: 'In den Kalender übernehmen (.ics)', ics_note: 'Für Google Kalender, Apple Kalender oder Outlook: Datei herunterladen und dort importieren.',
     leg_java: 'Java', leg_hoare: 'Hoare-Kalkül', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'vorlesungsfrei', leg_exam: 'Klausur',
     m_start: 'Vorlesungsbeginn', m_end: 'Vorlesungsende', m_resume: 'Vorlesungen wieder', today_l: 'heute', wd5: ['Mo', 'Di', 'Mi', 'Do', 'Fr'],
     ics_ext: 'Kalenderdatei auf der öffentlichen Seite ↗', ics_ext_note: 'In dieser Vorschau sind Kalender-Downloads gesperrt. Auf der öffentlichen Seite funktioniert der Knopf „In den Kalender übernehmen“; die Datei dann in Google Kalender, Apple Kalender oder Outlook importieren.',
@@ -6255,7 +6300,7 @@ const WT = {
     res_kicker: 'Programmierung · extras', res_title: 'Learn more',
     res_lede: 'Free sites to train with alongside the exercise sheets. For each one you see what it is good for and which chapter of the lecture it fits.',
     res_note: 'All of these are free to use, most of them in English. They are not official RWTH material; the lecture, Moodle and the exercise sheets remain what counts.',
-    cal_h: 'The semester at a glance', list_h: 'Week by week in detail', kw: 'CW', ics: 'Add to your calendar (.ics)', ics_note: 'For Google Calendar, Apple Calendar or Outlook: download the file and import it there.',
+    close: 'Close', cal_h: 'The semester at a glance', list_h: 'Week by week in detail', kw: 'CW', ics: 'Add to your calendar (.ics)', ics_note: 'For Google Calendar, Apple Calendar or Outlook: download the file and import it there.',
     leg_java: 'Java', leg_hoare: 'Hoare logic', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'no lectures', leg_exam: 'Exam',
     m_start: 'Lectures start', m_end: 'Lectures end', m_resume: 'Lectures resume', today_l: 'today', wd5: ['Mo', 'Tu', 'We', 'Th', 'Fr'],
     ics_ext: 'Calendar file on the public site ↗', ics_ext_note: 'Calendar downloads are blocked in this preview. On the public site the “Add to your calendar” button works; then import the file into Google Calendar, Apple Calendar or Outlook.',
@@ -6413,7 +6458,7 @@ function calRows() {
   return rows;
 }
 function isoWeek(n) { const t = new Date(n * 864e5); const d = (t.getUTCDay() + 6) % 7; t.setUTCDate(t.getUTCDate() - d + 3); const y = t.getUTCFullYear(); const f = new Date(Date.UTC(y, 0, 4)); return 1 + Math.round(((t - f) / 864e5 - 3 + ((f.getUTCDay() + 6) % 7)) / 7); }
-function calHTML(cur) {
+function calHTML(cur, mini) {
   const today = dNum(dToday()), loc = lang === 'de' ? 'de-DE' : 'en-GB';
   const mName = n => new Date(n * 864e5).toLocaleDateString(loc, { month: 'long', year: 'numeric', timeZone: 'UTC' });
   const table = rows => {
@@ -6443,6 +6488,12 @@ function calHTML(cur) {
   const all = calRows(), cut = all.findIndex(r => r.m >= dNum('2026-12-01'));
   let html = `<div class="cal-split">${table(all.slice(0, cut))}${table(all.slice(cut))}</div>`;
   const leg = ['java', 'hoare', 'haskell', 'prolog', 'pause', 'exam'].map(k => `<span class="cal-leg k-${k}"><i></i>${esc(wt('leg_' + k))}</span>`).join('');
+  if (mini) return `<div class="cal-wrap mini">
+    <div class="cal-top"><h2 id="cal-dlg-h">${esc(wt('cal_h'))}</h2>
+      <div class="cal-top-a"><a class="btn" href="#weeks" data-dlg-go="1">${esc(wt('open_plan'))}</a><button type="button" class="btn ghost cal-x" data-dlg-close="1" aria-label="${esc(wt('close'))}">✕</button></div></div>
+    <div class="cal-legend">${leg}</div>
+    ${html}
+  </div>`;
   return `<section class="cal-wrap" aria-labelledby="cal-h">
     <div class="cal-top"><h2 id="cal-h">${esc(wt('cal_h'))}</h2>${icsBlocked() ? `<a class="btn" href="${DSYNC_URL}#weeks" target="_blank" rel="noopener">⤓ ${esc(wt('ics_ext'))}</a>` : `<button type="button" class="btn" data-ics="1">⤓ ${esc(wt('ics'))}</button>`}</div>
     <div class="cal-legend">${leg}</div>
@@ -6539,6 +6590,34 @@ function initWeeks() {
     const b = e.target.closest('[data-wjump]'); if (!b) return;
     const el = document.getElementById('wk-' + b.dataset.wjump); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' });
   });
+}
+
+/* ---------- header calendar popup ---------- */
+function renderCalDlg() { const b = document.getElementById('cal-dlg-body'); if (b) b.innerHTML = calHTML(wCurrent().i, true); }
+function openCalDlg() {
+  const d = document.getElementById('cal-dlg'); if (!d) return;
+  renderCalDlg();
+  try { d.showModal(); } catch (e) { d.setAttribute('open', ''); }
+  const cur = d.querySelector('.cal-ev.now') || d.querySelector('.cal-row.cur');
+  if (cur) cur.scrollIntoView({ block: 'center' });
+  const x = d.querySelector('.cal-x'); if (x) x.focus({ preventScroll: true });
+}
+function closeCalDlg() { const d = document.getElementById('cal-dlg'); if (d && d.open) { try { d.close(); } catch (e) { d.removeAttribute('open'); } } }
+function calBtnLabel() { const b = document.getElementById('cal-btn'); if (b) b.setAttribute('aria-label', wt('cal_h')); }
+function initCalDlg() {
+  const btn = document.getElementById('cal-btn'), d = document.getElementById('cal-dlg'); if (!btn || !d) return;
+  calBtnLabel();
+  btn.addEventListener('click', openCalDlg);
+  d.addEventListener('click', e => {
+    if (e.target === d) { closeCalDlg(); return; }
+    if (e.target.closest('[data-dlg-close]')) { closeCalDlg(); return; }
+    if (e.target.closest('[data-dlg-go]')) { closeCalDlg(); return; }
+    const ev = e.target.closest('[data-wjump]'); if (!ev) return;
+    const i = ev.dataset.wjump; closeCalDlg();
+    if (location.hash !== '#weeks') location.hash = '#weeks';
+    setTimeout(() => { const el = document.getElementById('wk-' + i); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }); }, 60);
+  });
+  d.addEventListener('close', () => btn.focus({ preventScroll: true }));
 }
 /* ===== Klausur-Training per language ===== */
 const LXT = {

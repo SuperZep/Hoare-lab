@@ -643,6 +643,8 @@ function setLang(l) {
   try { dNavBadge(); } catch (e) {}
   if (ST.view === 'daily') renderDaily();
   if (ST.view === 'weeks') renderWeeks();
+  try { calBtnLabel(); } catch (e) {}
+  try { const dd = document.getElementById('cal-dlg'); if (dd && dd.open) renderCalDlg(); } catch (e) {}
   if (ST.view === 'resources') renderResources();
   if (ST.view === 'prog') renderThisWeek();
   if (ST.view === 'practice') renderPractice();
@@ -658,6 +660,7 @@ function start(data) {
   initSecbar();
   initDaily();
   initWeeks();
+  initCalDlg();
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
   const ws = document.getElementById('ws');
   ws.addEventListener('click', handleWS);

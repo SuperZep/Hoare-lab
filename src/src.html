@@ -335,6 +335,46 @@ strong .wiki,strong.brick .wiki{color:inherit}
 .wk-prog-bar{height:8px;border-radius:999px;background:var(--rule);overflow:hidden}
 .wk-prog-bar span{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .3s}
 
+
+/* header calendar button + popup */
+.cal-btn{margin-left:auto;position:relative;width:38px;height:38px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.cal-btn:hover,.cal-btn:focus-visible{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.cal-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cal-btn + .lang{margin-left:0}
+.cal-btn .tip{position:absolute;top:calc(100% + 9px);left:50%;transform:translate(-50%,-3px);white-space:nowrap;background:var(--ink);color:var(--paper);font-family:var(--display);font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:7px;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;z-index:30}
+.cal-btn .tip::before{content:"";position:absolute;top:-4px;left:50%;margin-left:-4px;width:8px;height:8px;background:inherit;transform:rotate(45deg)}
+.cal-btn:hover .tip,.cal-btn:focus-visible .tip{opacity:1;transform:translate(-50%,0)}
+.cal-dlg{border:0;padding:0;margin:auto;width:min(1040px,94vw);max-height:88vh;border-radius:18px;background:var(--surface);color:var(--ink);box-shadow:0 30px 80px -20px rgba(10,12,20,.55);overflow:auto}
+.cal-dlg::backdrop{background:rgba(10,12,20,.45);backdrop-filter:blur(2px)}
+.cal-dlg .cal-wrap.mini{border:0;border-radius:0;padding:16px 18px 18px;gap:8px}
+.cal-top-a{display:flex;gap:8px;align-items:center;flex:none}
+.cal-top-a .btn{white-space:nowrap}
+.cal-x{width:36px;height:36px;flex:none;padding:0;display:grid;place-items:center;font-size:15px}
+.mini .cal-top h2{font-size:18px}
+.mini .cal-legend{gap:4px 12px}.mini .cal-leg{font-size:12px}
+.mini .cal-row{grid-template-columns:34px repeat(5,minmax(0,1fr));grid-template-rows:14px 17px;padding:2px 0 3px}
+.mini .cal-kw{font-size:10px;margin:-2px 0 -3px}
+.mini .cal-day{margin-top:-2px;padding-top:2px}
+.mini .cal-day i{font-size:10px;min-width:16px;height:14px}
+.mini .cal-day.today i{padding:0 4px}
+.mini .cal-ev{font-size:11px;border-left-width:2px;border-radius:5px;padding:0 6px}
+.mini .cal-month{font-size:12px;padding:3px 10px 2px}
+.mini .cal-head{font-size:10.5px;padding:4px 0;grid-template-rows:auto}
+.mini .cal-top{position:sticky;top:-16px;z-index:3;background:var(--surface);margin:-16px -18px 0;padding:14px 18px 8px;border-bottom:1px solid var(--rule)}
+.mini .cal-split{gap:12px}
+@media (prefers-reduced-motion:no-preference){.cal-dlg[open]{animation:dlgIn .18s ease-out}@keyframes dlgIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}}
+@media (max-width:720px){
+  .cal-dlg{width:100vw;max-width:100vw;max-height:92vh;margin:auto 0 0;border-radius:18px 18px 0 0}
+  .cal-dlg .cal-wrap.mini{padding:14px 10px 16px}
+  .mini .cal-top{top:-14px;margin:-14px -10px 0;padding:14px 16px 8px 12px;gap:8px}
+  .mini .cal-top h2{flex:1 1 auto;min-width:0}
+  .mini .cal-top-a{flex:0 1 auto;min-width:0}
+  .mini .cal-top{flex-wrap:nowrap}.mini .cal-top h2{font-size:15px}.mini .cal-top .btn:not(.cal-x){font-size:12px;padding:5px 9px}
+  .mini .cal-row{grid-template-columns:26px repeat(5,minmax(0,1fr))}
+  .cal-btn .tip{display:none}
+}
+
+@media (max-width:380px){.mini .cal-top-a .btn:not(.cal-x){display:none}}
 /* compact calendar */
 .cal-wrap{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:16px 18px 14px;display:grid;gap:10px}
 .cal-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -378,7 +418,7 @@ strong .wiki,strong.brick .wiki{color:inherit}
   .cal-ev{font-size:11.5px;padding:0 5px;margin:0 2px}
   .cal-ev span{display:none}
   .cal-ev[style*="/ 7"] span,.cal-ev[style*="2 / 7"] span{display:inline}
-  .cal-top .btn{width:100%}
+  .cal-wrap:not(.mini) .cal-top .btn{width:100%}
 }
 
 .wk-list{list-style:none;margin:0;padding:0;display:grid}
@@ -673,6 +713,7 @@ footer a{color:var(--muted)}
       <a href="#practice" data-view="practice"><span class="de">Übungen</span><span class="en">Exercises</span></a>
       <a href="#exam" data-view="exam"><span class="de">Klausur</span><span class="en">Exam</span></a>
     </nav>
+<button type="button" class="cal-btn" id="cal-btn" aria-haspopup="dialog" aria-controls="cal-dlg"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M7.5 13.5h3M13.5 13.5h3M7.5 17h3" stroke-width="2.2"/></svg><span class="tip" role="tooltip"><span class="de">Semester auf einen Blick</span><span class="en">The semester at a glance</span></span></button>
     <div class="lang" role="group" aria-label="Sprache / Language">
       <button type="button" id="lang-de" data-lang="de" aria-pressed="true">DE</button>
       <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
@@ -1461,6 +1502,7 @@ Oma = renate.</pre>
     <a href="https://www.haskell.org/ghc/blog/20251219-ghc-9.14.1-released.html">GHC 9.14.1</a></p>
 </footer>
 
+<dialog id="cal-dlg" class="cal-dlg" aria-labelledby="cal-dlg-h"><div id="cal-dlg-body"></div></dialog>
 <script>
 /*ENGINE*/
 </script>

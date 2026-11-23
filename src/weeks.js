@@ -12,7 +12,7 @@ const WT = {
     res_kicker: 'Programmierung · Ergänzungen', res_title: 'Weiterlernen',
     res_lede: 'Kostenlose Seiten, mit denen du neben den Übungsblättern trainieren kannst. Zu jeder steht, wofür sie sich eignet und zu welchem Kapitel der Vorlesung sie passt.',
     res_note: 'Alle Angebote sind kostenlos nutzbar, die meisten auf Englisch. Sie sind keine offiziellen Materialien der RWTH; maßgeblich bleiben Vorlesung, Moodle und Übungsblätter.',
-    cal_h: 'Semester auf einen Blick', list_h: 'Woche für Woche im Detail', kw: 'KW', ics: 'In den Kalender übernehmen (.ics)', ics_note: 'Für Google Kalender, Apple Kalender oder Outlook: Datei herunterladen und dort importieren.',
+    close: 'Schließen', cal_h: 'Semester auf einen Blick', list_h: 'Woche für Woche im Detail', kw: 'KW', ics: 'In den Kalender übernehmen (.ics)', ics_note: 'Für Google Kalender, Apple Kalender oder Outlook: Datei herunterladen und dort importieren.',
     leg_java: 'Java', leg_hoare: 'Hoare-Kalkül', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'vorlesungsfrei', leg_exam: 'Klausur',
     m_start: 'Vorlesungsbeginn', m_end: 'Vorlesungsende', m_resume: 'Vorlesungen wieder', today_l: 'heute', wd5: ['Mo', 'Di', 'Mi', 'Do', 'Fr'],
     ics_ext: 'Kalenderdatei auf der öffentlichen Seite ↗', ics_ext_note: 'In dieser Vorschau sind Kalender-Downloads gesperrt. Auf der öffentlichen Seite funktioniert der Knopf „In den Kalender übernehmen“; die Datei dann in Google Kalender, Apple Kalender oder Outlook importieren.',
@@ -29,7 +29,7 @@ const WT = {
     res_kicker: 'Programmierung · extras', res_title: 'Learn more',
     res_lede: 'Free sites to train with alongside the exercise sheets. For each one you see what it is good for and which chapter of the lecture it fits.',
     res_note: 'All of these are free to use, most of them in English. They are not official RWTH material; the lecture, Moodle and the exercise sheets remain what counts.',
-    cal_h: 'The semester at a glance', list_h: 'Week by week in detail', kw: 'CW', ics: 'Add to your calendar (.ics)', ics_note: 'For Google Calendar, Apple Calendar or Outlook: download the file and import it there.',
+    close: 'Close', cal_h: 'The semester at a glance', list_h: 'Week by week in detail', kw: 'CW', ics: 'Add to your calendar (.ics)', ics_note: 'For Google Calendar, Apple Calendar or Outlook: download the file and import it there.',
     leg_java: 'Java', leg_hoare: 'Hoare logic', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'no lectures', leg_exam: 'Exam',
     m_start: 'Lectures start', m_end: 'Lectures end', m_resume: 'Lectures resume', today_l: 'today', wd5: ['Mo', 'Tu', 'We', 'Th', 'Fr'],
     ics_ext: 'Calendar file on the public site ↗', ics_ext_note: 'Calendar downloads are blocked in this preview. On the public site the “Add to your calendar” button works; then import the file into Google Calendar, Apple Calendar or Outlook.',
@@ -187,7 +187,7 @@ function calRows() {
   return rows;
 }
 function isoWeek(n) { const t = new Date(n * 864e5); const d = (t.getUTCDay() + 6) % 7; t.setUTCDate(t.getUTCDate() - d + 3); const y = t.getUTCFullYear(); const f = new Date(Date.UTC(y, 0, 4)); return 1 + Math.round(((t - f) / 864e5 - 3 + ((f.getUTCDay() + 6) % 7)) / 7); }
-function calHTML(cur) {
+function calHTML(cur, mini) {
   const today = dNum(dToday()), loc = lang === 'de' ? 'de-DE' : 'en-GB';
   const mName = n => new Date(n * 864e5).toLocaleDateString(loc, { month: 'long', year: 'numeric', timeZone: 'UTC' });
   const table = rows => {
@@ -217,6 +217,12 @@ function calHTML(cur) {
   const all = calRows(), cut = all.findIndex(r => r.m >= dNum('2026-12-01'));
   let html = `<div class="cal-split">${table(all.slice(0, cut))}${table(all.slice(cut))}</div>`;
   const leg = ['java', 'hoare', 'haskell', 'prolog', 'pause', 'exam'].map(k => `<span class="cal-leg k-${k}"><i></i>${esc(wt('leg_' + k))}</span>`).join('');
+  if (mini) return `<div class="cal-wrap mini">
+    <div class="cal-top"><h2 id="cal-dlg-h">${esc(wt('cal_h'))}</h2>
+      <div class="cal-top-a"><a class="btn" href="#weeks" data-dlg-go="1">${esc(wt('open_plan'))}</a><button type="button" class="btn ghost cal-x" data-dlg-close="1" aria-label="${esc(wt('close'))}">✕</button></div></div>
+    <div class="cal-legend">${leg}</div>
+    ${html}
+  </div>`;
   return `<section class="cal-wrap" aria-labelledby="cal-h">
     <div class="cal-top"><h2 id="cal-h">${esc(wt('cal_h'))}</h2>${icsBlocked() ? `<a class="btn" href="${DSYNC_URL}#weeks" target="_blank" rel="noopener">⤓ ${esc(wt('ics_ext'))}</a>` : `<button type="button" class="btn" data-ics="1">⤓ ${esc(wt('ics'))}</button>`}</div>
     <div class="cal-legend">${leg}</div>
@@ -313,4 +319,32 @@ function initWeeks() {
     const b = e.target.closest('[data-wjump]'); if (!b) return;
     const el = document.getElementById('wk-' + b.dataset.wjump); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' });
   });
+}
+
+/* ---------- header calendar popup ---------- */
+function renderCalDlg() { const b = document.getElementById('cal-dlg-body'); if (b) b.innerHTML = calHTML(wCurrent().i, true); }
+function openCalDlg() {
+  const d = document.getElementById('cal-dlg'); if (!d) return;
+  renderCalDlg();
+  try { d.showModal(); } catch (e) { d.setAttribute('open', ''); }
+  const cur = d.querySelector('.cal-ev.now') || d.querySelector('.cal-row.cur');
+  if (cur) cur.scrollIntoView({ block: 'center' });
+  const x = d.querySelector('.cal-x'); if (x) x.focus({ preventScroll: true });
+}
+function closeCalDlg() { const d = document.getElementById('cal-dlg'); if (d && d.open) { try { d.close(); } catch (e) { d.removeAttribute('open'); } } }
+function calBtnLabel() { const b = document.getElementById('cal-btn'); if (b) b.setAttribute('aria-label', wt('cal_h')); }
+function initCalDlg() {
+  const btn = document.getElementById('cal-btn'), d = document.getElementById('cal-dlg'); if (!btn || !d) return;
+  calBtnLabel();
+  btn.addEventListener('click', openCalDlg);
+  d.addEventListener('click', e => {
+    if (e.target === d) { closeCalDlg(); return; }
+    if (e.target.closest('[data-dlg-close]')) { closeCalDlg(); return; }
+    if (e.target.closest('[data-dlg-go]')) { closeCalDlg(); return; }
+    const ev = e.target.closest('[data-wjump]'); if (!ev) return;
+    const i = ev.dataset.wjump; closeCalDlg();
+    if (location.hash !== '#weeks') location.hash = '#weeks';
+    setTimeout(() => { const el = document.getElementById('wk-' + i); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }); }, 60);
+  });
+  d.addEventListener('close', () => btn.focus({ preventScroll: true }));
 }
