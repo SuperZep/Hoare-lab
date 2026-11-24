@@ -650,6 +650,22 @@ body.touring{overflow:hidden}
 .dl-due span{font-size:13px;color:var(--muted);max-width:16ch;font-family:var(--display)}
 .dl-main{display:grid;gap:12px;max-width:760px}
 .dl-round{display:grid;gap:8px}
+.dl-topics{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:0}
+.dl-topics>summary{cursor:pointer;padding:10px 14px;font-family:var(--display);font-size:14px;list-style:none;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline}
+.dl-topics>summary::-webkit-details-marker{display:none}
+.dl-topics>summary::after{content:"▾";margin-left:auto;color:var(--muted);transition:transform .2s}.dl-topics[open]>summary::after{transform:rotate(180deg)}
+.dl-topics>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:12px}
+.dl-top-body{display:grid;gap:10px;padding:0 14px 12px}
+.dl-seg{display:inline-flex;border:1.5px solid var(--rule);border-radius:999px;padding:2px;justify-self:start;max-width:100%;flex-wrap:wrap}
+.dl-seg button{font:inherit;font-family:var(--display);font-size:13.5px;border:0;background:none;color:var(--muted);padding:5px 14px;border-radius:999px;cursor:pointer}
+.dl-seg button.on{background:var(--ink);color:var(--paper)}
+.dl-tops{display:flex;flex-wrap:wrap;gap:6px}
+.dl-top{display:inline-grid;gap:1px;font:inherit;font-family:var(--display);font-size:13.5px;text-align:left;border:1.5px solid var(--rule);background:var(--paper);color:var(--muted);border-radius:10px;padding:6px 11px;cursor:pointer}
+.dl-top.on{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.dl-top.on span::before{content:"✓ ";color:var(--accent);font-weight:700}
+.dl-top:disabled{cursor:default}.dl-top:not(.on):disabled{opacity:.7;border-style:dashed}
+.dl-top em{font-style:normal;font-size:11.5px;color:var(--muted)}
+.dl-top-body p{margin:0}
 .dl-bar{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
 .dl-bar span{height:8px;border-radius:999px;background:var(--rule);transition:background .2s}
 .dl-bar span.cur{background:color-mix(in srgb,var(--accent) 45%,var(--rule))}

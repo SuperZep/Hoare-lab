@@ -650,6 +650,22 @@ body.touring{overflow:hidden}
 .dl-due span{font-size:13px;color:var(--muted);max-width:16ch;font-family:var(--display)}
 .dl-main{display:grid;gap:12px;max-width:760px}
 .dl-round{display:grid;gap:8px}
+.dl-topics{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:0}
+.dl-topics>summary{cursor:pointer;padding:10px 14px;font-family:var(--display);font-size:14px;list-style:none;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline}
+.dl-topics>summary::-webkit-details-marker{display:none}
+.dl-topics>summary::after{content:"▾";margin-left:auto;color:var(--muted);transition:transform .2s}.dl-topics[open]>summary::after{transform:rotate(180deg)}
+.dl-topics>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:12px}
+.dl-top-body{display:grid;gap:10px;padding:0 14px 12px}
+.dl-seg{display:inline-flex;border:1.5px solid var(--rule);border-radius:999px;padding:2px;justify-self:start;max-width:100%;flex-wrap:wrap}
+.dl-seg button{font:inherit;font-family:var(--display);font-size:13.5px;border:0;background:none;color:var(--muted);padding:5px 14px;border-radius:999px;cursor:pointer}
+.dl-seg button.on{background:var(--ink);color:var(--paper)}
+.dl-tops{display:flex;flex-wrap:wrap;gap:6px}
+.dl-top{display:inline-grid;gap:1px;font:inherit;font-family:var(--display);font-size:13.5px;text-align:left;border:1.5px solid var(--rule);background:var(--paper);color:var(--muted);border-radius:10px;padding:6px 11px;cursor:pointer}
+.dl-top.on{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.dl-top.on span::before{content:"✓ ";color:var(--accent);font-weight:700}
+.dl-top:disabled{cursor:default}.dl-top:not(.on):disabled{opacity:.7;border-style:dashed}
+.dl-top em{font-style:normal;font-size:11.5px;color:var(--muted)}
+.dl-top-body p{margin:0}
 .dl-bar{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
 .dl-bar span{height:8px;border-radius:999px;background:var(--rule);transition:background .2s}
 .dl-bar span.cur{background:color-mix(in srgb,var(--accent) 45%,var(--rule))}
@@ -6593,6 +6609,8 @@ const DT = {
     sync_ok: 'Fortschritt übernommen. {s}. {r}.', sync_bad: 'Dieser Code ist ungültig oder unvollständig.', sync_wait: 'Code wird erstellt …',
     sync_note: 'Der Code enthält nur deinen Lernstand, keinen Namen und keine persönlichen Daten.',
     focus_l: 'Fokus-Runde · {t}', weak_link: 'Meine Schwächen ansehen →',
+    top_l: 'Themen', top_plan: 'Nach Wochenplan', top_own: 'Selbst wählen', top_sum_plan: 'nach Wochenplan, Woche {n}', top_sum_all: 'alle Themen', top_sum_own: 'selbst gewählt',
+    top_from: 'ab Woche {n}', top_min: 'Mindestens ein Thema bleibt ausgewählt.', top_note_plan: 'Es kommen nur Themen, die laut Wochenplan in der Vorlesung schon dran waren. Neue Themen kommen automatisch dazu.', top_note_own: 'Tippe auf ein Thema, um es ein- oder auszuschalten. Gilt ab der nächsten offenen Aufgabe.',
     wd: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'], today: 'heute'
   },
   en: {
@@ -6633,6 +6651,8 @@ const DT = {
     sync_ok: 'Progress transferred. {s}. {r}.', sync_bad: 'This code is invalid or incomplete.', sync_wait: 'Creating the code …',
     sync_note: 'The code contains only your learning progress, no name and no personal data.',
     focus_l: 'Focus round · {t}', weak_link: 'See my weak spots →',
+    top_l: 'Topics', top_plan: 'Follow the week plan', top_own: 'Choose myself', top_sum_plan: 'following the week plan, week {n}', top_sum_all: 'all topics', top_sum_own: 'chosen by you',
+    top_from: 'from week {n}', top_min: 'At least one topic stays selected.', top_note_plan: 'Only topics that the lecture has already covered according to the week plan. New topics are added automatically.', top_note_own: 'Tap a topic to switch it on or off. Applies from the next open task.',
     wd: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'], today: 'today'
   }
 };
@@ -6898,14 +6918,18 @@ function dDue(day) { return Object.entries(DS.box).filter(([, b]) => b.d <= day)
 
 function dBuild(date, round) {
   const r = dRng(dHash(date + '#' + round));
-  const due = dDue(dNum(date)).slice(0, 2).map(k => { const [g, s] = k.split(':'); return { g, s: +s, rev: true }; }).filter(x => DGEN[x.g]);
-  const have = new Set(due.map(x => x.g)), order = dShuffle(DTOPICS, r);
+  const al = dAllowed(), alS = new Set(al);
+  const due = dDue(dNum(date)).map(k => { const [g, s] = k.split(':'); return { g, s: +s, rev: true }; }).filter(x => DGEN[x.g] && alS.has(x.g)).slice(0, 2);
+  const have = new Set(due.map(x => x.g)), order = dShuffle(al, r);
   let pref = null; // one extra item for this week's topic or the weakest topic
   try { const wc = wCurrent(); const wk = wc.i >= 0 && WEEKS[wc.i] && WEEKS[wc.i].daily; if (wk && DGEN[wk]) pref = wk; } catch (e) {}
-  try { const wg = stWeakGen(); if (wg) pref = wg; } catch (e) {}
-  const N = 5 - due.length, base = [...order.filter(t => !have.has(t)), ...order.filter(t => have.has(t))];
+  try { const wg = stWeakGen(); if (wg && alS.has(wg)) pref = wg; } catch (e) {}
+  if (pref && !alS.has(pref)) pref = null;
+  const N = 5 - due.length, base0 = [...order.filter(t => !have.has(t)), ...order.filter(t => have.has(t))], base = [];
+  while (base.length < N) base.push(...base0);
   const pick = pref ? [...base.slice(0, N - 1), pref] : base.slice(0, N);
-  const fresh = pick.map((g, k) => ({ g, s: dHash(date + '#' + round + '#' + g + (pick.indexOf(g) !== k ? '#2' : '')) }));
+  const seen = {};
+  const fresh = pick.map(g => { const c = seen[g] = (seen[g] || 0) + 1; return { g, s: dHash(date + '#' + round + '#' + g + (c > 1 ? '#' + c : '')) }; });
   const items = dShuffle([...due, ...fresh], r);
   return { date, round, items, idx: 0, res: items.map(() => null), done: false };
 }
@@ -6916,9 +6940,30 @@ function dStartFocus(g) {
   DS.sess = { date, round, focus: g, items, idx: 0, res: items.map(() => null), done: false };
   DC = { v: {}, fb: null, shown: false }; dSave();
 }
+/* topics: follow the week plan (only what the lecture has covered) or a manual choice (DS.topics) */
+function dIntro(g) { const i = WEEKS.findIndex(w => w.daily === g); return i < 0 ? { i: 0, n: 1 } : { i, n: WEEKS[i].n }; }
+function dPlanInfo() { let cur = -1; try { cur = wCurrent().i; } catch (e) {} return cur; }
+function dAllowed() {
+  if (Array.isArray(DS.topics) && DS.topics.length) return DTOPICS.filter(g => DS.topics.includes(g));
+  const cur = dPlanInfo();
+  if (cur < 0) return DTOPICS.slice(); // before the semester or after the lecture period: everything
+  const a = DTOPICS.filter(g => dIntro(g).i <= cur);
+  return a.length ? a : ['java'];
+}
+function dFilterSession(S) { // replace open tasks whose topic is not allowed (keeps answered ones)
+  if (!S || S.done || S.focus) return false;
+  const al = dAllowed(), ok = new Set(al); let ch = false, j = 0;
+  S.items.forEach((it, k) => {
+    if (S.res[k] || ok.has(it.g)) return;
+    const g = al[(k + j++) % al.length];
+    S.items[k] = { g, s: dHash(S.date + '#' + S.round + '#r' + k + '#' + g) }; ch = true;
+  });
+  return ch;
+}
 function dSession() {
   const today = dToday();
   if (!DS.sess || DS.sess.date !== today) { DS.sess = dBuild(today, 0); dSave(); }
+  else if (dFilterSession(DS.sess)) { DC = { v: {}, fb: null, shown: false }; dSave(); }
   return DS.sess;
 }
 function dRecord(it, ok) {
@@ -7002,7 +7047,7 @@ function dQR(text) {
 }
 function dSyncMsg(m) {
   if (!m.ok) return dt('sync_bad');
-  const n = dStreak(), due = dDue(dNum(dToday())).length;
+  const n = dStreak(), due = (() => { const al = new Set(dAllowed()); return dDue(dNum(dToday())).filter(k => al.has(k.split(":")[0])).length; })();
   return dt('sync_ok', { s: n ? dt(n === 1 ? 'streak_n' : 'streak_ns', { n }) : dt('streak_0'), r: due ? dt(due === 1 ? 'due' : 'dues', { n: due }) : dt('due_0') });
 }
 function dSyncHTML() {
@@ -7072,7 +7117,7 @@ function dWeek() {
   return `<div class="dl-week" aria-label="7 days">${[...Array(7)].map((_, k) => { const n = t - 6 + k, s = dStr(n), wd = new Date(n * 864e5).getUTCDay(); return `<span class="dl-day ${set.has(s) ? 'on' : ''} ${k === 6 ? 'now' : ''}" title="${s}"><i></i><span>${k === 6 ? esc(dt('today')) : DT[lang].wd[wd]}</span></span>`; }).join('')}</div>`;
 }
 function dHeader() {
-  const n = dStreak(), due = dDue(dNum(dToday())).length;
+  const n = dStreak(), due = (() => { const al = new Set(dAllowed()); return dDue(dNum(dToday())).filter(k => al.has(k.split(":")[0])).length; })();
   return `<div class="dl-stats">
     <div class="dl-streak ${n ? 'on' : ''}">${FLAME}<div><b>${n ? esc(dt(n === 1 ? 'streak_n' : 'streak_ns', { n })) : esc(dt('streak_0'))}</b><span>${esc(dt('best', { n: DS.best }))}</span></div></div>
     ${dWeek()}
@@ -7128,12 +7173,36 @@ function renderDaily() {
     <div class="dl-main">
       <div class="dl-round"><span class="mono small muted">${S.focus ? esc(dt('focus_l', { t: dt('t_' + S.focus) })) : S.round ? esc(dt('bonus', { n: S.round })) : esc(new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }))}</span>${dProgress(S)}</div>
       ${S.done ? dDone(S) : dCard(S)}
+      ${dTopicsHTML()}
     </div>
     <p class="dl-foot small muted">${esc(dt('stats', { k: DS.stats.ok, n: DS.stats.n }))} · ${esc(dt('local'))} <a class="linkbtn strong" href="#progress">${esc(dt('weak_link'))}</a> · <button type="button" class="linkbtn strong" data-dact="sync" aria-expanded="${DSY.open}">${esc(dt('sync_btn'))}</button> · <button type="button" class="linkbtn" data-dact="reset">${esc(dt('reset'))}</button></p>
     ${dSyncHTML()}`;
   dNavBadge();
   const inp = document.getElementById('dl-input');
   if (inp && !inp.disabled && !DSY.open && document.activeElement === document.body && innerWidth > 720) inp.focus({ preventScroll: true });
+}
+let DTOPEN = false;
+function dTopicsHTML() {
+  const own = Array.isArray(DS.topics) && DS.topics.length, al = dAllowed(), cur = dPlanInfo();
+  const wn = cur >= 0 && WEEKS[cur] ? (WEEKS[cur].n || null) : null;
+  const sum = own ? dt('top_sum_own') : wn ? dt('top_sum_plan', { n: wn }) : al.length === DTOPICS.length ? dt('top_sum_all') : dt('top_sum_plan', { n: '–' });
+  const names = al.map(g => dt('t_' + g).split(' · ')[0]).filter((v, i, a) => a.indexOf(v) === i).join(', ');
+  const chips = DTOPICS.map(g => {
+    const on = al.includes(g), intro = dIntro(g), locked = !own && !on;
+    return `<button type="button" class="dl-top ${on ? 'on' : ''}" data-dtop="${g}" aria-pressed="${on}" ${own ? '' : 'disabled'}><span>${esc(dt('t_' + g))}</span>${locked ? `<em>${esc(dt('top_from', { n: intro.n }))}</em>` : ''}</button>`;
+  }).join('');
+  return `<details class="dl-topics" ${DTOPEN ? 'open' : ''}><summary><b>${esc(dt('top_l'))}:</b> ${esc(names)} <span class="muted">· ${esc(sum)}</span></summary>
+    <div class="dl-top-body">
+      <div class="dl-seg" role="radiogroup" aria-label="${esc(dt('top_l'))}">
+        <button type="button" role="radio" aria-checked="${!own}" class="${own ? '' : 'on'}" data-dtmode="plan">${esc(dt('top_plan'))}</button>
+        <button type="button" role="radio" aria-checked="${!!own}" class="${own ? 'on' : ''}" data-dtmode="own">${esc(dt('top_own'))}</button></div>
+      <div class="dl-tops">${chips}</div>
+      <p class="small muted" id="dl-top-note">${esc(dt(own ? 'top_note_own' : 'top_note_plan'))}</p></div></details>`;
+}
+function dTopicsChanged() {
+  const S = dSession(), before = S.items[S.idx] && S.items[S.idx].g + ':' + S.items[S.idx].s;
+  if (dFilterSession(S)) { const it = S.items[S.idx]; if (!it || it.g + ':' + it.s !== before) DC = { v: {}, fb: null, shown: false }; }
+  dSave(); DTOPEN = true; renderDaily();
 }
 function dFocusAfter(sel) { const el = document.querySelector('#daily ' + sel); if (el) el.focus({ preventScroll: true }); }
 function dAct(a) {
@@ -7178,8 +7247,18 @@ function initDaily() {
   const root = document.getElementById('daily'); if (!root) return;
   root.addEventListener('click', e => {
     const o = e.target.closest('[data-opt]'); if (o && !o.disabled) { DC.v.a = o.dataset.opt; DC.fb = null; dAct('check'); return; }
-    const b = e.target.closest('[data-dact]'); if (b) dAct(b.dataset.dact);
+    const b = e.target.closest('[data-dact]'); if (b) { dAct(b.dataset.dact); return; }
+    const m = e.target.closest('[data-dtmode]');
+    if (m) { DS.topics = m.dataset.dtmode === 'own' ? (Array.isArray(DS.topics) && DS.topics.length ? DS.topics : dAllowed()) : null; if (m.dataset.dtmode === 'own' && !DS.topics.length) DS.topics = dAllowed(); dTopicsChanged(); const f = root.querySelector(`[data-dtmode="${m.dataset.dtmode}"]`); if (f) f.focus({ preventScroll: true }); return; }
+    const tp = e.target.closest('[data-dtop]');
+    if (tp && !tp.disabled) {
+      const g = tp.dataset.dtop, cur = new Set(dAllowed());
+      if (cur.has(g)) { if (cur.size === 1) { const n = root.querySelector('#dl-top-note'); if (n) n.textContent = dt('top_min'); return; } cur.delete(g); } else cur.add(g);
+      DS.topics = DTOPICS.filter(x => cur.has(x)); dTopicsChanged();
+      const f = root.querySelector(`[data-dtop="${g}"]`); if (f) f.focus({ preventScroll: true }); return;
+    }
   });
+  root.addEventListener('toggle', e => { if (e.target.matches && e.target.matches('.dl-topics')) DTOPEN = e.target.open; }, true);
   root.addEventListener('input', e => {
     const i = e.target.closest('[data-dl]'); if (!i) return;
     if (i.type === 'checkbox') { DC.v[i.dataset.dl] = i.checked ? '1' : ''; const t = document.getElementById('dl-input'); if (t) t.disabled = i.checked; }
