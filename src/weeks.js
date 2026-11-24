@@ -5,7 +5,7 @@ const WT = {
   de: {
     kicker: 'Programmierung · WS 2026/27', title: 'Semester-Wochenplan',
     lede: 'Woche für Woche: was gerade in der Vorlesung dran ist, was du hier im Hoare Lab dazu übst und welche Seite im Netz dich weiterbringt.',
-    disclaimer: 'Orientierungsplan: Die Reihenfolge folgt den Kapiteln der Vorlesung, das genaue Tempo legt die Vorlesung fest. Verbindlich sind die Ankündigungen im Moodle-Kurs und die wöchentlichen Übungsblätter.',
+    disclaimer: 'Orientierungsplan: Die Reihenfolge folgt den Kapiteln der Vorlesung, das genaue Tempo legt die Vorlesung fest. Stand 24. November: Die Vorlesung ist bereits in Woche 9. Der Plan ist daran angepasst: Die ersten acht Wochen sind zusammengerückt, am Ende bleiben zwei Wochen für Wiederholung. Verbindlich sind die Ankündigungen im Moodle-Kurs und die wöchentlichen Übungsblätter.',
     week: 'Woche {n}', now: 'diese Woche', done: 'erledigt', mark: 'Als erledigt markieren', lab: 'Im Hoare Lab', ext: 'Weiterlernen', daily: 'Täglich-Schwerpunkt',
     progress: '{k} von {n} Wochen erledigt', before: 'Das Semester beginnt am 12. Oktober 2026.', after: 'Die Vorlesungszeit ist vorbei: Jetzt zählt die Klausurvorbereitung.',
     jump: 'Zur aktuellen Woche', thisweek: 'Diese Woche in Programmierung', open_plan: 'Zum Wochenplan →', break: 'Weihnachtspause', exam: 'Klausurphase',
@@ -13,7 +13,7 @@ const WT = {
     res_lede: 'Kostenlose Seiten, mit denen du neben den Übungsblättern trainieren kannst. Zu jeder steht, wofür sie sich eignet und zu welchem Kapitel der Vorlesung sie passt.',
     res_note: 'Alle Angebote sind kostenlos nutzbar, die meisten auf Englisch. Sie sind keine offiziellen Materialien der RWTH; maßgeblich bleiben Vorlesung, Moodle und Übungsblätter.',
     close: 'Schließen', cal_h: 'Semester auf einen Blick', list_h: 'Woche für Woche im Detail', kw: 'KW', ics: 'In den Kalender übernehmen (.ics)', ics_note: 'Für Google Kalender, Apple Kalender oder Outlook: Datei herunterladen und dort importieren.',
-    leg_java: 'Java', leg_hoare: 'Hoare-Kalkül', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'vorlesungsfrei', leg_exam: 'Klausur',
+    leg_java: 'Java', leg_hoare: 'Hoare-Kalkül', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'vorlesungsfrei', leg_exam: 'Klausur', leg_rev: 'Wiederholung', rev: 'Wiederholung',
     m_start: 'Vorlesungsbeginn', m_end: 'Vorlesungsende', m_resume: 'Vorlesungen wieder', today_l: 'heute', wd5: ['Mo', 'Di', 'Mi', 'Do', 'Fr'],
     ics_ext: 'Kalenderdatei auf der öffentlichen Seite ↗', ics_ext_note: 'In dieser Vorschau sind Kalender-Downloads gesperrt. Auf der öffentlichen Seite funktioniert der Knopf „In den Kalender übernehmen“; die Datei dann in Google Kalender, Apple Kalender oder Outlook importieren.',
     ics_desc: 'Orientierungsplan aus dem Hoare Lab (keine offizielle Zeitplanung der RWTH). Verbindlich sind Moodle und die Übungsblätter.',
@@ -22,7 +22,7 @@ const WT = {
   en: {
     kicker: 'Programmierung · WS 2026/27', title: 'Semester week by week',
     lede: 'Week by week: what the lecture is covering, what you can practise here in Hoare Lab, and which site on the web takes you further.',
-    disclaimer: 'Orientation plan: the order follows the chapters of the lecture; the lecture sets the actual pace. The announcements in the Moodle course and the weekly exercise sheets are what counts.',
+    disclaimer: 'Orientation plan: the order follows the chapters of the lecture; the lecture sets the actual pace. As of 24 November the lecture is already in week 9. The plan has been adjusted: the first eight weeks are compressed, and two weeks for review remain at the end. The announcements in the Moodle course and the weekly exercise sheets are what counts.',
     week: 'Week {n}', now: 'this week', done: 'done', mark: 'Mark as done', lab: 'In Hoare Lab', ext: 'Learn more', daily: 'Daily focus',
     progress: '{k} of {n} weeks done', before: 'The semester starts on 12 October 2026.', after: 'The lecture period is over: now it is all about exam preparation.',
     jump: 'Go to the current week', thisweek: 'This week in Programmierung', open_plan: 'Open the week plan →', break: 'Christmas break', exam: 'Exam period',
@@ -30,7 +30,7 @@ const WT = {
     res_lede: 'Free sites to train with alongside the exercise sheets. For each one you see what it is good for and which chapter of the lecture it fits.',
     res_note: 'All of these are free to use, most of them in English. They are not official RWTH material; the lecture, Moodle and the exercise sheets remain what counts.',
     close: 'Close', cal_h: 'The semester at a glance', list_h: 'Week by week in detail', kw: 'CW', ics: 'Add to your calendar (.ics)', ics_note: 'For Google Calendar, Apple Calendar or Outlook: download the file and import it there.',
-    leg_java: 'Java', leg_hoare: 'Hoare logic', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'no lectures', leg_exam: 'Exam',
+    leg_java: 'Java', leg_hoare: 'Hoare logic', leg_haskell: 'Haskell', leg_prolog: 'Prolog', leg_pause: 'no lectures', leg_exam: 'Exam', leg_rev: 'Review', rev: 'Review',
     m_start: 'Lectures start', m_end: 'Lectures end', m_resume: 'Lectures resume', today_l: 'today', wd5: ['Mo', 'Tu', 'We', 'Th', 'Fr'],
     ics_ext: 'Calendar file on the public site ↗', ics_ext_note: 'Calendar downloads are blocked in this preview. On the public site the “Add to your calendar” button works; then import the file into Google Calendar, Apple Calendar or Outlook.',
     ics_desc: 'Orientation plan from Hoare Lab (not an official RWTH schedule). Moodle and the exercise sheets are what counts.',
@@ -85,48 +85,51 @@ const WEEKS = [
   { n: 2, k: 'java', s: { de: 'Datentypen, Kontrollstrukturen', en: 'Data types, control flow' }, d: '2026-10-19', ch: 'II.1.2 · II.1.3', t: { de: 'Datentypen und Kontrollstrukturen', en: 'Data types and control structures' },
     x: { de: 'int, double, boolean, char; if, while, for. Ganzzahldivision und Modulo sind klassische Fallen.', en: 'int, double, boolean, char; if, while, for. Integer division and modulo are classic traps.' },
     lab: [['#daily', { de: 'Täglich: Java verfolgen', en: 'Daily: tracing Java' }]], ext: [['cb', 'Logic-1', 'https://codingbat.com/java/Logic-1'], ['cb', 'Warmup-2', 'https://codingbat.com/java/Warmup-2']], daily: 'java' },
-  { n: 3, k: 'hoare', s: { de: 'Hoare: Zuweisung', en: 'Hoare: assignment' }, d: '2026-10-26', ch: 'II.1.4', t: { de: 'Verifikation I: Hoare-Tripel und Zuweisung', en: 'Verification I: Hoare triples and assignment' },
+  { n: 3, k: 'hoare', s: { de: 'Hoare: Zuweisung', en: 'Hoare: assignment' }, d: '2026-10-22', ch: 'II.1.4', t: { de: 'Verifikation I: Hoare-Tripel und Zuweisung', en: 'Verification I: Hoare triples and assignment' },
     x: { de: 'Zusicherungen, Vor- und Nachbedingung, die Zuweisungsregel: von unten nach oben rechnen.', en: 'Assertions, pre- and postconditions, the assignment rule: working from the bottom up.' },
     lab: [['#hoare', { de: 'Lektion Hoare-Kalkül', en: 'Hoare logic lesson' }], ['#daily', { de: 'Täglich: schwächste Vorbedingung', en: 'Daily: weakest precondition' }]], ext: [['ptb']], daily: 'hwp' },
-  { n: 4, k: 'hoare', s: { de: 'Hoare: Invarianten', en: 'Hoare: invariants' }, d: '2026-11-02', ch: 'II.1.4', t: { de: 'Verifikation II: Schleifen und Invarianten', en: 'Verification II: loops and invariants' },
+  { n: 4, k: 'hoare', s: { de: 'Hoare: Invarianten', en: 'Hoare: invariants' }, d: '2026-10-29', ch: 'II.1.4', t: { de: 'Verifikation II: Schleifen und Invarianten', en: 'Verification II: loops and invariants' },
     x: { de: 'Die while-Regel: Invariante am Anfang, Erhalt im Rumpf, Nachbedingung am Ende.', en: 'The while rule: invariant at the start, preserved by the body, postcondition at the end.' },
     lab: [['#practice', { de: 'Übungen mit gegebener Invariante', en: 'Exercises with a given invariant' }], ['#daily', { de: 'Täglich: Invariante prüfen', en: 'Daily: checking an invariant' }]], ext: [], daily: 'hinv' },
-  { n: 5, k: 'hoare', s: { de: 'Invariante finden, Arrays', en: 'Finding invariants, arrays' }, d: '2026-11-09', ch: 'II.1.4 · II.1.5', t: { de: 'Invarianten finden, Terminierung, Arrays', en: 'Finding invariants, termination, arrays' },
+  { n: 5, k: 'hoare', s: { de: 'Invariante finden, Arrays', en: 'Finding invariants, arrays' }, d: '2026-11-05', ch: 'II.1.4 · II.1.5', t: { de: 'Invarianten finden, Terminierung, Arrays', en: 'Finding invariants, termination, arrays' },
     x: { de: 'Invariante selbst finden, Terminierung mit einer Variante zeigen; Reihungen (Arrays) in Java.', en: 'Finding the invariant yourself, proving termination with a variant; arrays in Java.' },
     lab: [['#practice', { de: 'Invariante finden, if/else, Arrays', en: 'Find the invariant, if/else, arrays' }], ['#exam-hoare', { de: 'Hoare-Klausur-Simulation', en: 'Hoare exam simulation' }]], ext: [['cb', 'Array-1', 'https://codingbat.com/java/Array-1']], daily: 'hinv' },
-  { n: 6, k: 'java', s: { de: 'Objekte, Klassen', en: 'Objects, classes' }, d: '2026-11-16', ch: 'II.2', t: { de: 'Objekte, Klassen und Methoden', en: 'Objects, classes and methods' },
+  { n: 6, k: 'java', s: { de: 'Objekte, Klassen', en: 'Objects, classes' }, d: '2026-11-12', ch: 'II.2', t: { de: 'Objekte, Klassen und Methoden', en: 'Objects, classes and methods' },
     x: { de: 'Klassen und Objekte, Methoden und Parameterübergabe: Werte gegen Referenzen.', en: 'Classes and objects, methods and parameter passing: values versus references.' },
     lab: [['#exam-java', { de: 'Java-Training: Parameter und Referenzen', en: 'Java training: parameters and references' }]], ext: [['exj'], ['cb', 'Array-2', 'https://codingbat.com/java/Array-2']], daily: 'java' },
-  { n: 7, k: 'java', s: { de: 'Datenabstraktion, Strings', en: 'Abstraction, strings' }, d: '2026-11-23', ch: 'II.2', t: { de: 'Datenabstraktion, Konstruktoren, Strings', en: 'Data abstraction, constructors, strings' },
+  { n: 7, k: 'java', s: { de: 'Datenabstraktion, Strings', en: 'Abstraction, strings' }, d: '2026-11-16', ch: 'II.2', t: { de: 'Datenabstraktion, Konstruktoren, Strings', en: 'Data abstraction, constructors, strings' },
     x: { de: 'Kapselung mit private, Konstruktoren, vordefinierte Klassen wie String.', en: 'Encapsulation with private, constructors, predefined classes such as String.' },
     lab: [['#exam-java', { de: 'Java-Training: Ausgaben mit int und String', en: 'Java training: output with int and String' }]], ext: [['cb', 'String-1', 'https://codingbat.com/java/String-1']], daily: 'java' },
-  { n: 8, k: 'java', s: { de: 'Rekursion, Listen', en: 'Recursion, lists' }, d: '2026-11-30', ch: 'II.3', t: { de: 'Rekursion und dynamische Datenstrukturen', en: 'Recursion and dynamic data structures' },
+  { n: 8, k: 'java', s: { de: 'Rekursion, Listen', en: 'Recursion, lists' }, d: '2026-11-19', ch: 'II.3', t: { de: 'Rekursion und dynamische Datenstrukturen', en: 'Recursion and dynamic data structures' },
     x: { de: 'Rekursive Methoden, Aufrufe zählen; verkettete Listen.', en: 'Recursive methods, counting calls; linked lists.' },
     lab: [['#exam-java', { de: 'Java-Training: Rekursion, verkettete Liste', en: 'Java training: recursion, linked list' }]], ext: [['cb', 'Recursion-1', 'https://codingbat.com/java/Recursion-1']], daily: 'java' },
-  { n: 9, k: 'java', s: { de: 'Vererbung, Interfaces', en: 'Inheritance, interfaces' }, d: '2026-12-07', ch: 'II.4', t: { de: 'Vererbung, abstrakte Klassen, Interfaces', en: 'Inheritance, abstract classes, interfaces' },
+  { n: 9, k: 'java', s: { de: 'Vererbung, Interfaces', en: 'Inheritance, interfaces' }, d: '2026-11-23', ch: 'II.4', t: { de: 'Vererbung, abstrakte Klassen, Interfaces', en: 'Inheritance, abstract classes, interfaces' },
     x: { de: 'Unterklassen, dynamisches Binden, Überladen gegen Überschreiben, Interfaces und Pakete.', en: 'Subclasses, dynamic binding, overloading versus overriding, interfaces and packages.' },
     lab: [['#exam-java', { de: 'Java-Training: dynamisches Binden', en: 'Java training: dynamic binding' }]], ext: [['exj'], ['dj']], daily: 'java' },
-  { n: 10, k: 'haskell', s: { de: 'Haskell: Grundlagen', en: 'Haskell basics' }, d: '2026-12-14', ch: 'III', t: { de: 'Haskell: Prinzipien, Deklarationen, Ausdrücke', en: 'Haskell: principles, declarations, expressions' },
+  { n: 10, k: 'haskell', s: { de: 'Haskell: Grundlagen', en: 'Haskell basics' }, d: '2026-11-30', ch: 'III', t: { de: 'Haskell: Prinzipien, Deklarationen, Ausdrücke', en: 'Haskell: principles, declarations, expressions' },
     x: { de: 'Funktionen statt Anweisungen, GHCi, Ausdrücke und ihre Typen.', en: 'Functions instead of statements, GHCi, expressions and their types.' },
     lab: [['#haskell', { de: 'Haskell-Seite', en: 'Haskell page' }], ['#daily', { de: 'Täglich: Typ bestimmen', en: 'Daily: finding the type' }]], ext: [['mooc', { de: 'Lektion 1', en: 'Lecture 1' }, 'https://haskell.mooc.fi/part1#lecture-1-and-so-it-begins'], ['play']], daily: 'htype' },
+  { n: 11, k: 'haskell', s: { de: 'Muster, Listen', en: 'Patterns, lists' }, d: '2026-12-07', ch: 'III', t: { de: 'Muster, Listen, Rekursion', en: 'Patterns, lists, recursion' },
+    x: { de: 'Pattern Matching, Listen und rekursive Funktionen auf Listen.', en: 'Pattern matching, lists and recursive functions on lists.' },
+    lab: [['#exam-haskell', { de: 'Haskell-Training: Pattern Matching', en: 'Haskell training: pattern matching' }]], ext: [['mooc', { de: 'Lektion 2–3', en: 'Lectures 2–3' }, 'https://haskell.mooc.fi/part1#lecture-2-either-you-die-a-hero']], daily: 'htype' },
+  { n: 12, k: 'haskell', s: { de: 'Typen, Typklassen', en: 'Types, type classes' }, d: '2026-12-14', ch: 'III', t: { de: 'Typen und Datenstrukturen', en: 'Types and data structures' },
+    x: { de: 'Polymorphie, Typklassen, eigene Datentypen mit data, Bäume.', en: 'Polymorphism, type classes, your own data types with data, trees.' },
+    lab: [['#exam-haskell', { de: 'Haskell-Training: Typen bestimmen', en: 'Haskell training: determining types' }], ['#daily', { de: 'Täglich: Typ bestimmen', en: 'Daily: finding the type' }]], ext: [['mooc', { de: 'Lektion 4–5', en: 'Lectures 4–5' }, 'https://haskell.mooc.fi/part1#lecture-4-real-classy']], daily: 'htype' },
   { pause: true, k: 'pause', s: { de: 'Weihnachtspause', en: 'Christmas break' }, d: '2026-12-21', t: { de: 'Weihnachtspause (23.12. – 5.1.)', en: 'Christmas break (23 Dec – 5 Jan)' },
     x: { de: 'Keine Vorlesung. Ein guter Moment, den Java-Teil und den Hoare-Kalkül zu wiederholen, bevor es mit Haskell weitergeht.', en: 'No lectures. A good moment to review the Java part and Hoare logic before Haskell continues.' },
     lab: [['#exam-hoare', { de: 'Hoare-Klausur-Simulation', en: 'Hoare exam simulation' }], ['#exam-java', { de: 'Java-Training', en: 'Java training' }]], ext: [['lyah']] },
-  { n: 11, k: 'haskell', s: { de: 'Muster, Listen', en: 'Patterns, lists' }, d: '2027-01-04', ch: 'III', t: { de: 'Muster, Listen, Rekursion', en: 'Patterns, lists, recursion' },
-    x: { de: 'Pattern Matching, Listen und rekursive Funktionen auf Listen. Vorlesung ab 6. Januar.', en: 'Pattern matching, lists and recursive functions on lists. Lectures from 6 January.' },
-    lab: [['#exam-haskell', { de: 'Haskell-Training: Pattern Matching', en: 'Haskell training: pattern matching' }]], ext: [['mooc', { de: 'Lektion 2–3', en: 'Lectures 2–3' }, 'https://haskell.mooc.fi/part1#lecture-2-either-you-die-a-hero']], daily: 'htype' },
-  { n: 12, k: 'haskell', s: { de: 'Typen, Typklassen', en: 'Types, type classes' }, d: '2027-01-11', ch: 'III', t: { de: 'Typen und Datenstrukturen', en: 'Types and data structures' },
-    x: { de: 'Polymorphie, Typklassen, eigene Datentypen mit data, Bäume.', en: 'Polymorphism, type classes, your own data types with data, trees.' },
-    lab: [['#exam-haskell', { de: 'Haskell-Training: Typen bestimmen', en: 'Haskell training: determining types' }], ['#daily', { de: 'Täglich: Typ bestimmen', en: 'Daily: finding the type' }]], ext: [['mooc', { de: 'Lektion 4–5', en: 'Lectures 4–5' }, 'https://haskell.mooc.fi/part1#lecture-4-real-classy']], daily: 'htype' },
-  { n: 13, k: 'haskell', s: { de: 'Höhere Ordnung, Lazy', en: 'Higher order, laziness' }, d: '2027-01-18', ch: 'III', t: { de: 'Funktionale Programmiertechniken', en: 'Functional programming techniques' },
-    x: { de: 'Funktionen höherer Ordnung, map, filter, foldr und foldl, Lazy Evaluation.', en: 'Higher-order functions, map, filter, foldr and foldl, lazy evaluation.' },
+  { n: 13, k: 'haskell', s: { de: 'Höhere Ordnung, Lazy', en: 'Higher order, laziness' }, d: '2027-01-04', ch: 'III', t: { de: 'Funktionale Programmiertechniken', en: 'Functional programming techniques' },
+    x: { de: 'Funktionen höherer Ordnung, map, filter, foldr und foldl, Lazy Evaluation. Vorlesung wieder ab 6. Januar.', en: 'Higher-order functions, map, filter, foldr and foldl, lazy evaluation. Lectures resume on 6 January.' },
     lab: [['#exam-haskell', { de: 'Haskell-Training: Auswerten und Lazy Evaluation', en: 'Haskell training: evaluation and lazy evaluation' }]], ext: [['exh'], ['play']], daily: 'htype' },
-  { n: 14, k: 'prolog', s: { de: 'Prolog: Unifikation', en: 'Prolog: unification' }, d: '2027-01-25', ch: 'IV', t: { de: 'Prolog: Fakten, Regeln, Unifikation', en: 'Prolog: facts, rules, unification' },
+  { n: 14, k: 'prolog', s: { de: 'Prolog: Unifikation', en: 'Prolog: unification' }, d: '2027-01-11', ch: 'IV', t: { de: 'Prolog: Fakten, Regeln, Unifikation', en: 'Prolog: facts, rules, unification' },
     x: { de: 'Logisches Programmieren: Fakten, Regeln, Anfragen und die Unifikation mit Occurs-Check.', en: 'Logic programming: facts, rules, queries and unification with the occurs check.' },
     lab: [['#prolog', { de: 'Prolog-Seite', en: 'Prolog page' }], ['#exam-prolog', { de: 'Prolog-Training: Unifikation', en: 'Prolog training: unification' }], ['#daily', { de: 'Täglich: Unifikation', en: 'Daily: unification' }]], ext: [['lpn', { de: 'Kapitel 1–2', en: 'Chapters 1–2' }, 'https://lpn.swi-prolog.org/lpnpage.php?pagetype=html&pageid=lpn-htmlch1'], ['swish']], daily: 'unify' },
-  { n: 15, k: 'prolog', s: { de: 'Resolution, Listen', en: 'Resolution, lists' }, d: '2027-02-01', ch: 'IV', t: { de: 'Resolution, Backtracking, Listen, Arithmetik', en: 'Resolution, backtracking, lists, arithmetic' },
+  { n: 15, k: 'prolog', s: { de: 'Resolution, Listen', en: 'Resolution, lists' }, d: '2027-01-18', ch: 'IV', t: { de: 'Resolution, Backtracking, Listen, Arithmetik', en: 'Resolution, backtracking, lists, arithmetic' },
     x: { de: 'Wie Prolog Antworten sucht, rekursive Prädikate auf Listen, Rechnen mit is.', en: 'How Prolog searches for answers, recursive predicates on lists, arithmetic with is.' },
     lab: [['#exam-prolog', { de: 'Prolog-Training: Anfragen und Prädikate', en: 'Prolog training: queries and predicates' }]], ext: [['lpn', { de: 'Kapitel 3–5', en: 'Chapters 3–5' }, 'https://lpn.swi-prolog.org/lpnpage.php?pagetype=html&pageid=lpn-htmlch3'], ['exp']], daily: 'unify' },
+  { rev: true, k: 'rev', s: { de: 'Wiederholung, Probeklausuren', en: 'Review, practice exams' }, d: '2027-01-25', t: { de: 'Wiederholung und Probeklausuren', en: 'Review and practice exams' },
+    x: { de: 'Die letzten zwei Vorlesungswochen bis zum 5. Februar: In der Vorlesung kommen meist Ergänzungen und Wiederholung. Schreib jetzt Probeklausuren mit Zeitlimit und arbeite gezielt an deinen schwächsten Themen.', en: 'The last two lecture weeks until 5 February: the lecture usually adds extras and revision. Now write timed practice exams and work specifically on your weakest topics.' },
+    lab: [['#mock', { de: 'Probeklausur mit Zeitlimit', en: 'Timed practice exam' }], ['#progress', { de: 'Meine Schwächen', en: 'My weak spots' }], ['#print', { de: 'Probeklausur auf Papier', en: 'Practice exam on paper' }]], ext: [] },
   { exam: true, k: 'exam', s: { de: 'Klausurphase · Termin in RWTHonline', en: 'Exam period · date in RWTHonline' }, d: '2027-02-08', t: { de: 'Klausurvorbereitung', en: 'Exam preparation' },
     x: { de: 'Die Vorlesungszeit endet am 5. Februar. Die Klausur liegt meist im Februar; den Termin findest du in RWTHonline. Jetzt alle vier Klausur-Trainings unter Zeitdruck durchspielen.', en: 'The lecture period ends on 5 February. The exam is usually in February; you will find the date in RWTHonline. Now work through all four exam trainings under time pressure.' },
     lab: [['#exam', { de: 'Alle Klausur-Trainings', en: 'All exam trainings' }], ['#daily', { de: 'Täglich mit Bonusrunden', en: 'Daily with bonus rounds' }]], ext: [] }
@@ -143,15 +146,22 @@ function wCurrent() {
   if (cur === WEEKS.length - 1 && t > dNum(WEEKS[cur].d) + 41) return { i: -2 };
   return { i: cur };
 }
+const wSym = w => w.pause ? '❄' : w.rev ? '↻' : '★';
+const wHead = w => w.pause ? wt('break') : w.exam ? wt('exam') : w.rev ? wt('rev') : wt('week', { n: w.n });
+function wLen(i) { // days from the start to the last weekday before the next entry (at most Friday of the same run)
+  const a = dNum(WEEKS[i].d), nx = WEEKS[i + 1] ? dNum(WEEKS[i + 1].d) : a + 5;
+  let e = Math.min(nx - 1, a + (WEEKS[i].rev ? 13 : 6)); while ([0, 6].includes(new Date(e * 864e5).getUTCDay())) e--;
+  return e - a;
+}
 function wChip(href, label) { return `<a class="wk-lab" href="${href}">${esc(wL(label))}</a>`; }
 function wExt(e) { const R = RES[e[0]]; const url = e[2] || R.url; return `<a class="wk-ext" href="${url}" target="_blank" rel="noopener"><b>${esc(R.name)}</b>${e[1] ? ` <span>${esc(wL(e[1]))}</span>` : ''} ↗</a>`; }
 function wCard(w, i, cur) {
   const isNow = i === cur, done = w.n && WDONE.has(w.n);
-  const kind = w.pause ? 'pause' : w.exam ? 'exam' : '';
-  const head = w.pause ? wt('break') : w.exam ? wt('exam') : wt('week', { n: w.n });
-  const range = w.exam ? `${wDate(w.d)} –` : `${wDate(w.d)} – ${wDate(w.d, 4)}`;
+  const kind = w.pause ? 'pause' : w.exam ? 'exam' : w.rev ? 'rev' : '';
+  const head = wHead(w);
+  const range = w.exam ? `${wDate(w.d)} –` : `${wDate(w.d)} – ${wDate(w.d, wLen(i))}`;
   return `<li class="wk ${kind} ${isNow ? 'now' : ''} ${done ? 'done' : ''}" id="wk-${i}">
-    <div class="wk-rail" aria-hidden="true"><span class="wk-dot">${done ? '✓' : w.n || (w.pause ? '❄' : '★')}</span></div>
+    <div class="wk-rail" aria-hidden="true"><span class="wk-dot">${done ? '✓' : w.n || wSym(w)}</span></div>
     <div class="wk-body">
       <div class="wk-h"><span class="wk-n">${esc(head)}</span><span class="wk-date mono">${esc(range)}</span>${w.ch ? `<span class="wk-ch mono">${esc(w.ch)}</span>` : ''}${isNow ? `<span class="wk-now">${esc(wt('now'))}</span>` : ''}
         ${w.n ? `<label class="wk-check"><input type="checkbox" data-wk="${w.n}" ${done ? 'checked' : ''}> <span>${esc(wt('done'))}</span></label>` : ''}</div>
@@ -207,7 +217,7 @@ function calHTML(cur, mini) {
       r.segs.forEach(sg => {
         if (sg.e < 0) return;
         const w = WEEKS[sg.e], done = w.n && WDONE.has(w.n);
-        const head = w.n ? `W${w.n}` : w.pause ? '❄' : '★';
+        const head = w.n ? `W${w.n}` : wSym(w);
         h += `<button type="button" class="cal-ev k-${w.k} ${done ? 'done' : ''} ${sg.e === cur ? 'now' : ''}" style="grid-column:${sg.from + 2} / ${sg.to + 3}" data-wjump="${sg.e}" title="${esc((w.n ? wt('week', { n: w.n }) + ': ' : '') + wL(w.t))}"><b>${done ? '✓ ' : ''}${head}</b> <span>${esc(wL(w.s))}</span></button>`;
       });
       h += `</div>`;
@@ -216,7 +226,7 @@ function calHTML(cur, mini) {
   };
   const all = calRows(), cut = all.findIndex(r => r.m >= dNum('2026-12-01'));
   let html = `<div class="cal-split">${table(all.slice(0, cut))}${table(all.slice(cut))}</div>`;
-  const leg = ['java', 'hoare', 'haskell', 'prolog', 'pause', 'exam'].map(k => `<span class="cal-leg k-${k}"><i></i>${esc(wt('leg_' + k))}</span>`).join('');
+  const leg = ['java', 'hoare', 'haskell', 'prolog', 'pause', 'rev', 'exam'].map(k => `<span class="cal-leg k-${k}"><i></i>${esc(wt('leg_' + k))}</span>`).join('');
   if (mini) return `<div class="cal-wrap mini">
     <div class="cal-top"><h2 id="cal-dlg-h">${esc(wt('cal_h'))}</h2>
       <div class="cal-top-a"><a class="btn" href="#weeks" data-dlg-go="1">${esc(wt('open_plan'))}</a><button type="button" class="btn ghost cal-x" data-dlg-close="1" aria-label="${esc(wt('close'))}">✕</button></div></div>
@@ -259,7 +269,7 @@ function buildICS() {
     const lab = w.lab.map(l => '• ' + wL(l[1]) + ': ' + DSYNC_URL + l[0]).join('\n');
     const ext = w.ext.map(e => '• ' + RES[e[0]].name + (e[1] ? ' ' + wL(e[1]) : '') + ': ' + (e[2] || RES[e[0]].url)).join('\n');
     const desc = [wL(w.x), lab && (wt('lab') + ':\n' + lab), ext && (wt('ext') + ':\n' + ext), wt('ics_desc')].filter(Boolean).join('\n\n');
-    L.push('BEGIN:VEVENT', `UID:hoarelab-ws2627-${w.n ? 'w' + w.n : w.pause ? 'pause' : 'exam'}@superzep.github.io`, 'DTSTAMP:' + stamp,
+    L.push('BEGIN:VEVENT', `UID:hoarelab-ws2627-${w.n ? 'w' + w.n : w.pause ? 'pause' : w.rev ? 'rev' : 'exam'}@superzep.github.io`, 'DTSTAMP:' + stamp,
       'DTSTART;VALUE=DATE:' + icsDate(r.a), 'DTEND;VALUE=DATE:' + icsDate(r.b + 1),
       'SUMMARY:' + icsEsc(title), 'DESCRIPTION:' + icsEsc(desc), 'URL:' + DSYNC_URL + '#weeks', 'TRANSP:TRANSPARENT',
       'CATEGORIES:' + icsEsc(wt('leg_' + w.k)), 'END:VEVENT');
@@ -291,13 +301,13 @@ function renderThisWeek() {
   const { i } = wCurrent(); if (i < 0) { el.innerHTML = ''; return; }
   const w = WEEKS[i];
   el.innerHTML = `<a class="thisweek" href="#weeks">
-    <span class="tw-k">${esc(wt('thisweek'))} · ${esc(w.pause ? wt('break') : w.exam ? wt('exam') : wt('week', { n: w.n }))}</span>
+    <span class="tw-k">${esc(wt('thisweek'))} · ${esc(wHead(w))}</span>
     <b>${esc(wL(w.t))}</b>
     <span class="tw-go">${esc(wt('open_plan'))}</span></a>`;
 }
 function renderResources() {
   const root = document.getElementById('resources'); if (!root) return;
-  const usedIn = key => WEEKS.filter(w => w.ext.some(e => e[0] === key)).map(w => w.n ? String(w.n) : (w.pause ? '❄' : '★'));
+  const usedIn = key => WEEKS.filter(w => w.ext.some(e => e[0] === key)).map(w => w.n ? String(w.n) : wSym(w));
   root.innerHTML = RES_GROUPS.map(([g, label]) => `<section class="res-g"><h2>${esc(wL(label))}</h2><div class="res-grid">${Object.entries(RES).filter(([, r]) => r.lang === g).map(([key, r]) => {
       const u = usedIn(key);
       return `<article class="res"><div class="res-h"><h3>${esc(r.name)}</h3><span class="res-by">${esc(r.by)}</span></div>

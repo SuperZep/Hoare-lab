@@ -1,6 +1,6 @@
 /* Hoare Lab service worker: offline support. The page itself is network-first (updates arrive at once),
    fonts and icons are cached. Version is set by build.py. */
-const VERSION = 'hoarelab-20261124104436';
+const VERSION = 'hoarelab-20261124191025';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {

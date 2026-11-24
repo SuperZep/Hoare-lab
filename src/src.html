@@ -418,7 +418,7 @@ body.touring{overflow:hidden}
 .cal-leg{display:inline-flex;gap:6px;align-items:center;font-family:var(--display);font-size:13px;color:var(--muted)}
 .cal-leg i{width:12px;height:12px;border-radius:3px;background:var(--tc);display:block}
 .cal-leg.k-pause i{background:transparent;border:1.5px dashed var(--muted)}
-.k-java{--tc:var(--brick)}.k-hoare{--tc:var(--accent)}.k-haskell{--tc:#7A4BC2}.k-prolog{--tc:var(--ok)}.k-pause{--tc:var(--muted)}.k-exam{--tc:var(--warn)}
+.k-java{--tc:var(--brick)}.k-hoare{--tc:var(--accent)}.k-haskell{--tc:#7A4BC2}.k-prolog{--tc:var(--ok)}.k-pause{--tc:var(--muted)}.k-exam{--tc:var(--warn)}.k-rev{--tc:#1F7A8C}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .k-haskell{--tc:#B99BF0}}
 :root[data-theme="dark"] .k-haskell{--tc:#B99BF0}
 .cal{display:grid;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--paper)}
@@ -469,6 +469,7 @@ body.touring{overflow:hidden}
 .wk.now .wk-body{border-color:var(--accent);box-shadow:0 10px 26px -20px var(--accent)}
 .wk.pause .wk-body{background:transparent;border-style:dashed}
 .wk.exam .wk-body{border-left:4px solid var(--brick)}
+.wk.rev .wk-body{border-left:4px solid #1F7A8C}.wk.rev .wk-n{color:#1F7A8C}
 .wk.done:not(.now) .wk-body{opacity:.72}
 .wk-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
 .wk-n{font-family:var(--display);font-weight:700;font-size:14px;color:var(--accent)}
