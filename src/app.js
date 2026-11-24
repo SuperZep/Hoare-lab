@@ -382,7 +382,7 @@ function handleWS(e) {
     case 'check': {
       const r = userFormula(ex, readVal(), 'B');
       if (r.err) P.res[s.id] = r;
-      else { const q = equiv(ex, r.ast, s.expect); if (!q.ok) { q.vars = [...new Set([...varsOf(r.ast), ...varsOf(s.expect)])]; q.tip = diagWp(ex, r.ast, s.k === 'input' ? [{ k: 'asg', x: s.x, e: parse(s.tsrc), src: s.tsrc }] : compile(ex).init, s.after); } P.res[s.id] = q.ok ? { ok: true } : q; if (q.ok) P.done[s.id] = true; }
+      else { const q = equiv(ex, r.ast, s.expect); if (!q.ok) { q.vars = [...new Set([...varsOf(r.ast), ...varsOf(s.expect)])]; q.tip = diagWp(ex, r.ast, s.k === 'input' ? [{ k: 'asg', x: s.x, e: parse(s.tsrc), src: s.tsrc }] : compile(ex).init, s.after); } P.res[s.id] = q.ok ? { ok: true } : q; if (q.ok) P.done[s.id] = true; stRecord('hoare-wp', q.ok, q.ok ? null : q.tip); }
       break; }
     case 'hint': P.res[s.id + '_h'] = true; break;
     case 'show': P.res[s.id] = { shown: true }; break;
@@ -394,12 +394,12 @@ function handleWS(e) {
     case 'cand': { const k = +b.dataset.k; P.res[s.id] = { picked: k }; if (ex.cands[k].ok) P.done[s.id] = true; break; }
     case 'checkinv': {
       const r = userFormula(ex, readVal(), 'B');
-      if (r.err) P.res[s.id] = r; else { const R = checkInv(ex, r.ast); P.res[s.id] = { R, tip: diagInv(ex, r.ast, R) }; if (R.ok) P.done[s.id] = true; }
+      if (r.err) P.res[s.id] = r; else { const R = checkInv(ex, r.ast); P.res[s.id] = { R, tip: diagInv(ex, r.ast, R) }; if (R.ok) P.done[s.id] = true; stRecord('hoare-inv', R.ok, P.res[s.id].tip); }
       break; }
     case 'morehint': P.hints++; break;
     case 'checkvar': {
       const r = userFormula(ex, readVal(), 'N');
-      if (r.err) P.res[s.id] = r; else { const R = checkVariant(ex, r.ast); P.res[s.id] = { R, tip: diagVar(R) }; if (R.ok) P.done[s.id] = true; }
+      if (r.err) P.res[s.id] = r; else { const R = checkVariant(ex, r.ast); P.res[s.id] = { R, tip: diagVar(R) }; if (R.ok) P.done[s.id] = true; stRecord('hoare-var', R.ok, P.res[s.id].tip); }
       break; }
     case 'vhint': P.vhint = true; break;
     case 'reset': delete ST.P[ex.id]; break;
@@ -441,9 +441,8 @@ function kArmTimer() {
     if (el) { const m = Math.floor(left / 60000), s = Math.floor(left / 1000) % 60; el.textContent = `${m}:${String(s).padStart(2, '0')}`; el.classList.toggle('warn', left < 120000); }
   }, 1000);
 }
-function kGrade() {
-  clearInterval(kTimer); kTimer = null;
-  const ex = exById(ST.K.id), c = compile(ex), V = ST.K.vals, res = { lines: {}, vlines: {}, pts: 0 };
+function hoareGradeWith(ex, V) {
+  const c = compile(ex), res = { lines: {}, vlines: {}, pts: 0 };
   const iu = userFormula(ex, V.inv || '', 'B');
   let Igrade = c.inv;
   if (iu.ast) { res.invR = checkInv(ex, iu.ast); if (res.invR.ok) { Igrade = iu.ast; res.invOK = true; res.pts += 2; } else res.invTip = diagInv(ex, iu.ast, res.invR); }
@@ -467,16 +466,56 @@ function kGrade() {
     if (ok) res.pts++;
   });
   res.total = kTotal(ex);
+  return res;
+}
+function hoareRecord(res) {
+  Object.values(res.lines).forEach(r => stRecord('hoare-wp', r.ok, null));
+  stRecord('hoare-inv', !!res.invOK, res.invTip || null);
+  stRecord('hoare-var', !!res.varOK, res.varTip || null);
+}
+function kGrade() {
+  clearInterval(kTimer); kTimer = null;
+  const ex = exById(ST.K.id), res = hoareGradeWith(ex, ST.K.vals); hoareRecord(res);
   ST.K.res = res; ST.K.phase = 'done';
   renderExam(); window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
   snapshot();
 }
-function kInputLine(key, ind, done, r) {
-  const v = ST.K.vals[key] ?? '';
+function kInputLine(key, ind, done, r, vals) {
+  const v = (vals || ST.K.vals)[key] ?? '';
   const mark = done ? `<span class="nt kmark ${r.ok ? 'yes' : 'no'}">${r.ok ? '✓ 1' : '✗ 0'}</span>` : '';
   const inp = `<div class="ln a" style="--ind:${ind}"><span class="tx">⟨</span><input class="fx" data-k="${key}" value="${esc(v)}" placeholder="${esc(t('pha'))}" autocomplete="off" spellcheck="false" aria-label="${esc(t('pha'))}" ${done ? 'disabled' : ''}><span class="tx">⟩</span>${mark}</div>`;
   const exp = done && !r.ok ? `<div class="ln kexp" style="--ind:${ind}"><span class="tx">${t('k_expected')} ⟨${esc(r.exp)}⟩${r.err ? ' · ' + errMsg(r.err) : ''}</span></div>` : '';
   return inp + exp;
+}
+function hoarePaperHTML(ex, vals, done, R) {
+  const c = compile(ex), b = kBlankLines(ex);
+  const aux = auxName(ex);
+  const partA = b.A.map((l, i) => {
+    if (l.k === 'c') return lnHTML(l);
+    if (i === 0 || i === b.A.length - 1) return lnHTML({ ...l, note: null });
+    return kInputLine('a' + i, l.ind, done, done ? R.lines[i] : null, vals);
+  }).join('');
+  const partB = [lnHTML({ k: 'c', s: `while (${ex.cond}) {`, ind: 0 }), ...b.V.map((l, i) => l.k === 'c' ? lnHTML(l) : kInputLine('v' + i, l.ind, done, done ? R.vlines[i] : null, vals)), lnHTML({ k: 'c', s: '}', ind: 0 })].join('');
+  const invMark = done ? `<span class="kmark ${R.invOK ? 'yes' : 'no'}">${R.invOK ? '✓ 2' : '✗ 0'}</span>` : '';
+  const varMark = done ? `<span class="kmark ${R.varOK ? 'yes' : 'no'}">${R.varOK ? '✓ 1' : '✗ 0'}</span>` : '';
+  let invFb = '', varFb = '';
+  if (done) {
+    if (R.invOK) invFb = `<div class="fb ok">${t('k_inv_used')}</div>`;
+    else invFb = `<div class="fb bad"><span>${R.invErr && (vals.inv || '').trim() ? errMsg(R.invErr) + ' ' : ''}${t('k_inv_bad')}</span><span class="as">⟨${esc(pr(c.inv))}⟩</span></div>${R.invR ? checkHTML(R.invR, ex, false, R.invTip) : ''}`;
+    if (!R.varOK) varFb = `<div class="fb bad"><span>${R.varErr && (vals.var || '').trim() ? errMsg(R.varErr) + ' ' : ''}${t('k_var_bad')}</span><span class="as">V = ${esc(pr(c.variant))}</span></div>${R.varR ? variantHTML(R.varR, ex, R.varTip) : ''}`;
+  }
+  return `
+      <section class="kpart"><h2>${t('k_a')}</h2><p>${t('k_a_txt')}</p>${syntaxHTML(ex)}
+        <div class="prog">${partA}</div>
+        <div class="kinv"><span>${t('k_inv')}</span><span class="tx as">⟨</span><input class="fx" data-k="inv" value="${esc(vals.inv ?? '')}" placeholder="${esc(t('ph'))}" autocomplete="off" spellcheck="false" aria-label="${esc(t('k_inv'))}" ${done ? 'disabled' : ''}><span class="tx as">⟩</span>${invMark}</div>
+        ${invFb}
+      </section>
+      <section class="kpart"><h2>${t('k_b')}</h2><p>${t('k_b_txt', { m: `<span class="mono">${aux}</span>` })}</p>
+        <div class="inline-in"><span class="mono">V =</span><input data-k="var" value="${esc(vals.var ?? '')}" placeholder="${esc(t('phv'))}" autocomplete="off" spellcheck="false" aria-label="V" ${done ? 'disabled' : ''}>${varMark}</div>
+        <div class="prog">${partB}</div>
+        ${varFb}
+      </section>
+      ${done ? `<section class="kpart"><h2>${t('s_sol')}</h2>${linesHTML(annotate(ex))}${linesHTML(annotateVariant(ex))}</section>` : ''}`;
 }
 function renderExam() {
   const box = document.getElementById('exam'), K = ST.K;
@@ -494,21 +533,7 @@ function renderExam() {
     return;
   }
   const ex = exById(K.id), c = compile(ex), b = kBlankLines(ex), done = K.phase === 'done', R = K.res;
-  const aux = auxName(ex);
-  const partA = b.A.map((l, i) => {
-    if (l.k === 'c') return lnHTML(l);
-    if (i === 0 || i === b.A.length - 1) return lnHTML({ ...l, note: null });
-    return kInputLine('a' + i, l.ind, done, done ? R.lines[i] : null);
-  }).join('');
-  const partB = [lnHTML({ k: 'c', s: `while (${ex.cond}) {`, ind: 0 }), ...b.V.map((l, i) => l.k === 'c' ? lnHTML(l) : kInputLine('v' + i, l.ind, done, done ? R.vlines[i] : null)), lnHTML({ k: 'c', s: '}', ind: 0 })].join('');
-  const invMark = done ? `<span class="kmark ${R.invOK ? 'yes' : 'no'}">${R.invOK ? '✓ 2' : '✗ 0'}</span>` : '';
-  const varMark = done ? `<span class="kmark ${R.varOK ? 'yes' : 'no'}">${R.varOK ? '✓ 1' : '✗ 0'}</span>` : '';
-  let invFb = '', varFb = '';
-  if (done) {
-    if (R.invOK) invFb = `<div class="fb ok">${t('k_inv_used')}</div>`;
-    else invFb = `<div class="fb bad"><span>${R.invErr && (K.vals.inv || '').trim() ? errMsg(R.invErr) + ' ' : ''}${t('k_inv_bad')}</span><span class="as">⟨${esc(pr(c.inv))}⟩</span></div>${R.invR ? checkHTML(R.invR, ex, false, R.invTip) : ''}`;
-    if (!R.varOK) varFb = `<div class="fb bad"><span>${R.varErr && (K.vals.var || '').trim() ? errMsg(R.varErr) + ' ' : ''}${t('k_var_bad')}</span><span class="as">V = ${esc(pr(c.variant))}</span></div>${R.varR ? variantHTML(R.varR, ex, R.varTip) : ''}`;
-  }
+  const paper = hoarePaperHTML(ex, K.vals, done, R);
   const pct = done ? R.pts / R.total : 0;
   const head = done
     ? `<div class="kscore"><div class="big">${t('k_score', { p: R.pts, t: R.total })}</div><div class="bar"><span style="width:${Math.round(pct * 100)}%"></span></div><p>${K.timeup ? t('k_timeup') + ' ' : ''}${pct >= 0.8 ? t('k_g1') : pct >= 0.5 ? t('k_g2') : t('k_g3')}</p>
@@ -518,17 +543,8 @@ function renderExam() {
     <div class="plan-h"><div class="kicker">${t('k_kicker')}</div><h1 id="exam-title">${esc(L(ex.title))}</h1></div>
     <div class="kpaper">
       ${head}
-      <section class="kpart"><h2>${t('k_a')}</h2><p>${t('k_a_txt')}</p>${syntaxHTML(ex)}
-        <div class="prog">${partA}</div>
-        <div class="kinv"><span>${t('k_inv')}</span><span class="tx as">⟨</span><input class="fx" data-k="inv" value="${esc(K.vals.inv ?? '')}" placeholder="${esc(t('ph'))}" autocomplete="off" spellcheck="false" aria-label="${esc(t('k_inv'))}" ${done ? 'disabled' : ''}><span class="tx as">⟩</span>${invMark}</div>
-        ${invFb}
-      </section>
-      <section class="kpart"><h2>${t('k_b')}</h2><p>${t('k_b_txt', { m: `<span class="mono">${aux}</span>` })}</p>
-        <div class="inline-in"><span class="mono">V =</span><input data-k="var" value="${esc(K.vals.var ?? '')}" placeholder="${esc(t('phv'))}" autocomplete="off" spellcheck="false" aria-label="V" ${done ? 'disabled' : ''}>${varMark}</div>
-        <div class="prog">${partB}</div>
-        ${varFb}
-      </section>
-      ${done ? `<section class="kpart"><h2>${t('s_sol')}</h2>${linesHTML(annotate(ex))}${linesHTML(annotateVariant(ex))}</section>` : `<div class="row"><button class="btn primary" type="button" data-k-act="submit">${t('k_submit')}</button></div>`}
+      ${paper}
+      ${done ? '' : `<div class="row"><button class="btn primary" type="button" data-k-act="submit">${t('k_submit')}</button></div>`}
     </div>`;
   if (!done && K.ends) { const left = Math.max(0, K.ends - Date.now()), m = Math.floor(left / 60000), s = Math.floor(left / 1000) % 60; const el = document.getElementById('k-clock'); if (el) el.textContent = `${m}:${String(s).padStart(2, '0')}`; }
 }
@@ -570,11 +586,11 @@ function renderTracer() {
 }
 
 /* ---- view routing & language ---- */
-const VIEWS = ['plan', 'daily', 'prog', 'weeks', 'resources', 'glossary', 'print', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam', 'exam-java', 'exam-haskell', 'exam-prolog', 'exam-hoare'];
+const VIEWS = ['plan', 'daily', 'prog', 'weeks', 'resources', 'glossary', 'progress', 'print', 'mock', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam', 'exam-java', 'exam-haskell', 'exam-prolog', 'exam-hoare'];
 const PROG_VIEWS = VIEWS.filter(v => v !== 'plan' && v !== 'daily');
-const TOP_OF = { weeks: 'prog', resources: 'prog', glossary: 'prog', print: 'exam', java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
-const SUB_OF = { print: 'exam', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
-const TITLES = { plan: 'Hoare Lab', daily: 'Täglich · Hoare Lab', weeks: 'Wochenplan · Hoare Lab', resources: 'Weiterlernen · Hoare Lab', glossary: 'Glossar · Hoare Lab', print: 'Probeklausur drucken · Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
+const TOP_OF = { weeks: 'prog', resources: 'prog', glossary: 'prog', progress: 'prog', print: 'exam', mock: 'exam', java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const SUB_OF = { print: 'exam', mock: 'exam', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const TITLES = { plan: 'Hoare Lab', daily: 'Täglich · Hoare Lab', weeks: 'Wochenplan · Hoare Lab', resources: 'Weiterlernen · Hoare Lab', glossary: 'Glossar · Hoare Lab', progress: 'Meine Schwächen · Hoare Lab', mock: 'Probeklausur · Hoare Lab', print: 'Probeklausur drucken · Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
 
 /* section bar (Java/Haskell/Prolog): jump, scrollspy, progress */
 function hdrH() { const h = document.querySelector('header.top'); return h && getComputedStyle(h).position === 'sticky' ? h.offsetHeight : 0; }
@@ -615,6 +631,8 @@ function initSecbar() {
 }
 function showView(v, scroll) {
   if (v && v.startsWith('import=')) { v = 'daily'; try { dImportFromHash(location.hash.slice(1)); } catch (e) {} }
+  let anchor = null;
+  if (v && !VIEWS.includes(v)) { const el = document.getElementById(v), vw = el && el.closest('section.view'); if (vw && el.classList.contains('sec')) { anchor = el; v = vw.id.slice(5); } }
   if (!VIEWS.includes(v)) v = 'plan';
   ST.view = v;
   VIEWS.forEach(n => document.getElementById('view-' + n).classList.toggle('on', n === v));
@@ -627,13 +645,18 @@ function showView(v, scroll) {
   if (v === 'daily') renderDaily();
   if (v === 'weeks') renderWeeks();
   if (v === 'glossary') renderGlossary();
+  if (v === 'progress') renderProgress();
+  if (v === 'mock') renderMock();
+  if (v === 'prolog') renderSLD();
+  if (v === 'haskell') renderHS();
   if (v === 'print') renderPrint();
   if (v === 'resources') renderResources();
   if (v === 'prog') renderThisWeek();
   if (v === 'practice') renderPractice();
   if (v === 'exam-hoare') { renderExam(); kArmTimer(); }
   if (v.startsWith('exam-') && LX[v.slice(5)]) renderLX(v.slice(5));
-  if (scroll) window.scrollTo(0, 0);
+  if (anchor) requestAnimationFrame(() => anchor.scrollIntoView({ block: 'start' }));
+  else if (scroll) window.scrollTo(0, 0);
   try { secbarSpy(); } catch (e) {}
 }
 function setLang(l) {
@@ -647,6 +670,10 @@ function setLang(l) {
   if (ST.view === 'daily') renderDaily();
   if (ST.view === 'weeks') renderWeeks();
   if (ST.view === 'glossary') renderGlossary();
+  if (ST.view === 'progress') renderProgress();
+  if (ST.view === 'mock') renderMock();
+  if (ST.view === 'prolog') renderSLD();
+  if (ST.view === 'haskell') renderHS();
   if (ST.view === 'print') renderPrint();
   try { renderInstall(); } catch (e) {}
   try { calBtnLabel(); } catch (e) {}
@@ -669,6 +696,10 @@ function start(data) {
   initWeeks();
   initCalDlg();
   initGlossary();
+  initProgress();
+  initMock();
+  initSLD();
+  initHS();
   initPrint();
   initPWA();
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });

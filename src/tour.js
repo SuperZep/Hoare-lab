@@ -10,7 +10,7 @@ const TT = {
       ['Täglich 5 Minuten', 'Jeden Tag fünf kurze Aufgaben aus allen Themen. Was du falsch machst, kommt nach 1, 3, 7 und 14 Tagen wieder, und die Flamme zählt deine Serie.'],
       ['Semester auf einen Blick', 'Der Kalender zeigt, was in welcher Woche dran ist. Als .ics-Datei übernimmst du ihn in Google, Apple oder Outlook.'],
       ['Übungen', 'Geführte Aufgaben zum Hoare-Kalkül, Schritt für Schritt: mit gegebener Invariante oder mit einer, die du selbst findest.'],
-      ['Klausur', 'Klausur-Trainings für Hoare, Java, Haskell und Prolog, mit sofortiger Korrektur und Punktzahl. Die Hoare-Simulation läuft mit Zeitlimit.'],
+      ['Klausur', 'Klausur-Trainings für Hoare, Java, Haskell und Prolog, mit sofortiger Korrektur und Punktzahl. Dazu eine komplette Probeklausur aus allen vier Teilen mit Zeitlimit und geschätzter Note; unter „Fortschritt“ siehst du deine Schwächen.'],
       ['Tour wiederholen', 'Über das Fragezeichen startest du diese Tour jederzeit neu.'],
       ['Dein Fortschritt gehört dir', 'Es gibt keine Anmeldung: Was du übst, bleibt in diesem Browser. Mit einem QR-Code nimmst du es auf ein anderes Gerät mit. Viel Erfolg im Semester!']
     ]
@@ -25,7 +25,7 @@ const TT = {
       ['5 minutes a day', 'Five short tasks a day across all topics. Whatever you get wrong comes back after 1, 3, 7 and 14 days, and the flame counts your streak.'],
       ['The semester at a glance', 'The calendar shows what is covered in which week. As an .ics file you can add it to Google, Apple or Outlook.'],
       ['Exercises', 'Guided Hoare logic tasks, step by step: with a given invariant or with one you find yourself.'],
-      ['Exam', 'Exam trainings for Hoare, Java, Haskell and Prolog, with instant grading and a score. The Hoare simulation runs against the clock.'],
+      ['Exam', 'Exam trainings for Hoare, Java, Haskell and Prolog, with instant grading and a score. Plus a complete practice exam from all four parts, timed and with an estimated grade; “Progress” shows your weak spots.'],
       ['Take the tour again', 'Use the question mark to restart this tour at any time.'],
       ['Your progress is yours', 'There is no sign-in: what you practise stays in this browser. A QR code takes it to another device. Good luck with the semester!']
     ]

@@ -39,6 +39,7 @@ const DT = {
     sync_merge: 'Beide Stände werden zusammengeführt: die längere Serie, alle Wiederholungen und alle geübten Tage. Nichts geht verloren.',
     sync_ok: 'Fortschritt übernommen. {s}. {r}.', sync_bad: 'Dieser Code ist ungültig oder unvollständig.', sync_wait: 'Code wird erstellt …',
     sync_note: 'Der Code enthält nur deinen Lernstand, keinen Namen und keine persönlichen Daten.',
+    focus_l: 'Fokus-Runde · {t}', weak_link: 'Meine Schwächen ansehen →',
     wd: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'], today: 'heute'
   },
   en: {
@@ -78,6 +79,7 @@ const DT = {
     sync_merge: 'Both records are merged: the longer streak, all reviews and all practised days. Nothing is lost.',
     sync_ok: 'Progress transferred. {s}. {r}.', sync_bad: 'This code is invalid or incomplete.', sync_wait: 'Creating the code …',
     sync_note: 'The code contains only your learning progress, no name and no personal data.',
+    focus_l: 'Focus round · {t}', weak_link: 'See my weak spots →',
     wd: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'], today: 'today'
   }
 };
@@ -345,10 +347,21 @@ function dBuild(date, round) {
   const r = dRng(dHash(date + '#' + round));
   const due = dDue(dNum(date)).slice(0, 2).map(k => { const [g, s] = k.split(':'); return { g, s: +s, rev: true }; }).filter(x => DGEN[x.g]);
   const have = new Set(due.map(x => x.g)), order = dShuffle(DTOPICS, r);
-  const fresh = [...order.filter(t => !have.has(t)), ...order.filter(t => have.has(t))].slice(0, 5 - due.length)
-    .map(g => ({ g, s: dHash(date + '#' + round + '#' + g) }));
+  let pref = null; // one extra item for this week's topic or the weakest topic
+  try { const wc = wCurrent(); const wk = wc.i >= 0 && WEEKS[wc.i] && WEEKS[wc.i].daily; if (wk && DGEN[wk]) pref = wk; } catch (e) {}
+  try { const wg = stWeakGen(); if (wg) pref = wg; } catch (e) {}
+  const N = 5 - due.length, base = [...order.filter(t => !have.has(t)), ...order.filter(t => have.has(t))];
+  const pick = pref ? [...base.slice(0, N - 1), pref] : base.slice(0, N);
+  const fresh = pick.map((g, k) => ({ g, s: dHash(date + '#' + round + '#' + g + (pick.indexOf(g) !== k ? '#2' : '')) }));
   const items = dShuffle([...due, ...fresh], r);
   return { date, round, items, idx: 0, res: items.map(() => null), done: false };
+}
+function dStartFocus(g) {
+  const S0 = dSession(), date = dToday();
+  const round = S0.done || S0.round > 0 ? S0.round + 1 : 0, salt = Date.now() >>> 0;
+  const items = [0, 1, 2, 3, 4].map(k => ({ g, s: dHash(date + '#F#' + g + '#' + k + '#' + salt) }));
+  DS.sess = { date, round, focus: g, items, idx: 0, res: items.map(() => null), done: false };
+  DC = { v: {}, fb: null, shown: false }; dSave();
 }
 function dSession() {
   const today = dToday();
@@ -560,10 +573,10 @@ function renderDaily() {
   const S = dSession();
   root.innerHTML = `${DSY.banner ? `<div class="fb ${DSY.banner.ok ? 'ok' : 'bad'} dl-banner" role="status">${esc(dSyncMsg(DSY.banner))}</div>` : ''}${dHeader()}
     <div class="dl-main">
-      <div class="dl-round"><span class="mono small muted">${S.round ? esc(dt('bonus', { n: S.round })) : esc(new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }))}</span>${dProgress(S)}</div>
+      <div class="dl-round"><span class="mono small muted">${S.focus ? esc(dt('focus_l', { t: dt('t_' + S.focus) })) : S.round ? esc(dt('bonus', { n: S.round })) : esc(new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }))}</span>${dProgress(S)}</div>
       ${S.done ? dDone(S) : dCard(S)}
     </div>
-    <p class="dl-foot small muted">${esc(dt('stats', { k: DS.stats.ok, n: DS.stats.n }))} · ${esc(dt('local'))} <button type="button" class="linkbtn strong" data-dact="sync" aria-expanded="${DSY.open}">${esc(dt('sync_btn'))}</button> · <button type="button" class="linkbtn" data-dact="reset">${esc(dt('reset'))}</button></p>
+    <p class="dl-foot small muted">${esc(dt('stats', { k: DS.stats.ok, n: DS.stats.n }))} · ${esc(dt('local'))} <a class="linkbtn strong" href="#progress">${esc(dt('weak_link'))}</a> · <button type="button" class="linkbtn strong" data-dact="sync" aria-expanded="${DSY.open}">${esc(dt('sync_btn'))}</button> · <button type="button" class="linkbtn" data-dact="reset">${esc(dt('reset'))}</button></p>
     ${dSyncHTML()}`;
   dNavBadge();
   const inp = document.getElementById('dl-input');
@@ -576,12 +589,12 @@ function dAct(a) {
   if (a === 'check' && !S.done) {
     const it = S.items[S.idx], G = dItem(it), res = G.check(DC.v);
     if (res.err !== undefined) { DC.fb = res.err ? { err: res.err } : null; renderDaily(); return; }
-    if (!S.res[S.idx]) { S.res[S.idx] = { ok: res.ok }; dRecord(it, res.ok); dSave(); }
+    if (!S.res[S.idx]) { S.res[S.idx] = { ok: res.ok }; dRecord(it, res.ok); dSave(); try { stRecord(GEN_TOPIC[it.g], res.ok, res.ok ? null : res.tip); } catch (e) {} }
     DC.fb = res; if (!res.ok && G.kind === 'mc') DC.shown = true;
     renderDaily(); dFocusAfter(res.ok || G.kind === 'mc' ? '[data-dact="next"]' : '#dl-input');
   } else if (a === 'reveal') {
     const it = S.items[S.idx];
-    if (!S.res[S.idx]) { S.res[S.idx] = { ok: false }; dRecord(it, false); dSave(); }
+    if (!S.res[S.idx]) { S.res[S.idx] = { ok: false }; dRecord(it, false); dSave(); try { stRecord(GEN_TOPIC[it.g], false, null); } catch (e) {} }
     DC.shown = true; renderDaily(); dFocusAfter('[data-dact="next"]');
   } else if (a === 'next') {
     DC = { v: {}, fb: null, shown: false };

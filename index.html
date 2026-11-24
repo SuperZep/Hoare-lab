@@ -830,6 +830,104 @@ pre.code{font-family:var(--mono);font-size:14.5px;line-height:1.6;background:var
 .lx .tool{max-width:980px}
 footer{border-top:1px solid var(--rule);padding:26px 20px 40px;max-width:1180px;margin:0 auto;display:grid;gap:8px;font-size:15px;color:var(--muted)}
 footer a{color:var(--muted)}
+
+/* ---- Meine Schwächen ---- */
+.st{display:grid;gap:22px;max-width:980px}
+.st-sum{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:14px 18px;font-family:var(--display);font-size:17px}
+.st-sec{display:grid;gap:12px}.st-sec h2{font-size:21px;font-weight:600}
+.st-list{display:grid;gap:8px}
+.st-row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(80px,1fr) minmax(0,1fr) auto;gap:10px 16px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:12px;padding:10px 14px}
+.st-row.strong{border-left-color:var(--ok)}.st-row.mid{border-left-color:var(--warn)}.st-row.weak{border-left-color:var(--bad)}
+.st-name{display:grid;gap:2px;min-width:0}.st-name b{font-family:var(--display);font-size:16px}.st-name span{font-size:13px;color:var(--muted)}
+.st-bar{height:8px;border-radius:99px;background:var(--rule);overflow:hidden}.st-bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
+.st-row.strong .st-bar span{background:var(--ok)}.st-row.weak .st-bar span{background:var(--bad)}.st-row.mid .st-bar span{background:var(--warn)}
+.st-lvl{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.st-chip{font-family:var(--display);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px}
+.st-chip.strong{background:var(--ok-soft);color:var(--ok)}.st-chip.mid{background:var(--accent-soft);color:var(--warn)}.st-chip.weak{background:var(--bad-soft);color:var(--bad)}
+.st-act .btn{white-space:nowrap}
+.st a.btn,.mk a.btn{text-decoration:none}
+.st-errs{display:grid;gap:8px}
+.st-err{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:10px 14px}
+.st-err p{margin:2px 0;font-size:15px}.st-cnt{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--bad);background:var(--bad-soft);border-radius:8px;padding:3px 8px;white-space:nowrap}
+.st-topic{font-family:var(--display);font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.04em}
+@media (max-width:700px){.st-row{grid-template-columns:minmax(0,1fr) auto}.st-bar{grid-column:1/-1;order:3}.st-lvl{grid-column:1/-1;order:4}.st-act{grid-column:2;grid-row:1}}
+
+/* ---- Probeklausur ---- */
+.mock-card{display:grid;gap:6px;text-decoration:none;color:var(--ink);background:linear-gradient(135deg,var(--accent-soft),var(--surface) 70%);border:1.5px solid var(--accent);border-radius:16px;padding:18px 22px;margin:0 0 16px;max-width:980px;transition:transform .15s}
+.mock-card:hover{transform:translateY(-2px)}
+.mc-k{font-family:var(--mono);font-size:12.5px;color:var(--accent)}.mc-t{font-family:var(--display);font-size:24px;font-weight:700}.mc-d{max-width:70ch;color:var(--muted)}.mc-go{font-family:var(--display);font-weight:600;color:var(--accent)}
+#mock{max-width:980px}
+.mk{display:grid;gap:22px;min-width:0}
+.mk-start{display:grid;gap:14px;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:20px 22px}
+.mk-compose h2{font-size:19px;font-weight:600;margin-bottom:6px}.mk-compose ol{margin:0;padding-left:22px;display:grid;gap:4px}
+.mk-bar-top{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;position:sticky;top:calc(var(--hdr,62px));z-index:5;background:var(--paper);padding:8px 0;border-bottom:1px solid var(--rule)}
+.mk-bar-top .btn.primary{margin-left:auto}
+#mk-clock.warn{color:var(--bad);font-weight:600}
+.mk-jump{display:flex;flex-wrap:wrap;gap:4px}.mk-jump a{font-family:var(--display);font-size:13px;color:var(--muted);text-decoration:none;padding:3px 9px;border:1px solid var(--rule);border-radius:999px}.mk-jump a:hover{color:var(--accent);border-color:var(--accent)}
+.mk-confirm{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.mk-part{display:grid;gap:14px;scroll-margin-top:calc(var(--hdr,62px) + 64px)}
+.mk-part>h2{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;font-size:24px;font-weight:600;border-bottom:2px solid var(--ink);padding-bottom:6px}
+.mk-part>h2 span{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:400}.mk-part>h2 em{margin-left:auto;font-style:normal;font-family:var(--display);font-size:14px;color:var(--muted)}
+.mk-task{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px 20px;display:grid;gap:12px;min-width:0}
+.mk-task h3{font-size:19px}
+.mk-th{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}.mk-th .xt-n{font-family:var(--mono);font-size:13px;color:var(--accent)}
+.mk-pts{margin-left:auto;font-family:var(--display);font-size:12.5px;color:var(--muted)}.mk-th .lxbadge+.mk-pts{display:none}
+.mk-kp{padding-top:4px;gap:16px}.mk-kp .kpart{background:var(--paper);padding:16px 18px}
+.mk-q{display:grid;gap:12px;min-width:0}
+.mk .xt>.row{display:none}
+.mk-end{justify-content:flex-end}
+.mk-result{display:grid;gap:16px;background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:20px 22px}
+.mk-res-top{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center}
+.mk-res-top>div:first-child{display:grid;gap:2px;justify-items:start}
+.mk-gl{font-family:var(--display);font-size:13px;color:var(--muted)}
+.mk-grade{font-family:var(--display);font-size:54px;line-height:1;font-weight:700}.mk-grade.ok{color:var(--ok)}.mk-grade.bad{color:var(--bad)}
+.mk-pass{font-family:var(--display);font-size:13px;font-weight:600;padding:2px 10px;border-radius:999px}.mk-pass.ok{background:var(--ok-soft);color:var(--ok)}.mk-pass.bad{background:var(--bad-soft);color:var(--bad)}
+.mk-res-sc{display:grid;gap:4px;flex:1 1 260px;font-family:var(--display);font-size:18px}
+.mk-bars{display:grid;gap:8px}
+.mk-bar{display:grid;grid-template-columns:120px minmax(0,1fr) 70px;gap:12px;align-items:center;font-family:var(--display);font-size:14.5px}
+.mk-bar i{height:10px;border-radius:99px;background:var(--rule);overflow:hidden}.mk-bar i b{display:block;height:100%;background:var(--accent);border-radius:99px}
+.mk-bar em{font-style:normal;text-align:right;font-family:var(--mono);font-size:13px}
+.mk-errs{display:grid;gap:8px}.mk-errs h3{font-size:17px}
+.mk-review{font-size:22px;font-weight:600;margin-top:6px}
+@media (max-width:600px){.mk-bar{grid-template-columns:80px minmax(0,1fr) 56px}.mk-bar-top{top:0}.mk-jump{display:none}.mk-task,.mk-result,.mk-start{padding:14px}.mk-grade{font-size:44px}}
+
+/* ---- Suchbaum / Schritt für Schritt ---- */
+.sld{display:grid;gap:14px;margin-top:8px;min-width:0}
+.sld-ctrl{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+.sld-ctrl .f{display:grid;gap:4px;font-size:13px;color:var(--muted);min-width:0}
+.sld-ctrl>.f{max-width:100%}.sld-ctrl select{min-width:0;text-overflow:ellipsis}
+.sld-ctrl select,.sld-ctrl input{font:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1.5px solid var(--rule);border-radius:10px;padding:7px 10px;max-width:100%}
+.sld-ctrl input.mono{font-family:var(--mono);font-size:14px}
+.sld-q{flex:1 1 340px}.sld-q .row{display:flex;gap:8px;align-items:center;flex-wrap:nowrap}.sld-q input{flex:1;min-width:0}
+.sld-pre{display:flex;flex-wrap:wrap;gap:6px;width:100%}.sld-pre .gl-chip{font-family:var(--mono);font-size:12.5px;font-weight:400}
+.sld-grid{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:16px;align-items:start}
+.sld-prog{display:grid;gap:8px;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:12px;min-width:0;position:sticky;top:calc(var(--hdr,62px) + 64px)}
+.sld-prog pre.code{margin:0;font-size:12.5px}
+.sld-cl{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:12.5px}
+.sld-cl li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:6px;padding:3px 6px;border-radius:6px}
+.sld-cl li>span{color:var(--muted);font-size:11.5px;padding-top:1px}.sld-cl code{font-family:var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:none;padding:0}
+.sld-cl li.on{background:var(--accent-soft)}.sld-cl li.on>span{color:var(--accent);font-weight:600}
+.sld-main{display:grid;gap:10px;min-width:0}
+.sld-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sld-x{min-height:3.2em}
+.sld-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:14px 12px}
+.sld-tree,.sld-tree ul{list-style:none;margin:0;padding:0}
+.sld-tree ul{margin-left:18px;padding-left:14px;border-left:1.5px solid var(--rule)}
+.sld-tree li{position:relative;padding-top:8px}
+.sld-tree ul>li::before{content:"";position:absolute;left:-14px;top:24px;width:12px;border-top:1.5px solid var(--rule)}
+.sld-n{display:inline-grid;gap:3px;background:var(--paper);border:1.5px solid var(--rule);border-radius:10px;padding:6px 10px;max-width:100%;transition:border-color .2s,box-shadow .2s}
+.sld-n.cur{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.sld-n.success{border-color:var(--ok);background:var(--ok-soft)}.sld-n.fail{border-style:dashed}.sld-n.error{border-color:var(--bad)}
+.sld-e{font-family:var(--mono);font-size:11.5px;color:var(--accent);overflow-wrap:anywhere}.sld-e .mono{color:var(--muted)}
+.sld-g{font-size:13px;overflow-wrap:anywhere}
+.sld-ok{font-family:var(--mono);font-size:12.5px;color:var(--ok);font-weight:600}.sld-no{font-family:var(--mono);font-size:12.5px;color:var(--bad);font-weight:600}
+.sld-ans{margin:0}.sld-ans .mono{font-family:var(--mono);background:var(--ok-soft);color:var(--ok);padding:1px 6px;border-radius:6px}
+.hs-steps{list-style:none;margin:0;padding:12px 14px;display:grid;gap:4px;background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow-x:auto}
+.hs-steps li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;align-items:baseline;padding:4px 6px;border-radius:8px;opacity:.6}
+.hs-steps li.cur{opacity:1;background:var(--accent-soft)}
+.hs-steps code{font-family:var(--mono);font-size:14px;background:none;padding:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.hs-eq{font-family:var(--mono);color:var(--accent)}
+@media (max-width:760px){.sld-grid{grid-template-columns:minmax(0,1fr)}.sld-prog{position:static}.sld-q .row{flex-wrap:wrap}.sld-q .row .btn{width:100%}}
 </style>
 </head>
 <body data-lang="de">
@@ -862,6 +960,7 @@ footer a{color:var(--muted)}
       <a href="#weeks" data-view="weeks"><span class="de">Wochenplan</span><span class="en">Week by week</span></a>
       <a href="#resources" data-view="resources"><span class="de">Weiterlernen</span><span class="en">Learn more</span></a>
       <a href="#glossary" data-view="glossary"><span class="de">Glossar</span><span class="en">Glossary</span></a>
+      <a href="#progress" data-view="progress"><span class="de">Fortschritt</span><span class="en">Progress</span></a>
     </nav>
   </div>
 </header>
@@ -1044,6 +1143,16 @@ footer a{color:var(--muted)}
     <p class="lede"><span class="de">Die Fachbegriffe der Vorlesung mit ihrer englischen Entsprechung und einer kurzen Erklärung. Praktisch, wenn du englische Quellen liest oder auf Englisch denkst.</span><span class="en">The technical terms of the lecture with their German counterpart and a short explanation. Handy when the lecture is in German but you think or read in English.</span></p>
   </div>
   <div id="glossary" class="gl"></div>
+</section>
+
+<section class="view" id="view-progress" aria-labelledby="st-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span><span class="de">Meine Schwächen</span><span class="en">My weak spots</span></span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Programmierung · Fortschritt</span><span class="en">Programmierung · progress</span></div>
+    <h1 id="st-title"><span class="de">Meine Schwächen</span><span class="en">My weak spots</span></h1>
+    <p class="lede"><span class="de">Hier sammelt die Seite, wie sicher du in jedem Thema bist und welche typischen Fehler dir am häufigsten passieren. Gezählt wird alles, was du in Täglich, in den Übungen und im Klausur-Training prüfst. Die Daten bleiben in diesem Browser.</span><span class="en">This page collects how confident you are in each topic and which typical mistakes you make most often. Everything you check in Daily, in the exercises and in the exam training counts. The data stays in this browser.</span></p>
+  </div>
+  <div id="progress" class="st"></div>
 </section>
 
 <!-- ================= PRINTABLE EXAM ================= -->
@@ -1233,7 +1342,7 @@ N = 3.</pre>
   </div>
 
   <nav class="secbar" aria-label="Abschnitte · Sections">
-    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="haskell-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="haskell-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="haskell-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="haskell-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="haskell-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button></div><a class="secbar-exam" href="#exam-haskell"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
+    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="haskell-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="haskell-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="haskell-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="haskell-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="haskell-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button><button type="button" data-jump="haskell-steps"><span class="n">06</span><span class="de">Schritt für Schritt</span><span class="en">Step by step</span></button></div><a class="secbar-exam" href="#exam-haskell"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
     <div class="secbar-prog" aria-hidden="true"><span></span></div>
   </nav>
 
@@ -1293,6 +1402,12 @@ quadrate xs = map (\x -> x * x) xs
 
 -- GHCi&gt; quadrate [1, 2, 3]
 -- [1,4,9]</pre>
+  </section>
+
+  <section class="sec" id="haskell-steps">
+    <div class="sec-h"><span class="num">06</span><h2><span class="de">Schritt für Schritt auswerten</span><span class="en">Evaluating step by step</span></h2></div>
+    <p class="prose"><span class="de">In der Klausur musst du Ausdrücke von Hand auswerten. Hier siehst du jeden Reduktionsschritt einzeln: wie foldr nach rechts und foldl nach links klammert, warum take auf einer unendlichen Liste trotzdem endet, und wie Pattern Matching die Liste zerlegt. Ändere die Liste oder den Operator und vergleiche.</span><span class="en">In the exam you evaluate expressions by hand. Here you see every reduction step on its own: how foldr brackets to the right and foldl to the left, why take on an infinite list still terminates, and how pattern matching takes the list apart. Change the list or the operator and compare.</span></p>
+    <div id="hsteps" class="sld"></div>
     <div class="pager"><a class="btn" href="#java">← Java</a><a class="btn" href="#exam-haskell"><span class="de">Klausur-Training Haskell</span><span class="en">Haskell exam training</span></a><a class="btn primary" href="#prolog"><span class="de">Weiter: Prolog →</span><span class="en">Next: Prolog →</span></a></div>
   </section>
 </section>
@@ -1313,7 +1428,7 @@ quadrate xs = map (\x -> x * x) xs
   </div>
 
   <nav class="secbar" aria-label="Abschnitte · Sections">
-    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="prolog-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="prolog-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="prolog-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="prolog-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="prolog-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button></div><a class="secbar-exam" href="#exam-prolog"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
+    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="prolog-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="prolog-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="prolog-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="prolog-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="prolog-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button><button type="button" data-jump="prolog-tree"><span class="n">06</span><span class="de">Suchbaum</span><span class="en">Search tree</span></button></div><a class="secbar-exam" href="#exam-prolog"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
     <div class="secbar-prog" aria-hidden="true"><span></span></div>
   </nav>
 
@@ -1370,6 +1485,12 @@ grossmutterVon(G, K) :- mutterVon(G, M), mutterVon(M, K).
 
 ?- grossmutterVon(Oma, aline).
 Oma = renate.</pre>
+  </section>
+
+  <section class="sec" id="prolog-tree">
+    <div class="sec-h"><span class="num">06</span><h2><span class="de">Der Suchbaum Schritt für Schritt</span><span class="en">The search tree step by step</span></h2></div>
+    <p class="prose"><span class="de">Prolog sucht Antworten in einem Baum: Das erste Ziel wird mit einer passenden Klausel unifiziert, dann geht es in die Tiefe; scheitert ein Zweig, geht Prolog zurück und probiert die nächste Klausel. Genau diesen SLD-Baum zeichnest du in der Klausur. Hier wächst er Knoten für Knoten.</span><span class="en">Prolog searches for answers in a tree: the first goal is unified with a matching clause, then the search goes deeper; when a branch fails, Prolog goes back and tries the next clause. This is exactly the SLD tree you draw in the exam. Here it grows node by node.</span></p>
+    <div id="sld" class="sld"></div>
     <div class="pager"><a class="btn" href="#haskell">← Haskell</a><a class="btn" href="#exam-prolog"><span class="de">Klausur-Training Prolog</span><span class="en">Prolog exam training</span></a><a class="btn primary" href="#hoare"><span class="de">Weiter: Hoare-Kalkül →</span><span class="en">Next: Hoare logic →</span></a></div>
   </section>
 </section>
@@ -1616,6 +1737,7 @@ Oma = renate.</pre>
     <p class="lede"><span class="de">Für jeden Teil der Vorlesung gibt es ein eigenes Klausur-Training mit Punkten. Die Aufgaben werden sofort ausgewertet; Programmieraufgaben in Prolog testet ein eingebautes Mini-Prolog.</span><span class="en">Each part of the lecture has its own exam training with points. Tasks are graded immediately; Prolog programming tasks are tested by a built-in mini Prolog.</span></p>
   </div>
   <section class="sec">
+    <a class="mock-card" href="#mock"><span class="mc-k"><span class="de">Neu · alle Teile · mit Zeitlimit</span><span class="en">New · all parts · timed</span></span><span class="mc-t"><span class="de">Probeklausur</span><span class="en">Practice exam</span></span><span class="mc-d"><span class="de">Hoare-Kalkül, Java, Haskell und Prolog in einem Durchgang, jedes Mal neu zusammengestellt. Am Ende Punkte pro Teil, eine geschätzte Note und deine typischen Fehler.</span><span class="en">Hoare logic, Java, Haskell and Prolog in one go, put together anew every time. At the end: points per part, an estimated grade and your typical mistakes.</span></span><span class="mc-go"><span class="de">Probeklausur schreiben →</span><span class="en">Write a practice exam →</span></span></a>
     <div class="parts">
       <a class="part-card" href="#exam-java"><span class="pn">II · 24 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Java</span><span class="pd"><span class="de">8 Aufgaben: Ausgaben, Parameterübergabe, dynamisches Binden, Überladen, Rekursion, abstrakte Klassen, eine Methode schreiben.</span><span class="en">8 tasks: outputs, parameter passing, dynamic binding, overloading, recursion, abstract classes, writing a method.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
       <a class="part-card accent" href="#exam-hoare"><span class="pn">II.1.4 · <span class="de">mit Zeitlimit</span><span class="en">timed</span></span><span class="pt">Hoare-Kalkül</span><span class="pd"><span class="de">Klausur-Simulation: alle Zusicherungen, Invariante und Variante selbst eintragen, 13 Programme.</span><span class="en">Exam simulation: fill in every assertion, the invariant and the variant yourself, 13 programs.</span></span><span class="go"><span class="de">Simulation starten →</span><span class="en">Start simulation →</span></span></a>
@@ -1623,8 +1745,19 @@ Oma = renate.</pre>
       <a class="part-card" href="#exam-prolog"><span class="pn">IV · 23 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Prolog</span><span class="pd"><span class="de">6 Aufgaben: Unifikation, Anfragen mit Backtracking, drei Prädikate programmieren, dazu eine Prolog-Spielwiese.</span><span class="en">6 tasks: unification, queries with backtracking, programming three predicates, plus a Prolog playground.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
     </div>
     <a class="print-card" href="#print"><span class="pc-i" aria-hidden="true">🖶</span><span><b><span class="de">Probeklausur auf Papier</span><span class="en">Practice exam on paper</span></b><span class="muted"><span class="de">Alle Teile als Druckversion oder PDF, Lösungen auf eigenen Seiten.</span><span class="en">All parts as a printable version or PDF, solutions on separate pages.</span></span></span><span class="pc-go"><span class="de">Zur Druckversion →</span><span class="en">To the print version →</span></span></a>
+    <a class="print-card" href="#progress"><span class="pc-i" aria-hidden="true">◔</span><span><b><span class="de">Meine Schwächen</span><span class="en">My weak spots</span></b><span class="muted"><span class="de">Sicherheit pro Thema und deine häufigsten Fehler, mit gezieltem Training.</span><span class="en">Confidence per topic and your most frequent mistakes, with targeted practice.</span></span></span><span class="pc-go"><span class="de">Ansehen →</span><span class="en">View →</span></span></a>
     <p class="small muted"><span class="de">Die Aufgaben sind eigene Übungsaufgaben im Stil der Klausur, keine Originalaufgaben der RWTH.</span><span class="en">The tasks are original practice tasks in exam style, not actual RWTH exam questions.</span></p>
   </section>
+</section>
+
+<section class="view" id="view-mock" aria-labelledby="mock-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span><span class="de">Probeklausur</span><span class="en">Practice exam</span></span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Klausur · alle Teile</span><span class="en">Exam · all parts</span></div>
+    <h1 id="mock-title"><span class="de">Probeklausur</span><span class="en">Practice exam</span></h1>
+    <p class="lede"><span class="de">Eine komplette Klausur aus allen vier Teilen: Hoare-Kalkül, Java, Haskell und Prolog. Jede Probeklausur wird neu zusammengestellt; ausgewertet wird erst beim Abgeben, wie in der echten Klausur.</span><span class="en">A complete exam from all four parts: Hoare logic, Java, Haskell and Prolog. Every practice exam is put together anew; grading happens only when you hand it in, as in the real exam.</span></p>
+  </div>
+  <div id="mock"></div>
 </section>
 
 <section class="view" id="view-exam-java" aria-labelledby="lx-java-title">
@@ -2367,12 +2500,12 @@ const PL = (() => {
     return out;
   }
   function parseProgram(src) {
-    const db = {};
+    const db = {}; let idx = 0;
     for (const { term } of parseTerms(src)) {
       let head = term, body = atom('true');
       if (term.t === 'c' && term.f === ':-' && term.a.length === 2) { head = term.a[0]; body = term.a[1]; }
       if (head.t === 'v' || head.t === 'n') throw perr('head');
-      const key = keyOf(head); (db[key] ||= []).push({ head, body });
+      const key = keyOf(head); (db[key] ||= []).push({ head, body, idx: ++idx });
     }
     return db;
   }
@@ -2467,6 +2600,76 @@ const PL = (() => {
     return t.f + '(' + t.a.map(x => fmt(x, s, false)).join(',') + ')';
   }
 
+
+  /* SLD search tree for teaching: nodes in depth-first order with the clause used and the new bindings */
+  function traceSLD(program, query, maxNodes = 70) {
+    try {
+      const db = typeof program === 'string' ? parseProgram(program) : program;
+      const q = parseQuery(query);
+      const qn = {}; Object.entries(q.names).forEach(([n, v]) => { if (!n.startsWith('_')) qn[v.id] = n; });
+      const nice = {}; let nv = 0;
+      const vname = v => qn[v.id] || nice[v.id] || (nice[v.id] = (v.n && v.n !== '_' ? v.n : 'V') + String(++nv).replace(/\d/g, d => '₀₁₂₃₄₅₆₇₈₉'[d]));
+      const fd = (t, s) => {
+        t = walk(t, s);
+        if (t.t === 'v') return vname(t);
+        if (t.t === 'n') return String(t.v);
+        if (t.t === 'a') return t.n;
+        if (t.f === '.' && t.a.length === 2) { const it = []; let c = t; while (c.t === 'c' && c.f === '.' && c.a.length === 2) { it.push(fd(c.a[0], s)); c = walk(c.a[1], s); } return '[' + it.join(', ') + (c.t === 'a' && c.n === '[]' ? '' : ' | ' + fd(c, s)) + ']'; }
+        if (INFIX[t.f] && t.a.length === 2) return fd(t.a[0], s) + (/^[a-z]/.test(t.f) || t.f === ',' ? ' ' + t.f + ' ' : ' ' + t.f + ' ') + fd(t.a[1], s);
+        return t.f + '(' + t.a.map(x => fd(x, s)).join(', ') + ')';
+      };
+      const flat = (goals, s) => { const out = []; let g = goals; while (g) { let x = walk(g.g, s); if (x.t === 'c' && x.f === ',' && x.a.length === 2) { g = { g: x.a[0], next: { g: x.a[1], next: g.next } }; continue; } if (!(x.t === 'a' && x.n === 'true')) out.push(x); g = g.next; } return out; };
+      const varsIn = (t, s, acc = []) => { t = walk(t, s); if (t.t === 'v') { if (!acc.includes(t)) acc.push(t); } else if (t.t === 'c') t.a.forEach(x => varsIn(x, s, acc)); return acc; };
+      const binds = (g, s, s2) => varsIn(g, s).filter(v => walk(v, s2) !== v).map(v => `${vname(v)} = ${fd(v, s2)}`).join(', ');
+      const qvars = Object.entries(q.names).filter(([n]) => !n.startsWith('_'));
+      const nodes = []; let truncated = false;
+      function nodeU(goals, s, depth, parent, edge) {
+        const gl = flat(goals, s);
+        const nd = { id: nodes.length, parent, edge, goals: gl.length ? gl.map(x => fd(x, s)).join(', ') : '□', depth, kind: 'goal' };
+        if (nodes.length >= maxNodes || depth > 30) { truncated = true; return null; }
+        nodes.push(nd);
+        if (!gl.length) { nd.kind = 'success'; nd.answer = qvars.length ? qvars.map(([n, v]) => `${n} = ${fd(v, s)}`).join(', ') : 'true'; return nd; }
+        const g = gl[0], restL = gl.slice(1), mk = list => list.reduceRight((acc, x) => ({ g: x, next: acc }), null);
+        const key = keyOf(g), a = g.a || [];
+        let kids = 0;
+        const BI = { '=/2': 1, '\\=/2': 1, 'is/2': 1, '</2': 1, '>/2': 1, '=</2': 1, '>=/2': 1, '=:=/2': 1, '=\\=/2': 1, '\\+/1': 1, '==/2': 1, '\\==/2': 1, 'fail/0': 1, 'false/0': 1 };
+        if (key === ';/2') { kids += 2; nodeU({ g: a[0], next: mk(restL) }, s, depth + 1, nd.id, { builtin: ';', binds: '' }); nodeU({ g: a[1], next: mk(restL) }, s, depth + 1, nd.id, { builtin: ';', binds: '' }); }
+        else if (BI[key]) {
+          let s2 = null;
+          try {
+            if (key === '=/2') s2 = unify(a[0], a[1], s);
+            else if (key === '\\=/2') s2 = unify(a[0], a[1], s) ? null : s;
+            else if (key === 'is/2') s2 = unify(a[0], num(evalA(a[1], s)), s);
+            else if (key === '==/2') s2 = same(a[0], a[1], s) ? s : null;
+            else if (key === '\\==/2') s2 = same(a[0], a[1], s) ? null : s;
+            else if (key === '\\+/1') { let f = false; for (const _ of solve({ g: a[0], next: null }, s, db, { steps: 0, max: 20000 }, 0)) { f = true; break; } s2 = f ? null : s; }
+            else if (key === 'fail/0' || key === 'false/0') s2 = null;
+            else { const x = evalA(a[0], s), y = evalA(a[1], s); s2 = ({ '<': x < y, '>': x > y, '=<': x <= y, '>=': x >= y, '=:=': x === y, '=\\=': x !== y }[g.f]) ? s : null; }
+          } catch (e) { nd.kind = 'error'; nd.err = e.code || 'error'; return nd; }
+          if (s2) { kids++; nodeU(mk(restL), s2, depth + 1, nd.id, { builtin: g.f, binds: binds(g, s, s2) }); }
+        } else {
+          const cls = db[key]; if (!cls) { nd.kind = 'error'; nd.err = 'unknown'; nd.detail = key; return nd; }
+          for (const cl of cls) {
+            if (nodes.length >= maxNodes) { truncated = true; break; }
+            const map = {}; const h = rename(cl.head, map), b = rename(cl.body, map);
+            const s2 = unify(g, h, s);
+            if (!s2) continue;
+            kids++;
+            const body = b.t === 'a' && b.n === 'true' ? [] : [b];
+            nodeU(mk([...body, ...restL]), s2, depth + 1, nd.id, { clause: cl.idx, binds: binds(g, s, s2) });
+          }
+        }
+        if (!kids && nd.kind === 'goal') nd.kind = 'fail';
+        return nd;
+      }
+      nodeU({ g: q.term, next: null }, {}, 0, null, null);
+      return { nodes, truncated };
+    } catch (e) {
+      if (e === LIMIT) return { error: 'limit' };
+      return { error: e.code || 'syntax', detail: e.detail };
+    }
+  }
+
   /* run a query: returns {answers:[{Var: 'val'}], more:boolean} or {error} */
   function run(program, query, maxAnswers = 8, maxSteps = 60000) {
     try {
@@ -2549,7 +2752,7 @@ const PL = (() => {
   }
   /* true if the terms unify when the occurs check is switched off (used to name the typical mistake) */
   function unifiesWithoutOC(t1src, t2src) { try { const { term } = parseTerms(`p(${t1src}, ${t2src}).`)[0]; return !!unify(term.a[0], term.a[1], {}, false); } catch (e) { return false; } }
-  return { run, parseProgram, checkUnifier, refUnifier, unifiesWithoutOC, fmt };
+  return { run, parseProgram, checkUnifier, refUnifier, unifiesWithoutOC, traceSLD, fmt };
 })();
 
 /* ===== Haskell type comparison ===== */
@@ -3024,7 +3227,7 @@ function handleWS(e) {
     case 'check': {
       const r = userFormula(ex, readVal(), 'B');
       if (r.err) P.res[s.id] = r;
-      else { const q = equiv(ex, r.ast, s.expect); if (!q.ok) { q.vars = [...new Set([...varsOf(r.ast), ...varsOf(s.expect)])]; q.tip = diagWp(ex, r.ast, s.k === 'input' ? [{ k: 'asg', x: s.x, e: parse(s.tsrc), src: s.tsrc }] : compile(ex).init, s.after); } P.res[s.id] = q.ok ? { ok: true } : q; if (q.ok) P.done[s.id] = true; }
+      else { const q = equiv(ex, r.ast, s.expect); if (!q.ok) { q.vars = [...new Set([...varsOf(r.ast), ...varsOf(s.expect)])]; q.tip = diagWp(ex, r.ast, s.k === 'input' ? [{ k: 'asg', x: s.x, e: parse(s.tsrc), src: s.tsrc }] : compile(ex).init, s.after); } P.res[s.id] = q.ok ? { ok: true } : q; if (q.ok) P.done[s.id] = true; stRecord('hoare-wp', q.ok, q.ok ? null : q.tip); }
       break; }
     case 'hint': P.res[s.id + '_h'] = true; break;
     case 'show': P.res[s.id] = { shown: true }; break;
@@ -3036,12 +3239,12 @@ function handleWS(e) {
     case 'cand': { const k = +b.dataset.k; P.res[s.id] = { picked: k }; if (ex.cands[k].ok) P.done[s.id] = true; break; }
     case 'checkinv': {
       const r = userFormula(ex, readVal(), 'B');
-      if (r.err) P.res[s.id] = r; else { const R = checkInv(ex, r.ast); P.res[s.id] = { R, tip: diagInv(ex, r.ast, R) }; if (R.ok) P.done[s.id] = true; }
+      if (r.err) P.res[s.id] = r; else { const R = checkInv(ex, r.ast); P.res[s.id] = { R, tip: diagInv(ex, r.ast, R) }; if (R.ok) P.done[s.id] = true; stRecord('hoare-inv', R.ok, P.res[s.id].tip); }
       break; }
     case 'morehint': P.hints++; break;
     case 'checkvar': {
       const r = userFormula(ex, readVal(), 'N');
-      if (r.err) P.res[s.id] = r; else { const R = checkVariant(ex, r.ast); P.res[s.id] = { R, tip: diagVar(R) }; if (R.ok) P.done[s.id] = true; }
+      if (r.err) P.res[s.id] = r; else { const R = checkVariant(ex, r.ast); P.res[s.id] = { R, tip: diagVar(R) }; if (R.ok) P.done[s.id] = true; stRecord('hoare-var', R.ok, P.res[s.id].tip); }
       break; }
     case 'vhint': P.vhint = true; break;
     case 'reset': delete ST.P[ex.id]; break;
@@ -3083,9 +3286,8 @@ function kArmTimer() {
     if (el) { const m = Math.floor(left / 60000), s = Math.floor(left / 1000) % 60; el.textContent = `${m}:${String(s).padStart(2, '0')}`; el.classList.toggle('warn', left < 120000); }
   }, 1000);
 }
-function kGrade() {
-  clearInterval(kTimer); kTimer = null;
-  const ex = exById(ST.K.id), c = compile(ex), V = ST.K.vals, res = { lines: {}, vlines: {}, pts: 0 };
+function hoareGradeWith(ex, V) {
+  const c = compile(ex), res = { lines: {}, vlines: {}, pts: 0 };
   const iu = userFormula(ex, V.inv || '', 'B');
   let Igrade = c.inv;
   if (iu.ast) { res.invR = checkInv(ex, iu.ast); if (res.invR.ok) { Igrade = iu.ast; res.invOK = true; res.pts += 2; } else res.invTip = diagInv(ex, iu.ast, res.invR); }
@@ -3109,16 +3311,56 @@ function kGrade() {
     if (ok) res.pts++;
   });
   res.total = kTotal(ex);
+  return res;
+}
+function hoareRecord(res) {
+  Object.values(res.lines).forEach(r => stRecord('hoare-wp', r.ok, null));
+  stRecord('hoare-inv', !!res.invOK, res.invTip || null);
+  stRecord('hoare-var', !!res.varOK, res.varTip || null);
+}
+function kGrade() {
+  clearInterval(kTimer); kTimer = null;
+  const ex = exById(ST.K.id), res = hoareGradeWith(ex, ST.K.vals); hoareRecord(res);
   ST.K.res = res; ST.K.phase = 'done';
   renderExam(); window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
   snapshot();
 }
-function kInputLine(key, ind, done, r) {
-  const v = ST.K.vals[key] ?? '';
+function kInputLine(key, ind, done, r, vals) {
+  const v = (vals || ST.K.vals)[key] ?? '';
   const mark = done ? `<span class="nt kmark ${r.ok ? 'yes' : 'no'}">${r.ok ? '✓ 1' : '✗ 0'}</span>` : '';
   const inp = `<div class="ln a" style="--ind:${ind}"><span class="tx">⟨</span><input class="fx" data-k="${key}" value="${esc(v)}" placeholder="${esc(t('pha'))}" autocomplete="off" spellcheck="false" aria-label="${esc(t('pha'))}" ${done ? 'disabled' : ''}><span class="tx">⟩</span>${mark}</div>`;
   const exp = done && !r.ok ? `<div class="ln kexp" style="--ind:${ind}"><span class="tx">${t('k_expected')} ⟨${esc(r.exp)}⟩${r.err ? ' · ' + errMsg(r.err) : ''}</span></div>` : '';
   return inp + exp;
+}
+function hoarePaperHTML(ex, vals, done, R) {
+  const c = compile(ex), b = kBlankLines(ex);
+  const aux = auxName(ex);
+  const partA = b.A.map((l, i) => {
+    if (l.k === 'c') return lnHTML(l);
+    if (i === 0 || i === b.A.length - 1) return lnHTML({ ...l, note: null });
+    return kInputLine('a' + i, l.ind, done, done ? R.lines[i] : null, vals);
+  }).join('');
+  const partB = [lnHTML({ k: 'c', s: `while (${ex.cond}) {`, ind: 0 }), ...b.V.map((l, i) => l.k === 'c' ? lnHTML(l) : kInputLine('v' + i, l.ind, done, done ? R.vlines[i] : null, vals)), lnHTML({ k: 'c', s: '}', ind: 0 })].join('');
+  const invMark = done ? `<span class="kmark ${R.invOK ? 'yes' : 'no'}">${R.invOK ? '✓ 2' : '✗ 0'}</span>` : '';
+  const varMark = done ? `<span class="kmark ${R.varOK ? 'yes' : 'no'}">${R.varOK ? '✓ 1' : '✗ 0'}</span>` : '';
+  let invFb = '', varFb = '';
+  if (done) {
+    if (R.invOK) invFb = `<div class="fb ok">${t('k_inv_used')}</div>`;
+    else invFb = `<div class="fb bad"><span>${R.invErr && (vals.inv || '').trim() ? errMsg(R.invErr) + ' ' : ''}${t('k_inv_bad')}</span><span class="as">⟨${esc(pr(c.inv))}⟩</span></div>${R.invR ? checkHTML(R.invR, ex, false, R.invTip) : ''}`;
+    if (!R.varOK) varFb = `<div class="fb bad"><span>${R.varErr && (vals.var || '').trim() ? errMsg(R.varErr) + ' ' : ''}${t('k_var_bad')}</span><span class="as">V = ${esc(pr(c.variant))}</span></div>${R.varR ? variantHTML(R.varR, ex, R.varTip) : ''}`;
+  }
+  return `
+      <section class="kpart"><h2>${t('k_a')}</h2><p>${t('k_a_txt')}</p>${syntaxHTML(ex)}
+        <div class="prog">${partA}</div>
+        <div class="kinv"><span>${t('k_inv')}</span><span class="tx as">⟨</span><input class="fx" data-k="inv" value="${esc(vals.inv ?? '')}" placeholder="${esc(t('ph'))}" autocomplete="off" spellcheck="false" aria-label="${esc(t('k_inv'))}" ${done ? 'disabled' : ''}><span class="tx as">⟩</span>${invMark}</div>
+        ${invFb}
+      </section>
+      <section class="kpart"><h2>${t('k_b')}</h2><p>${t('k_b_txt', { m: `<span class="mono">${aux}</span>` })}</p>
+        <div class="inline-in"><span class="mono">V =</span><input data-k="var" value="${esc(vals.var ?? '')}" placeholder="${esc(t('phv'))}" autocomplete="off" spellcheck="false" aria-label="V" ${done ? 'disabled' : ''}>${varMark}</div>
+        <div class="prog">${partB}</div>
+        ${varFb}
+      </section>
+      ${done ? `<section class="kpart"><h2>${t('s_sol')}</h2>${linesHTML(annotate(ex))}${linesHTML(annotateVariant(ex))}</section>` : ''}`;
 }
 function renderExam() {
   const box = document.getElementById('exam'), K = ST.K;
@@ -3136,21 +3378,7 @@ function renderExam() {
     return;
   }
   const ex = exById(K.id), c = compile(ex), b = kBlankLines(ex), done = K.phase === 'done', R = K.res;
-  const aux = auxName(ex);
-  const partA = b.A.map((l, i) => {
-    if (l.k === 'c') return lnHTML(l);
-    if (i === 0 || i === b.A.length - 1) return lnHTML({ ...l, note: null });
-    return kInputLine('a' + i, l.ind, done, done ? R.lines[i] : null);
-  }).join('');
-  const partB = [lnHTML({ k: 'c', s: `while (${ex.cond}) {`, ind: 0 }), ...b.V.map((l, i) => l.k === 'c' ? lnHTML(l) : kInputLine('v' + i, l.ind, done, done ? R.vlines[i] : null)), lnHTML({ k: 'c', s: '}', ind: 0 })].join('');
-  const invMark = done ? `<span class="kmark ${R.invOK ? 'yes' : 'no'}">${R.invOK ? '✓ 2' : '✗ 0'}</span>` : '';
-  const varMark = done ? `<span class="kmark ${R.varOK ? 'yes' : 'no'}">${R.varOK ? '✓ 1' : '✗ 0'}</span>` : '';
-  let invFb = '', varFb = '';
-  if (done) {
-    if (R.invOK) invFb = `<div class="fb ok">${t('k_inv_used')}</div>`;
-    else invFb = `<div class="fb bad"><span>${R.invErr && (K.vals.inv || '').trim() ? errMsg(R.invErr) + ' ' : ''}${t('k_inv_bad')}</span><span class="as">⟨${esc(pr(c.inv))}⟩</span></div>${R.invR ? checkHTML(R.invR, ex, false, R.invTip) : ''}`;
-    if (!R.varOK) varFb = `<div class="fb bad"><span>${R.varErr && (K.vals.var || '').trim() ? errMsg(R.varErr) + ' ' : ''}${t('k_var_bad')}</span><span class="as">V = ${esc(pr(c.variant))}</span></div>${R.varR ? variantHTML(R.varR, ex, R.varTip) : ''}`;
-  }
+  const paper = hoarePaperHTML(ex, K.vals, done, R);
   const pct = done ? R.pts / R.total : 0;
   const head = done
     ? `<div class="kscore"><div class="big">${t('k_score', { p: R.pts, t: R.total })}</div><div class="bar"><span style="width:${Math.round(pct * 100)}%"></span></div><p>${K.timeup ? t('k_timeup') + ' ' : ''}${pct >= 0.8 ? t('k_g1') : pct >= 0.5 ? t('k_g2') : t('k_g3')}</p>
@@ -3160,17 +3388,8 @@ function renderExam() {
     <div class="plan-h"><div class="kicker">${t('k_kicker')}</div><h1 id="exam-title">${esc(L(ex.title))}</h1></div>
     <div class="kpaper">
       ${head}
-      <section class="kpart"><h2>${t('k_a')}</h2><p>${t('k_a_txt')}</p>${syntaxHTML(ex)}
-        <div class="prog">${partA}</div>
-        <div class="kinv"><span>${t('k_inv')}</span><span class="tx as">⟨</span><input class="fx" data-k="inv" value="${esc(K.vals.inv ?? '')}" placeholder="${esc(t('ph'))}" autocomplete="off" spellcheck="false" aria-label="${esc(t('k_inv'))}" ${done ? 'disabled' : ''}><span class="tx as">⟩</span>${invMark}</div>
-        ${invFb}
-      </section>
-      <section class="kpart"><h2>${t('k_b')}</h2><p>${t('k_b_txt', { m: `<span class="mono">${aux}</span>` })}</p>
-        <div class="inline-in"><span class="mono">V =</span><input data-k="var" value="${esc(K.vals.var ?? '')}" placeholder="${esc(t('phv'))}" autocomplete="off" spellcheck="false" aria-label="V" ${done ? 'disabled' : ''}>${varMark}</div>
-        <div class="prog">${partB}</div>
-        ${varFb}
-      </section>
-      ${done ? `<section class="kpart"><h2>${t('s_sol')}</h2>${linesHTML(annotate(ex))}${linesHTML(annotateVariant(ex))}</section>` : `<div class="row"><button class="btn primary" type="button" data-k-act="submit">${t('k_submit')}</button></div>`}
+      ${paper}
+      ${done ? '' : `<div class="row"><button class="btn primary" type="button" data-k-act="submit">${t('k_submit')}</button></div>`}
     </div>`;
   if (!done && K.ends) { const left = Math.max(0, K.ends - Date.now()), m = Math.floor(left / 60000), s = Math.floor(left / 1000) % 60; const el = document.getElementById('k-clock'); if (el) el.textContent = `${m}:${String(s).padStart(2, '0')}`; }
 }
@@ -3212,11 +3431,11 @@ function renderTracer() {
 }
 
 /* ---- view routing & language ---- */
-const VIEWS = ['plan', 'daily', 'prog', 'weeks', 'resources', 'glossary', 'print', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam', 'exam-java', 'exam-haskell', 'exam-prolog', 'exam-hoare'];
+const VIEWS = ['plan', 'daily', 'prog', 'weeks', 'resources', 'glossary', 'progress', 'print', 'mock', 'java', 'haskell', 'prolog', 'hoare', 'practice', 'exam', 'exam-java', 'exam-haskell', 'exam-prolog', 'exam-hoare'];
 const PROG_VIEWS = VIEWS.filter(v => v !== 'plan' && v !== 'daily');
-const TOP_OF = { weeks: 'prog', resources: 'prog', glossary: 'prog', print: 'exam', java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
-const SUB_OF = { print: 'exam', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
-const TITLES = { plan: 'Hoare Lab', daily: 'Täglich · Hoare Lab', weeks: 'Wochenplan · Hoare Lab', resources: 'Weiterlernen · Hoare Lab', glossary: 'Glossar · Hoare Lab', print: 'Probeklausur drucken · Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
+const TOP_OF = { weeks: 'prog', resources: 'prog', glossary: 'prog', progress: 'prog', print: 'exam', mock: 'exam', java: 'prog', haskell: 'prog', prolog: 'prog', hoare: 'prog', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const SUB_OF = { print: 'exam', mock: 'exam', 'exam-java': 'exam', 'exam-haskell': 'exam', 'exam-prolog': 'exam', 'exam-hoare': 'exam' };
+const TITLES = { plan: 'Hoare Lab', daily: 'Täglich · Hoare Lab', weeks: 'Wochenplan · Hoare Lab', resources: 'Weiterlernen · Hoare Lab', glossary: 'Glossar · Hoare Lab', progress: 'Meine Schwächen · Hoare Lab', mock: 'Probeklausur · Hoare Lab', print: 'Probeklausur drucken · Hoare Lab', prog: 'Programmierung · Hoare Lab', java: 'Java · Hoare Lab', haskell: 'Haskell · Hoare Lab', prolog: 'Prolog · Hoare Lab', hoare: 'Hoare-Kalkül · Hoare Lab', practice: 'Übungen · Hoare Lab', exam: 'Klausur · Hoare Lab', 'exam-java': 'Klausur Java · Hoare Lab', 'exam-haskell': 'Klausur Haskell · Hoare Lab', 'exam-prolog': 'Klausur Prolog · Hoare Lab', 'exam-hoare': 'Klausur Hoare-Kalkül · Hoare Lab' };
 
 /* section bar (Java/Haskell/Prolog): jump, scrollspy, progress */
 function hdrH() { const h = document.querySelector('header.top'); return h && getComputedStyle(h).position === 'sticky' ? h.offsetHeight : 0; }
@@ -3257,6 +3476,8 @@ function initSecbar() {
 }
 function showView(v, scroll) {
   if (v && v.startsWith('import=')) { v = 'daily'; try { dImportFromHash(location.hash.slice(1)); } catch (e) {} }
+  let anchor = null;
+  if (v && !VIEWS.includes(v)) { const el = document.getElementById(v), vw = el && el.closest('section.view'); if (vw && el.classList.contains('sec')) { anchor = el; v = vw.id.slice(5); } }
   if (!VIEWS.includes(v)) v = 'plan';
   ST.view = v;
   VIEWS.forEach(n => document.getElementById('view-' + n).classList.toggle('on', n === v));
@@ -3269,13 +3490,18 @@ function showView(v, scroll) {
   if (v === 'daily') renderDaily();
   if (v === 'weeks') renderWeeks();
   if (v === 'glossary') renderGlossary();
+  if (v === 'progress') renderProgress();
+  if (v === 'mock') renderMock();
+  if (v === 'prolog') renderSLD();
+  if (v === 'haskell') renderHS();
   if (v === 'print') renderPrint();
   if (v === 'resources') renderResources();
   if (v === 'prog') renderThisWeek();
   if (v === 'practice') renderPractice();
   if (v === 'exam-hoare') { renderExam(); kArmTimer(); }
   if (v.startsWith('exam-') && LX[v.slice(5)]) renderLX(v.slice(5));
-  if (scroll) window.scrollTo(0, 0);
+  if (anchor) requestAnimationFrame(() => anchor.scrollIntoView({ block: 'start' }));
+  else if (scroll) window.scrollTo(0, 0);
   try { secbarSpy(); } catch (e) {}
 }
 function setLang(l) {
@@ -3289,6 +3515,10 @@ function setLang(l) {
   if (ST.view === 'daily') renderDaily();
   if (ST.view === 'weeks') renderWeeks();
   if (ST.view === 'glossary') renderGlossary();
+  if (ST.view === 'progress') renderProgress();
+  if (ST.view === 'mock') renderMock();
+  if (ST.view === 'prolog') renderSLD();
+  if (ST.view === 'haskell') renderHS();
   if (ST.view === 'print') renderPrint();
   try { renderInstall(); } catch (e) {}
   try { calBtnLabel(); } catch (e) {}
@@ -3311,6 +3541,10 @@ function start(data) {
   initWeeks();
   initCalDlg();
   initGlossary();
+  initProgress();
+  initMock();
+  initSLD();
+  initHS();
   initPrint();
   initPWA();
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
@@ -6217,6 +6451,103 @@ function diagProg(t, items) {
   if (errs.includes('inst')) return tip('inst');
   return null;
 }
+/* ================= learning statistics + "Meine Schwächen" ================= */
+const STKEY = 'hoarelab-stats';
+const ST_TOPICS = [
+  ['hoare-wp', { de: 'Hoare: Zusicherungen und schwächste Vorbedingung', en: 'Hoare: assertions and weakest precondition' }, { gen: 'hwp' }, '#hoare'],
+  ['hoare-inv', { de: 'Hoare: Schleifeninvarianten', en: 'Hoare: loop invariants' }, { gen: 'hinv' }, '#practice'],
+  ['hoare-var', { de: 'Hoare: Varianten und Terminierung', en: 'Hoare: variants and termination' }, { href: '#practice' }, '#practice'],
+  ['java-trace', { de: 'Java: Programme verfolgen', en: 'Java: tracing programs' }, { gen: 'java' }, '#java'],
+  ['java-oo', { de: 'Java: Referenzen, Vererbung, Binden', en: 'Java: references, inheritance, binding' }, { href: '#exam-java' }, '#java'],
+  ['hs-type', { de: 'Haskell: Typen bestimmen', en: 'Haskell: finding types' }, { gen: 'htype' }, '#haskell'],
+  ['hs-eval', { de: 'Haskell: Auswerten, Muster, Lazy Evaluation', en: 'Haskell: evaluation, patterns, laziness' }, { href: '#haskell-steps' }, '#haskell'],
+  ['pl-unify', { de: 'Prolog: Unifikation', en: 'Prolog: unification' }, { gen: 'unify' }, '#prolog'],
+  ['pl-query', { de: 'Prolog: Anfragen und Backtracking', en: 'Prolog: queries and backtracking' }, { href: '#prolog-tree' }, '#prolog'],
+  ['pl-prog', { de: 'Prolog: Prädikate schreiben', en: 'Prolog: writing predicates' }, { href: '#exam-prolog' }, '#prolog']
+];
+const GEN_TOPIC = { hwp: 'hoare-wp', hinv: 'hoare-inv', java: 'java-trace', htype: 'hs-type', unify: 'pl-unify' };
+const TASK_TOPIC = { j1: 'java-trace', j5: 'java-trace', j6: 'java-trace', j2: 'java-oo', j3: 'java-oo', j4: 'java-oo', j7: 'java-oo',
+  h1: 'hs-type', h2: 'hs-type', h3: 'hs-eval', h4: 'hs-eval', h5: 'hs-eval', p1: 'pl-unify', p2: 'pl-query', p3: 'pl-query', p4: 'pl-prog', p5: 'pl-prog', p6: 'pl-prog' };
+function stFresh() { return { v: 1, t: {}, e: {} }; }
+let STS = (() => { try { const j = JSON.parse(localStorage.getItem(STKEY)); if (j && j.v === 1) return Object.assign(stFresh(), j); } catch (e) {} return stFresh(); })();
+function stSave() { try { localStorage.setItem(STKEY, JSON.stringify(STS)); } catch (e) {} }
+function stTipKey(tip) { if (tip.k) return tip.k; let h = 0; const s = tip.m.de; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return 'm' + (h >>> 0).toString(36); }
+/* record one answered item */
+function stRecord(topic, ok, tip) {
+  if (!topic) return;
+  const T = STS.t[topic] || (STS.t[topic] = { n: 0, ok: 0, last: [] });
+  T.n++; if (ok) T.ok++; T.last = [...T.last, ok ? 1 : 0].slice(-12);
+  if (!ok && tip) {
+    const k = stTipKey(tip), E = STS.e[k] || (STS.e[k] = { n: 0, topic });
+    E.n++; E.d = dToday(); if (tip.k) { E.k = tip.k; E.rep = tip.rep || null; } else E.m = tip.m;
+  }
+  stSave();
+}
+function stAcc(topic) { const T = STS.t[topic]; return T && T.n ? T.ok / T.n : null; }
+function stRecent(topic) { const T = STS.t[topic]; return T && T.last.length ? T.last.reduce((a, b) => a + b, 0) / T.last.length : null; }
+/* generator to emphasise in Täglich: the weakest generator-backed topic with enough data */
+function stWeakGen() {
+  let best = null, bv = 2;
+  for (const [g, tp] of Object.entries(GEN_TOPIC)) { const T = STS.t[tp]; if (!T || T.last.length < 3) continue; const r = stRecent(tp); if (r < 0.75 && r < bv) { bv = r; best = g; } }
+  return best;
+}
+/* record the graded items of an exam-training task */
+function stRecordTask(t, res) {
+  const tp = TASK_TOPIC[t.id]; if (!tp || !res) return;
+  if (t.type === 'pprog') { stRecord(tp, res.items.every(i => i.ok), res.tip); return; }
+  if (t.type === 'self') return;
+  res.items.forEach(it => stRecord(tp, it.ok, it.tip));
+}
+
+/* ---------- page ---------- */
+const STT = {
+  de: { empty: 'Noch keine Daten. Löse ein paar Aufgaben in Täglich, in den Übungen oder in den Klausur-Trainings; dann zeigt diese Seite, wo du stehst.',
+        sum: '{n} Antworten ausgewertet, {p} % richtig', topics: 'Themen', errs: 'Deine häufigsten typischen Fehler', errs_none: 'Bisher kein typischer Fehler erkannt.',
+        acc: '{p} % richtig', recent: 'zuletzt {p} %', nodata: 'noch keine Daten', n: '{n} Antworten', practise: 'Gezielt üben →', explain: 'Zum Thema',
+        times: '{n}×', last: 'zuletzt {d}', strong: 'sicher', mid: 'fast sicher', weak: 'üben', reset: 'Statistik zurücksetzen', reset_q: 'Wirklich alles löschen?',
+        note: 'Die Statistik bleibt nur in diesem Browser. Sie wird mit dem Übertragungscode aus Täglich nicht mitgenommen.', focus_h: 'Fokus-Runde', mock: 'Probeklausur schreiben →' },
+  en: { empty: 'No data yet. Solve a few tasks in Daily, the exercises or the exam trainings; then this page shows where you stand.',
+        sum: '{n} answers evaluated, {p} % correct', topics: 'Topics', errs: 'Your most frequent typical mistakes', errs_none: 'No typical mistake detected so far.',
+        acc: '{p} % correct', recent: 'recently {p} %', nodata: 'no data yet', n: '{n} answers', practise: 'Practise this →', explain: 'Go to topic',
+        times: '{n}×', last: 'last {d}', strong: 'solid', mid: 'nearly there', weak: 'practise', reset: 'Reset statistics', reset_q: 'Really delete everything?',
+        note: 'The statistics stay in this browser only. They are not included in the transfer code from Daily.', focus_h: 'Focus round', mock: 'Take a practice exam →' }
+};
+const stt = (k, rep) => { let s = STT[lang][k] ?? STT.de[k] ?? k; if (rep) for (const r in rep) s = s.split('{' + r + '}').join(rep[r]); return s; };
+let stResetArmed = 0;
+function renderProgress() {
+  const root = document.getElementById('progress'); if (!root) return;
+  const L2 = o => (o && typeof o === 'object') ? (o[lang] ?? o.de) : o;
+  const all = Object.values(STS.t).reduce((a, T) => ({ n: a.n + T.n, ok: a.ok + T.ok }), { n: 0, ok: 0 });
+  if (!all.n) { root.innerHTML = `<div class="fb info">${esc(stt('empty'))}</div><div class="row"><a class="btn primary" href="#daily">Täglich →</a><a class="btn" href="#mock">${esc(stt('mock'))}</a></div>`; return; }
+  const rows = ST_TOPICS.map(([k, name, act, href]) => {
+    const T = STS.t[k], acc = stAcc(k), rec = stRecent(k);
+    const lvl = rec === null ? '' : rec >= 0.85 ? 'strong' : rec >= 0.6 ? 'mid' : 'weak';
+    const btn = act.gen ? `<button type="button" class="btn ${lvl === 'weak' ? 'primary' : ''}" data-focus="${act.gen}">${esc(stt('practise'))}</button>` : `<a class="btn ${lvl === 'weak' ? 'primary' : ''}" href="${act.href}">${esc(stt('practise'))}</a>`;
+    return `<div class="st-row ${lvl}"><div class="st-name"><b>${esc(L2(name))}</b><span>${T ? esc(stt('n', { n: T.n })) + ' · ' + esc(stt('acc', { p: Math.round(acc * 100) })) : esc(stt('nodata'))}</span></div>
+      <div class="st-bar" aria-hidden="true"><span style="width:${rec === null ? 0 : Math.round(rec * 100)}%"></span></div>
+      <div class="st-lvl">${lvl ? `<span class="st-chip ${lvl}">${esc(stt(lvl))}</span><span class="small muted">${esc(stt('recent', { p: Math.round(rec * 100) }))}</span>` : ''}</div>
+      <div class="st-act">${T ? btn : `<a class="btn ghost" href="${href}">${esc(stt('explain'))}</a>`}</div></div>`;
+  }).join('');
+  const errs = Object.entries(STS.e).sort((a, b) => b[1].n - a[1].n).slice(0, 8);
+  const errHTML = errs.length ? errs.map(([key, E]) => {
+    const name = L2((ST_TOPICS.find(t => t[0] === E.topic) || [, ''])[1]);
+    const txt = E.m ? L2(E.m) : dgt(E.k, E.rep || undefined);
+    return `<div class="st-err"><span class="st-cnt">${esc(stt('times', { n: E.n }))}</span><div><span class="st-topic">${esc(name)}</span><p>${esc(txt)}</p><span class="small muted">${esc(stt('last', { d: new Date(dNum(E.d) * 864e5).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }) }))}</span></div></div>`;
+  }).join('') : `<p class="muted">${esc(stt('errs_none'))}</p>`;
+  root.innerHTML = `<div class="st-sum"><b>${esc(stt('sum', { n: all.n, p: Math.round(all.ok / all.n * 100) }))}</b><a class="btn" href="#mock">${esc(stt('mock'))}</a></div>
+    <section class="st-sec"><h2>${esc(stt('topics'))}</h2><div class="st-list">${rows}</div></section>
+    <section class="st-sec"><h2>${esc(stt('errs'))}</h2><div class="st-errs">${errHTML}</div></section>
+    <p class="small muted">${esc(stt('note'))} · <button type="button" class="linkbtn" data-streset="1">${esc(stt('reset'))}</button></p>`;
+}
+function initProgress() {
+  const root = document.getElementById('progress'); if (!root) return;
+  root.addEventListener('click', e => {
+    const f = e.target.closest('[data-focus]');
+    if (f) { dStartFocus(f.dataset.focus); location.hash = '#daily'; return; }
+    const r = e.target.closest('[data-streset]');
+    if (r) { if (Date.now() - stResetArmed < 4000) { STS = stFresh(); stSave(); renderProgress(); } else { stResetArmed = Date.now(); r.textContent = stt('reset_q'); } }
+  });
+}
 /* ================= Täglich · 5 Minuten =================
    Five short tasks a day, generated from the date. Mistakes return
    (Leitner boxes: 1, 3, 7, 14 days). A streak counts consecutive days. */
@@ -6258,6 +6589,7 @@ const DT = {
     sync_merge: 'Beide Stände werden zusammengeführt: die längere Serie, alle Wiederholungen und alle geübten Tage. Nichts geht verloren.',
     sync_ok: 'Fortschritt übernommen. {s}. {r}.', sync_bad: 'Dieser Code ist ungültig oder unvollständig.', sync_wait: 'Code wird erstellt …',
     sync_note: 'Der Code enthält nur deinen Lernstand, keinen Namen und keine persönlichen Daten.',
+    focus_l: 'Fokus-Runde · {t}', weak_link: 'Meine Schwächen ansehen →',
     wd: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'], today: 'heute'
   },
   en: {
@@ -6297,6 +6629,7 @@ const DT = {
     sync_merge: 'Both records are merged: the longer streak, all reviews and all practised days. Nothing is lost.',
     sync_ok: 'Progress transferred. {s}. {r}.', sync_bad: 'This code is invalid or incomplete.', sync_wait: 'Creating the code …',
     sync_note: 'The code contains only your learning progress, no name and no personal data.',
+    focus_l: 'Focus round · {t}', weak_link: 'See my weak spots →',
     wd: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'], today: 'today'
   }
 };
@@ -6564,10 +6897,21 @@ function dBuild(date, round) {
   const r = dRng(dHash(date + '#' + round));
   const due = dDue(dNum(date)).slice(0, 2).map(k => { const [g, s] = k.split(':'); return { g, s: +s, rev: true }; }).filter(x => DGEN[x.g]);
   const have = new Set(due.map(x => x.g)), order = dShuffle(DTOPICS, r);
-  const fresh = [...order.filter(t => !have.has(t)), ...order.filter(t => have.has(t))].slice(0, 5 - due.length)
-    .map(g => ({ g, s: dHash(date + '#' + round + '#' + g) }));
+  let pref = null; // one extra item for this week's topic or the weakest topic
+  try { const wc = wCurrent(); const wk = wc.i >= 0 && WEEKS[wc.i] && WEEKS[wc.i].daily; if (wk && DGEN[wk]) pref = wk; } catch (e) {}
+  try { const wg = stWeakGen(); if (wg) pref = wg; } catch (e) {}
+  const N = 5 - due.length, base = [...order.filter(t => !have.has(t)), ...order.filter(t => have.has(t))];
+  const pick = pref ? [...base.slice(0, N - 1), pref] : base.slice(0, N);
+  const fresh = pick.map((g, k) => ({ g, s: dHash(date + '#' + round + '#' + g + (pick.indexOf(g) !== k ? '#2' : '')) }));
   const items = dShuffle([...due, ...fresh], r);
   return { date, round, items, idx: 0, res: items.map(() => null), done: false };
+}
+function dStartFocus(g) {
+  const S0 = dSession(), date = dToday();
+  const round = S0.done || S0.round > 0 ? S0.round + 1 : 0, salt = Date.now() >>> 0;
+  const items = [0, 1, 2, 3, 4].map(k => ({ g, s: dHash(date + '#F#' + g + '#' + k + '#' + salt) }));
+  DS.sess = { date, round, focus: g, items, idx: 0, res: items.map(() => null), done: false };
+  DC = { v: {}, fb: null, shown: false }; dSave();
 }
 function dSession() {
   const today = dToday();
@@ -6779,10 +7123,10 @@ function renderDaily() {
   const S = dSession();
   root.innerHTML = `${DSY.banner ? `<div class="fb ${DSY.banner.ok ? 'ok' : 'bad'} dl-banner" role="status">${esc(dSyncMsg(DSY.banner))}</div>` : ''}${dHeader()}
     <div class="dl-main">
-      <div class="dl-round"><span class="mono small muted">${S.round ? esc(dt('bonus', { n: S.round })) : esc(new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }))}</span>${dProgress(S)}</div>
+      <div class="dl-round"><span class="mono small muted">${S.focus ? esc(dt('focus_l', { t: dt('t_' + S.focus) })) : S.round ? esc(dt('bonus', { n: S.round })) : esc(new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }))}</span>${dProgress(S)}</div>
       ${S.done ? dDone(S) : dCard(S)}
     </div>
-    <p class="dl-foot small muted">${esc(dt('stats', { k: DS.stats.ok, n: DS.stats.n }))} · ${esc(dt('local'))} <button type="button" class="linkbtn strong" data-dact="sync" aria-expanded="${DSY.open}">${esc(dt('sync_btn'))}</button> · <button type="button" class="linkbtn" data-dact="reset">${esc(dt('reset'))}</button></p>
+    <p class="dl-foot small muted">${esc(dt('stats', { k: DS.stats.ok, n: DS.stats.n }))} · ${esc(dt('local'))} <a class="linkbtn strong" href="#progress">${esc(dt('weak_link'))}</a> · <button type="button" class="linkbtn strong" data-dact="sync" aria-expanded="${DSY.open}">${esc(dt('sync_btn'))}</button> · <button type="button" class="linkbtn" data-dact="reset">${esc(dt('reset'))}</button></p>
     ${dSyncHTML()}`;
   dNavBadge();
   const inp = document.getElementById('dl-input');
@@ -6795,12 +7139,12 @@ function dAct(a) {
   if (a === 'check' && !S.done) {
     const it = S.items[S.idx], G = dItem(it), res = G.check(DC.v);
     if (res.err !== undefined) { DC.fb = res.err ? { err: res.err } : null; renderDaily(); return; }
-    if (!S.res[S.idx]) { S.res[S.idx] = { ok: res.ok }; dRecord(it, res.ok); dSave(); }
+    if (!S.res[S.idx]) { S.res[S.idx] = { ok: res.ok }; dRecord(it, res.ok); dSave(); try { stRecord(GEN_TOPIC[it.g], res.ok, res.ok ? null : res.tip); } catch (e) {} }
     DC.fb = res; if (!res.ok && G.kind === 'mc') DC.shown = true;
     renderDaily(); dFocusAfter(res.ok || G.kind === 'mc' ? '[data-dact="next"]' : '#dl-input');
   } else if (a === 'reveal') {
     const it = S.items[S.idx];
-    if (!S.res[S.idx]) { S.res[S.idx] = { ok: false }; dRecord(it, false); dSave(); }
+    if (!S.res[S.idx]) { S.res[S.idx] = { ok: false }; dRecord(it, false); dSave(); try { stRecord(GEN_TOPIC[it.g], false, null); } catch (e) {} }
     DC.shown = true; renderDaily(); dFocusAfter('[data-dact="next"]');
   } else if (a === 'next') {
     DC = { v: {}, fb: null, shown: false };
@@ -7207,7 +7551,7 @@ const TT = {
       ['Täglich 5 Minuten', 'Jeden Tag fünf kurze Aufgaben aus allen Themen. Was du falsch machst, kommt nach 1, 3, 7 und 14 Tagen wieder, und die Flamme zählt deine Serie.'],
       ['Semester auf einen Blick', 'Der Kalender zeigt, was in welcher Woche dran ist. Als .ics-Datei übernimmst du ihn in Google, Apple oder Outlook.'],
       ['Übungen', 'Geführte Aufgaben zum Hoare-Kalkül, Schritt für Schritt: mit gegebener Invariante oder mit einer, die du selbst findest.'],
-      ['Klausur', 'Klausur-Trainings für Hoare, Java, Haskell und Prolog, mit sofortiger Korrektur und Punktzahl. Die Hoare-Simulation läuft mit Zeitlimit.'],
+      ['Klausur', 'Klausur-Trainings für Hoare, Java, Haskell und Prolog, mit sofortiger Korrektur und Punktzahl. Dazu eine komplette Probeklausur aus allen vier Teilen mit Zeitlimit und geschätzter Note; unter „Fortschritt“ siehst du deine Schwächen.'],
       ['Tour wiederholen', 'Über das Fragezeichen startest du diese Tour jederzeit neu.'],
       ['Dein Fortschritt gehört dir', 'Es gibt keine Anmeldung: Was du übst, bleibt in diesem Browser. Mit einem QR-Code nimmst du es auf ein anderes Gerät mit. Viel Erfolg im Semester!']
     ]
@@ -7222,7 +7566,7 @@ const TT = {
       ['5 minutes a day', 'Five short tasks a day across all topics. Whatever you get wrong comes back after 1, 3, 7 and 14 days, and the flame counts your streak.'],
       ['The semester at a glance', 'The calendar shows what is covered in which week. As an .ics file you can add it to Google, Apple or Outlook.'],
       ['Exercises', 'Guided Hoare logic tasks, step by step: with a given invariant or with one you find yourself.'],
-      ['Exam', 'Exam trainings for Hoare, Java, Haskell and Prolog, with instant grading and a score. The Hoare simulation runs against the clock.'],
+      ['Exam', 'Exam trainings for Hoare, Java, Haskell and Prolog, with instant grading and a score. Plus a complete practice exam from all four parts, timed and with an estimated grade; “Progress” shows your weak spots.'],
       ['Take the tour again', 'Use the question mark to restart this tour at any time.'],
       ['Your progress is yours', 'There is no sign-in: what you practise stays in this browser. A QR code takes it to another device. Good luck with the semester!']
     ]
@@ -7555,6 +7899,368 @@ function initPrint() {
     renderPrint();
   });
   root.addEventListener('click', e => { if (e.target.closest('[data-pprint]')) { try { window.print(); } catch (err) {} } });
+}
+/* ================= Probeklausur: mixed full exam ================= */
+const MKT = {
+  de: { kicker: 'Klausur · alle Teile', title: 'Probeklausur', lede: 'Eine komplette Klausur aus allen vier Teilen: Hoare-Kalkül, Java, Haskell und Prolog. Jede Probeklausur wird neu zusammengestellt; ausgewertet wird erst beim Abgeben, wie in der echten Klausur.',
+        start: 'Probeklausur starten', timed: 'Mit Zeitlimit ({m} Minuten)', rules: 'Während der Bearbeitung gibt es keine Rückmeldung. Nach dem Abgeben siehst du Punkte pro Teil, eine geschätzte Note, alle Lösungen und deine typischen Fehler. Dein Stand wird im Browser gespeichert, du kannst die Seite also auch neu laden.',
+        resume: 'Weiterschreiben', discard: 'Verwerfen und neu beginnen', running: 'Eine Probeklausur ist noch offen.', submit: 'Abgeben und auswerten', submit_q: 'Wirklich abgeben? Danach ist keine Änderung mehr möglich.', left: 'übrig', timeup: 'Die Zeit ist abgelaufen, die Klausur wurde automatisch abgegeben.',
+        part: 'Teil {n}', pts: '{n} Punkte', pt1: '1 Punkt', task: 'Aufgabe {n}', total: 'Gesamt', grade: 'Geschätzte Note', grade_note: 'übliche Skala mit Bestehensgrenze 50 %; die echte Notenskala legt der Lehrstuhl fest.', passed: 'bestanden', failed: 'nicht bestanden',
+        score: '{p} von {t} Punkten ({q} %)', new: 'Neue Probeklausur', weak: 'Meine Schwächen ansehen →', errs: 'Typische Fehler in dieser Klausur', errs_none: 'Kein typischer Fehler erkannt.', review: 'Durchsicht mit Lösungen',
+        unanswered: 'nicht beantwortet', compose: 'Zusammensetzung', hoare_prog: 'Programm verifizieren', items: '{n} Aufgaben', confirm: 'Abgeben', cancel: 'Weiterschreiben', ans_ph: 'Antwort' },
+  en: { kicker: 'Exam · all parts', title: 'Practice exam', lede: 'A complete exam from all four parts: Hoare logic, Java, Haskell and Prolog. Every practice exam is put together anew; grading happens only when you hand it in, as in the real exam.',
+        start: 'Start the practice exam', timed: 'With time limit ({m} minutes)', rules: 'There is no feedback while you work. After handing in you see points per part, an estimated grade, all solutions and your typical mistakes. Your progress is saved in the browser, so you can reload the page.',
+        resume: 'Continue', discard: 'Discard and start over', running: 'A practice exam is still open.', submit: 'Hand in and grade', submit_q: 'Really hand in? No changes are possible afterwards.', left: 'left', timeup: 'Time is up, the exam was handed in automatically.',
+        part: 'Part {n}', pts: '{n} points', pt1: '1 point', task: 'Task {n}', total: 'Total', grade: 'Estimated grade', grade_note: 'usual German scale with a 50 % pass mark; the real scale is set by the chair.', passed: 'passed', failed: 'not passed',
+        score: '{p} of {t} points ({q} %)', new: 'New practice exam', weak: 'See my weak spots →', errs: 'Typical mistakes in this exam', errs_none: 'No typical mistake detected.', review: 'Review with solutions',
+        unanswered: 'not answered', compose: 'Composition', hoare_prog: 'Verify a program', items: '{n} tasks', confirm: 'Hand in', cancel: 'Keep writing', ans_ph: 'answer' }
+};
+const mkt = (k, rep) => { let s = MKT[lang][k] ?? MKT.de[k] ?? k; if (rep) for (const r in rep) s = s.split('{' + r + '}').join(rep[r]); return s; };
+const MKEY = 'hoarelab-mock';
+const MK_PARTS = [['hoare', 'Hoare-Kalkül'], ['java', 'Java'], ['haskell', 'Haskell'], ['prolog', 'Prolog']];
+let MOCK = (() => { try { const j = JSON.parse(localStorage.getItem(MKEY)); if (j && j.v === 1) return j; } catch (e) {} return { v: 1, phase: 'start', timed: true }; })();
+let mkTimer = null, mkConfirm = false;
+function mkSave() { try { localStorage.setItem(MKEY, JSON.stringify(MOCK)); } catch (e) {} }
+function mkGrade(p) { const s = [[.95, '1,0'], [.90, '1,3'], [.85, '1,7'], [.80, '2,0'], [.75, '2,3'], [.70, '2,7'], [.65, '3,0'], [.60, '3,3'], [.55, '3,7'], [.50, '4,0']]; for (const [x, g] of s) if (p >= x - 1e-9) return lang === 'de' ? g : g.replace(',', '.'); return lang === 'de' ? '5,0' : '5.0'; }
+function mkCompose() {
+  const r = dRng(Date.now() >>> 0), pickN = (arr, n) => dShuffle(arr, r).slice(0, n), sd = () => Math.floor(r() * 4294967296) >>> 0;
+  const pool = POOL();
+  const gens = [['hoare', 'hwp'], ['hoare', 'hwp'], ['hoare', 'hinv'], ['java', 'java'], ['java', 'java'], ['java', 'java'], ['haskell', 'htype'], ['haskell', 'htype'], ['prolog', 'unify'], ['prolog', 'unify']].map(([part, g]) => ({ part, g, s: sd() }));
+  const lx = [...pickN(['j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7'], 2), ...pickN(['h1', 'h2', 'h3', 'h4', 'h5'], 2), ...pickN(['p1', 'p2', 'p3'], 1), ...pickN(['p4', 'p5', 'p6'], 1)];
+  return { hoare: pool[Math.floor(r() * pool.length)].id, gens, lx };
+}
+const mkTask = id => { for (const l of ['java', 'haskell', 'prolog']) { const t = LX[l].tasks.find(x => x.id === id); if (t) return [l, t]; } return [null, null]; };
+function mkPartOf(id) { return id[0] === 'j' ? 'java' : id[0] === 'h' ? 'haskell' : 'prolog'; }
+function mkSetupLX() {
+  LX.mock = { title: lang === 'de' ? 'Probeklausur' : 'Practice exam', tasks: (MOCK.lx || []).map(id => mkTask(id)[1]).filter(Boolean) };
+  ST.LX = ST.LX || {}; MOCK.lxv = MOCK.lxv || {};
+  ST.LX.mock = { v: MOCK.lxv, r: MOCK.lxr || {}, sol: MOCK.phase === 'done' ? Object.fromEntries(LX.mock.tasks.map(t => [t.id, true])) : {} };
+}
+function mkMax() {
+  let m = { hoare: kTotal(exById(MOCK.hoare)), java: 0, haskell: 0, prolog: 0 };
+  MOCK.gens.forEach(x => m[x.part] += 1);
+  MOCK.lx.forEach(id => { const [, t] = mkTask(id); if (t) m[mkPartOf(id)] += taskMax(t); });
+  return m;
+}
+function mkStart() {
+  const c = mkCompose();
+  Object.assign(MOCK, { phase: 'run', created: Date.now(), hoare: c.hoare, gens: c.gens, lx: c.lx, hv: {}, gv: {}, lxv: {}, lxr: {}, res: null, timeup: false });
+  const max = Object.values(mkMax()).reduce((a, b) => a + b, 0);
+  MOCK.minutes = Math.min(120, Math.max(60, Math.round(max * 2 / 5) * 5));
+  MOCK.ends = MOCK.timed ? Date.now() + MOCK.minutes * 60000 : 0;
+  mkSave(); mkSetupLX(); renderMock(); window.scrollTo(0, 0); mkArm();
+}
+function mkArm() {
+  clearInterval(mkTimer); mkTimer = null;
+  if (MOCK.phase !== 'run' || !MOCK.ends) return;
+  const tick = () => {
+    const left = MOCK.ends - Date.now(), el = document.getElementById('mk-clock');
+    if (left <= 0) { MOCK.timeup = true; mkSubmit(); return; }
+    if (el) { const m = Math.floor(left / 60000), s = Math.floor(left / 1000) % 60; el.textContent = `${m}:${String(s).padStart(2, '0')}`; el.classList.toggle('warn', left < 5 * 60000); }
+  };
+  tick(); mkTimer = setInterval(tick, 1000);
+}
+function mkSubmit() {
+  clearInterval(mkTimer); mkTimer = null; mkConfirm = false;
+  const gres = MOCK.gens.map((x, i) => { const G = dItem(x), v = MOCK.gv[i] || {}; let r; try { r = G.check(v); } catch (e) { r = { err: '' }; } const ok = r.err === undefined && !!r.ok, empty = !String(v.a || '').trim() && v.n !== '1'; return { ok, tip: ok || empty ? null : (r.tip || null), empty }; });
+  const ex = exById(MOCK.hoare), H = hoareGradeWith(ex, MOCK.hv);
+  mkSetupLX();
+  const S = ST.LX.mock;
+  LX.mock.tasks.forEach(t => { S.r[t.id] = gradeTask('mock', t); S.sol[t.id] = true; });
+  MOCK.lxr = S.r;
+  const pts = { hoare: H.pts, java: 0, haskell: 0, prolog: 0 };
+  MOCK.gens.forEach((x, i) => { if (gres[i].ok) pts[x.part]++; });
+  LX.mock.tasks.forEach(t => pts[mkPartOf(t.id)] += S.r[t.id].pts);
+  try {
+    MOCK.gens.forEach((x, i) => { if (!gres[i].empty) stRecord(GEN_TOPIC[x.g], gres[i].ok, gres[i].tip); });
+    if (Object.values(MOCK.hv).some(v => String(v).trim())) hoareRecord(H);
+    LX.mock.tasks.forEach(t => { if (Object.entries(S.v).some(([k, v]) => k.startsWith(t.id + ':') && String(v).trim())) stRecordTask(t, S.r[t.id]); });
+  } catch (e) {}
+  const max = mkMax(), P = Object.values(pts).reduce((a, b) => a + b, 0), M = Object.values(max).reduce((a, b) => a + b, 0);
+  MOCK.res = { gres, hoare: H, pts, max, P, M };
+  MOCK.phase = 'done'; mkSave(); renderMock(); window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
+}
+function mkGenHTML(i, done) {
+  const x = MOCK.gens[i], G = dItem(x), v = MOCK.gv[i] || {}, r = done ? MOCK.res.gres[i] : null;
+  let input;
+  if (G.kind === 'mc') input = `<div class="dl-opts">${G.opts.map((o, k) => { const sel = v.a === String(k); return `<button type="button" class="dl-opt ${sel ? 'sel' : ''} ${done && k === G.answer ? 'right' : ''} ${done && sel && k !== G.answer ? 'wrong' : ''}" data-mopt="${i}:${k}" ${done ? 'disabled' : ''} aria-pressed="${sel}"><span class="k">${'ABCD'[k]}</span>${esc(dt(o))}</button>`; }).join('')}</div>`;
+  else {
+    const ph = G.kind === 'num' ? dt('java_ph') : G.kind === 'unify' ? dt('unify_ph') : G.kind === 'text' ? dt(G.ph) : 'x + 2 > 5';
+    input = `<div class="dl-in"><input class="mono" data-mg="${i}" value="${esc(v.a || '')}" placeholder="${esc(ph)}" autocomplete="off" spellcheck="false" autocapitalize="off" ${done || v.n === '1' ? 'disabled' : ''}>${G.kind === 'unify' ? `<label class="kcheck small"><input type="checkbox" data-mgn="${i}" ${v.n === '1' ? 'checked' : ''} ${done ? 'disabled' : ''}> ${esc(dt('not_unif'))}</label>` : ''}</div>`;
+  }
+  const fb = done ? `<div class="fb ${r.ok ? 'ok' : 'bad'}"><span class="lab">${r.ok ? esc(dt('right')) : r.empty ? esc(mkt('unanswered')) : esc(dt('wrong'))}</span>${dgBox(r.tip)}${G.solution()}</div>` : '';
+  return `<div class="mk-q">${G.body()}${input}${fb}</div>`;
+}
+function mkTaskHead(no, pts, mark) { return `<header class="mk-th"><span class="xt-n">${esc(mkt('task', { n: no }))}</span>${mark || ''}<span class="mk-pts">${pts === 1 ? esc(mkt('pt1')) : esc(mkt('pts', { n: pts }))}</span></header>`; }
+function renderMock() {
+  const root = document.getElementById('mock'); if (!root) return;
+  if (MOCK.phase !== 'start' && (!MOCK.gens || !exById(MOCK.hoare))) MOCK.phase = 'start';
+  if (MOCK.phase === 'run' && MOCK.ends && Date.now() > MOCK.ends) { MOCK.timeup = true; mkSetupLX(); mkSubmit(); return; }
+  if (MOCK.phase === 'start') {
+    const est = 90;
+    root.innerHTML = `<div class="mk-start">
+      <div class="mk-compose"><h2>${esc(mkt('compose'))}</h2><ol>
+        <li><b>Hoare-Kalkül</b> · ${esc(mkt('hoare_prog'))} + ${esc(dt('t_hwp'))} + ${esc(dt('t_hinv'))}</li>
+        <li><b>Java</b> · ${esc(dt('t_java'))} + 2 ${esc(lang === 'de' ? 'Klausuraufgaben' : 'exam tasks')}</li>
+        <li><b>Haskell</b> · ${esc(dt('t_htype'))} + 2 ${esc(lang === 'de' ? 'Klausuraufgaben' : 'exam tasks')}</li>
+        <li><b>Prolog</b> · ${esc(dt('t_unify'))} + ${esc(lang === 'de' ? 'Anfragen oder Unifikation und ein Prädikat zum Schreiben' : 'queries or unification and a predicate to write')}</li></ol></div>
+      <label class="kcheck"><input type="checkbox" data-mtimed="1" ${MOCK.timed ? 'checked' : ''}> ${esc(mkt('timed', { m: '60–120' }))}</label>
+      <p class="small muted">${esc(mkt('rules'))}</p>
+      <div class="row"><button type="button" class="btn primary" data-mact="start">${esc(mkt('start'))}</button></div></div>`;
+    return;
+  }
+  const done = MOCK.phase === 'done', R = MOCK.res, max = mkMax();
+  let no = 0, html = '';
+  MK_PARTS.forEach(([p, name], pi) => {
+    let body = '';
+    if (p === 'hoare') {
+      no++;
+      const ex = exById(MOCK.hoare), H = done ? R.hoare : null;
+      body += `<article class="mk-task">${mkTaskHead(no, kTotal(ex), done ? `<span class="lxbadge ${H.pts === H.total ? 'full' : H.pts ? 'part' : 'zero'}">${H.pts} / ${H.total}</span>` : '')}<h3>${esc(mkt('hoare_prog'))}: ${esc(L(ex.title))}</h3>${syntaxHTML(ex)}<div class="kpaper mk-kp">${hoarePaperHTML(ex, MOCK.hv, done, H)}</div></article>`;
+    }
+    MOCK.gens.forEach((x, i) => { if (x.part !== p) return; no++; const r = done ? R.gres[i] : null;
+      body += `<article class="mk-task">${mkTaskHead(no, 1, done ? `<span class="lxbadge ${r.ok ? 'full' : 'zero'}">${r.ok ? 1 : 0} / 1</span>` : '')}<h3>${esc(dt('t_' + x.g))}</h3>${mkGenHTML(i, done)}</article>`; });
+    LX.mock.tasks.forEach((t, k) => { if (mkPartOf(t.id) !== p) return; no++;
+      body += taskHTML('mock', t, no - 1).replace(/(id|for|name)="(xt|lx)-/g, '$1="mk$2-'); });
+    const pp = done ? `${R.pts[p]} / ${max[p]}` : mkt('pts', { n: max[p] });
+    html += `<section class="mk-part" id="mk-part-${p}"><h2><span>${esc(mkt('part', { n: pi + 1 }))}</span> ${esc(name)}<em>${esc(pp)}</em></h2>${body}</section>`;
+  });
+  let head;
+  if (done) {
+    const q = R.P / R.M, g = mkGrade(q), ok = q >= 0.5 - 1e-9;
+    const tips = [];
+    R.gres.forEach(r => r.tip && tips.push(r.tip));
+    if (R.hoare.invTip) tips.push(R.hoare.invTip); if (R.hoare.varTip) tips.push(R.hoare.varTip);
+    LX.mock.tasks.forEach(t => { const r = ST.LX.mock.r[t.id]; if (!r) return; if (r.tip) tips.push(r.tip); (r.items || []).forEach(it => it.tip && tips.push(it.tip)); });
+    const seen = new Set(), uniq = tips.filter(tp => { const k = stTipKey(tp); if (seen.has(k)) return false; seen.add(k); return true; });
+    head = `<div class="mk-result">
+      ${MOCK.timeup ? `<div class="fb info">${esc(mkt('timeup'))}</div>` : ''}
+      <div class="mk-res-top"><div><span class="mk-gl">${esc(mkt('grade'))}</span><b class="mk-grade ${ok ? 'ok' : 'bad'}">${g}</b><span class="mk-pass ${ok ? 'ok' : 'bad'}">${esc(mkt(ok ? 'passed' : 'failed'))}</span></div>
+        <div class="mk-res-sc"><b>${esc(mkt('score', { p: R.P, t: R.M, q: Math.round(q * 100) }))}</b><span class="small muted">${esc(mkt('grade_note'))}</span></div></div>
+      <div class="mk-bars">${MK_PARTS.map(([p, name]) => `<div class="mk-bar"><span>${esc(name)}</span><i><b style="width:${max[p] ? Math.round(R.pts[p] / max[p] * 100) : 0}%"></b></i><em>${R.pts[p]} / ${max[p]}</em></div>`).join('')}</div>
+      <div class="mk-errs"><h3>${esc(mkt('errs'))}</h3>${uniq.length ? uniq.map(dgBox).join('') : `<p class="muted">${esc(mkt('errs_none'))}</p>`}</div>
+      <div class="row"><button type="button" class="btn primary" data-mact="new">${esc(mkt('new'))}</button><a class="btn" href="#progress">${esc(mkt('weak'))}</a></div></div>
+      <h2 class="mk-review">${esc(mkt('review'))}</h2>`;
+  } else {
+    head = `<div class="mk-bar-top"><span class="badge">${esc(mkt('pts', { n: Object.values(max).reduce((a, b) => a + b, 0) }))}</span>${MOCK.ends ? `<span class="kclock"><span id="mk-clock">–</span> ${esc(mkt('left'))}</span>` : ''}
+      <span class="mk-jump">${MK_PARTS.map(([p, n], i) => `<a href="#mock" data-mjump="${p}">${i + 1} · ${esc(n)}</a>`).join('')}</span>
+      <button type="button" class="btn primary" data-mact="submit">${esc(mkt('submit'))}</button></div>
+      ${mkConfirm ? `<div class="fb info mk-confirm">${esc(mkt('submit_q'))} <span class="row"><button type="button" class="btn primary" data-mact="confirm">${esc(mkt('confirm'))}</button><button type="button" class="btn" data-mact="cancel">${esc(mkt('cancel'))}</button></span></div>` : ''}`;
+  }
+  root.innerHTML = `<div class="mk ${done ? 'mk-done' : 'mk-run'}">${head}${html}${done ? '' : `<div class="row mk-end"><button type="button" class="btn primary" data-mact="submit">${esc(mkt('submit'))}</button></div>`}</div>`;
+  if (done) root.querySelectorAll('input, textarea, select').forEach(el => { if (!el.closest('.mk-result')) el.disabled = true; });
+  else mkArm();
+}
+function initMock() {
+  const root = document.getElementById('mock'); if (!root) return;
+  root.addEventListener('click', e => {
+    const o = e.target.closest('[data-mopt]');
+    if (o) { const [i, k] = o.dataset.mopt.split(':'); MOCK.gv[i] = { a: k }; mkSave(); root.querySelectorAll(`[data-mopt^="${i}:"]`).forEach(b => { const on = b.dataset.mopt === o.dataset.mopt; b.classList.toggle('sel', on); b.setAttribute('aria-pressed', on); }); return; }
+    const j = e.target.closest('[data-mjump]'); if (j) { e.preventDefault(); const el = document.getElementById('mk-part-' + j.dataset.mjump); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' }); return; }
+    const b = e.target.closest('[data-mact]');
+    if (b) {
+      const a = b.dataset.mact;
+      if (a === 'start') mkStart();
+      else if (a === 'submit') { mkConfirm = true; renderMock(); const c = root.querySelector('.mk-confirm'); if (c) { c.scrollIntoView({ block: 'center' }); const cb = c.querySelector('[data-mact="confirm"]'); if (cb) cb.focus({ preventScroll: true }); } }
+      else if (a === 'confirm') mkSubmit();
+      else if (a === 'cancel') { mkConfirm = false; renderMock(); }
+      else if (a === 'new') { MOCK = { v: 1, phase: 'start', timed: MOCK.timed }; mkSave(); renderMock(); window.scrollTo(0, 0); }
+      return;
+    }
+  });
+  root.addEventListener('change', e => { const tm = e.target.closest('[data-mtimed]'); if (tm) { MOCK.timed = tm.checked; mkSave(); } });
+  const onInput = e => {
+    const g = e.target.closest('[data-mg]'); if (g) { const i = g.dataset.mg; MOCK.gv[i] = Object.assign(MOCK.gv[i] || {}, { a: g.value }); mkSave(); return; }
+    const n = e.target.closest('[data-mgn]'); if (n) { const i = n.dataset.mgn; MOCK.gv[i] = Object.assign(MOCK.gv[i] || {}, { n: n.checked ? '1' : '' }); const inp = root.querySelector(`[data-mg="${i}"]`); if (inp) inp.disabled = n.checked; mkSave(); return; }
+    if (MOCK.phase !== 'run') return;
+    if (e.target.closest('[data-lx="mock"]')) { handleLXInput(e); MOCK.lxv = ST.LX.mock.v; mkSave(); return; }
+    const k = e.target.closest('[data-k]'); if (k && MOCK.hv) { MOCK.hv[k.dataset.k] = k.value; mkSave(); }
+  };
+  root.addEventListener('input', onInput); root.addEventListener('change', onInput);
+  if (MOCK.phase !== 'start' && MOCK.gens) mkSetupLX();
+}
+/* ================= step-by-step visualisations: Prolog search tree, Haskell evaluation ================= */
+const VZT = {
+  de: { prog: 'Programm', fam: 'Familie', ari: 'Arithmetik und Listen', own: 'Eigenes Programm', query: 'Anfrage', build: 'Suchbaum erstellen', next: 'Nächster Schritt', prev: 'Schritt zurück', all: 'Alles zeigen', reset: 'Von vorn',
+        step: 'Schritt {i} von {n}', answers: 'Gefundene Antworten', none: 'noch keine', legend: 'K3 = Klausel 3 des Programms. Jeder Knoten zeigt die noch offenen Ziele, die Kante die verwendete Klausel und die neuen Bindungen.',
+        e_start: 'Start: Die Anfrage ist das erste Ziel.', e_clause: 'Das erste Ziel wird mit dem Kopf von Klausel {k} unifiziert{b}. Der Rumpf der Klausel ersetzt das Ziel.', e_builtin: 'Das eingebaute Prädikat {p} wird ausgewertet{b}.',
+        e_success: 'Leere Zielliste: Erfolg. Prolog meldet {a}.', e_fail: 'Kein Kopf passt auf das erste Ziel: Fehlschlag. Prolog geht zurück (Backtracking) und probiert die nächste Klausel weiter oben im Baum.', e_error: 'Fehler: {d}', binds: ' mit {b}',
+        truncated: 'Der Baum wurde nach {n} Knoten abgeschnitten, vermutlich ist er unendlich.', err_syntax: 'Das Programm oder die Anfrage enthält einen Syntaxfehler.', err_unknown: 'Unbekanntes Prädikat: {d}', clause: 'Klausel',
+        hs_ex: 'Beispiel', hs_list: 'Liste', hs_op: 'Operator', hs_z: 'Startwert', hs_n: 'n', hs_k: 'Faktor', hs_from: 'ab', hs_steps: 'Auswertung', hs_def: 'Definition',
+        ex_foldr: 'foldr', ex_foldl: 'foldl', ex_lazy: 'take und map auf [a..] (Lazy Evaluation)', ex_pat: 'Pattern Matching: f (x:y:ys) = x − f ys',
+        n_start: 'Ausgangsausdruck.', n_foldr1: 'foldr f z (x:xs) = x `f` foldr f z xs: Das erste Element wird links abgespalten.', n_foldr_b: 'foldr f z [] = z: Die leere Liste liefert den Startwert, ganz rechts.', n_calc: 'Die innerste Klammer wird ausgerechnet: {c}.',
+        n_foldl1: 'foldl f z (x:xs) = foldl f (z `f` x) xs: Der Akkumulator wächst, wird aber wegen Lazy Evaluation noch nicht ausgerechnet.', n_foldl_b: 'foldl f z [] = z: Übrig bleibt der aufgebaute Ausdruck, links geklammert.',
+        n_enum: '[{a}..] liefert genau ein weiteres Element: {a} : [{a1}..].', n_map: 'map f (x:xs) = f x : map f xs', n_take: 'take n (x:xs) = x : take (n − 1) xs', n_mul: '({k}) {a} wird ausgerechnet, weil GHCi den Wert ausgeben will: {v}.',
+        n_take0: 'take 0 _ = []: Hier hört die Auswertung auf. Der Rest der unendlichen Liste wird nie berechnet.', n_list: 'Listenschreibweise.',
+        n_pat2: 'Das Muster (x:y:ys) passt mit x = {x}, y = {y}, ys = [{ys}]. y wird übersprungen.', n_pat1: 'Das Muster [x] passt: f [{x}] = {x}.', n_pat0: 'Das Muster [] passt: f [] = 0.' },
+  en: { prog: 'Program', fam: 'Family', ari: 'Arithmetic and lists', own: 'Your own program', query: 'Query', build: 'Build the search tree', next: 'Next step', prev: 'Step back', all: 'Show all', reset: 'Start over',
+        step: 'Step {i} of {n}', answers: 'Answers found', none: 'none yet', legend: 'K3 = clause 3 of the program. Each node shows the open goals, each edge the clause used and the new bindings.',
+        e_start: 'Start: the query is the first goal.', e_clause: 'The first goal is unified with the head of clause {k}{b}. The clause body replaces the goal.', e_builtin: 'The built-in predicate {p} is evaluated{b}.',
+        e_success: 'Empty goal list: success. Prolog reports {a}.', e_fail: 'No head matches the first goal: failure. Prolog goes back (backtracking) and tries the next clause higher up in the tree.', e_error: 'Error: {d}', binds: ' with {b}',
+        truncated: 'The tree was cut off after {n} nodes; it is probably infinite.', err_syntax: 'The program or the query contains a syntax error.', err_unknown: 'Unknown predicate: {d}', clause: 'clause',
+        hs_ex: 'Example', hs_list: 'List', hs_op: 'Operator', hs_z: 'Start value', hs_n: 'n', hs_k: 'Factor', hs_from: 'from', hs_steps: 'Evaluation', hs_def: 'Definition',
+        ex_foldr: 'foldr', ex_foldl: 'foldl', ex_lazy: 'take and map on [a..] (lazy evaluation)', ex_pat: 'Pattern matching: f (x:y:ys) = x − f ys',
+        n_start: 'Starting expression.', n_foldr1: 'foldr f z (x:xs) = x `f` foldr f z xs: the first element is split off on the left.', n_foldr_b: 'foldr f z [] = z: the empty list gives the start value, on the far right.', n_calc: 'The innermost bracket is computed: {c}.',
+        n_foldl1: 'foldl f z (x:xs) = foldl f (z `f` x) xs: the accumulator grows but, due to lazy evaluation, is not computed yet.', n_foldl_b: 'foldl f z [] = z: what remains is the expression built up, bracketed to the left.',
+        n_enum: '[{a}..] yields exactly one more element: {a} : [{a1}..].', n_map: 'map f (x:xs) = f x : map f xs', n_take: 'take n (x:xs) = x : take (n − 1) xs', n_mul: '({k}) {a} is computed because GHCi wants to print the value: {v}.',
+        n_take0: 'take 0 _ = []: evaluation stops here. The rest of the infinite list is never computed.', n_list: 'List notation.',
+        n_pat2: 'The pattern (x:y:ys) matches with x = {x}, y = {y}, ys = [{ys}]. y is skipped.', n_pat1: 'The pattern [x] matches: f [{x}] = {x}.', n_pat0: 'The pattern [] matches: f [] = 0.' }
+};
+const vzt = (k, rep) => { let s = VZT[lang][k] ?? VZT.de[k] ?? k; if (rep) for (const r in rep) s = s.split('{' + r + '}').join(rep[r]); return s; };
+
+/* ---------- Prolog search tree ---------- */
+let SLD = { prog: 'fam', own: 'p(a).\np(b).\nq(b).\nr(X) :- p(X), q(X).', query: 'grossvater(hans, E)', res: null, k: 1 };
+const SLD_PRESETS = { fam: ['grossvater(hans, E)', 'elternteil(X, tom)', 'vater(peter, anna)'], ari: ['laenge([a, b], N)', 'summe([4, 5], S)', 'laenge(L, 1)'], own: ['r(X)'] };
+function sldProgram() { return SLD.prog === 'fam' ? FAM : SLD.prog === 'ari' ? ARI : SLD.own; }
+function sldClauses(src) { return src.split(/\.\s*(?:\n|$)/).map(s => s.replace(/%.*$/gm, '').trim()).filter(Boolean).map(s => s + '.'); }
+function sldBuild() { SLD.res = PL.traceSLD(sldProgram(), SLD.query, 70); SLD.k = 1; }
+function sldTreeHTML(nodes, k) {
+  const shown = nodes.slice(0, k), cur = shown[shown.length - 1];
+  const kids = id => shown.filter(n => n.parent === id);
+  const lab = n => n.edge ? `<span class="sld-e">${n.edge.clause ? 'K' + n.edge.clause : esc(n.edge.builtin)}${n.edge.binds ? ` · <span class="mono">${esc(n.edge.binds)}</span>` : ''}</span>` : '';
+  const box = n => {
+    const done = shown.indexOf(n) < shown.length - 1 || n.kind !== 'goal';
+    const st = n.kind === 'success' ? `<span class="sld-ok">✓ ${esc(n.answer)}</span>` : n.kind === 'fail' && done ? '<span class="sld-no">✗</span>' : n.kind === 'error' ? `<span class="sld-no">⚠ ${esc(n.err)}</span>` : '';
+    return `<div class="sld-n ${n.kind} ${n === cur ? 'cur' : ''}">${lab(n)}<span class="sld-g mono">${esc(n.goals)}</span>${st}</div>`;
+  };
+  const rec = n => `<li>${box(n)}${kids(n.id).length ? `<ul>${kids(n.id).map(rec).join('')}</ul>` : ''}</li>`;
+  return `<ul class="sld-tree">${shown.length ? rec(shown[0]) : ''}</ul>`;
+}
+function sldExplain(n) {
+  if (!n) return '';
+  if (n.kind === 'error') return vzt('e_error', { d: n.err === 'unknown' ? vzt('err_unknown', { d: n.detail }) : n.err });
+  const b = n.edge && n.edge.binds ? vzt('binds', { b: n.edge.binds }) : '';
+  let s = !n.edge ? vzt('e_start') : n.edge.clause ? vzt('e_clause', { k: n.edge.clause, b }) : vzt('e_builtin', { p: n.edge.builtin, b });
+  if (n.kind === 'success') s += ' ' + vzt('e_success', { a: n.answer });
+  if (n.kind === 'fail') s += ' ' + vzt('e_fail');
+  return s;
+}
+function renderSLD() {
+  const root = document.getElementById('sld'); if (!root) return;
+  if (!SLD.res) sldBuild();
+  const R = SLD.res, src = sldProgram(), cls = sldClauses(src);
+  const curNode = R.nodes ? R.nodes[SLD.k - 1] : null, usedK = curNode && curNode.edge && curNode.edge.clause;
+  const answers = R.nodes ? R.nodes.slice(0, SLD.k).filter(n => n.kind === 'success').map(n => n.answer) : [];
+  root.innerHTML = `<div class="sld-ctrl">
+      <label class="f"><span>${esc(vzt('prog'))}</span><select data-sp="1">${[['fam', vzt('fam')], ['ari', vzt('ari')], ['own', vzt('own')]].map(([k, n]) => `<option value="${k}" ${SLD.prog === k ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select></label>
+      <label class="f sld-q"><span>${esc(vzt('query'))}</span><span class="row"><span class="mono">?-</span><input class="mono" data-sq="1" value="${esc(SLD.query)}" spellcheck="false" autocomplete="off"><button type="button" class="btn primary" data-sact="build">${esc(vzt('build'))}</button></span></label>
+      <div class="sld-pre">${(SLD_PRESETS[SLD.prog] || []).map(q => `<button type="button" class="gl-chip" data-spre="${esc(q)}">${esc(q)}</button>`).join('')}</div></div>
+    <div class="sld-grid">
+      <div class="sld-prog">${SLD.prog === 'own' ? `<textarea class="mono lxarea" rows="7" data-sown="1" spellcheck="false">${esc(SLD.own)}</textarea>` : ''}
+        <ol class="sld-cl">${cls.map((c, i) => `<li class="${usedK === i + 1 ? 'on' : ''}"><span class="mono">K${i + 1}</span><code>${esc(c)}</code></li>`).join('')}</ol></div>
+      <div class="sld-main">
+        ${R.error ? `<div class="fb bad">${esc(R.error === 'unknown' ? vzt('err_unknown', { d: R.detail }) : vzt('err_syntax'))}</div>` : `
+        <div class="sld-bar"><button type="button" class="btn" data-sact="prev" ${SLD.k <= 1 ? 'disabled' : ''}>← ${esc(vzt('prev'))}</button><button type="button" class="btn primary" data-sact="next" ${SLD.k >= R.nodes.length ? 'disabled' : ''}>${esc(vzt('next'))} →</button><button type="button" class="btn ghost" data-sact="all">${esc(vzt('all'))}</button><button type="button" class="btn ghost" data-sact="reset">${esc(vzt('reset'))}</button><span class="small muted">${esc(vzt('step', { i: SLD.k, n: R.nodes.length }))}</span></div>
+        <div class="fb info sld-x" aria-live="polite">${esc(sldExplain(curNode))}</div>
+        <div class="sld-wrap">${sldTreeHTML(R.nodes, SLD.k)}</div>
+        ${R.truncated && SLD.k >= R.nodes.length ? `<p class="small muted">${esc(vzt('truncated', { n: R.nodes.length }))}</p>` : ''}
+        <p class="sld-ans"><b>${esc(vzt('answers'))}:</b> ${answers.length ? answers.map(a => `<span class="mono">${esc(a)}</span>`).join(' ; ') : esc(vzt('none'))}</p>`}
+        <p class="small muted">${esc(vzt('legend'))}</p></div></div>`;
+}
+function initSLD() {
+  const root = document.getElementById('sld'); if (!root) return;
+  root.addEventListener('click', e => {
+    const p = e.target.closest('[data-spre]'); if (p) { SLD.query = p.dataset.spre; sldBuild(); renderSLD(); return; }
+    const b = e.target.closest('[data-sact]'); if (!b) return;
+    const a = b.dataset.sact, n = SLD.res && SLD.res.nodes ? SLD.res.nodes.length : 1;
+    if (a === 'build') { const q = root.querySelector('[data-sq]'); if (q) SLD.query = q.value; sldBuild(); }
+    else if (a === 'next') SLD.k = Math.min(n, SLD.k + 1);
+    else if (a === 'prev') SLD.k = Math.max(1, SLD.k - 1);
+    else if (a === 'all') SLD.k = n;
+    else if (a === 'reset') SLD.k = 1;
+    renderSLD();
+    const f = root.querySelector(`[data-sact="${a}"]`); if (f && !f.disabled) f.focus({ preventScroll: true });
+    const c = root.querySelector('.sld-n.cur'); if (c && (a === 'next' || a === 'prev')) c.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  });
+  root.addEventListener('change', e => {
+    if (e.target.closest('[data-sp]')) { SLD.prog = e.target.value; SLD.query = SLD_PRESETS[SLD.prog][0]; sldBuild(); renderSLD(); }
+  });
+  root.addEventListener('input', e => { if (e.target.closest('[data-sown]')) SLD.own = e.target.value; if (e.target.closest('[data-sq]')) SLD.query = e.target.value; });
+  root.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('[data-sq]')) { e.preventDefault(); SLD.query = e.target.value; sldBuild(); renderSLD(); } });
+}
+
+/* ---------- Haskell evaluation steps ---------- */
+let HS = { ex: 'foldr', list: '1, 2, 3', op: '-', z: '0', n: '3', k: '2', a: '1', i: 1 };
+const hN = v => v < 0 ? `(${v})` : String(v);
+const hAp = (op, a, b) => op === '+' ? a + b : op === '-' ? a - b : a * b;
+function hsSteps() {
+  const xs = HS.list.split(',').map(s => parseInt(s.trim(), 10)).filter(v => !isNaN(v)).slice(0, 7), op = HS.op, z = parseInt(HS.z, 10) || 0, S = [];
+  const L = a => `[${a.join(',')}]`;
+  if (HS.ex === 'foldr') {
+    const render = (pre, tail, tailIsOp) => { let s = tail, isOp = tailIsOp; for (let j = pre.length - 1; j >= 0; j--) { s = `${hN(pre[j])} ${op} ${isOp ? '(' + s + ')' : s}`; isOp = true; } return s; };
+    S.push([`foldr (${op}) ${hN(z)} ${L(xs)}`, vzt('n_start')]);
+    for (let i = 1; i <= xs.length; i++) S.push([render(xs.slice(0, i), `foldr (${op}) ${hN(z)} ${L(xs.slice(i))}`, false), vzt('n_foldr1')]);
+    S.push([render(xs, hN(z), false), vzt('n_foldr_b')]);
+    let v = z;
+    for (let j = xs.length - 1; j >= 0; j--) { const nv = hAp(op, xs[j], v); S.push([render(xs.slice(0, j), j ? hN(nv) : String(nv), false), vzt('n_calc', { c: `${hN(xs[j])} ${op} ${hN(v)} = ${nv}` })]); v = nv; }
+  } else if (HS.ex === 'foldl') {
+    const acc = n => { let s = hN(z); for (let i = 0; i < n; i++) s = `${i ? '(' + s + ')' : s} ${op} ${hN(xs[i])}`; return s; };
+    S.push([`foldl (${op}) ${hN(z)} ${L(xs)}`, vzt('n_start')]);
+    for (let i = 1; i <= xs.length; i++) S.push([`foldl (${op}) (${acc(i)}) ${L(xs.slice(i))}`, vzt('n_foldl1')]);
+    S.push([acc(xs.length), vzt('n_foldl_b')]);
+    let v = z;
+    for (let j = 0; j < xs.length; j++) {
+      const nv = hAp(op, v, xs[j]); let s = j < xs.length - 1 ? hN(nv) : String(nv);
+      for (let i = j + 1; i < xs.length; i++) s = `${i > j + 1 ? '(' + s + ')' : s} ${op} ${hN(xs[i])}`;
+      S.push([s, vzt('n_calc', { c: `${hN(v)} ${op} ${hN(xs[j])} = ${nv}` })]); v = nv;
+    }
+  } else if (HS.ex === 'lazy') {
+    const n = Math.max(0, Math.min(5, parseInt(HS.n, 10) || 0)), k = parseInt(HS.k, 10) || 2, a = parseInt(HS.a, 10) || 1, f = `(*${k})`;
+    const pre = P => P.length ? P.join(' : ') + ' : ' : '';
+    S.push([`take ${n} (map ${f} [${a}..])`, vzt('n_start')]);
+    const P = [];
+    for (let i = 0; i < n; i++) {
+      const c = a + i, r = n - i;
+      S.push([`${pre(P)}take ${r} (map ${f} (${c} : [${c + 1}..]))`, vzt('n_enum', { a: c, a1: c + 1 })]);
+      S.push([`${pre(P)}take ${r} (${f} ${c} : map ${f} [${c + 1}..])`, vzt('n_map')]);
+      S.push([`${pre(P)}${f} ${c} : take ${r - 1} (map ${f} [${c + 1}..])`, vzt('n_take')]);
+      P.push(c * k);
+      S.push([`${pre(P)}take ${r - 1} (map ${f} [${c + 1}..])`, vzt('n_mul', { k: '*' + k, a: c, v: c * k })]);
+    }
+    S.push([`${pre(P)}[]`, vzt('n_take0')]);
+    S.push([`[${P.join(',')}]`, vzt('n_list')]);
+  } else {
+    const render = (pre, tail, tailIsOp) => { let s = tail, isOp = tailIsOp; for (let j = pre.length - 1; j >= 0; j--) { s = `${hN(pre[j])} - ${isOp ? '(' + s + ')' : s}`; isOp = true; } return s; };
+    S.push([`f ${L(xs)}`, vzt('n_start')]);
+    let rest = xs.slice(), pre = [];
+    while (rest.length >= 2) { const [x, y, ...ys] = rest; pre.push(x); rest = ys; S.push([render(pre, `f ${L(rest)}`, false), vzt('n_pat2', { x, y, ys: ys.join(',') })]); }
+    const base = rest.length ? rest[0] : 0;
+    S.push([render(pre, hN(base), false), rest.length ? vzt('n_pat1', { x: base }) : vzt('n_pat0')]);
+    let v = base;
+    for (let j = pre.length - 1; j >= 0; j--) { const nv = pre[j] - v; S.push([render(pre.slice(0, j), j ? hN(nv) : String(nv), false), vzt('n_calc', { c: `${hN(pre[j])} - ${hN(v)} = ${nv}` })]); v = nv; }
+  }
+  return S;
+}
+const HS_DEF = {
+  foldr: 'foldr :: (a -> b -> b) -> b -> [a] -> b\nfoldr f z []     = z\nfoldr f z (x:xs) = f x (foldr f z xs)',
+  foldl: 'foldl :: (b -> a -> b) -> b -> [a] -> b\nfoldl f z []     = z\nfoldl f z (x:xs) = foldl f (f z x) xs',
+  lazy: 'take 0 _      = []\ntake n (x:xs) = x : take (n - 1) xs\n\nmap f []     = []\nmap f (x:xs) = f x : map f xs',
+  pat: 'f :: [Int] -> Int\nf []       = 0\nf [x]      = x\nf (x:y:ys) = x - f ys'
+};
+function renderHS() {
+  const root = document.getElementById('hsteps'); if (!root) return;
+  const S = hsSteps(); HS.i = Math.min(Math.max(1, HS.i), S.length);
+  const inp = (k, lab, w) => `<label class="f"><span>${esc(lab)}</span><input class="mono" data-hs="${k}" value="${esc(HS[k])}" style="width:${w}" spellcheck="false" autocomplete="off"></label>`;
+  const params = HS.ex === 'lazy' ? inp('n', vzt('hs_n'), '5ch') + inp('k', vzt('hs_k'), '5ch') + inp('a', vzt('hs_from'), '5ch')
+    : HS.ex === 'pat' ? inp('list', vzt('hs_list'), '18ch')
+    : inp('list', vzt('hs_list'), '14ch') + `<label class="f"><span>${esc(vzt('hs_op'))}</span><select data-hs="op">${['-', '+', '*'].map(o => `<option ${HS.op === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>` + inp('z', vzt('hs_z'), '6ch');
+  root.innerHTML = `<div class="sld-ctrl"><label class="f"><span>${esc(vzt('hs_ex'))}</span><select data-hs="ex">${[['foldr', vzt('ex_foldr')], ['foldl', vzt('ex_foldl')], ['lazy', vzt('ex_lazy')], ['pat', vzt('ex_pat')]].map(([k, n]) => `<option value="${k}" ${HS.ex === k ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select></label>${params}</div>
+    <div class="sld-grid hs-grid"><div class="sld-prog"><span class="small muted">${esc(vzt('hs_def'))}</span><pre class="code">${esc(HS_DEF[HS.ex])}</pre></div>
+    <div class="sld-main">
+      <div class="sld-bar"><button type="button" class="btn" data-hact="prev" ${HS.i <= 1 ? 'disabled' : ''}>← ${esc(vzt('prev'))}</button><button type="button" class="btn primary" data-hact="next" ${HS.i >= S.length ? 'disabled' : ''}>${esc(vzt('next'))} →</button><button type="button" class="btn ghost" data-hact="all">${esc(vzt('all'))}</button><button type="button" class="btn ghost" data-hact="reset">${esc(vzt('reset'))}</button><span class="small muted">${esc(vzt('step', { i: HS.i, n: S.length }))}</span></div>
+      <div class="fb info sld-x" aria-live="polite">${esc(S[HS.i - 1][1])}</div>
+      <ol class="hs-steps">${S.slice(0, HS.i).map((s, j) => `<li class="${j === HS.i - 1 ? 'cur' : ''}"><span class="hs-eq">${j ? '=' : ''}</span><code>${esc(s[0])}</code></li>`).join('')}</ol></div></div>`;
+}
+function initHS() {
+  const root = document.getElementById('hsteps'); if (!root) return;
+  root.addEventListener('click', e => {
+    const b = e.target.closest('[data-hact]'); if (!b) return;
+    const n = hsSteps().length, a = b.dataset.hact;
+    HS.i = a === 'next' ? Math.min(n, HS.i + 1) : a === 'prev' ? Math.max(1, HS.i - 1) : a === 'all' ? n : 1;
+    renderHS(); const f = root.querySelector(`[data-hact="${a}"]`); if (f && !f.disabled) f.focus({ preventScroll: true });
+  });
+  const upd = e => { const i = e.target.closest('[data-hs]'); if (!i) return; HS[i.dataset.hs] = i.value; if (i.dataset.hs === 'ex' || e.type === 'change') { HS.i = 1; renderHS(); const again = root.querySelector(`[data-hs="${i.dataset.hs}"]`); if (again && again.tagName === 'INPUT') { again.focus(); again.setSelectionRange(again.value.length, again.value.length); } } };
+  root.addEventListener('change', upd);
 }
 /* ===== Klausur-Training per language ===== */
 const LXT = {
@@ -7936,6 +8642,8 @@ function taskHTML(l, t, idx) {
   if (showSol && t.expl) sol = `<div class="fb info"><span class="lab">${lt('solution')}</span><span>${esc(L(t.expl))}</span></div>`;
   if (showSol && t.type === 'pprog') sol = `<div class="lxsol"><span class="lab">${lt('solution')}</span>${codeHTML(t.model)}</div>`;
   if (showSol && t.type === 'lines') sol = `<div class="fb info"><span class="lab">${lt('solution')}</span><pre class="code">${esc(t.answer.join('\n'))}</pre><span>${esc(L(t.expl))}</span></div>`;
+  const VZ = { p2: ['#prolog-tree', 'viz_sld'], p3: ['#prolog-tree', 'viz_sld'], h4: ['#haskell-steps', 'viz_hs'], h3: ['#haskell-steps', 'viz_hs'] }[t.id];
+  if (showSol && VZ) sol += `<p class="small"><a href="${VZ[0]}">${lang === 'de' ? (VZ[1] === 'viz_sld' ? 'Den Suchbaum Schritt für Schritt ansehen →' : 'Die Auswertung Schritt für Schritt ansehen →') : (VZ[1] === 'viz_sld' ? 'See the search tree step by step →' : 'See the evaluation step by step →')}</a></p>`;
   const max = taskMax(t);
   const badge = r ? `<span class="lxbadge ${r.pts === max ? 'full' : r.pts ? 'part' : 'zero'}">${r.pts} / ${max} ${lt('pts')}${t.type === 'self' ? ' · ' + lt('self_pts') : ''}</span>` : `<span class="lxbadge">${max} ${lt('pts')}</span>`;
   const checkBtn = t.type === 'self' ? '' : `<button class="btn primary" type="button" data-lxact="check" data-lx="${l}" data-t="${t.id}">${t.type === 'pprog' ? lt('run_tests') : lt('check')}</button>`;
@@ -7990,9 +8698,9 @@ function rerenderTask(l, id) {
 function handleLX(e) {
   const b = e.target.closest('[data-lxact]'); if (!b) return;
   const l = b.dataset.lx, act = b.dataset.lxact, S = lxS(l), id = b.dataset.t;
-  if (act === 'check') { S.r[id] = gradeTask(l, LX[l].tasks.find(x => x.id === id)); rerenderTask(l, id); }
+  if (act === 'check') { const tk = LX[l].tasks.find(x => x.id === id); S.r[id] = gradeTask(l, tk); if (l !== 'mock') stRecordTask(tk, S.r[id]); rerenderTask(l, id); }
   else if (act === 'sol') { S.sol[id] = !S.sol[id]; const tk = LX[l].tasks.find(x => x.id === id); if (tk.type === 'self') S.r[id] = gradeTask(l, tk); rerenderTask(l, id); }
-  else if (act === 'checkall') { LX[l].tasks.forEach(tk => { if (tk.type !== 'self' || S.sol[tk.id]) S.r[tk.id] = gradeTask(l, tk); }); renderLX(l); }
+  else if (act === 'checkall') { LX[l].tasks.forEach(tk => { if (tk.type !== 'self' || S.sol[tk.id]) { S.r[tk.id] = gradeTask(l, tk); stRecordTask(tk, S.r[tk.id]); } }); renderLX(l); }
   else if (act === 'reset') { ST.LX[l] = { v: {}, r: {}, sol: {} }; renderLX(l); }
   else if (act === 'pgrun') { S.pg = PL.run(S.v['pg:prog'] ?? FAM, S.v['pg:q'] ?? 'grossvater(hans, E)'); const pg = document.getElementById('pg'); if (pg) pg.outerHTML = playgroundHTML(); }
   snapshot();

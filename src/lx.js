@@ -378,6 +378,8 @@ function taskHTML(l, t, idx) {
   if (showSol && t.expl) sol = `<div class="fb info"><span class="lab">${lt('solution')}</span><span>${esc(L(t.expl))}</span></div>`;
   if (showSol && t.type === 'pprog') sol = `<div class="lxsol"><span class="lab">${lt('solution')}</span>${codeHTML(t.model)}</div>`;
   if (showSol && t.type === 'lines') sol = `<div class="fb info"><span class="lab">${lt('solution')}</span><pre class="code">${esc(t.answer.join('\n'))}</pre><span>${esc(L(t.expl))}</span></div>`;
+  const VZ = { p2: ['#prolog-tree', 'viz_sld'], p3: ['#prolog-tree', 'viz_sld'], h4: ['#haskell-steps', 'viz_hs'], h3: ['#haskell-steps', 'viz_hs'] }[t.id];
+  if (showSol && VZ) sol += `<p class="small"><a href="${VZ[0]}">${lang === 'de' ? (VZ[1] === 'viz_sld' ? 'Den Suchbaum Schritt für Schritt ansehen →' : 'Die Auswertung Schritt für Schritt ansehen →') : (VZ[1] === 'viz_sld' ? 'See the search tree step by step →' : 'See the evaluation step by step →')}</a></p>`;
   const max = taskMax(t);
   const badge = r ? `<span class="lxbadge ${r.pts === max ? 'full' : r.pts ? 'part' : 'zero'}">${r.pts} / ${max} ${lt('pts')}${t.type === 'self' ? ' · ' + lt('self_pts') : ''}</span>` : `<span class="lxbadge">${max} ${lt('pts')}</span>`;
   const checkBtn = t.type === 'self' ? '' : `<button class="btn primary" type="button" data-lxact="check" data-lx="${l}" data-t="${t.id}">${t.type === 'pprog' ? lt('run_tests') : lt('check')}</button>`;
@@ -432,9 +434,9 @@ function rerenderTask(l, id) {
 function handleLX(e) {
   const b = e.target.closest('[data-lxact]'); if (!b) return;
   const l = b.dataset.lx, act = b.dataset.lxact, S = lxS(l), id = b.dataset.t;
-  if (act === 'check') { S.r[id] = gradeTask(l, LX[l].tasks.find(x => x.id === id)); rerenderTask(l, id); }
+  if (act === 'check') { const tk = LX[l].tasks.find(x => x.id === id); S.r[id] = gradeTask(l, tk); if (l !== 'mock') stRecordTask(tk, S.r[id]); rerenderTask(l, id); }
   else if (act === 'sol') { S.sol[id] = !S.sol[id]; const tk = LX[l].tasks.find(x => x.id === id); if (tk.type === 'self') S.r[id] = gradeTask(l, tk); rerenderTask(l, id); }
-  else if (act === 'checkall') { LX[l].tasks.forEach(tk => { if (tk.type !== 'self' || S.sol[tk.id]) S.r[tk.id] = gradeTask(l, tk); }); renderLX(l); }
+  else if (act === 'checkall') { LX[l].tasks.forEach(tk => { if (tk.type !== 'self' || S.sol[tk.id]) { S.r[tk.id] = gradeTask(l, tk); stRecordTask(tk, S.r[tk.id]); } }); renderLX(l); }
   else if (act === 'reset') { ST.LX[l] = { v: {}, r: {}, sol: {} }; renderLX(l); }
   else if (act === 'pgrun') { S.pg = PL.run(S.v['pg:prog'] ?? FAM, S.v['pg:q'] ?? 'grossvater(hans, E)'); const pg = document.getElementById('pg'); if (pg) pg.outerHTML = playgroundHTML(); }
   snapshot();

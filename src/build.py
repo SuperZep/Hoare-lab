@@ -1,5 +1,5 @@
 s=open('src.html').read()
-s=s.replace('/*ENGINE*/',open('core.js').read()+open('exercises.js').read()+open('exercises2.js').read()).replace('/*LANGENG*/',open('langengines.js').read()).replace('/*APP*/',open('app.js').read()).replace('/*WIKI*/',open('wiki.js').read()).replace('/*LX*/',open('vendor/qrcode.js').read()+open('diag.js').read()+open('diagtasks.js').read()+open('daily.js').read()+open('weeks.js').read()+open('tour.js').read()+open('glossary.js').read()+open('extras.js').read()+open('lx.js').read())
+s=s.replace('/*ENGINE*/',open('core.js').read()+open('exercises.js').read()+open('exercises2.js').read()).replace('/*LANGENG*/',open('langengines.js').read()).replace('/*APP*/',open('app.js').read()).replace('/*WIKI*/',open('wiki.js').read()).replace('/*LX*/',open('vendor/qrcode.js').read()+open('diag.js').read()+open('diagtasks.js').read()+open('stats.js').read()+open('daily.js').read()+open('weeks.js').read()+open('tour.js').read()+open('glossary.js').read()+open('extras.js').read()+open('mock.js').read()+open('viz.js').read()+open('lx.js').read())
 open('../index.html','w').write(s)
 
 # PWA files for GitHub Pages (manifest, service worker with build version, icons)

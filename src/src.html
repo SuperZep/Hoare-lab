@@ -830,6 +830,104 @@ pre.code{font-family:var(--mono);font-size:14.5px;line-height:1.6;background:var
 .lx .tool{max-width:980px}
 footer{border-top:1px solid var(--rule);padding:26px 20px 40px;max-width:1180px;margin:0 auto;display:grid;gap:8px;font-size:15px;color:var(--muted)}
 footer a{color:var(--muted)}
+
+/* ---- Meine Schwächen ---- */
+.st{display:grid;gap:22px;max-width:980px}
+.st-sum{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:14px 18px;font-family:var(--display);font-size:17px}
+.st-sec{display:grid;gap:12px}.st-sec h2{font-size:21px;font-weight:600}
+.st-list{display:grid;gap:8px}
+.st-row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(80px,1fr) minmax(0,1fr) auto;gap:10px 16px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:12px;padding:10px 14px}
+.st-row.strong{border-left-color:var(--ok)}.st-row.mid{border-left-color:var(--warn)}.st-row.weak{border-left-color:var(--bad)}
+.st-name{display:grid;gap:2px;min-width:0}.st-name b{font-family:var(--display);font-size:16px}.st-name span{font-size:13px;color:var(--muted)}
+.st-bar{height:8px;border-radius:99px;background:var(--rule);overflow:hidden}.st-bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
+.st-row.strong .st-bar span{background:var(--ok)}.st-row.weak .st-bar span{background:var(--bad)}.st-row.mid .st-bar span{background:var(--warn)}
+.st-lvl{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.st-chip{font-family:var(--display);font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px}
+.st-chip.strong{background:var(--ok-soft);color:var(--ok)}.st-chip.mid{background:var(--accent-soft);color:var(--warn)}.st-chip.weak{background:var(--bad-soft);color:var(--bad)}
+.st-act .btn{white-space:nowrap}
+.st a.btn,.mk a.btn{text-decoration:none}
+.st-errs{display:grid;gap:8px}
+.st-err{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:10px 14px}
+.st-err p{margin:2px 0;font-size:15px}.st-cnt{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--bad);background:var(--bad-soft);border-radius:8px;padding:3px 8px;white-space:nowrap}
+.st-topic{font-family:var(--display);font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.04em}
+@media (max-width:700px){.st-row{grid-template-columns:minmax(0,1fr) auto}.st-bar{grid-column:1/-1;order:3}.st-lvl{grid-column:1/-1;order:4}.st-act{grid-column:2;grid-row:1}}
+
+/* ---- Probeklausur ---- */
+.mock-card{display:grid;gap:6px;text-decoration:none;color:var(--ink);background:linear-gradient(135deg,var(--accent-soft),var(--surface) 70%);border:1.5px solid var(--accent);border-radius:16px;padding:18px 22px;margin:0 0 16px;max-width:980px;transition:transform .15s}
+.mock-card:hover{transform:translateY(-2px)}
+.mc-k{font-family:var(--mono);font-size:12.5px;color:var(--accent)}.mc-t{font-family:var(--display);font-size:24px;font-weight:700}.mc-d{max-width:70ch;color:var(--muted)}.mc-go{font-family:var(--display);font-weight:600;color:var(--accent)}
+#mock{max-width:980px}
+.mk{display:grid;gap:22px;min-width:0}
+.mk-start{display:grid;gap:14px;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:20px 22px}
+.mk-compose h2{font-size:19px;font-weight:600;margin-bottom:6px}.mk-compose ol{margin:0;padding-left:22px;display:grid;gap:4px}
+.mk-bar-top{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;position:sticky;top:calc(var(--hdr,62px));z-index:5;background:var(--paper);padding:8px 0;border-bottom:1px solid var(--rule)}
+.mk-bar-top .btn.primary{margin-left:auto}
+#mk-clock.warn{color:var(--bad);font-weight:600}
+.mk-jump{display:flex;flex-wrap:wrap;gap:4px}.mk-jump a{font-family:var(--display);font-size:13px;color:var(--muted);text-decoration:none;padding:3px 9px;border:1px solid var(--rule);border-radius:999px}.mk-jump a:hover{color:var(--accent);border-color:var(--accent)}
+.mk-confirm{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.mk-part{display:grid;gap:14px;scroll-margin-top:calc(var(--hdr,62px) + 64px)}
+.mk-part>h2{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;font-size:24px;font-weight:600;border-bottom:2px solid var(--ink);padding-bottom:6px}
+.mk-part>h2 span{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:400}.mk-part>h2 em{margin-left:auto;font-style:normal;font-family:var(--display);font-size:14px;color:var(--muted)}
+.mk-task{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px 20px;display:grid;gap:12px;min-width:0}
+.mk-task h3{font-size:19px}
+.mk-th{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}.mk-th .xt-n{font-family:var(--mono);font-size:13px;color:var(--accent)}
+.mk-pts{margin-left:auto;font-family:var(--display);font-size:12.5px;color:var(--muted)}.mk-th .lxbadge+.mk-pts{display:none}
+.mk-kp{padding-top:4px;gap:16px}.mk-kp .kpart{background:var(--paper);padding:16px 18px}
+.mk-q{display:grid;gap:12px;min-width:0}
+.mk .xt>.row{display:none}
+.mk-end{justify-content:flex-end}
+.mk-result{display:grid;gap:16px;background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:20px 22px}
+.mk-res-top{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center}
+.mk-res-top>div:first-child{display:grid;gap:2px;justify-items:start}
+.mk-gl{font-family:var(--display);font-size:13px;color:var(--muted)}
+.mk-grade{font-family:var(--display);font-size:54px;line-height:1;font-weight:700}.mk-grade.ok{color:var(--ok)}.mk-grade.bad{color:var(--bad)}
+.mk-pass{font-family:var(--display);font-size:13px;font-weight:600;padding:2px 10px;border-radius:999px}.mk-pass.ok{background:var(--ok-soft);color:var(--ok)}.mk-pass.bad{background:var(--bad-soft);color:var(--bad)}
+.mk-res-sc{display:grid;gap:4px;flex:1 1 260px;font-family:var(--display);font-size:18px}
+.mk-bars{display:grid;gap:8px}
+.mk-bar{display:grid;grid-template-columns:120px minmax(0,1fr) 70px;gap:12px;align-items:center;font-family:var(--display);font-size:14.5px}
+.mk-bar i{height:10px;border-radius:99px;background:var(--rule);overflow:hidden}.mk-bar i b{display:block;height:100%;background:var(--accent);border-radius:99px}
+.mk-bar em{font-style:normal;text-align:right;font-family:var(--mono);font-size:13px}
+.mk-errs{display:grid;gap:8px}.mk-errs h3{font-size:17px}
+.mk-review{font-size:22px;font-weight:600;margin-top:6px}
+@media (max-width:600px){.mk-bar{grid-template-columns:80px minmax(0,1fr) 56px}.mk-bar-top{top:0}.mk-jump{display:none}.mk-task,.mk-result,.mk-start{padding:14px}.mk-grade{font-size:44px}}
+
+/* ---- Suchbaum / Schritt für Schritt ---- */
+.sld{display:grid;gap:14px;margin-top:8px;min-width:0}
+.sld-ctrl{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+.sld-ctrl .f{display:grid;gap:4px;font-size:13px;color:var(--muted);min-width:0}
+.sld-ctrl>.f{max-width:100%}.sld-ctrl select{min-width:0;text-overflow:ellipsis}
+.sld-ctrl select,.sld-ctrl input{font:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1.5px solid var(--rule);border-radius:10px;padding:7px 10px;max-width:100%}
+.sld-ctrl input.mono{font-family:var(--mono);font-size:14px}
+.sld-q{flex:1 1 340px}.sld-q .row{display:flex;gap:8px;align-items:center;flex-wrap:nowrap}.sld-q input{flex:1;min-width:0}
+.sld-pre{display:flex;flex-wrap:wrap;gap:6px;width:100%}.sld-pre .gl-chip{font-family:var(--mono);font-size:12.5px;font-weight:400}
+.sld-grid{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:16px;align-items:start}
+.sld-prog{display:grid;gap:8px;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:12px;min-width:0;position:sticky;top:calc(var(--hdr,62px) + 64px)}
+.sld-prog pre.code{margin:0;font-size:12.5px}
+.sld-cl{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:12.5px}
+.sld-cl li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:6px;padding:3px 6px;border-radius:6px}
+.sld-cl li>span{color:var(--muted);font-size:11.5px;padding-top:1px}.sld-cl code{font-family:var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:none;padding:0}
+.sld-cl li.on{background:var(--accent-soft)}.sld-cl li.on>span{color:var(--accent);font-weight:600}
+.sld-main{display:grid;gap:10px;min-width:0}
+.sld-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sld-x{min-height:3.2em}
+.sld-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:14px 12px}
+.sld-tree,.sld-tree ul{list-style:none;margin:0;padding:0}
+.sld-tree ul{margin-left:18px;padding-left:14px;border-left:1.5px solid var(--rule)}
+.sld-tree li{position:relative;padding-top:8px}
+.sld-tree ul>li::before{content:"";position:absolute;left:-14px;top:24px;width:12px;border-top:1.5px solid var(--rule)}
+.sld-n{display:inline-grid;gap:3px;background:var(--paper);border:1.5px solid var(--rule);border-radius:10px;padding:6px 10px;max-width:100%;transition:border-color .2s,box-shadow .2s}
+.sld-n.cur{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.sld-n.success{border-color:var(--ok);background:var(--ok-soft)}.sld-n.fail{border-style:dashed}.sld-n.error{border-color:var(--bad)}
+.sld-e{font-family:var(--mono);font-size:11.5px;color:var(--accent);overflow-wrap:anywhere}.sld-e .mono{color:var(--muted)}
+.sld-g{font-size:13px;overflow-wrap:anywhere}
+.sld-ok{font-family:var(--mono);font-size:12.5px;color:var(--ok);font-weight:600}.sld-no{font-family:var(--mono);font-size:12.5px;color:var(--bad);font-weight:600}
+.sld-ans{margin:0}.sld-ans .mono{font-family:var(--mono);background:var(--ok-soft);color:var(--ok);padding:1px 6px;border-radius:6px}
+.hs-steps{list-style:none;margin:0;padding:12px 14px;display:grid;gap:4px;background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow-x:auto}
+.hs-steps li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;align-items:baseline;padding:4px 6px;border-radius:8px;opacity:.6}
+.hs-steps li.cur{opacity:1;background:var(--accent-soft)}
+.hs-steps code{font-family:var(--mono);font-size:14px;background:none;padding:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.hs-eq{font-family:var(--mono);color:var(--accent)}
+@media (max-width:760px){.sld-grid{grid-template-columns:minmax(0,1fr)}.sld-prog{position:static}.sld-q .row{flex-wrap:wrap}.sld-q .row .btn{width:100%}}
 </style>
 </head>
 <body data-lang="de">
@@ -862,6 +960,7 @@ footer a{color:var(--muted)}
       <a href="#weeks" data-view="weeks"><span class="de">Wochenplan</span><span class="en">Week by week</span></a>
       <a href="#resources" data-view="resources"><span class="de">Weiterlernen</span><span class="en">Learn more</span></a>
       <a href="#glossary" data-view="glossary"><span class="de">Glossar</span><span class="en">Glossary</span></a>
+      <a href="#progress" data-view="progress"><span class="de">Fortschritt</span><span class="en">Progress</span></a>
     </nav>
   </div>
 </header>
@@ -1044,6 +1143,16 @@ footer a{color:var(--muted)}
     <p class="lede"><span class="de">Die Fachbegriffe der Vorlesung mit ihrer englischen Entsprechung und einer kurzen Erklärung. Praktisch, wenn du englische Quellen liest oder auf Englisch denkst.</span><span class="en">The technical terms of the lecture with their German counterpart and a short explanation. Handy when the lecture is in German but you think or read in English.</span></p>
   </div>
   <div id="glossary" class="gl"></div>
+</section>
+
+<section class="view" id="view-progress" aria-labelledby="st-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><span><span class="de">Meine Schwächen</span><span class="en">My weak spots</span></span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Programmierung · Fortschritt</span><span class="en">Programmierung · progress</span></div>
+    <h1 id="st-title"><span class="de">Meine Schwächen</span><span class="en">My weak spots</span></h1>
+    <p class="lede"><span class="de">Hier sammelt die Seite, wie sicher du in jedem Thema bist und welche typischen Fehler dir am häufigsten passieren. Gezählt wird alles, was du in Täglich, in den Übungen und im Klausur-Training prüfst. Die Daten bleiben in diesem Browser.</span><span class="en">This page collects how confident you are in each topic and which typical mistakes you make most often. Everything you check in Daily, in the exercises and in the exam training counts. The data stays in this browser.</span></p>
+  </div>
+  <div id="progress" class="st"></div>
 </section>
 
 <!-- ================= PRINTABLE EXAM ================= -->
@@ -1233,7 +1342,7 @@ N = 3.</pre>
   </div>
 
   <nav class="secbar" aria-label="Abschnitte · Sections">
-    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="haskell-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="haskell-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="haskell-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="haskell-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="haskell-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button></div><a class="secbar-exam" href="#exam-haskell"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
+    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="haskell-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="haskell-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="haskell-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="haskell-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="haskell-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button><button type="button" data-jump="haskell-steps"><span class="n">06</span><span class="de">Schritt für Schritt</span><span class="en">Step by step</span></button></div><a class="secbar-exam" href="#exam-haskell"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
     <div class="secbar-prog" aria-hidden="true"><span></span></div>
   </nav>
 
@@ -1293,6 +1402,12 @@ quadrate xs = map (\x -> x * x) xs
 
 -- GHCi&gt; quadrate [1, 2, 3]
 -- [1,4,9]</pre>
+  </section>
+
+  <section class="sec" id="haskell-steps">
+    <div class="sec-h"><span class="num">06</span><h2><span class="de">Schritt für Schritt auswerten</span><span class="en">Evaluating step by step</span></h2></div>
+    <p class="prose"><span class="de">In der Klausur musst du Ausdrücke von Hand auswerten. Hier siehst du jeden Reduktionsschritt einzeln: wie foldr nach rechts und foldl nach links klammert, warum take auf einer unendlichen Liste trotzdem endet, und wie Pattern Matching die Liste zerlegt. Ändere die Liste oder den Operator und vergleiche.</span><span class="en">In the exam you evaluate expressions by hand. Here you see every reduction step on its own: how foldr brackets to the right and foldl to the left, why take on an infinite list still terminates, and how pattern matching takes the list apart. Change the list or the operator and compare.</span></p>
+    <div id="hsteps" class="sld"></div>
     <div class="pager"><a class="btn" href="#java">← Java</a><a class="btn" href="#exam-haskell"><span class="de">Klausur-Training Haskell</span><span class="en">Haskell exam training</span></a><a class="btn primary" href="#prolog"><span class="de">Weiter: Prolog →</span><span class="en">Next: Prolog →</span></a></div>
   </section>
 </section>
@@ -1313,7 +1428,7 @@ quadrate xs = map (\x -> x * x) xs
   </div>
 
   <nav class="secbar" aria-label="Abschnitte · Sections">
-    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="prolog-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="prolog-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="prolog-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="prolog-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="prolog-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button></div><a class="secbar-exam" href="#exam-prolog"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
+    <div class="secbar-in"><span class="secbar-l"><span class="de">Auf dieser Seite</span><span class="en">On this page</span></span><div class="secbar-chips"><button type="button" data-jump="prolog-why"><span class="n">01</span><span class="de">Entstehung</span><span class="en">Origins</span></button><button type="button" data-jump="prolog-evo"><span class="n">02</span><span class="de">Entwicklung</span><span class="en">Evolution</span></button><button type="button" data-jump="prolog-today"><span class="n">03</span><span class="de">Heute gefragt</span><span class="en">In demand today</span></button><button type="button" data-jump="prolog-lecture"><span class="n">04</span><span class="de">In der Vorlesung</span><span class="en">In the lecture</span></button><button type="button" data-jump="prolog-look"><span class="n">05</span><span class="de">Erster Blick</span><span class="en">First look</span></button><button type="button" data-jump="prolog-tree"><span class="n">06</span><span class="de">Suchbaum</span><span class="en">Search tree</span></button></div><a class="secbar-exam" href="#exam-prolog"><span class="de">Klausur-Training</span><span class="en">Exam training</span> →</a></div>
     <div class="secbar-prog" aria-hidden="true"><span></span></div>
   </nav>
 
@@ -1370,6 +1485,12 @@ grossmutterVon(G, K) :- mutterVon(G, M), mutterVon(M, K).
 
 ?- grossmutterVon(Oma, aline).
 Oma = renate.</pre>
+  </section>
+
+  <section class="sec" id="prolog-tree">
+    <div class="sec-h"><span class="num">06</span><h2><span class="de">Der Suchbaum Schritt für Schritt</span><span class="en">The search tree step by step</span></h2></div>
+    <p class="prose"><span class="de">Prolog sucht Antworten in einem Baum: Das erste Ziel wird mit einer passenden Klausel unifiziert, dann geht es in die Tiefe; scheitert ein Zweig, geht Prolog zurück und probiert die nächste Klausel. Genau diesen SLD-Baum zeichnest du in der Klausur. Hier wächst er Knoten für Knoten.</span><span class="en">Prolog searches for answers in a tree: the first goal is unified with a matching clause, then the search goes deeper; when a branch fails, Prolog goes back and tries the next clause. This is exactly the SLD tree you draw in the exam. Here it grows node by node.</span></p>
+    <div id="sld" class="sld"></div>
     <div class="pager"><a class="btn" href="#haskell">← Haskell</a><a class="btn" href="#exam-prolog"><span class="de">Klausur-Training Prolog</span><span class="en">Prolog exam training</span></a><a class="btn primary" href="#hoare"><span class="de">Weiter: Hoare-Kalkül →</span><span class="en">Next: Hoare logic →</span></a></div>
   </section>
 </section>
@@ -1616,6 +1737,7 @@ Oma = renate.</pre>
     <p class="lede"><span class="de">Für jeden Teil der Vorlesung gibt es ein eigenes Klausur-Training mit Punkten. Die Aufgaben werden sofort ausgewertet; Programmieraufgaben in Prolog testet ein eingebautes Mini-Prolog.</span><span class="en">Each part of the lecture has its own exam training with points. Tasks are graded immediately; Prolog programming tasks are tested by a built-in mini Prolog.</span></p>
   </div>
   <section class="sec">
+    <a class="mock-card" href="#mock"><span class="mc-k"><span class="de">Neu · alle Teile · mit Zeitlimit</span><span class="en">New · all parts · timed</span></span><span class="mc-t"><span class="de">Probeklausur</span><span class="en">Practice exam</span></span><span class="mc-d"><span class="de">Hoare-Kalkül, Java, Haskell und Prolog in einem Durchgang, jedes Mal neu zusammengestellt. Am Ende Punkte pro Teil, eine geschätzte Note und deine typischen Fehler.</span><span class="en">Hoare logic, Java, Haskell and Prolog in one go, put together anew every time. At the end: points per part, an estimated grade and your typical mistakes.</span></span><span class="mc-go"><span class="de">Probeklausur schreiben →</span><span class="en">Write a practice exam →</span></span></a>
     <div class="parts">
       <a class="part-card" href="#exam-java"><span class="pn">II · 24 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Java</span><span class="pd"><span class="de">8 Aufgaben: Ausgaben, Parameterübergabe, dynamisches Binden, Überladen, Rekursion, abstrakte Klassen, eine Methode schreiben.</span><span class="en">8 tasks: outputs, parameter passing, dynamic binding, overloading, recursion, abstract classes, writing a method.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
       <a class="part-card accent" href="#exam-hoare"><span class="pn">II.1.4 · <span class="de">mit Zeitlimit</span><span class="en">timed</span></span><span class="pt">Hoare-Kalkül</span><span class="pd"><span class="de">Klausur-Simulation: alle Zusicherungen, Invariante und Variante selbst eintragen, 13 Programme.</span><span class="en">Exam simulation: fill in every assertion, the invariant and the variant yourself, 13 programs.</span></span><span class="go"><span class="de">Simulation starten →</span><span class="en">Start simulation →</span></span></a>
@@ -1623,8 +1745,19 @@ Oma = renate.</pre>
       <a class="part-card" href="#exam-prolog"><span class="pn">IV · 23 <span class="de">Punkte</span><span class="en">points</span></span><span class="pt">Prolog</span><span class="pd"><span class="de">6 Aufgaben: Unifikation, Anfragen mit Backtracking, drei Prädikate programmieren, dazu eine Prolog-Spielwiese.</span><span class="en">6 tasks: unification, queries with backtracking, programming three predicates, plus a Prolog playground.</span></span><span class="go"><span class="de">Training starten →</span><span class="en">Start training →</span></span></a>
     </div>
     <a class="print-card" href="#print"><span class="pc-i" aria-hidden="true">🖶</span><span><b><span class="de">Probeklausur auf Papier</span><span class="en">Practice exam on paper</span></b><span class="muted"><span class="de">Alle Teile als Druckversion oder PDF, Lösungen auf eigenen Seiten.</span><span class="en">All parts as a printable version or PDF, solutions on separate pages.</span></span></span><span class="pc-go"><span class="de">Zur Druckversion →</span><span class="en">To the print version →</span></span></a>
+    <a class="print-card" href="#progress"><span class="pc-i" aria-hidden="true">◔</span><span><b><span class="de">Meine Schwächen</span><span class="en">My weak spots</span></b><span class="muted"><span class="de">Sicherheit pro Thema und deine häufigsten Fehler, mit gezieltem Training.</span><span class="en">Confidence per topic and your most frequent mistakes, with targeted practice.</span></span></span><span class="pc-go"><span class="de">Ansehen →</span><span class="en">View →</span></span></a>
     <p class="small muted"><span class="de">Die Aufgaben sind eigene Übungsaufgaben im Stil der Klausur, keine Originalaufgaben der RWTH.</span><span class="en">The tasks are original practice tasks in exam style, not actual RWTH exam questions.</span></p>
   </section>
+</section>
+
+<section class="view" id="view-mock" aria-labelledby="mock-title">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="#plan"><span class="de">Erstes Jahr</span><span class="en">First year</span></a><span>›</span><a href="#prog">Programmierung</a><span>›</span><a href="#exam"><span class="de">Klausur</span><span class="en">Exam</span></a><span>›</span><span><span class="de">Probeklausur</span><span class="en">Practice exam</span></span></nav>
+  <div class="page-h">
+    <div class="kicker"><span class="de">Klausur · alle Teile</span><span class="en">Exam · all parts</span></div>
+    <h1 id="mock-title"><span class="de">Probeklausur</span><span class="en">Practice exam</span></h1>
+    <p class="lede"><span class="de">Eine komplette Klausur aus allen vier Teilen: Hoare-Kalkül, Java, Haskell und Prolog. Jede Probeklausur wird neu zusammengestellt; ausgewertet wird erst beim Abgeben, wie in der echten Klausur.</span><span class="en">A complete exam from all four parts: Hoare logic, Java, Haskell and Prolog. Every practice exam is put together anew; grading happens only when you hand it in, as in the real exam.</span></p>
+  </div>
+  <div id="mock"></div>
 </section>
 
 <section class="view" id="view-exam-java" aria-labelledby="lx-java-title">

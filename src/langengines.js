@@ -88,12 +88,12 @@ const PL = (() => {
     return out;
   }
   function parseProgram(src) {
-    const db = {};
+    const db = {}; let idx = 0;
     for (const { term } of parseTerms(src)) {
       let head = term, body = atom('true');
       if (term.t === 'c' && term.f === ':-' && term.a.length === 2) { head = term.a[0]; body = term.a[1]; }
       if (head.t === 'v' || head.t === 'n') throw perr('head');
-      const key = keyOf(head); (db[key] ||= []).push({ head, body });
+      const key = keyOf(head); (db[key] ||= []).push({ head, body, idx: ++idx });
     }
     return db;
   }
@@ -188,6 +188,76 @@ const PL = (() => {
     return t.f + '(' + t.a.map(x => fmt(x, s, false)).join(',') + ')';
   }
 
+
+  /* SLD search tree for teaching: nodes in depth-first order with the clause used and the new bindings */
+  function traceSLD(program, query, maxNodes = 70) {
+    try {
+      const db = typeof program === 'string' ? parseProgram(program) : program;
+      const q = parseQuery(query);
+      const qn = {}; Object.entries(q.names).forEach(([n, v]) => { if (!n.startsWith('_')) qn[v.id] = n; });
+      const nice = {}; let nv = 0;
+      const vname = v => qn[v.id] || nice[v.id] || (nice[v.id] = (v.n && v.n !== '_' ? v.n : 'V') + String(++nv).replace(/\d/g, d => '₀₁₂₃₄₅₆₇₈₉'[d]));
+      const fd = (t, s) => {
+        t = walk(t, s);
+        if (t.t === 'v') return vname(t);
+        if (t.t === 'n') return String(t.v);
+        if (t.t === 'a') return t.n;
+        if (t.f === '.' && t.a.length === 2) { const it = []; let c = t; while (c.t === 'c' && c.f === '.' && c.a.length === 2) { it.push(fd(c.a[0], s)); c = walk(c.a[1], s); } return '[' + it.join(', ') + (c.t === 'a' && c.n === '[]' ? '' : ' | ' + fd(c, s)) + ']'; }
+        if (INFIX[t.f] && t.a.length === 2) return fd(t.a[0], s) + (/^[a-z]/.test(t.f) || t.f === ',' ? ' ' + t.f + ' ' : ' ' + t.f + ' ') + fd(t.a[1], s);
+        return t.f + '(' + t.a.map(x => fd(x, s)).join(', ') + ')';
+      };
+      const flat = (goals, s) => { const out = []; let g = goals; while (g) { let x = walk(g.g, s); if (x.t === 'c' && x.f === ',' && x.a.length === 2) { g = { g: x.a[0], next: { g: x.a[1], next: g.next } }; continue; } if (!(x.t === 'a' && x.n === 'true')) out.push(x); g = g.next; } return out; };
+      const varsIn = (t, s, acc = []) => { t = walk(t, s); if (t.t === 'v') { if (!acc.includes(t)) acc.push(t); } else if (t.t === 'c') t.a.forEach(x => varsIn(x, s, acc)); return acc; };
+      const binds = (g, s, s2) => varsIn(g, s).filter(v => walk(v, s2) !== v).map(v => `${vname(v)} = ${fd(v, s2)}`).join(', ');
+      const qvars = Object.entries(q.names).filter(([n]) => !n.startsWith('_'));
+      const nodes = []; let truncated = false;
+      function nodeU(goals, s, depth, parent, edge) {
+        const gl = flat(goals, s);
+        const nd = { id: nodes.length, parent, edge, goals: gl.length ? gl.map(x => fd(x, s)).join(', ') : '□', depth, kind: 'goal' };
+        if (nodes.length >= maxNodes || depth > 30) { truncated = true; return null; }
+        nodes.push(nd);
+        if (!gl.length) { nd.kind = 'success'; nd.answer = qvars.length ? qvars.map(([n, v]) => `${n} = ${fd(v, s)}`).join(', ') : 'true'; return nd; }
+        const g = gl[0], restL = gl.slice(1), mk = list => list.reduceRight((acc, x) => ({ g: x, next: acc }), null);
+        const key = keyOf(g), a = g.a || [];
+        let kids = 0;
+        const BI = { '=/2': 1, '\\=/2': 1, 'is/2': 1, '</2': 1, '>/2': 1, '=</2': 1, '>=/2': 1, '=:=/2': 1, '=\\=/2': 1, '\\+/1': 1, '==/2': 1, '\\==/2': 1, 'fail/0': 1, 'false/0': 1 };
+        if (key === ';/2') { kids += 2; nodeU({ g: a[0], next: mk(restL) }, s, depth + 1, nd.id, { builtin: ';', binds: '' }); nodeU({ g: a[1], next: mk(restL) }, s, depth + 1, nd.id, { builtin: ';', binds: '' }); }
+        else if (BI[key]) {
+          let s2 = null;
+          try {
+            if (key === '=/2') s2 = unify(a[0], a[1], s);
+            else if (key === '\\=/2') s2 = unify(a[0], a[1], s) ? null : s;
+            else if (key === 'is/2') s2 = unify(a[0], num(evalA(a[1], s)), s);
+            else if (key === '==/2') s2 = same(a[0], a[1], s) ? s : null;
+            else if (key === '\\==/2') s2 = same(a[0], a[1], s) ? null : s;
+            else if (key === '\\+/1') { let f = false; for (const _ of solve({ g: a[0], next: null }, s, db, { steps: 0, max: 20000 }, 0)) { f = true; break; } s2 = f ? null : s; }
+            else if (key === 'fail/0' || key === 'false/0') s2 = null;
+            else { const x = evalA(a[0], s), y = evalA(a[1], s); s2 = ({ '<': x < y, '>': x > y, '=<': x <= y, '>=': x >= y, '=:=': x === y, '=\\=': x !== y }[g.f]) ? s : null; }
+          } catch (e) { nd.kind = 'error'; nd.err = e.code || 'error'; return nd; }
+          if (s2) { kids++; nodeU(mk(restL), s2, depth + 1, nd.id, { builtin: g.f, binds: binds(g, s, s2) }); }
+        } else {
+          const cls = db[key]; if (!cls) { nd.kind = 'error'; nd.err = 'unknown'; nd.detail = key; return nd; }
+          for (const cl of cls) {
+            if (nodes.length >= maxNodes) { truncated = true; break; }
+            const map = {}; const h = rename(cl.head, map), b = rename(cl.body, map);
+            const s2 = unify(g, h, s);
+            if (!s2) continue;
+            kids++;
+            const body = b.t === 'a' && b.n === 'true' ? [] : [b];
+            nodeU(mk([...body, ...restL]), s2, depth + 1, nd.id, { clause: cl.idx, binds: binds(g, s, s2) });
+          }
+        }
+        if (!kids && nd.kind === 'goal') nd.kind = 'fail';
+        return nd;
+      }
+      nodeU({ g: q.term, next: null }, {}, 0, null, null);
+      return { nodes, truncated };
+    } catch (e) {
+      if (e === LIMIT) return { error: 'limit' };
+      return { error: e.code || 'syntax', detail: e.detail };
+    }
+  }
+
   /* run a query: returns {answers:[{Var: 'val'}], more:boolean} or {error} */
   function run(program, query, maxAnswers = 8, maxSteps = 60000) {
     try {
@@ -270,7 +340,7 @@ const PL = (() => {
   }
   /* true if the terms unify when the occurs check is switched off (used to name the typical mistake) */
   function unifiesWithoutOC(t1src, t2src) { try { const { term } = parseTerms(`p(${t1src}, ${t2src}).`)[0]; return !!unify(term.a[0], term.a[1], {}, false); } catch (e) { return false; } }
-  return { run, parseProgram, checkUnifier, refUnifier, unifiesWithoutOC, fmt };
+  return { run, parseProgram, checkUnifier, refUnifier, unifiesWithoutOC, traceSLD, fmt };
 })();
 
 /* ===== Haskell type comparison ===== */
