@@ -702,6 +702,7 @@ function start(data) {
   initHS();
   initPrint();
   initPWA();
+  initCounter();
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
   const ws = document.getElementById('ws');
   ws.addEventListener('click', handleWS);

@@ -1782,6 +1782,7 @@ Oma = renate.</pre>
 <footer>
   <div id="install-box" class="install-box"></div>
   <p><span class="de">Unabhängige Lernhilfe für Studierende im ersten Jahr. Kein offizielles Angebot der RWTH Aachen.</span><span class="en">Independent study aid for first-year students. Not an official RWTH Aachen offering.</span></p>
+  <p class="small"><span class="de">Besuche werden anonym mit <a href="https://www.goatcounter.com/">GoatCounter</a> gezählt: ohne Cookies, ohne persönliche Daten. Deine Antworten und dein Fortschritt bleiben nur in deinem Browser.</span><span class="en">Visits are counted anonymously with <a href="https://www.goatcounter.com/">GoatCounter</a>: no cookies, no personal data. Your answers and progress stay only in your browser.</span></p>
   <p><span class="de">Quellen:</span><span class="en">Sources:</span>
     <a href="https://sc.informatik.rwth-aachen.de/wp-content/uploads/2025/10/2025-WS-Erstsemestereinfuehrung-BSInf.pdf">Erstsemester-Facheinführung BSInf WS 2025/26</a> ·
     <a href="https://verify.rwth-aachen.de/">LuFG Informatik 2 (Programmierung)</a> ·
@@ -3547,6 +3548,7 @@ function start(data) {
   initHS();
   initPrint();
   initPWA();
+  initCounter();
   document.getElementById('exlist').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; ST.ex = b.dataset.ex; renderPractice(); snapshot(); if (innerWidth < 900) document.getElementById('ws').scrollIntoView({ block: 'start' }); });
   const ws = document.getElementById('ws');
   ws.addEventListener('click', handleWS);
@@ -7899,6 +7901,27 @@ function initPrint() {
     renderPrint();
   });
   root.addEventListener('click', e => { if (e.target.closest('[data-pprint]')) { try { window.print(); } catch (err) {} } });
+}
+
+/* ---- anonymous visit counter (GoatCounter: no cookies, no personal data) ----
+   Loaded only on the public site, never in the claude.ai artifact or locally.
+   Hash routes are counted as pages (/#daily, /#mock …); an #import code is never sent. */
+function gcPath() {
+  const h = location.hash.slice(1), v = h.startsWith('import=') ? 'import' : (h.split(/[?&=]/)[0] || 'plan');
+  return '/#' + v;
+}
+function initCounter() {
+  if (!/\.github\.io$/.test(location.hostname)) return;
+  try {
+    window.goatcounter = { no_onload: true };
+    let last = null;
+    const count = () => { const p = gcPath(); if (p === last || !window.goatcounter || !window.goatcounter.count) return; last = p; window.goatcounter.count({ path: p }); };
+    const s = document.createElement('script');
+    s.async = true; s.src = 'https://gc.zgo.at/count.js';
+    s.dataset.goatcounter = 'https://hoare-lab.goatcounter.com/count';
+    s.onload = () => { count(); window.addEventListener('hashchange', () => setTimeout(count, 0)); };
+    document.head.appendChild(s);
+  } catch (e) {}
 }
 /* ================= Probeklausur: mixed full exam ================= */
 const MKT = {

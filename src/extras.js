@@ -136,3 +136,24 @@ function initPrint() {
   });
   root.addEventListener('click', e => { if (e.target.closest('[data-pprint]')) { try { window.print(); } catch (err) {} } });
 }
+
+/* ---- anonymous visit counter (GoatCounter: no cookies, no personal data) ----
+   Loaded only on the public site, never in the claude.ai artifact or locally.
+   Hash routes are counted as pages (/#daily, /#mock …); an #import code is never sent. */
+function gcPath() {
+  const h = location.hash.slice(1), v = h.startsWith('import=') ? 'import' : (h.split(/[?&=]/)[0] || 'plan');
+  return '/#' + v;
+}
+function initCounter() {
+  if (!/\.github\.io$/.test(location.hostname)) return;
+  try {
+    window.goatcounter = { no_onload: true };
+    let last = null;
+    const count = () => { const p = gcPath(); if (p === last || !window.goatcounter || !window.goatcounter.count) return; last = p; window.goatcounter.count({ path: p }); };
+    const s = document.createElement('script');
+    s.async = true; s.src = 'https://gc.zgo.at/count.js';
+    s.dataset.goatcounter = 'https://hoare-lab.goatcounter.com/count';
+    s.onload = () => { count(); window.addEventListener('hashchange', () => setTimeout(count, 0)); };
+    document.head.appendChild(s);
+  } catch (e) {}
+}
